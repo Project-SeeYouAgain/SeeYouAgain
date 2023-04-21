@@ -1,66 +1,50 @@
 import styled, { css } from 'styled-components';
 
 export interface ButtonLayoutProps {
-    buttonType: 'primary' | 'ghost' | 'default';
-    isFull?: boolean;
+    buttonType: 'ghost' | 'default';
 }
 
 export const defaultButtonStyles = css`
-    background: #e1e1e1;
-    color: #4b4b4b;
+    background: #5669ff;
+    color: #ffffff;
 
     &:hover {
-        background: #e7e7e7;
+        background: #afb8ff;
     }
 
     &:active {
-        background: #d7d7d7;
-    }
-`;
-
-export const primaryButtonStyles = css`
-    background: #33ccbd;
-    color: #fff;
-
-    &:hover {
-        background: #6fd0c6;
-    }
-
-    &:active {
-        background: #0b9688;
+        background: #afb8ff;
     }
 `;
 
 export const ghostButtonStyles = css`
     background: transparent;
-    color: #33ccbd;
-    border: 1px solid #33ccbd;
+    color: #5669ff;
+    border: 2px solid #5669ff;
 
     &:hover {
-        background: #33ccbd;
+        background: #5669ff;
         color: #fff;
     }
 
     &:active {
-        background: #0b9688;
+        background: #5669ff;
     }
 `;
 
 export const ButtonLayout = styled.button<ButtonLayoutProps>`
     padding: 10px 30px;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     width: 100%;
     ${({ buttonType }) => {
         switch (buttonType) {
-            case 'primary':
-                return primaryButtonStyles;
             case 'ghost':
                 return ghostButtonStyles;
             case 'default':
                 return defaultButtonStyles;
             default:
-                return primaryButtonStyles;
+                return defaultButtonStyles;
         }
     }}
 `;

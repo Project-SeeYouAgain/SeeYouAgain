@@ -13,22 +13,12 @@ export const Default = Template.bind({});
 
 Default.args = {
     buttonType: 'default',
-    isFull: false,
-    children: '버튼',
-};
-
-export const Primary = Template.bind({});
-
-Primary.args = {
-    buttonType: 'primary',
-    isFull: false,
-    children: '버튼',
+    children: '예은 바보',
 };
 
 export const Ghost = Template.bind({});
 
 Ghost.args = {
     buttonType: 'ghost',
-    isFull: false,
-    children: '버튼',
+    children: '예은 바보 아니다',
 };
