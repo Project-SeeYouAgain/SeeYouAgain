@@ -20,18 +20,22 @@ public class Message extends TimeStamped {
 
     private String chat;
 
-    private Long writerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "participant_id")
+    private Participant participant;
 
     private String nickname;
 
-    private Long channelId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
 
-    public static Message from(MessageRequestDto requestDto) {
+    public static Message of(MessageRequestDto requestDto, Channel channel, Participant participant) {
         return Message.builder()
                 .chat(requestDto.getChat())
-                .writerId(requestDto.getWriterId())
+                .participant(participant)
                 .nickname(requestDto.getNickname())
-                .channelId(requestDto.getChannelId())
+                .channel(channel)
                 .build();
     }
 }
