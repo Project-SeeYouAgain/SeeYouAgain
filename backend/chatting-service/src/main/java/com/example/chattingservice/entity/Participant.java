@@ -9,16 +9,20 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@Table(name = "channels")
-public class Channel extends TimeStamped {
+@Table(name = "participants")
+public class Participant extends TimeStamped {
 
     @Id
-    @Column(name = "channel_id")
+    @Column(name = "participant_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
 
-    private String productImg;
+    private Long userId;
+
+    private Boolean isOut;
 
 }
