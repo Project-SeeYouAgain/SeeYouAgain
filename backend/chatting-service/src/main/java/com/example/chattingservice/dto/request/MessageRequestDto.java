@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class MessageRequestDto {
 
     private Long channelId;
-    private Long writerId;
+    private Long userId;
     private String nickname;
     private String chat;
 }
