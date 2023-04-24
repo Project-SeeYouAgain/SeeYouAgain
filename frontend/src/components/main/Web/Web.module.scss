@@ -1,0 +1,68 @@
+.fifthPage_box {
+    background: #ffffff;
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.25);
+    border-radius: 40px;
+    margin-top: 50px;
+    padding: 20px;
+    justify-content: space-between;
+    padding-left: 30px;
+}
+.parent {
+    position: relative;
+}
+
+.textContainer {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    .first {
+        color: white;
+        font-size: xxx-large;
+        text-align: center;
+        font-weight: bolder;
+    }
+}
+.boxContainer {
+    position: absolute;
+    top: 50vh;
+    left: 45vw;
+    transform: translate(-50%, -50%);
+    .first {
+        color: white;
+        font-size: xxx-large;
+        text-align: center;
+        font-weight: bolder;
+    }
+}
+.slickContainer {
+    position: absolute;
+    top: 50vh;
+    // left: 45vw;
+    transform: translate(0, -50%);
+    .first {
+        color: white;
+        font-size: xxx-large;
+        text-align: center;
+        font-weight: bolder;
+    }
+}
+.pointColor {
+    color: #ff8655;
+}
+.text {
+    font-size: xx-large;
+    text-align: center;
+    font-weight: bolder;
+}
+.blue {
+    color: #5669ff;
+}
+.spacebetween {
+    display: flex;
+    justify-content: space-between;
+}
+.margin {
+    padding-top: 30vh;
+    margin-bottom: 12px;
+}

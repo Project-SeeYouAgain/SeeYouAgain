@@ -1,0 +1,25 @@
+.main_body {
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+.box {
+    height: 100vh;
+    scroll-snap-align: start;
+    overflow: hidden;
+}
+.box_nohidden {
+    height: 140vh;
+    scroll-snap-align: start;
+}
+.point {
+    background-color: #fedab9;
+}
+.blue {
+    background-color: #afb8ff;
+}
+.none {
+    background-color: #fafafa;
+}
