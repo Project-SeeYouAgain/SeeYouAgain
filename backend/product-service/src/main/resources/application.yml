@@ -36,4 +36,4 @@ eureka:
 
 logging:
   level:
-    com.example.userservice.client: DEBUG
+    com.example.productservice.client: DEBUG
