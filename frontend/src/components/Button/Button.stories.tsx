@@ -22,3 +22,18 @@ Ghost.args = {
     buttonType: 'ghost',
     children: '예은 바보 아니다',
 };
+
+export const LargeSubmit = Template.bind({});
+
+LargeSubmit.args = {
+    buttonType: 'LargeSubmit',
+    children: '아아',
+};
+
+export const MiddleModal = Template.bind({});
+
+MiddleModal.args = {
+    buttonType: 'MiddleModal',
+    color: 'blue',
+    children: '대여일정',
+};
