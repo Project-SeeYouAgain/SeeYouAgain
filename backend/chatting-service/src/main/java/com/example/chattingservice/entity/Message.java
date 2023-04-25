@@ -32,7 +32,7 @@ public class Message extends TimeStamped {
 
     public static Message of(MessageRequestDto requestDto, Channel channel, Participant participant) {
         return Message.builder()
-                .chat(requestDto.getChat())
+                .chat(requestDto.getMessage())
                 .participant(participant)
                 .nickname(requestDto.getNickname())
                 .channel(channel)

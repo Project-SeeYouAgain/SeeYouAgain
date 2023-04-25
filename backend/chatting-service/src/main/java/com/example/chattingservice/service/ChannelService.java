@@ -9,5 +9,5 @@ public interface ChannelService {
 
     List<ChannelResponseDto> getChannelList(Long userId);
 
-    void createChannel(ChannelRequestDto requestDto);
+    void createChannel(Long userId, ChannelRequestDto requestDto);
 }

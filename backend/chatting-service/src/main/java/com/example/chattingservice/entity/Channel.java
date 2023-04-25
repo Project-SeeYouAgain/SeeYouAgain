@@ -1,5 +1,7 @@
 package com.example.chattingservice.entity;
 
+import com.example.chattingservice.dto.request.ChannelRequestDto;
+import com.example.chattingservice.dto.response.ProductClientResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,6 +21,18 @@ public class Channel extends TimeStamped {
 
     private Long productId;
 
+    private Long ownerId;
+
+    private Long userId;
+
     private String productImg;
 
+    public static Channel of(ChannelRequestDto requestDto, Long userId, ProductClientResponseDto productInfo) {
+        return Channel.builder()
+                .productId(requestDto.getProductId())
+                .ownerId(requestDto.getOwnerId())
+                .userId(userId)
+                .productImg(productInfo.getProductImg())
+                .build();
+    }
 }

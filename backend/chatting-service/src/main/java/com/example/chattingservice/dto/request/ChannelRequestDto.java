@@ -9,7 +9,5 @@ public class ChannelRequestDto {
 
     private Long productId;
 
-    private Long firstUserId;
-
-    private Long secondUserId;
+    private Long ownerId;
 }

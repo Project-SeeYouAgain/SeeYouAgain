@@ -11,11 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/channel")
+@RequestMapping("/auth/channel")
 public class ChannelController {
 
     private final ChannelService channelService;
@@ -29,8 +30,9 @@ public class ChannelController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponseDto<Void>> createChannel(@RequestBody ChannelRequestDto requestDto) {
-        channelService.createChannel(requestDto);
+    public ResponseEntity<BaseResponseDto<Void>> createChannel(HttpServletRequest request,
+                                                               @RequestBody ChannelRequestDto requestDto) {
+        channelService.createChannel(getUserId(request), requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseDto<>(201, "success"));
     }
@@ -40,6 +42,10 @@ public class ChannelController {
                                                                                     @PathVariable("lastMessageId") Long lastMessageId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", messageService.getMessageByChannelId(channelId, lastMessageId)));
+    }
+
+    private Long getUserId(HttpServletRequest request) {
+        return Long.parseLong(request.getHeader("userId"));
     }
 
 }
