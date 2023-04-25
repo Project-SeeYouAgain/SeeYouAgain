@@ -5,7 +5,7 @@ import styles from './Web.module.scss';
 import classNames from 'classnames';
 import useInView from './useInView';
 
-function SixthPage(props: any) {
+function SixthPage() {
     const [ref, isInView] = useInView();
     useEffect(() => {
         console.log('Visibility status:', isInView ? 'Second Visible' : '');

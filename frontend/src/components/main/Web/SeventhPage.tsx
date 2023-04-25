@@ -8,7 +8,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import useInView from './useInView';
 
-function SeventhPage(props: any) {
+function SeventhPage() {
     const settings = {
         dots: false,
         infinite: true,
