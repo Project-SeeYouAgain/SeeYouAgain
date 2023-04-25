@@ -16,7 +16,7 @@ function ThirdPage() {
                 <div className={classNames('text-center', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
                     <p className={classNames(styles.text, styles.blue)}>불필요한 낭비를 줄여</p>
                     <p className={styles.text}>환경 보호에도 좋습니다.</p>
-                    <div className="rounded-xl bg-blue-400">
+                    <div className={classNames('rounded-xl', styles.thirdPageBox)}>
                         <Image src={img_earth} alt="img_earth" className="w-full" />
                     </div>
                 </div>
