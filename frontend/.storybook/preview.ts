@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-
+import '../src/styles/fonts/style.css'
 const preview: Preview = {
     parameters: {
         actions: { argTypesRegex: '^on[A-Z].*' },

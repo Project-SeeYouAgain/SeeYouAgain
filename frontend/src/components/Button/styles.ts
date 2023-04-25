@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export interface ButtonLayoutProps {
-    buttonType: 'ghost' | 'default';
+    buttonType: 'ghost' | 'default' | 'LargeSubmit' | 'MiddleModal';
 }
 
 export const defaultButtonStyles = css`
@@ -15,6 +15,28 @@ export const defaultButtonStyles = css`
     &:active {
         background: #afb8ff;
     }
+`;
+
+export const LargeSubmitButtonStyles = css`
+    background: #5669ff;
+    color: #ffffff;
+    font-family: 'Pretendard-Bold';
+    font-size: 1.25rem;
+    text-align: center;
+    align-items: center;
+    width: 18.75rem;
+    height: 3.06rem;
+    border-radius: 5px;
+`;
+export const MiddleModalButtonStyles = css`
+    color: #ffffff;
+    font-family: 'Pretendard-Bold';
+    font-size: 0.68rem;
+    text-align: center;
+    align-items: center;
+    width: 3.42rem;
+    height: 1.12rem;
+    border-radius: 50rem;
 `;
 
 export const ghostButtonStyles = css`
@@ -33,12 +55,15 @@ export const ghostButtonStyles = css`
 `;
 
 export const ButtonLayout = styled.button<ButtonLayoutProps>`
-    padding: 10px 30px;
     border: none;
-    border-radius: 10px;
-    width: 100%;
+    background: #f2f2f2;
+
     ${({ buttonType }) => {
         switch (buttonType) {
+            case 'LargeSubmit':
+                return LargeSubmitButtonStyles;
+            case 'MiddleModal':
+                return MiddleModalButtonStyles;
             case 'ghost':
                 return ghostButtonStyles;
             case 'default':
