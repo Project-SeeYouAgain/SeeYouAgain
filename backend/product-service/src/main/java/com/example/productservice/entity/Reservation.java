@@ -3,7 +3,7 @@ package com.example.productservice.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,8 +25,8 @@ public class Reservation {
     private Long lenderId;
 
     @Column(nullable = false)
-    private LocalTime startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalTime endDate;
+    private LocalDate endDate;
 }

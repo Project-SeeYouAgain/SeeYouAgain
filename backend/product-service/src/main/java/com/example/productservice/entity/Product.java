@@ -1,9 +1,11 @@
 package com.example.productservice.entity;
 
+import com.example.productservice.dto.request.ProductRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -20,7 +22,6 @@ public class Product extends TimeStamped {
     private Long id;
 
     @Column(nullable = false)
-
     private Long ownerId;
 
     @Column(nullable = false)
@@ -42,7 +43,7 @@ public class Product extends TimeStamped {
     private String location;
 
     @Column(nullable = false)
-    private Integer productState;
+    private Boolean productState;
 
     @Column(nullable = false)
     private LocalDate startDate;
@@ -57,9 +58,34 @@ public class Product extends TimeStamped {
     private Integer refreshCnt;
 
     @Column(nullable = false)
-    private LocalTime refreshedAt;
+    private LocalDateTime refreshedAt;
 
     @Column(nullable = false)
     private Boolean isSafe;
+
+    public static Product of(Long userId,
+                             ProductRequestDto dto,
+                             Boolean productState,
+                             Integer hitCnt,
+                             Integer refreshCnt,
+                             LocalDateTime refreshTime) {
+
+        return Product.builder()
+                .ownerId(userId)
+                .title(dto.getTitle())
+                .type(dto.getType())
+                .category(dto.getCategory())
+                .price(dto.getPrice())
+                .description(dto.getDescription())
+                .location(dto.getLocation())
+                .productState(productState)
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .hit(hitCnt)
+                .refreshCnt(refreshCnt)
+                .refreshedAt(refreshTime)
+                .isSafe(dto.getIsSafe())
+                .build();
+    }
 }
 

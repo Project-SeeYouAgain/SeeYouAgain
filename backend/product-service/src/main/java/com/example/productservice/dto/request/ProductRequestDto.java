@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class ProductRequestDto {
-    private String tile;
+    private String title;
 
     private Boolean type;
 
