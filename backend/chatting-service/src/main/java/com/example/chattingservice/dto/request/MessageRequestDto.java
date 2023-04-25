@@ -10,5 +10,5 @@ public class MessageRequestDto {
     private Long channelId;
     private Long userId;
     private String nickname;
-    private String chat;
+    private String message;
 }
