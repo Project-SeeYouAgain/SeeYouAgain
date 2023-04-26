@@ -17,6 +17,7 @@ public class MessageController {
 
     @MessageMapping("/chat")
     public void sendMessage(MessageRequestDto chatDto) {
+        messageService.insertMessage(chatDto);
         template.convertAndSend("/sub/" + chatDto.getChannelId(), chatDto);
     }
 }
