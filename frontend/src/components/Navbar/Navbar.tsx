@@ -28,7 +28,7 @@ function Navbar() {
     };
     return (
         <div>
-            <ul className="flex absolute bottom-0 h-[4rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey"> {MenuDataNods()} </ul>
+            <ul className="flex absolute bottom-0 h-[4.5rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey"> {MenuDataNods()} </ul>
         </div>
     );
 }
