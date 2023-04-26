@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export interface ButtonLayoutProps {
-    buttonType: 'ghost' | 'default' | 'LargeSubmit' | 'MiddleModal';
+    buttonType: 'ghost' | 'default' | 'LargeSubmit' | 'MiddleModal' | 'Cate1' | 'Cate2' | 'Cate3';
 }
 
 export const defaultButtonStyles = css`
@@ -24,7 +24,7 @@ export const LargeSubmitButtonStyles = css`
     font-size: 1.25rem;
     text-align: center;
     align-items: center;
-    width: 18.75rem;
+    width: 22rem;
     height: 3.06rem;
     border-radius: 5px;
 `;
@@ -36,6 +36,36 @@ export const MiddleModalButtonStyles = css`
     align-items: center;
     width: 3.42rem;
     height: 1.12rem;
+    border-radius: 50rem;
+`;
+export const Cate1ButtonStyles = css`
+    color: #ffffff;
+    font-family: 'Pretendard-Bold';
+    font-size: 0.68rem;
+    text-align: center;
+    align-items: center;
+    width: 7.44rem;
+    height: 1.87rem;
+    border-radius: 50rem;
+`;
+export const Cate2ButtonStyles = css`
+    color: #ffffff;
+    font-family: 'Pretendard-Bold';
+    font-size: 0.68rem;
+    text-align: center;
+    align-items: center;
+    width: 5.5rem;
+    height: 1.87rem;
+    border-radius: 50rem;
+`;
+export const Cate3ButtonStyles = css`
+    color: #ffffff;
+    font-family: 'Pretendard-Bold';
+    font-size: 0.68rem;
+    text-align: center;
+    align-items: center;
+    width: 3.25rem;
+    height: 1.87rem;
     border-radius: 50rem;
 `;
 
@@ -64,6 +94,12 @@ export const ButtonLayout = styled.button<ButtonLayoutProps>`
                 return LargeSubmitButtonStyles;
             case 'MiddleModal':
                 return MiddleModalButtonStyles;
+            case 'Cate1':
+                return Cate1ButtonStyles;
+            case 'Cate2':
+                return Cate2ButtonStyles;
+            case 'Cate3':
+                return Cate3ButtonStyles;
             case 'ghost':
                 return ghostButtonStyles;
             case 'default':
