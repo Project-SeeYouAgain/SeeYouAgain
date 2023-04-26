@@ -1,5 +1,5 @@
 // useInView.ts
-import { useCallback, useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useRef } from 'react';
 
 export default function useInView(threshold: number): [React.RefCallback<HTMLElement>, boolean] {
     const [isInView, setIsInView] = useState(false);
