@@ -3,9 +3,9 @@ import { ButtonLayout, ButtonLayoutProps } from './styles';
 
 export interface ButtonProps extends HTMLProps<HTMLButtonElement>, ButtonLayoutProps {}
 
-const Button: FunctionComponent<ButtonProps> = ({ children, buttonType }) => {
+const Button: FunctionComponent<ButtonProps> = ({ children, buttonType, onclick }) => {
     return (
-        <ButtonLayout type="button" buttonType={buttonType}>
+        <ButtonLayout type="button" buttonType={buttonType} onclick={onclick}>
             {children}
         </ButtonLayout>
     );
