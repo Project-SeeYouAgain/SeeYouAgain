@@ -41,7 +41,7 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<MessageResponseDto> getMessageByChannelId(Long channelId, Long lastMessageId) {
-        return null;
+    public List<MessageResponseDto> getMessageByChannelId(Long channelId, Long firstMessageId) {
+        return messageRepository.findLatestMessageList(channelId, firstMessageId);
     }
 }
