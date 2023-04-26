@@ -37,11 +37,11 @@ public class ChannelController {
                 .body(new BaseResponseDto<>(201, "success"));
     }
 
-    @GetMapping("/{channelId}/{lastMessageId}")
+    @GetMapping("/{channelId}/{firstMessageId}")
     public ResponseEntity<BaseResponseDto<List<MessageResponseDto>>> getMessageList(@PathVariable("channelId") Long channelId,
-                                                                                    @PathVariable("lastMessageId") Long lastMessageId) {
+                                                                                    @PathVariable("firstMessageId") Long firstMessageId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", messageService.getMessageByChannelId(channelId, lastMessageId)));
+                .body(new BaseResponseDto<>(200, "success", messageService.getMessageByChannelId(channelId, firstMessageId)));
     }
 
     private Long getUserId(HttpServletRequest request) {

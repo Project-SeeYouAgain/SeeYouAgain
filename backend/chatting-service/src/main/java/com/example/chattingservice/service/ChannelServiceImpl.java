@@ -44,7 +44,8 @@ public class ChannelServiceImpl implements ChannelService {
                 .map(c -> {
                     UserClientResponseDto responseDto = getUserClientResponseDto(userId, c);
 
-                    List<Message> latestMessage = messageRepository.findLatestMessage(c.getId());
+                    PageRequest pageRequest = PageRequest.of(0, 1);
+                    List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
 
                     return ChannelResponseDto.of(c, responseDto, latestMessage.get(0));
                 })
@@ -52,13 +53,10 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     private UserClientResponseDto getUserClientResponseDto(Long userId, Channel c) {
-        UserClientResponseDto responseDto;
-        if (c.getOwnerId().equals(userId)) {
-            responseDto = userServiceClient.getUserInfo(c.getUserId()).getData();
-        } else {
-            responseDto = userServiceClient.getUserInfo(c.getOwnerId()).getData();
-        }
-        return responseDto;
+
+        if (c.getOwnerId().equals(userId)) return userServiceClient.getUserInfo(c.getUserId()).getData();
+
+        return userServiceClient.getUserInfo(c.getOwnerId()).getData();
     }
 
     @Override
