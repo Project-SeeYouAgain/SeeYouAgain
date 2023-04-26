@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import web_main from '@/images/web_main.gif';
-import styles from './Web.module.scss';
-import useInView from '../Web/useInView';
+import web_main from '@/images/mobile_main.gif';
+import styles from './Mobile.module.scss';
+import useInView from '../Mobile/useInView';
 import classNames from 'classnames';
 
 function FirstPage() {
