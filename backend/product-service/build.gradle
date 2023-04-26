@@ -47,6 +47,9 @@ dependencies {
 
 	// Feign Client
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.1'
+
+	// Amazon S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 dependencyManagement {

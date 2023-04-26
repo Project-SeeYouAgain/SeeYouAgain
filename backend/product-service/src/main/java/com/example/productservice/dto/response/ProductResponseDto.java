@@ -74,7 +74,6 @@ public class ProductResponseDto {
                 .reservation(reservationList)
                 .isSafe(product.getIsSafe())
                 .score(totalScore)
-                .hit(product.getHit())
                 .build();
     }
 }

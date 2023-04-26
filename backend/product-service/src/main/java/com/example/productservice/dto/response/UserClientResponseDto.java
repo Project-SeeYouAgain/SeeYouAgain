@@ -18,6 +18,4 @@ public class UserClientResponseDto {
     private String profileImg;
     private String location;
     private Integer mannerScore;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

@@ -1,5 +1,6 @@
 package com.example.productservice.entity;
 
+import com.example.productservice.dto.request.ProductRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,4 +24,11 @@ public class ProductTag {
     @Column(nullable = false, length = 20)
     private String tag;
 
+    public static ProductTag of(Product product, String tag) {
+
+        return ProductTag.builder()
+                .product(product)
+                .tag(tag)
+                .build();
+    }
 }

@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Entity
@@ -52,9 +51,6 @@ public class Product extends TimeStamped {
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private Integer hit;
-
-    @Column(nullable = false)
     private Integer refreshCnt;
 
     @Column(nullable = false)
@@ -66,10 +62,8 @@ public class Product extends TimeStamped {
     public static Product of(Long userId,
                              ProductRequestDto dto,
                              Boolean productState,
-                             Integer hitCnt,
                              Integer refreshCnt,
                              LocalDateTime refreshTime) {
-
         return Product.builder()
                 .ownerId(userId)
                 .title(dto.getTitle())
@@ -81,7 +75,6 @@ public class Product extends TimeStamped {
                 .productState(productState)
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
-                .hit(hitCnt)
                 .refreshCnt(refreshCnt)
                 .refreshedAt(refreshTime)
                 .isSafe(dto.getIsSafe())
