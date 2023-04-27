@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void createProduct(Long userId, ProductRequestDto requestDto) {
-        Product product = Product.of(userId ,requestDto, true, 0, LocalDateTime.now());
+        Product product = Product.of(userId ,requestDto, true, 0, LocalDateTime.now(), false);
         productRepository.save(product);
 
         List<ProductTag> productTagList = requestDto.getTag().stream().map(t -> ProductTag.of(product, t)).collect(toList());

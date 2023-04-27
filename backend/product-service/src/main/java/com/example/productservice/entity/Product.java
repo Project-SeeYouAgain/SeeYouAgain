@@ -59,11 +59,15 @@ public class Product extends TimeStamped {
     @Column(nullable = false)
     private Boolean isSafe;
 
+    @Column(nullable = false)
+    private Boolean isHide;
+
     public static Product of(Long userId,
                              ProductRequestDto dto,
                              Boolean productState,
                              Integer refreshCnt,
-                             LocalDateTime refreshTime) {
+                             LocalDateTime refreshTime,
+                             Boolean isHide) {
         return Product.builder()
                 .ownerId(userId)
                 .title(dto.getTitle())
@@ -78,6 +82,7 @@ public class Product extends TimeStamped {
                 .refreshCnt(refreshCnt)
                 .refreshedAt(refreshTime)
                 .isSafe(dto.getIsSafe())
+                .isHide(isHide)
                 .build();
     }
 
@@ -91,6 +96,7 @@ public class Product extends TimeStamped {
         this.startDate = requestDto.getStartDate();
         this.endDate = requestDto.getEndDate();
         this.isSafe = requestDto.getIsSafe();
+        this.isHide = requestDto.getIsHide();
     }
 }
 

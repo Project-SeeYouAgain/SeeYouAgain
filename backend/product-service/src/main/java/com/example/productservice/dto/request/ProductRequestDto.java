@@ -37,4 +37,6 @@ public class ProductRequestDto {
 
     private Boolean isSafe;
 
+    private Boolean isHide;
+
 }

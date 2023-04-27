@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
-public class ProductReservationRequestDto {
+public class ReservationRequestDto {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate startDate;
