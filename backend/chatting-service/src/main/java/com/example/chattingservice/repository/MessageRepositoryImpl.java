@@ -1,9 +1,6 @@
 package com.example.chattingservice.repository;
 
 import com.example.chattingservice.dto.response.MessageResponseDto;
-import com.example.chattingservice.entity.QChannel;
-import com.example.chattingservice.entity.QMessage;
-import com.example.chattingservice.entity.QParticipant;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

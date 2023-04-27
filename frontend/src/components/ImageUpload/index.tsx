@@ -42,6 +42,7 @@ function ImageUpload() {
                     <label htmlFor="file-upload" className="cursor-pointer">
                         <div className="w-[4.8rem] h-[4.8rem] bg-sky rounded-[.9rem] mr-[.6rem]"></div>
                         <div className="absolute top-[1rem] left-[1.48rem]">
+                            {/* Image로 다음에 수정 */}
                             <img src="../icon/camera.png" alt="camera" className="w-[2rem]" />
                             <p className="text-blue text-center">{images.length}/5</p>
                         </div>
@@ -68,10 +69,3 @@ function ImageUpload() {
 }
 
 export default ImageUpload;
-
-// useEffect(() => {
-//     if (image && image.length > 0) {
-//         const file = image[0];
-//         setImgPreview(URL.createObjectURL(file));
-//     }
-// }, [image]);

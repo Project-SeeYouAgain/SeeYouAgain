@@ -14,6 +14,7 @@ public enum ExceptionEnum {
     API_PARAMETER_EXCEPTION(HttpStatus.BAD_REQUEST, "E0005", "파라미터 타입과 값을 확인하세요."),
     MEMBER_ACCESS_EXCEPTION(HttpStatus.FORBIDDEN, "M0001", "접근 권한이 없습니다."),
     PRODUCT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "P0001", "존재하지 않는 상품입니다."),
+    OWNER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "P0001", "작성자가 아닙니다."),
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다.");
 
     private final HttpStatus status;
