@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import style from './index.module.scss';
 import Image from 'next/image';
-import default_user from '@/images/default_user.png'
+import default_user from '@/images/default_user.png';
 
 type ChatRoomProps = {
     chatRoomId: number;

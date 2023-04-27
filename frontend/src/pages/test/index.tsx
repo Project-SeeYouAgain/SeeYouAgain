@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar/Navbar';
+import Navbar from '@/components/Container/components/Navbar';
 import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
