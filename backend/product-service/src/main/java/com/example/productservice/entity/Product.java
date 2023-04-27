@@ -59,6 +59,22 @@ public class Product extends TimeStamped {
     @Column(nullable = false)
     private Boolean isSafe;
 
+
+    public static Product from(ProductRequestDto dto){
+
+        return Product.builder()
+                .title(dto.getTitle())
+                .type(dto.getType())
+                .category(dto.getCategory())
+                .price(dto.getPrice())
+                .description(dto.getDescription())
+                .location(dto.getLocation())
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .isSafe(dto.getIsSafe())
+                .build();
+    }
+
     public static Product of(Long userId,
                              ProductRequestDto dto,
                              Boolean productState,

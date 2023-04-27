@@ -1,5 +1,8 @@
 package com.example.productservice.service;
 
+import com.amazonaws.SdkClientException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.example.productservice.client.UserServiceClient;
 import com.example.productservice.dto.request.ProductRequestDto;
 import com.example.productservice.dto.response.ProductClientResponseDto;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,7 +45,11 @@ public class ProductServiceImpl implements ProductService {
     private final UserServiceClient userServiceClient;
 
     private final AmazonS3Service amazonS3Service;
+    private final AmazonS3 amazonS3Client;
 
+    /**
+     * explain : 제품 조회
+     */
     @Override
     @Transactional(readOnly = true)
     public ProductResponseDto getDetailProduct(Long productId) {
@@ -66,9 +74,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * author : 나웅기
      * explain : 제품 등록 + 태그, 이미지 등록
-     *
      */
     @Override
     @Transactional
@@ -94,6 +100,59 @@ public class ProductServiceImpl implements ProductService {
         return ProductClientResponseDto.of(product, productImg.getProductImg());
     }
 
+    /**
+     * explain : 제품 수정 + 태그, 이미지 수정
+     */
+    @Override
+    @Transactional
+    public void updateProduct(Long userId, Long productId, ProductRequestDto requestDto) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+        // 제품 수정
+        Product newProduct = product.from(requestDto);
+        productRepository.save(newProduct);
+
+        // 제품 태그 삭제 후 생성 => querydsl을 사용하면 더 효율적일지도?
+        List<ProductTag> productTagList = productTagRepository.findAllByProductId(productId);
+        productTagRepository.deleteAll(productTagList);
+
+        List<ProductTag> newProductTagList = requestDto.getTag().stream().map(t -> ProductTag.of(newProduct, t)).collect(toList());
+        productTagRepository.saveAll(newProductTagList);
+
+        // 제품 이미지 삭제 후 생성
+        List<ProductImg> productImgList = productImgRepository.findAllByProductId(productId);
+        deleteProductImg(productImgList);
+        productImgRepository.deleteAll(productImgList);
+
+        List<ProductImg> newProductImgList = saveProductImg(requestDto, product);
+        productImgRepository.saveAll(newProductImgList);
+    }
+
+    /**
+     * explain : 제품 삭제
+     */
+    @Override
+    @Transactional
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+        productRepository.delete(product);
+        // 여기부터 수정하기
+    }
+
+    private void deleteProductImg(List<ProductImg> productImgList) {
+        productImgList.forEach(i -> {
+            delete(i.getProductKey());
+        });
+    }
+    private void delete(String key) {
+        try {
+            amazonS3Client.deleteObject(new DeleteObjectRequest("product", key));
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
+    }
+
     private List<ProductImg> saveProductImg(ProductRequestDto requestDto, Product product) {
         return requestDto.getProductImg().stream()
                 .map(i -> {
@@ -103,6 +162,7 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .collect(toList());
     }
+
 
     private String saveProductImg(MultipartFile i) {
         try {
