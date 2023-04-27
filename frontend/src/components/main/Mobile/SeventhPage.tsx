@@ -38,13 +38,13 @@ function SeventhPage() {
     }, [isInView]);
 
     return (
-        <div className={classNames('text-3xl font-bold text-center', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
+        <div className={classNames('text-2xl font-bold text-center', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
             <p className={classNames(styles.margin, styles.blue)}>같이 만들어가는 좋은 세상</p>
             <p>행복해집니다.</p>
-            <div className="carousel w-full mt-12" ref={ref}>
+            <div className="carousel w-full mt-4" ref={ref}>
                 <Slider {...settings}>
                     <div>
-                        <Image src={img_step_01} alt="step 1" width={400} height={300} className="rounded-3xl p-2" />
+                        <Image src={img_step_01} alt="step 1" className="rounded-3xl p-2" />
                     </div>
                     <div>
                         <Image src={img_step_01} alt="step 1" width={400} height={300} className="rounded-3xl p-2" />
