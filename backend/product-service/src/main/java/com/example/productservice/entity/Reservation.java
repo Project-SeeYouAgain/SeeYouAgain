@@ -1,5 +1,6 @@
 package com.example.productservice.entity;
 
+import com.example.productservice.dto.request.ProductReservationRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,4 +30,14 @@ public class Reservation {
 
     @Column(nullable = false)
     private LocalDate endDate;
+
+    public static Reservation of(Long userId, Product product, ProductReservationRequestDto dto) {
+
+        return Reservation.builder()
+                .product(product)
+                .lenderId(userId)
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .build();
+    }
 }
