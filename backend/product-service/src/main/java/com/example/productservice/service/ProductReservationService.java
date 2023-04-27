@@ -12,4 +12,6 @@ public interface ProductReservationService {
     List<ReservationResponseDto> getReservationList(Long userId, String state);
 
     List<ReservationResponseDto> myProductList(Long userId, String state);
+
+    void updateReservation(Long userId, Long reservationId, ReservationRequestDto requestDto);
 }

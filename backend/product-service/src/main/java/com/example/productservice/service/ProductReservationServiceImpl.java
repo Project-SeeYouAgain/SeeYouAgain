@@ -97,6 +97,21 @@ public class ProductReservationServiceImpl implements ProductReservationService 
         }
     }
 
+    /**
+     * explain : 예약 수정
+     */
+    @Override
+    public void updateReservation(Long userId, Long reservationId, ReservationRequestDto requestDto) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+
+        if (!reservation.getProduct().getOwnerId().equals(userId))
+            throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
+
+
+        // 여기부터 수정
+    }
+
     private double getReviewScoreAvg(List<Review> reviewList) {
         int cnt = reviewList.size();
         int totalScore = 0;

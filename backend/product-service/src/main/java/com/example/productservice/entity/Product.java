@@ -92,7 +92,7 @@ public class Product extends TimeStamped {
         this.category = requestDto.getCategory();
         this.price = requestDto.getPrice();
         this.description = requestDto.getDescription();
-        this.location = location;
+        this.location = requestDto.getLocation();
         this.startDate = requestDto.getStartDate();
         this.endDate = requestDto.getEndDate();
         this.isSafe = requestDto.getIsSafe();
