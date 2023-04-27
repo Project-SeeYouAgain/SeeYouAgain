@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,9 +31,25 @@ public class ProductReservationController {
 
     //대여 예약 조회(대여 받은 내역)
     @GetMapping("/reservation/{state}")
-    public ResponseEntity<BaseResponseDto<ReservationResponseDto>> getReservationList(HttpServletRequest request,
+    public ResponseEntity<BaseResponseDto<List<ReservationResponseDto>>> getReservationList(HttpServletRequest request,
                                                                                       @PathVariable("state") String state) {
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
+                .body(new BaseResponseDto<>(200, "success",
+                         productReservationService.getReservationList(getUserId(request), state)));
+    }
+
+    // 내 물품 조회
+    @GetMapping("/myproduct/{state}")
+    public ResponseEntity<BaseResponseDto<List<ReservationResponseDto>>> getMyProduct(HttpServletRequest request,
+                                                                                      @PathVariable("state") String state) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success",
+                        productReservationService.myProductList(getUserId(request), state)));
+    }
+     
+    public Long getUserId(HttpServletRequest request) {
+        return Long.parseLong(request.getHeader("userId"));
     }
 }
