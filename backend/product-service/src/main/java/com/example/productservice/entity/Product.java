@@ -59,22 +59,6 @@ public class Product extends TimeStamped {
     @Column(nullable = false)
     private Boolean isSafe;
 
-
-    public static Product from(ProductRequestDto dto){
-
-        return Product.builder()
-                .title(dto.getTitle())
-                .type(dto.getType())
-                .category(dto.getCategory())
-                .price(dto.getPrice())
-                .description(dto.getDescription())
-                .location(dto.getLocation())
-                .startDate(dto.getStartDate())
-                .endDate(dto.getEndDate())
-                .isSafe(dto.getIsSafe())
-                .build();
-    }
-
     public static Product of(Long userId,
                              ProductRequestDto dto,
                              Boolean productState,
@@ -95,6 +79,18 @@ public class Product extends TimeStamped {
                 .refreshedAt(refreshTime)
                 .isSafe(dto.getIsSafe())
                 .build();
+    }
+
+    public void updateProduct(ProductRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.type = requestDto.getType();
+        this.category = requestDto.getCategory();
+        this.price = requestDto.getPrice();
+        this.description = requestDto.getDescription();
+        this.location = location;
+        this.startDate = requestDto.getStartDate();
+        this.endDate = requestDto.getEndDate();
+        this.isSafe = requestDto.getIsSafe();
     }
 }
 

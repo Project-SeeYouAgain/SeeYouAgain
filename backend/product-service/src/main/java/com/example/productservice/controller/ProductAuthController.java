@@ -31,9 +31,9 @@ public class ProductAuthController {
     // 대여 물품 생성
     @PostMapping
     public ResponseEntity<BaseResponseDto<ProductRequestDto>> createProduct(HttpServletRequest request,
-                                                                            @RequestBody ProductRequestDto requestDto) {
+                                                                            @RequestPart ProductRequestDto requestDto) {
 
-        productService.createProduct(Long.parseLong(request.getHeader("userId")), requestDto);
+        productService.createProduct(getUserId(request), requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseDto<>(201, "success"));
     }
@@ -42,17 +42,22 @@ public class ProductAuthController {
     @PatchMapping("/{productId}")
     public ResponseEntity<BaseResponseDto<ProductRequestDto>> updateProduct(HttpServletRequest request,
                                                                             @PathVariable("productId") Long productId,
-                                                                            @RequestBody ProductRequestDto requestDto) {
-        productService.updateProduct(Long.parseLong(request.getHeader("userId")), productId ,requestDto);
+                                                                            @RequestPart ProductRequestDto requestDto) {
+        productService.updateProduct(getUserId(request), productId ,requestDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
     }
 
+    // 대여 물품 삭제
     @DeleteMapping("/{productId}")
     public ResponseEntity<BaseResponseDto<?>> deleteProduct(HttpServletRequest request,
                                                          @PathVariable("productId") Long productId) {
-        productService.deleteProduct(productId);
+        productService.deleteProduct(getUserId(request), productId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
+    }
+
+    public Long getUserId(HttpServletRequest request) {
+        return Long.parseLong(request.getHeader("userId"));
     }
 }
