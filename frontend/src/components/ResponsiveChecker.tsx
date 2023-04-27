@@ -1,6 +1,8 @@
 // components/ResponsiveChecker.tsx
 import { useWindowSize } from './hooks/useWindowSize';
 import { useEffect, useState } from 'react';
+import logo from '@/assets/icons/phone.png';
+import Image from 'next/image';
 
 const MOBILE_MAX_WIDTH = 768;
 
@@ -21,8 +23,11 @@ const ResponsiveChecker: React.FC<ResponsiveCheckerProps> = ({ message, onIsMobi
 
     if (!isMobile) {
         return (
-            <div className="w-full h-screen flex items-center text-2xl font-bold bg-white">
-                <p className="w-full text-center text-blue text-3xl">{message}</p>
+            <div className="w-full h-screen grid items-center text-2xl font-bold bg-white">
+                <div>
+                    <Image src={logo} alt="logo" className="w-1/3 m-auto mb-8" />
+                    <p className="w-full text-center text-blue text-3xl">{message}</p>
+                </div>
             </div>
         );
     } else {
