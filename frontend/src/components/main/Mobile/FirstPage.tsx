@@ -1,16 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import web_main from '@/images/mobile_main.gif';
 import styles from './Mobile.module.scss';
 import useInView from '../Mobile/useInView';
 import classNames from 'classnames';
+import { SlArrowDown } from 'react-icons/sl';
 
 function FirstPage() {
+    const [scrollPos, setScrollPos] = useState(0);
     const [ref, isInView] = useInView(0.5);
 
     useEffect(() => {
-        console.log('Visibility status:', isInView ? 'First Visible' : '');
-    }, [isInView]);
+        if (typeof window !== 'undefined') {
+            setScrollPos(window.scrollY);
+        }
+    }, []);
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.code === 'PageDown' && typeof window !== 'undefined') {
+            setScrollPos(window.scrollY);
+        }
+    };
 
     return (
         <div className={styles.parent}>
@@ -20,6 +30,12 @@ function FirstPage() {
                     <p>
                         <span className={styles.pointColor}>S</span>ee<span className={styles.pointColor}>Y</span>ou<span className={styles.pointColor}>A</span>gain
                     </p>
+                </div>
+            </div>
+            <div className={classNames(styles.arrowContainer, 'text-white font-bold w-full text-2xl', { visible: typeof window !== 'undefined' && scrollPos !== window.scrollY })}>
+                <div>
+                    <p>Scroll Down</p>
+                    <SlArrowDown className="m-auto" />
                 </div>
             </div>
             <Image src={web_main} alt="main image" className="w-full h-screen" />

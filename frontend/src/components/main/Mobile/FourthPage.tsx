@@ -16,9 +16,7 @@ function FourthPage() {
                 <div className={classNames('w-fit', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
                     <p className={classNames(styles.blue, 'whitespace-nowrap h-fit text-2xl font-bold')}>세이프존에서</p>
                     <p className="whitespace-nowrap h-fit text-2xl font-bold">안전하게 거래하세요.</p>
-                    <div className={classNames('rounded-xl', styles.fourthImage)}>
-                        <Image src={mobile_map} alt="web_map" />
-                    </div>
+                    <Image src={mobile_map} alt="web_map" className="rounded-[20px] w-4/5 m-auto" />
                 </div>
             </div>
         </div>
