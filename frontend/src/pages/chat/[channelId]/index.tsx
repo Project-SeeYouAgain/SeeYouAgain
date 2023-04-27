@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/router';
-import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
 interface ChatData {
     applyId: string;
@@ -12,17 +12,25 @@ function Channel() {
     const router = useRouter();
     const [chatList, setChatList] = useState<ChatData[]>([]);
     const [chat, setChat] = useState<string>('');
+    const [firstMessageId, setFirstMessageId] = useState<Number>();
 
     const { apply_id } = router.query;
-    const client = useRef<Stomp.Client | null>(null);
+    const client = useRef<Client | null>(null);
 
     const connect = () => {
         const socket = new SockJS('http://localhost:8000/chatting-service/ws');
-        client.current = Stomp.over(socket);
-        client.current.connect({}, () => {
+
+        client.current = new Client({
+            webSocketFactory: () => socket,
+            debug: str => console.log(str),
+        });
+
+        client.current.onConnect = () => {
             console.log('success');
             subscribe();
-        });
+        };
+
+        client.current.activate();
     };
 
     const subscribe = () => {
@@ -33,26 +41,31 @@ function Channel() {
     };
 
     const publish = (chat: string) => {
+        console.log(chat);
+
         if (!client.current?.connected) return;
 
-        client.current.send(
-            '/pub/chat',
-            {},
-            JSON.stringify({
+        client.current.publish({
+            destination: '/pub/chat',
+            body: JSON.stringify({
                 channelId: apply_id,
                 userId: 1,
                 nickname: 'nickname',
                 message: chat,
             }),
-        );
+        });
 
         setChat('');
     };
 
     const disconnect = () => {
+<<<<<<< HEAD
         client.current?.disconnect(() => {
             console.log('방이 닫혔습니다.');
         });
+=======
+        client.current?.deactivate();
+>>>>>>> 495d105b0049ea3717b60d605cdd8771e55b78dc
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -65,11 +78,16 @@ function Channel() {
         publish(chat);
     };
 
+    const getMessage = () => {
+        
+    }
+
     useEffect(() => {
+        getMessage();
         connect();
 
         return () => disconnect();
-    }, [subscribe, apply_id]);
+    }, []);
 
     return (
         <div>
@@ -85,7 +103,7 @@ function Channel() {
                 <div>
                     <input type={'text'} name={'chatInput'} onChange={handleChange} value={chat} />
                 </div>
-                <input type={'submit'} value={'보내기'} />
+                <button type="submit">보내기</button>
             </form>
         </div>
     );

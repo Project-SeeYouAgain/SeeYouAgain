@@ -40,7 +40,7 @@ export default function index() {
                     <SeventhPage />
                 </div>
             </div>
-            <div className={classNames('fixed bottom-0 h-16 w-full p-3', styles.header)}>
+            <div className={classNames('fixed bottom-0 h-20 w-full p-3 mb-3', styles.header)}>
                 <button className={classNames(styles.btn, 'rounded-xl bg-white')}>START</button>
             </div>
         </div>
