@@ -16,12 +16,6 @@ function FirstPage() {
         }
     }, []);
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.code === 'PageDown' && typeof window !== 'undefined') {
-            setScrollPos(window.scrollY);
-        }
-    };
-
     return (
         <div className={styles.parent}>
             <div className={classNames(styles.textContainer)} ref={ref}>
