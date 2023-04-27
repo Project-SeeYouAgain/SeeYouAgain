@@ -80,5 +80,17 @@ public class Product extends TimeStamped {
                 .isSafe(dto.getIsSafe())
                 .build();
     }
+
+    public void updateProduct(ProductRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.type = requestDto.getType();
+        this.category = requestDto.getCategory();
+        this.price = requestDto.getPrice();
+        this.description = requestDto.getDescription();
+        this.location = location;
+        this.startDate = requestDto.getStartDate();
+        this.endDate = requestDto.getEndDate();
+        this.isSafe = requestDto.getIsSafe();
+    }
 }
 

@@ -10,4 +10,8 @@ public interface ProductService {
     void createProduct(Long userId, ProductRequestDto requestDto);
 
     ProductClientResponseDto getProductInfo(Long productId);
+
+    void updateProduct(Long userId, Long productId, ProductRequestDto requestDto);
+
+    void deleteProduct(Long userId, Long productId);
 }
