@@ -41,7 +41,7 @@ function Channel() {
             JSON.stringify({
                 channelId: apply_id,
                 userId: 1,
-                nickname: "nickname",
+                nickname: 'nickname',
                 message: chat,
             }),
         );
@@ -51,7 +51,7 @@ function Channel() {
 
     const disconnect = () => {
         client.current?.disconnect(() => {
-            console.log("방이 닫혔습니다.")
+            console.log('방이 닫혔습니다.');
         });
     };
 
