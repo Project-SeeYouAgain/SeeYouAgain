@@ -12,7 +12,7 @@ function Channel() {
     const router = useRouter();
     const [chatList, setChatList] = useState<ChatData[]>([]);
     const [chat, setChat] = useState<string>('');
-    const [firstMessageId, setFirstMessageId] = useState<Number>();
+    const [firstMessageId, setFirstMessageId] = useState<number>();
 
     const { apply_id } = router.query;
     const client = useRef<Client | null>(null);
@@ -59,13 +59,7 @@ function Channel() {
     };
 
     const disconnect = () => {
-<<<<<<< HEAD
-        client.current?.disconnect(() => {
-            console.log('방이 닫혔습니다.');
-        });
-=======
         client.current?.deactivate();
->>>>>>> 495d105b0049ea3717b60d605cdd8771e55b78dc
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -78,12 +72,10 @@ function Channel() {
         publish(chat);
     };
 
-    const getMessage = () => {
-        
-    }
+    // const getMessage = () => {};
 
     useEffect(() => {
-        getMessage();
+        // getMessage();
         connect();
 
         return () => disconnect();
