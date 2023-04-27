@@ -4,7 +4,6 @@ import com.example.productservice.dto.BaseResponseDto;
 import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 import com.example.productservice.service.ProductReservationService;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,6 @@ public class ProductReservationController {
     public ResponseEntity<BaseResponseDto<List<ReservationResponseDto>>> getReservationList(HttpServletRequest request,
                                                                                       @PathVariable("state") String state) {
 
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",
                          productReservationService.getReservationList(getUserId(request), state)));
@@ -48,7 +46,7 @@ public class ProductReservationController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",
-                productReservationService.myProductList(getUserId(request), state)));
+                        productReservationService.myProductList(getUserId(request), state)));
     }
      
     public Long getUserId(HttpServletRequest request) {

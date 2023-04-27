@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../components/header/Header';
 import Profile from '../../components/Card/Profile';
-import { MenuData1, MenuData2 } from './menuData';
+import { MenuData1, MenuData2 } from './MenuData';
 import Link from 'next/link';
 
 function MyPage() {

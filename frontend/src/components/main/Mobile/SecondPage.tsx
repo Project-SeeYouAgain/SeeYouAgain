@@ -13,12 +13,12 @@ function SecondPage() {
     return (
         <div className={classNames(styles.boxContainer)} ref={ref}>
             <div className={classNames(styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
-                <Image src={hammer} alt="hammer" width={300} height={200} className="m-auto" />
+                <Image src={hammer} alt="hammer" className="m-auto w-4/5" />
                 <div className={classNames(styles.textBox)}>
-                    <p className="text-xl text-center font-bold">Borrow what you need</p>
-                    <p className="text-3xl font-bold">한번 쓰려고 </p>
-                    <p className="text-3xl font-bold">사기에는 아까운 물건</p>
-                    <p className="text-3xl font-bold">이웃에게 빌려보세요</p>
+                    <p className="text-s text-center font-bold">Borrow what you need</p>
+                    <p className="text-2xl font-bold">한번 쓰려고 </p>
+                    <p className="text-2xl font-bold">사기에는 아까운 물건</p>
+                    <p className="text-2xl font-bold">이웃에게 빌려보세요</p>
                 </div>
             </div>
         </div>

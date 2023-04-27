@@ -1,14 +1,17 @@
-import React, { FunctionComponent, HTMLProps } from 'react';
-import { ButtonLayout, ButtonLayoutProps } from './styles';
+import RoundSm from './RoundSm';
+import RoundMd from './RoundMd';
+import RoundLg from './RoundLg';
+import RoundMini from './RoundMini';
+import SquareLg from './SquareLg';
+import Heart from './Heart';
 
-export interface ButtonProps extends HTMLProps<HTMLButtonElement>, ButtonLayoutProps {}
-
-const Button: FunctionComponent<ButtonProps> = ({ children, buttonType }) => {
-    return (
-        <ButtonLayout type="button" buttonType={buttonType}>
-            {children}
-        </ButtonLayout>
-    );
+const Button = {
+    RoundSm,
+    RoundMd,
+    RoundLg,
+    RoundMini,
+    SquareLg,
+    Heart,
 };
 
 export default Button;

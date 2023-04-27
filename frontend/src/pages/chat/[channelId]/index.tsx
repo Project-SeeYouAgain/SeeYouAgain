@@ -59,7 +59,13 @@ function Channel() {
     };
 
     const disconnect = () => {
+<<<<<<< HEAD
+        client.current?.disconnect(() => {
+            console.log('방이 닫혔습니다.');
+        });
+=======
         client.current?.deactivate();
+>>>>>>> 495d105b0049ea3717b60d605cdd8771e55b78dc
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
