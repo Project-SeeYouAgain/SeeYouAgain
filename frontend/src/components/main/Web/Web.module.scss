@@ -80,3 +80,35 @@
     opacity: 1;
     transform: translateY(0);
 }
+.arrowContainer {
+    position: absolute;
+    bottom: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation-name: fade-in-out;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+.arrowContainer.visible {
+    opacity: 1;
+}
+
+@keyframes fade-in-out {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 2000ms, transform 2000ms;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
