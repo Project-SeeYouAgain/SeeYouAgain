@@ -1,6 +1,6 @@
 package com.example.productservice.entity;
 
-import com.example.productservice.dto.request.ProductReservationRequestDto;
+import com.example.productservice.dto.request.ReservationRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,7 +31,7 @@ public class Reservation {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    public static Reservation of(Long userId, Product product, ProductReservationRequestDto dto) {
+    public static Reservation of(Long userId, Product product, ReservationRequestDto dto) {
 
         return Reservation.builder()
                 .product(product)

@@ -19,4 +19,6 @@ public class ReviewResponseDto {
     private Integer reviewScore;
 
     private LocalDateTime createdAt;
+
+    private String reviewImgUrl;
 }

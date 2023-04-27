@@ -1,7 +1,7 @@
 package com.example.productservice.controller;
 
 import com.example.productservice.dto.BaseResponseDto;
-import com.example.productservice.dto.request.ProductReservationRequestDto;
+import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 import com.example.productservice.service.ProductReservationService;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class ProductReservationContoller {
+public class ProductReservationController {
 
     private final ProductReservationService productReservationService;
 
     //대여 예약 생성
     @PostMapping("/reservation/{productId}")
-    public ResponseEntity<BaseResponseDto<ProductReservationRequestDto>> createReservation(HttpServletRequest request,
-                                                                                           @PathVariable("productId") Long productId,
-                                                                                           @RequestBody ProductReservationRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto<ReservationRequestDto>> createReservation(HttpServletRequest request,
+                                                                                    @PathVariable("productId") Long productId,
+                                                                                    @RequestBody ReservationRequestDto requestDto) {
         productReservationService.createReservation(Long.parseLong(request.getHeader("userId")), productId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseDto<>(201, "success"));

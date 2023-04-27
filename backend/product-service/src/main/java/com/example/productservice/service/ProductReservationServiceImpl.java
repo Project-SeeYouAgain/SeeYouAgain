@@ -1,7 +1,7 @@
 package com.example.productservice.service;
 
 import com.example.productservice.client.UserServiceClient;
-import com.example.productservice.dto.request.ProductReservationRequestDto;
+import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 import com.example.productservice.entity.Product;
 import com.example.productservice.entity.Reservation;
@@ -30,7 +30,7 @@ public class ProductReservationServiceImpl implements ProductReservationService 
 
     @Override
     @Transactional
-    public void createReservation(Long userId, Long productId, ProductReservationRequestDto requestDto) {
+    public void createReservation(Long userId, Long productId, ReservationRequestDto requestDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
