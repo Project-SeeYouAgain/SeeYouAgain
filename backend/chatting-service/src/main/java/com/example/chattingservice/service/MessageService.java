@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MessageService {
     void insertMessage(MessageRequestDto chatDto);
-    List<MessageResponseDto> getMessageByChannelId(Long channelId, Long firstMessageId);
+    List<MessageResponseDto> getMessageByChannelId(String identifier, Long firstMessageId);
 }

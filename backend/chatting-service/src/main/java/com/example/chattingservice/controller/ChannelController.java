@@ -23,10 +23,11 @@ public class ChannelController {
 
     private final MessageService messageService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<BaseResponseDto<List<ChannelResponseDto>>> getChannelList(@PathVariable Long userId) {
+    @GetMapping("/{type}")
+    public ResponseEntity<BaseResponseDto<List<ChannelResponseDto>>> getChannelList(HttpServletRequest request,
+                                                                                    @PathVariable("type") String type) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", channelService.getChannelList(userId)));
+                .body(new BaseResponseDto<>(200, "success", channelService.getChannelList(getUserId(request), type)));
     }
 
     @PostMapping
@@ -37,11 +38,11 @@ public class ChannelController {
                 .body(new BaseResponseDto<>(201, "success"));
     }
 
-    @GetMapping("/{channelId}/{firstMessageId}")
-    public ResponseEntity<BaseResponseDto<List<MessageResponseDto>>> getMessageList(@PathVariable("channelId") Long channelId,
+    @GetMapping("/{identifier}/{firstMessageId}")
+    public ResponseEntity<BaseResponseDto<List<MessageResponseDto>>> getMessageList(@PathVariable("identifier") String identifier,
                                                                                     @PathVariable("firstMessageId") Long firstMessageId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", messageService.getMessageByChannelId(channelId, firstMessageId)));
+                .body(new BaseResponseDto<>(200, "success", messageService.getMessageByChannelId(identifier, firstMessageId)));
     }
 
     private Long getUserId(HttpServletRequest request) {
