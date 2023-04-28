@@ -19,7 +19,6 @@ public class SecurityConfig {
 
    private final Environment env;
 
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -34,8 +33,9 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/error/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/**")
-                .access("hasIpAddress('" + gatewayIpAddress + "')")
+                .antMatchers("/**").access("hasIpAddress('" + gatewayIpAddress + "')")
+                .and()
+                .oauth2Login()
                 .and()
                 .headers().frameOptions().disable();
         return http.build();

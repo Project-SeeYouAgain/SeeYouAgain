@@ -35,6 +35,9 @@ spring:
         max-active: 8
     port: 6379
     host: localhost
+  profiles:
+    include: oauth
+
 eureka:
   instance:
     prefer-ip-address: true
@@ -54,4 +57,5 @@ gateway:
 
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
+
 
