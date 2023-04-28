@@ -17,10 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +49,7 @@ public class ChannelServiceImpl implements ChannelService {
 
                     return ChannelResponseDto.of(c, responseDto, latestMessage.get(0));
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private UserClientResponseDto getUserClientResponseDto(Long userId, Channel c) {

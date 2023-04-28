@@ -24,6 +24,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 message.channel.id.as("channelId"),
                 message.participant.id.as("writerId"),
                 message.participant.nickname,
+                message.participant.profileImg,
                 message.chat,
                 message.createdAt,
                 message.updatedAt
