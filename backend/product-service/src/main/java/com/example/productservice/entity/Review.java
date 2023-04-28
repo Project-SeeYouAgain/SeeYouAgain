@@ -1,8 +1,6 @@
 package com.example.productservice.entity;
 
 import com.example.productservice.dto.request.ReviewRequestDto;
-import com.example.productservice.dto.response.ReviewResponseDto;
-import com.example.productservice.dto.response.UserClientResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -54,5 +52,4 @@ public class Review extends TimeStamped {
         this.reviewImgKey = reviewImgKey;
         this.reviewImgUrl = reviewImgUrl;
     }
-
 }

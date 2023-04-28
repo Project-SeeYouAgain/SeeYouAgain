@@ -1,17 +1,24 @@
 package com.example.productservice.service;
 
 import com.example.productservice.dto.request.ReservationRequestDto;
+import com.example.productservice.dto.request.ReservationReturnRequestDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 
 import java.util.List;
 
-public interface ProductReservationService {
+public interface ReservationService {
 
     void createReservation(Long userId, Long productId, ReservationRequestDto requestDto);
+
+    void checkReservation(Long userId, Long reservationId, String state);
+
+    void doneReservation(Long userId, Long reservationId, String state);
 
     List<ReservationResponseDto> getReservationList(Long userId, String state);
 
     List<ReservationResponseDto> myProductList(Long userId, String state);
 
-    void updateReservation(Long userId, Long reservationId, ReservationRequestDto requestDto);
+    void updateReservation(Long userId, Long reservationId, ReservationReturnRequestDto requestDto);
+
+    void deleteReservation(Long userId, Long reservationId);
 }
