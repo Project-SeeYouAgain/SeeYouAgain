@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Button from '../../components/Button';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
+import Card from '../../components/Card/ItemCard';
 
 function MyPage() {
     return (
@@ -32,17 +33,8 @@ function MyPage() {
                             ))}
                         </div>
                     </div>
+                    <Card />
                 </Body>
-                <Button.Round bgColor="blue" textColor="white" innerValue="대여하기" />
-                <Button.Round bgColor="lightgray" textColor="black" innerValue="도서" />
-                <Button.Round bgColor="lightgray" textColor="black" innerValue="여성잡화" />
-                <Button.Round bgColor="lightgray" textColor="black" innerValue="가구/인테리어" />
-                <br />
-                <Button.SquareSm bgColor="red" textColor="white" innerValue="신고" />
-                <br />
-                <Button.Square bgColor="blue" textColor="white" innerValue="씨유 톡톡" />
-                <br />
-                <Button.SquareLg bgColor="blue" textColor="white" innerValue="선택완료" />
             </div>
         </Container>
     );
