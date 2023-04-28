@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface MessageRepositoryCustom {
 
-    List<MessageResponseDto> findLatestMessageList(Long channelId, Long firstMessageId);
+    List<MessageResponseDto> findLatestMessageList(String identifier, Long firstMessageId);
 }

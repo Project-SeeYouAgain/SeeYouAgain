@@ -6,26 +6,26 @@ import Image from 'next/image';
 import default_user from '@/images/default_user.png';
 
 type ChatRoomProps = {
-    chatRoomId: number;
     profileImg: string;
     nickname: string;
     location: string;
     latestMessageDate: string;
     latestMessage: string;
     productImg: string;
+    identifier: string;
 };
 
-function ChatRoom({ chatRoomId, profileImg, nickname, location, latestMessageDate, latestMessage, productImg }: ChatRoomProps) {
+function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMessage, productImg, identifier }: ChatRoomProps) {
     return (
-        <Link href={`/chat/${chatRoomId}`} className="border-b-1 flex" role="button">
+        <Link href={`/chat/${identifier}`} className="border-b-1 flex" role="button">
             <div className="w-1/6 me-4">
                 <Image src={default_user} alt="프로필 이미지" className="rounded-full object-cover" width="50" height="50" />
             </div>
             <div className="w-4/6">
                 <div className="flex items-end">
                     <p className="font-medium me-2">{nickname}</p>
-                    <p className="text-gray-400 me-1 font-light">{location}</p>
-                    <p className="text-gray-400 font-light">{latestMessageDate}</p>
+                    <p className="text-gray-500 me-1 font-light">{location}</p>
+                    <p className="text-gray-500 font-light">{latestMessageDate}</p>
                 </div>
                 <p>{latestMessage}</p>
             </div>
