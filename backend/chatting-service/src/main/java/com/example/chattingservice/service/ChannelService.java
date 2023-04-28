@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ChannelService {
 
-    List<ChannelResponseDto> getChannelList(Long userId);
+    List<ChannelResponseDto> getChannelList(Long userId, String type);
 
     void createChannel(Long userId, ChannelRequestDto requestDto);
 }
