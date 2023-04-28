@@ -15,7 +15,9 @@ import kakao from '@/assets/icons/kakaobtn.png';
 export default function index() {
     useEffect(() => {}, []);
 
-    const handleKakaoLogin = () => {};
+    const handleKakaoLogin = () => {
+        location.href = 'http://localhost:8000/user-service/oauth2/authorization/kakao';
+    };
 
     return (
         <div>

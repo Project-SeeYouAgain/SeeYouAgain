@@ -1,6 +1,6 @@
 server:
   # port 번호가 0번이면 랜덤으로 배정된다.
-  port: 0
+  port: 8080
 
 spring:
   application:
@@ -15,13 +15,13 @@ spring:
 #    url: jdbc:mysql://도메인주소:3306/seeyouagain?useSSL=false&serverTimezone=UTC
     url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: ssafy
+    password: kp23156385@
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     generate-ddl: true
     properties:
@@ -53,7 +53,7 @@ logging:
     com.example.userservice.client: DEBUG
 
 gateway:
-  ip: 192.168.100.120
+  ip: 192.168.0.100
 
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
