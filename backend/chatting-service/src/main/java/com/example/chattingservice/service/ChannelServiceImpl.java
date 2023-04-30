@@ -17,10 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -38,25 +39,25 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ChannelResponseDto> getChannelList(Long userId) {
-        List<Channel> myChannelList = channelRepository.findByOwnerIdOrUserId(userId);
+    public List<ChannelResponseDto> getChannelList(Long userId, String type) {
+        List<Channel> myChannelList = channelRepository.findAllByOwnerIdOrUserId(userId, type);
         return myChannelList.stream()
                 .map(c -> {
-                    UserClientResponseDto responseDto = getUserClientResponseDto(userId, c);
+                    UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
 
                     PageRequest pageRequest = PageRequest.of(0, 1);
                     List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
 
                     return ChannelResponseDto.of(c, responseDto, latestMessage.get(0));
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
-    private UserClientResponseDto getUserClientResponseDto(Long userId, Channel c) {
+    private UserClientResponseDto getUserClientResponseDto(String type, Channel c) {
 
-        if (c.getOwnerId().equals(userId)) return userServiceClient.getUserInfo(c.getUserId()).getData();
+        if (type.equals("borrow")) return userServiceClient.getUserInfo(c.getOwnerId()).getData();
 
-        return userServiceClient.getUserInfo(c.getOwnerId()).getData();
+        return userServiceClient.getUserInfo(c.getUserId()).getData();
     }
 
     @Override
@@ -74,7 +75,7 @@ public class ChannelServiceImpl implements ChannelService {
         UserClientResponseDto ownerUserInfo = userServiceClient.getUserInfo(requestDto.getOwnerId()).getData();
         ProductClientResponseDto productInfo = productServiceClient.getProductInfo(requestDto.getProductId()).getData();
 
-        Channel channel = Channel.of(requestDto, userId, productInfo);
+        Channel channel = Channel.of(requestDto, userId, UUID.randomUUID().toString(), productInfo);
         channelRepository.save(channel);
 
         Participant me = Participant.of(channel, userId, myUserInfo, true);

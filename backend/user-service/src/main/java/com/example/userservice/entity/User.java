@@ -1,11 +1,10 @@
 package com.example.userservice.entity;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Table(name = "users")
-public class User {
+public class User extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +23,7 @@ public class User {
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 20, unique = true)
+    @Column(length = 20, unique = true)
     private String nickname;
 
     @Column(nullable = false)
@@ -40,11 +39,9 @@ public class User {
 
     private int mannerCnt;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime modifiedAt;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Role> roleSet = new HashSet<>();
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
@@ -55,4 +52,7 @@ public class User {
         this.profileImgUrl = profileImgUrl;
     }
 
+    public void addUserRole(Role role) {
+        roleSet.add(role);
+    }
 }

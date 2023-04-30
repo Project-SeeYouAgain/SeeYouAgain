@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, ChangeEvent, FormEvent } from 'reac
 import { useRouter } from 'next/router';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import { axAuth } from '@/apis/axiosinstance';
 
 interface ChatData {
     applyId: string;
@@ -12,9 +13,9 @@ function Channel() {
     const router = useRouter();
     const [chatList, setChatList] = useState<ChatData[]>([]);
     const [chat, setChat] = useState<string>('');
-    const [firstMessageId, setFirstMessageId] = useState<Number>();
+    const [firstMessageId, setFirstMessageId] = useState<number>();
 
-    const { apply_id } = router.query;
+    const { identifier } = router.query;
     const client = useRef<Client | null>(null);
 
     const connect = () => {
@@ -34,21 +35,20 @@ function Channel() {
     };
 
     const subscribe = () => {
-        client.current?.subscribe('/sub/chat/' + apply_id, body => {
+        client.current?.subscribe('/sub/chat/' + identifier, body => {
             const json_body: ChatData = JSON.parse(body.body);
             setChatList((_chat_list: ChatData[]) => [..._chat_list, json_body]);
         });
     };
 
     const publish = (chat: string) => {
-        console.log(chat);
 
         if (!client.current?.connected) return;
 
         client.current.publish({
             destination: '/pub/chat',
             body: JSON.stringify({
-                channelId: apply_id,
+                channelId: identifier,
                 userId: 1,
                 nickname: 'nickname',
                 message: chat,
@@ -59,13 +59,7 @@ function Channel() {
     };
 
     const disconnect = () => {
-<<<<<<< HEAD
-        client.current?.disconnect(() => {
-            console.log('방이 닫혔습니다.');
-        });
-=======
         client.current?.deactivate();
->>>>>>> 495d105b0049ea3717b60d605cdd8771e55b78dc
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -78,12 +72,20 @@ function Channel() {
         publish(chat);
     };
 
-    const getMessage = () => {
-        
-    }
+    // const createChannel = () => {
+    //     axAuth({
+    //         url: "/chatting-service/auth/channel" + identifier, 
+    //         method: "post"
+    //     }).then((res) => {
+
+    //     })
+    // }
+
+    // const getMessage = () => {};
 
     useEffect(() => {
-        getMessage();
+        // getMessage();
+
         connect();
 
         return () => disconnect();

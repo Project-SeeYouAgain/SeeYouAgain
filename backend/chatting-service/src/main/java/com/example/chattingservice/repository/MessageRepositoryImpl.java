@@ -18,12 +18,13 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<MessageResponseDto> findLatestMessageList(Long channelId, Long firstMessageId) {
+    public List<MessageResponseDto> findLatestMessageList(String identifier, Long firstMessageId) {
         return queryFactory.select(Projections.constructor(
                 MessageResponseDto.class,
                 message.channel.id.as("channelId"),
                 message.participant.id.as("writerId"),
                 message.participant.nickname,
+                message.participant.profileImg,
                 message.chat,
                 message.createdAt,
                 message.updatedAt
@@ -31,7 +32,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 .from(message)
                 .join(message.channel, channel)
                 .join(message.participant, participant)
-                .where(channel.id.eq(channelId).and(ltMessageId(firstMessageId)))
+                .where(channel.identifier.eq(identifier).and(ltMessageId(firstMessageId)))
                 .orderBy(message.id.desc())
                 .limit(20)
                 .fetch();

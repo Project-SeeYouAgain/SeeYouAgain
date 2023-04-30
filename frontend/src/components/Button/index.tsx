@@ -1,17 +1,15 @@
-import RoundSm from './RoundSm';
-import RoundMd from './RoundMd';
-import RoundLg from './RoundLg';
-import RoundMini from './RoundMini';
+import Round from './Round';
+import Square from './Square';
+import SquareSm from './SquareSm';
 import SquareLg from './SquareLg';
 import Heart from './Heart';
 
 const Button = {
-    RoundSm,
-    RoundMd,
-    RoundLg,
-    RoundMini,
+    Round,
     SquareLg,
     Heart,
+    Square,
+    SquareSm,
 };
 
 export default Button;

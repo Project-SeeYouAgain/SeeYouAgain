@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,24 +43,24 @@ public class ReviewServiceImpl implements ReviewService{
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
-        Review review = getReview(userId, requestDto, responseDto, product);
+        Review review = getReview(userId, requestDto, responseDto.getNickname(), product);
 
         // 리뷰 저장
         reviewRepository.save(review);
     }
 
-    private Review getReview(Long userId, ReviewRequestDto requestDto, UserClientResponseDto responseDto, Product product) {
+    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname, Product product) {
 
-        if (!requestDto.getReviewImg().isEmpty()) {
-            String reviewKey = saveS3ReviewImg(requestDto);
-            String reviewUrl = amazonS3Service.getFileUrl(reviewKey);
-            return Review.of(product, userId, responseDto.getNickname(), requestDto, reviewKey, reviewUrl);
+        if (requestDto.getReviewImg().isEmpty()) {
+            return Review.of(product, userId, nickname, requestDto, null, null);
         }
 
-        return Review.of(product, userId, responseDto.getNickname(), requestDto, null, null);
+        String reviewKey = saveS3Img(requestDto);
+        String reviewUrl = amazonS3Service.getFileUrl(reviewKey);
+        return Review.of(product, userId, nickname, requestDto, reviewKey, reviewUrl);
     }
 
-    private String saveS3ReviewImg(ReviewRequestDto requestDto) {
+    private String saveS3Img(ReviewRequestDto requestDto) {
         try {
             return amazonS3Service.upload(requestDto.getReviewImg(), "review");
         } catch (IOException e) {
@@ -75,16 +74,16 @@ public class ReviewServiceImpl implements ReviewService{
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.REVIEW_NOT_EXIST_EXCEPTION));
 
-        if (!review.getLenderId().equals(reviewId)) throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
+        writerValidation(reviewId, review);
 
-        if (review.getReviewImgKey() != null) amazonS3Service.delete(review.getReviewImgKey());
+        deleteS3Img(review);
 
         updateReview(requestDto, review);
     }
 
     private void updateReview(ReviewRequestDto requestDto, Review review) {
         if (!requestDto.getReviewImg().isEmpty()) {
-            String reviewImgKey = saveS3ReviewImg(requestDto);
+            String reviewImgKey = saveS3Img(requestDto);
             String reviewImgUrl = amazonS3Service.getFileUrl(reviewImgKey);
             review.updateReview(requestDto, reviewImgKey, reviewImgUrl);
         } else {
@@ -98,11 +97,19 @@ public class ReviewServiceImpl implements ReviewService{
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.REVIEW_NOT_EXIST_EXCEPTION));
 
-        if (!review.getLenderId().equals(reviewId)) throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
+        writerValidation(reviewId, review);
 
-        if (review.getReviewImgKey() != null) amazonS3Service.delete(review.getReviewImgKey());
+        deleteS3Img(review);
 
         reviewRepository.deleteById(review.getId());
+    }
+
+    private void deleteS3Img(Review review) {
+        if (review.getReviewImgKey() != null) amazonS3Service.delete(review.getReviewImgKey());
+    }
+
+    private static void writerValidation(Long reviewId, Review review) {
+        if (!review.getLenderId().equals(reviewId)) throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
     }
 
 }
