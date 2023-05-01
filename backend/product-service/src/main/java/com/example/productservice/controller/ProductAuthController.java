@@ -18,6 +18,9 @@ public class ProductAuthController {
 
     private final ProductService productService;
 
+    // 전체 대여 물품 조회(sorted)
+
+
     // 대여 물품 조회
     @GetMapping("/{productId}")
     public ResponseEntity<BaseResponseDto<ProductResponseDto>> getDetailProduct(HttpServletRequest request,
