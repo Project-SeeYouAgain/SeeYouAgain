@@ -8,8 +8,4 @@ import lombok.NoArgsConstructor;
 public class NicknameRequestDto {
 
     private String nickname;
-
-    private String email;
-
-    private String password;
 }
