@@ -4,7 +4,6 @@ import com.example.productservice.dto.BaseResponseDto;
 import com.example.productservice.dto.request.ProductRequestDto;
 import com.example.productservice.dto.response.ProductResponseDto;
 import com.example.productservice.service.ProductService;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

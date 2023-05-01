@@ -1,6 +1,5 @@
 package com.example.productservice.entity;
 
-import com.example.productservice.dto.request.ProductRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
