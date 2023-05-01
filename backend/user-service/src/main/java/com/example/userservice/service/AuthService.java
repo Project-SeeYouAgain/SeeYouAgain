@@ -22,6 +22,6 @@ public interface AuthService {
 
     void deleteCart(Long userId, Long productId);
 
-//    String updateProfileImg(Long userId, MultipartFile profileImg);
+    String updateProfileImg(Long userId, MultipartFile profileImg);
 
 }
