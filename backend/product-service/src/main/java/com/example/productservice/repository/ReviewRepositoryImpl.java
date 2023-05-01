@@ -24,7 +24,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                     review.content,
                     review.reviewScore,
                     review.createdAt,
-                    review.reviewImg.reviewImgUrl
+                    review.reviewImgUrl
                 ))
                 .from(review)
                 .where(review.product.id.eq(productId).and(ltReviewId(lastReviewId)))

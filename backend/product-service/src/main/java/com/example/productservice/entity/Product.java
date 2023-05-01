@@ -41,6 +41,7 @@ public class Product extends TimeStamped {
     @Column(nullable = false, length = 50)
     private String location;
 
+    // 대여 가능 : true, 대여중 : false
     @Column(nullable = false)
     private Boolean productState;
 
@@ -92,11 +93,15 @@ public class Product extends TimeStamped {
         this.category = requestDto.getCategory();
         this.price = requestDto.getPrice();
         this.description = requestDto.getDescription();
-        this.location = location;
+        this.location = requestDto.getLocation();
         this.startDate = requestDto.getStartDate();
         this.endDate = requestDto.getEndDate();
         this.isSafe = requestDto.getIsSafe();
         this.isHide = requestDto.getIsHide();
+    }
+
+    public void updateProductState(Boolean state) {
+        this.productState = state;
     }
 }
 
