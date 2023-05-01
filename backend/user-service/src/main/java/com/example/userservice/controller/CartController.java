@@ -29,7 +29,7 @@ public class CartController {
                                                       @PathVariable("productId") Long productId) {
         Long userId = getUserId(request);
         cartService.addCart(userId, productId);
-        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(201, "success"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new BaseResponseDto<>(201, "success"));
     }
 
     /**
@@ -39,7 +39,7 @@ public class CartController {
      * @param productId
      * @return
      */
-    @DeleteMapping("/cart/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<BaseResponseDto<?>> deleteCart(HttpServletRequest request,
                                                       @PathVariable("productId") Long productId) {
         Long userId = getUserId(request);

@@ -9,7 +9,6 @@ import com.example.userservice.repository.UserRepository;
 import com.example.userservice.security.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
-    private final PasswordEncoder passwordEncoder;
 
     private final JWTUtil jwtUtil;
 
