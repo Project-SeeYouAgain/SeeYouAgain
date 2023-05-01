@@ -1,10 +1,9 @@
 package com.example.productservice.service;
 
 import com.example.productservice.client.UserServiceClient;
+import com.example.productservice.dto.request.ProductListRequestDto;
 import com.example.productservice.dto.request.ProductRequestDto;
-import com.example.productservice.dto.response.ProductClientResponseDto;
-import com.example.productservice.dto.response.ProductResponseDto;
-import com.example.productservice.dto.response.UserClientResponseDto;
+import com.example.productservice.dto.response.*;
 import com.example.productservice.entity.*;
 import com.example.productservice.exception.ApiException;
 import com.example.productservice.exception.ExceptionEnum;
@@ -17,8 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -39,6 +40,8 @@ public class ProductServiceImpl implements ProductService {
     private final UserServiceClient userServiceClient;
 
     private final AmazonS3Service amazonS3Service;
+
+    private final CartRepository cartRepository;
 
     /**
      * explain : 제품 조회
@@ -150,6 +153,20 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductListResponseDto> getProductList(Long userId, ProductListRequestDto requestDto) {
+        List<Product> productList = new ArrayList<>();
+        if (requestDto.getSort().equals(0)) {
+            productList = productRepository.findAllOrderByDate();
+        } else if (requestDto.getSort().equals(1)) {
+            productList = productRepository.findAllOrderByPrice();
+        } else if (requestDto.getSort().equals(2)) {
+            productList = productRepository.findAllOrderByScore();
+        }
+        return getProductResponse(productList, userId);
+    }
+
     private void saveProductImg(List<MultipartFile> productImg, Product product) {
         productImg.forEach(i -> {
             if (!i.isEmpty()) {
@@ -193,5 +210,22 @@ public class ProductServiceImpl implements ProductService {
                     return reservationMap;
                 })
                 .collect(toList());
+    }
+
+    private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {
+        return productList.stream().map(p -> {
+            double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
+            ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
+
+            Optional<Cart> cart = cartRepository.findByUserAndProductId(userId, p);
+
+            Boolean isCart = false;
+
+            if (cart.isPresent()) isCart = true;
+
+            return ProductListResponseDto.of(p, productScoreAverage, productImg.getProductImg(), isCart);
+
+
+        }).collect(toList());
     }
 }

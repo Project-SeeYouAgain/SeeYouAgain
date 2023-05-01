@@ -1,7 +1,9 @@
 package com.example.productservice.controller;
 
 import com.example.productservice.dto.BaseResponseDto;
+import com.example.productservice.dto.request.ProductListRequestDto;
 import com.example.productservice.dto.request.ProductRequestDto;
+import com.example.productservice.dto.response.ProductListResponseDto;
 import com.example.productservice.dto.response.ProductResponseDto;
 import com.example.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +62,16 @@ public class ProductAuthController {
         productService.deleteProduct(getUserId(request), productId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
+    }
+
+    // 대여 물품 목록(sort:최신순(0), 가격순(1), 별점순(2))
+    @GetMapping
+    public ResponseEntity<BaseResponseDto<List<ProductListResponseDto>>> getProductList(HttpServletRequest request,
+                                                                                        @RequestBody ProductListRequestDto requestDto) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success",
+                        productService.getProductList(getUserId(request), requestDto)));
     }
 
     public Long getUserId(HttpServletRequest request) {
