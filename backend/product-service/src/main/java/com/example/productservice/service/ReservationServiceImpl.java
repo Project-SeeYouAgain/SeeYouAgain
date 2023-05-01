@@ -87,8 +87,8 @@ public class ReservationServiceImpl implements ReservationService {
                 throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
 
             // 반납 완료로 변경 + product에서도 대여 가능으로 변경
-            reservation.updateState(ReservationEnum.RETURN);
             product.updateProductState(true);
+            reservation.updateState(ReservationEnum.RETURN);
         }
     }
 
@@ -106,7 +106,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
 
         // 대여 중이 아닌 경우에는 에러
-        if (!reservation.getState().equals("LENDING"))
+        if (!reservation.getState().equals(ReservationEnum.LENDING))
             throw new ApiException(ExceptionEnum.MEMBER_ACCESS_EXCEPTION);
 
         reservation.updateLocation(requestDto);
@@ -115,6 +115,7 @@ public class ReservationServiceImpl implements ReservationService {
      * explain : 예약 삭제
      */
     @Override
+    @Transactional
     public void deleteReservation(Long userId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
@@ -170,8 +171,6 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return null;
     }
-
-
 
     private double getReviewScoreAvg(List<Review> reviewList) {
         int cnt = reviewList.size();

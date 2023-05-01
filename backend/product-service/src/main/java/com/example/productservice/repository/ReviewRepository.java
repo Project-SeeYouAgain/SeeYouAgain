@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
     List<Review> findAllByProductId(Long productId);
+
+    void deleteAllByProductId(Long productId);
 }

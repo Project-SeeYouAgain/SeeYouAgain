@@ -71,15 +71,15 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     @Transactional
-    public void createProduct(Long userId, ProductRequestDto requestDto) {
+    public void createProduct(Long userId, ProductRequestDto requestDto, List<MultipartFile> productImg) {
+
         Product product = Product.of(userId ,requestDto, true, 0, LocalDateTime.now(), false);
         productRepository.save(product);
 
         List<ProductTag> productTagList = requestDto.getTag().stream().map(t -> ProductTag.of(product, t)).collect(toList());
         productTagRepository.saveAll(productTagList);
 
-        List<ProductImg> productImgList = saveProductImg(requestDto, product);
-        productImgRepository.saveAll(productImgList);
+        saveProductImg(productImg, product);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     @Transactional
-    public void updateProduct(Long userId, Long productId, ProductRequestDto requestDto) {
+    public void updateProduct(Long userId, Long productId, ProductRequestDto requestDto, List<MultipartFile> productImg) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
@@ -107,18 +107,25 @@ public class ProductServiceImpl implements ProductService {
         // 제품 수정
         product.updateProduct(requestDto);
 
-        productTagRepository.deleteAllByProductId(productId);
+        updateProductTag(productId, requestDto, product);
 
-        List<ProductTag> newProductTagList = requestDto.getTag().stream().map(t -> ProductTag.of(product, t)).collect(toList());
-        productTagRepository.saveAll(newProductTagList);
+        updateProductImg(productId, productImg, product);
+    }
 
-        // 제품 이미지 삭제 후 생성
+    private void updateProductImg(Long productId, List<MultipartFile> productImg, Product product) {
         List<ProductImg> productImgList = productImgRepository.findAllByProductId(productId);
         deleteProductImg(productImgList);
         productImgRepository.deleteAllByProductId(productId);
+        saveProductImg(productImg, product);
+    }
 
-        List<ProductImg> newProductImgList = saveProductImg(requestDto, product);
-        productImgRepository.saveAll(newProductImgList);
+    private void updateProductTag(Long productId, ProductRequestDto requestDto, Product product) {
+        productTagRepository.deleteAllByProductId(productId);
+        List<ProductTag> newProductTagList = requestDto.getTag()
+                .stream()
+                .map(t -> ProductTag.of(product, t))
+                .collect(toList());
+        productTagRepository.saveAll(newProductTagList);
     }
 
     /**
@@ -132,7 +139,26 @@ public class ProductServiceImpl implements ProductService {
 
         if (!product.getOwnerId().equals(userId)) throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
 
+        reservationRepository.deleteAllByProductId(productId);
+        productTagRepository.deleteAllByProductId(productId);
+        reviewRepository.deleteAllByProductId(productId);
+
+        List<ProductImg> productImgList = productImgRepository.findAllByProductId(productId);
+        deleteProductImg(productImgList);
+        productImgRepository.deleteAllByProductId(productId);
+
         productRepository.delete(product);
+    }
+
+    private void saveProductImg(List<MultipartFile> productImg, Product product) {
+        productImg.forEach(i -> {
+            if (!i.isEmpty()) {
+                String fileName = saveS3Img(i);
+                String fileUrl = amazonS3Service.getFileUrl(fileName);
+                ProductImg img = ProductImg.of(product, fileName, fileUrl);
+                productImgRepository.save(img);
+            }
+        });
     }
 
     private void deleteProductImg(List<ProductImg> productImgList) {
@@ -141,18 +167,7 @@ public class ProductServiceImpl implements ProductService {
         });
     }
 
-    private List<ProductImg> saveProductImg(ProductRequestDto requestDto, Product product) {
-        return requestDto.getProductImg().stream()
-                .map(i -> {
-                    String fileName = saveProductImg(i);
-                    String fileUrl = amazonS3Service.getFileUrl(fileName);
-                    return ProductImg.of(product, fileName, fileUrl);
-                })
-                .collect(toList());
-    }
-
-
-    private String saveProductImg(MultipartFile i) {
+    private String saveS3Img(MultipartFile i) {
         try {
             return amazonS3Service.upload(i, "product");
         } catch (IOException e) {
@@ -161,12 +176,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private double getReviewScoreAvg(List<Review> reviewList) {
-        int cnt = reviewList.size();
+
         int totalScore = 0;
         for (Review review : reviewList) {
             totalScore += review.getReviewScore();
         }
-        return (double) totalScore / cnt;
+        return (double) totalScore / reviewList.size();
     }
 
     private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
