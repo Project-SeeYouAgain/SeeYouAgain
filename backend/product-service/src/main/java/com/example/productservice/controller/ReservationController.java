@@ -71,20 +71,20 @@ public class ReservationController {
                 .body(new BaseResponseDto<>(200, "success"));
     }
 
-    //대여 예약 조회(대여중/ 대여완료/ 예약중)
+    //대여 예약 조회(대여중 : 1/ 대여완료 : 3/ 예약중 : 2)
     @GetMapping("/reservation/{state}")
     public ResponseEntity<BaseResponseDto<List<ReservationResponseDto>>> getReservationList(HttpServletRequest request,
-                                                                                            @PathVariable("state") String state) {
+                                                                                            @PathVariable("state") Integer state) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",
                          reservationService.getReservationList(getUserId(request), state)));
     }
 
-    // 내 물품 조회(대여중/ 대기중/ 숨김)
+    // 내 물품 조회(대여중 : 1/ 대기중 : 2/ 숨김 : 3)
     @GetMapping("/myproduct/{state}")
     public ResponseEntity<BaseResponseDto<List<ReservationResponseDto>>> getMyProduct(HttpServletRequest request,
-                                                                                      @PathVariable("state") String state) {
+                                                                                      @PathVariable("state") Integer state) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",

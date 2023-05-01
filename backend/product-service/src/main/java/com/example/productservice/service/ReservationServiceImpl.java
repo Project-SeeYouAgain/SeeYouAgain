@@ -132,17 +132,17 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationResponseDto> getReservationList(Long userId, String state) {
+    public List<ReservationResponseDto> getReservationList(Long userId, Integer state) {
 
-        if (state.equals("대여중")) {
+        if (state.equals(1)) {
            List<Reservation> reservationList = reservationRepository.findAllByLenderIdNow(userId);
             return getReservationResponse(reservationList);
 
-        } else if (state.equals("대여 완료")) {
+        } else if (state.equals(3)) {
            List<Reservation> reservationList = reservationRepository.findAllByLenderIdEnd(userId);
            return getReservationResponse(reservationList);
 
-        } else if (state.equals("예약중")) {
+        } else if (state.equals(2)) {
             List<Reservation> reservationList = reservationRepository.findAllByLenderIdWaiting(userId);
             return getReservationResponse(reservationList);
 
@@ -154,17 +154,17 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationResponseDto> myProductList(Long userId, String state) {
+    public List<ReservationResponseDto> myProductList(Long userId, Integer state) {
 
-        if (state.equals("대여중")) {
+        if (state.equals(1)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdNow(userId);
             return getReservationResponse(reservationList);
 
-        } else if (state.equals("대기중")) {
+        } else if (state.equals(2)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdWaiting(userId);
             return getReservationResponse(reservationList);
 
-        } else if (state.equals("숨김")) {
+        } else if (state.equals(3)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdIsHidden(userId);
             return getReservationResponse(reservationList);
 
