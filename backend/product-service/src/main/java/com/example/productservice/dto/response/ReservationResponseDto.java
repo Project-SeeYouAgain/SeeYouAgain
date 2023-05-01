@@ -15,9 +15,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class ReservationResponseDto {
-    private LocalDate startDate;
+    private String startDate;
 
-    private LocalDate endDate;
+    private String endDate;
 
     private Long productId;
 
@@ -38,8 +38,8 @@ public class ReservationResponseDto {
                                             double reviewScore,
                                             ProductImg productImg) {
         return ReservationResponseDto.builder()
-                .startDate(reservation.getStartDate())
-                .endDate(reservation.getEndDate())
+                .startDate(reservation.getStartDate().toString())
+                .endDate(reservation.getEndDate().toString())
                 .productId(reservation.getId())
                 .title(product.getTitle())
                 .price(product.getPrice())

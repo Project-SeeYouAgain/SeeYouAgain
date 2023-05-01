@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<Reservation> reservationList = reservationRepository.findAllByProductId(productId);
 
-        List<HashMap<String, LocalDate>> reservationMapList = getReservationPeriod(reservationList);
+        List<HashMap<String, String>> reservationMapList = getReservationPeriod(reservationList);
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
@@ -169,12 +169,12 @@ public class ProductServiceImpl implements ProductService {
         return (double) totalScore / cnt;
     }
 
-    private List<HashMap<String, LocalDate>> getReservationPeriod(List<Reservation> reservationList) {
+    private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
         return reservationList.stream()
                 .map(r -> {
-                    HashMap<String, LocalDate> reservationMap = new HashMap<>();
-                    reservationMap.put("startDate", r.getStartDate());
-                    reservationMap.put("endDate", r.getEndDate());
+                    HashMap<String, String> reservationMap = new HashMap<>();
+                    reservationMap.put("startDate", r.getStartDate().toString());
+                    reservationMap.put("endDate", r.getEndDate().toString());
                     return reservationMap;
                 })
                 .collect(toList());
