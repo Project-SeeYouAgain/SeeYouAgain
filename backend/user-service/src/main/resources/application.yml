@@ -15,7 +15,7 @@ spring:
 #    url: jdbc:mysql://도메인주소:3306/seeyouagain?useSSL=false&serverTimezone=UTC
     url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: root
-    password: kp23156385@
+    password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -53,7 +53,8 @@ logging:
     com.example.userservice.client: DEBUG
 
 gateway:
-  ip: 172.20.10.2
+  ip: 192.168.100.120
+#  ip: 172.20.10.2
 
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
