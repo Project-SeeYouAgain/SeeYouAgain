@@ -107,7 +107,6 @@ public class ProductServiceImpl implements ProductService {
         // 제품 수정
         product.updateProduct(requestDto);
 
-        // 제품 태그 삭제 후 생성 => querydsl을 사용하면 더 효율적일지도?
         productTagRepository.deleteAllByProductId(productId);
 
         List<ProductTag> newProductTagList = requestDto.getTag().stream().map(t -> ProductTag.of(product, t)).collect(toList());
