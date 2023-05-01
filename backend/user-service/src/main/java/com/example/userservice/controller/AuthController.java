@@ -1,6 +1,7 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.dto.BaseResponseDto;
+import com.example.userservice.dto.request.user.MannerCommentRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
 import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
 import com.example.userservice.dto.response.user.ProfileResponseDto;
@@ -22,46 +23,45 @@ public class AuthController {
 
     /**
      * 프로필을 가져오는 API입니다.
+     *
      * @param userId
      * @return
      */
     @GetMapping("/profile/{userId}")
     public ResponseEntity<BaseResponseDto<ProfileResponseDto>> getProfile(@PathVariable("userId") Long userId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200,"success", authService.getProfile(userId)));
+                .body(new BaseResponseDto<>(200, "success", authService.getProfile(userId)));
     }
 
     /**
      * 본인 프로필을 가져오는 API입니다.
+     *
      * @param request
      * @return
      */
     @GetMapping("/profile")
     public ResponseEntity<BaseResponseDto<ProfileResponseDto>> getMyProfile(HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200,"success", authService.getProfile(getUserId(request))));
+                .body(new BaseResponseDto<>(200, "success", authService.getProfile(getUserId(request))));
     }
 
     /**
      * 프로필 변경 API입니다.
+     *
      * @param request
-     * */
+     */
     @PatchMapping("/profile")
     public ResponseEntity<BaseResponseDto<?>> updateProfile(HttpServletRequest request,
                                                             @RequestBody ProfileUpdateRequestDto requestDto) {
-
-        MultipartFile profileImg = requestDto.getProfileImg();
-        String location = requestDto.getLocation();
-        String description = requestDto.getDescription();
-
-        authService.updateProfile(getUserId(request), profileImg, location, description);
+        authService.updateProfile(getUserId(request), requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(200, "success"));
     }
 
     /**
      * 회원탈퇴 API입니다.
+     *
      * @param request
-     * */
+     */
     @DeleteMapping
     public ResponseEntity<BaseResponseDto<?>> deleteUser(HttpServletRequest request) {
         authService.deleteUser(getUserId(request));
@@ -70,9 +70,10 @@ public class AuthController {
 
     /**
      * 닉네임을 변경하는 API입니다.
+     *
      * @param request
      * @param requestDto
-     * */
+     */
     @PatchMapping("/nickname")
     public ResponseEntity<BaseResponseDto<String>> updateNickname(HttpServletRequest request,
                                                                   @RequestBody NicknameRequestDto requestDto) {
@@ -93,6 +94,39 @@ public class AuthController {
 //        return ResponseEntity.status(HttpStatus.OK)
 //                .body(new BaseResponseDto<>(200, "success", authService.updateProfileImg(getUserId(request), profileImg)));
 //    }
+
+    /**
+     * 유저 매너 평가 API입니다.
+     *
+     * @param request
+     * @param requestDto
+     * @param userId
+     * @return
+     */
+    @PostMapping("/manner/{userId}")
+    public ResponseEntity<BaseResponseDto<?>> rateUser(HttpServletRequest request,
+                                                       @RequestBody MannerCommentRequestDto requestDto,
+                                                       @PathVariable("userId") Long userId) {
+        Long raterId = getUserId(request);
+        authService.rateUser(raterId, requestDto, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(201, "success"));
+    }
+
+    @PostMapping("/cart/{productId}")
+    public ResponseEntity<BaseResponseDto<?>> addCart(HttpServletRequest request,
+                                                      @PathVariable("productId") Long productId) {
+        Long userId = getUserId(request);
+        authService.addCart(userId, productId);
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(201, "success"));
+    }
+
+    @DeleteMapping("/cart/{productId}")
+    public ResponseEntity<BaseResponseDto<?>> deleteCart(HttpServletRequest request,
+                                                      @PathVariable("productId") Long productId) {
+        Long userId = getUserId(request);
+        authService.deleteCart(userId, productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new BaseResponseDto<>(204, "success"));
+    }
 
     private Long getUserId(HttpServletRequest request) {
         return Long.parseLong(request.getHeader("userId"));

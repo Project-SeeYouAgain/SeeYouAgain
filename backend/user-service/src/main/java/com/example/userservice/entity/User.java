@@ -1,5 +1,6 @@
 package com.example.userservice.entity;
 
+import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -55,9 +56,11 @@ public class User extends TimeStamped {
         this.nickname = nickname;
     }
 
-    public void updateProfile(String profileImgKey, String profileImgUrl) {
+    public void updateProfile(String profileImgKey, String profileImgUrl, String location, String description) {
         this.profileImgKey = profileImgKey;
         this.profileImgUrl = profileImgUrl;
+        this.location = location;
+        this.description = description;
     }
 
     public void update(String nickname, String profileImgUrl) {
@@ -68,6 +71,5 @@ public class User extends TimeStamped {
     public void addUserRole(Role role) {
         roleSet.add(role);
     }
-
 
 }
