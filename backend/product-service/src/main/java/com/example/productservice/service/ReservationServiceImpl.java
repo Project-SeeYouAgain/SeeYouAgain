@@ -143,7 +143,7 @@ public class ReservationServiceImpl implements ReservationService {
            return getReservationResponse(reservationList);
 
         } else if (state.equals("예약중")) {
-            List<Reservation> reservationList = reservationRepository.findAllByOwnerIdWaiting(userId);
+            List<Reservation> reservationList = reservationRepository.findAllByLenderIdWaiting(userId);
             return getReservationResponse(reservationList);
 
         }
