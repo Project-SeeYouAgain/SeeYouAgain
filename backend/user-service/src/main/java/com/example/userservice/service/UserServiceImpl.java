@@ -1,7 +1,5 @@
 package com.example.userservice.service;
 
-import com.example.userservice.dto.request.user.*;
-import com.example.userservice.dto.response.user.LoginResponseDto;
 import com.example.userservice.dto.response.user.TokenResponseDto;
 import com.example.userservice.dto.response.user.UserResponseDto;
 import com.example.userservice.entity.User;
@@ -11,15 +9,11 @@ import com.example.userservice.repository.UserRepository;
 import com.example.userservice.security.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,51 +27,6 @@ public class UserServiceImpl implements UserService {
     private final JWTUtil jwtUtil;
 
     private final RedisService redisService;
-
-    @Override
-    public UserResponseDto join(SignUpRequestDto requestDto) {
-        requestDto.setUserId(UUID.randomUUID().toString());
-
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        User user = mapper.map(requestDto, User.class);
-        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.setMannerScore(50);
-        user.setMannerCnt(0);
-
-        userRepository.save(user);
-
-        return UserResponseDto.from(user);
-    }
-
-    @Override
-    @Transactional
-    public LoginResponseDto login(LoginRequestDto requestDto) {
-        User user = userRepository.findByEmail(requestDto.getEmail())
-                .orElseThrow(() -> new ApiException(ExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new ApiException(ExceptionEnum.PASSWORD_NOT_MATCHED_EXCEPTION);
-        }
-
-        String accessToken = jwtUtil.createToken(user.getId());
-        String refreshToken = jwtUtil.createRefreshToken(user.getId());
-
-        redisService.setValues(refreshToken, user.getId());
-
-        return LoginResponseDto.of(UserResponseDto.from(user), accessToken, refreshToken);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public void nicknameCheck(String nickname) {
-        Optional<User> user = userRepository.findByNickname(nickname);
-
-        if (user.isPresent()) {
-            log.error("이미 사용중인 닉네입입니다.");
-            throw new ApiException(ExceptionEnum.MEMBER_EXIST_EXCEPTION);
-        }
-    }
 
     @Override
     @Transactional(readOnly = true)

@@ -58,4 +58,12 @@ gateway:
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
 
-
+cloud:
+  aws:
+    s3:
+      bucket: seeyouagain-s3-bucket
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIAZDX46XDEUXV5APLQ
+      secretKey: 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
