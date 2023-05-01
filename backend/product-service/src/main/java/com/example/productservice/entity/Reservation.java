@@ -67,7 +67,7 @@ public class Reservation {
     }
 
     public void checkReturnReservation() {
-        this.isCheck = true;
+        this.isReturnCheck = true;
     }
 
     public void updateState(ReservationEnum state) {
