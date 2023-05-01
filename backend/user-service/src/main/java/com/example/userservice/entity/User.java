@@ -1,8 +1,11 @@
 package com.example.userservice.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Table(name = "users")
-public class User extends TimeStamped {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +26,7 @@ public class User extends TimeStamped {
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
-    @Column(length = 20, unique = true)
+    @Column(nullable = false, length = 20, unique = true)
     private String nickname;
 
     @Column(nullable = false)
@@ -35,6 +38,8 @@ public class User extends TimeStamped {
 
     private String location;
 
+    private String description;
+
     private int mannerScore;
 
     private int mannerCnt;
@@ -42,6 +47,15 @@ public class User extends TimeStamped {
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Role> roleSet = new HashSet<>();
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime modifiedAt;
+
+    private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+    private String providerId;  // oauth2를 이용할 경우 아이디값
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
@@ -52,7 +66,16 @@ public class User extends TimeStamped {
         this.profileImgUrl = profileImgUrl;
     }
 
+    public User update(String nickname, String profileImgUrl) {
+        this.nickname = nickname;
+        this.profileImgUrl = profileImgUrl;
+
+        return this;
+    }
+
     public void addUserRole(Role role) {
         roleSet.add(role);
     }
+
+
 }
