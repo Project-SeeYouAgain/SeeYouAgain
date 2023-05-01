@@ -37,7 +37,6 @@ function MyPage() {
                             ))}
                         </div>
                     </div>
-                    <Card />
                 </Body>
             </div>
         </Container>
