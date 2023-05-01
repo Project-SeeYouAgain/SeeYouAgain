@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MannerCommentRequestDto {
-    private String mannerComment;
-    private int mannerScore;
+public class LocationRequestDto {
+    private double lat;
+    private double lng;
 }
