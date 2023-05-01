@@ -42,9 +42,9 @@ cloud:
     region:
       static: ap-northeast-2
     s3:
-      bucket:
+      bucket: seeyouagain-s3-bucket
     credentials:
-      access-key:
-      secret-key:
+      access-key: AKIAZDX46XDEUXV5APLQ
+      secret-key: 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
     stack:
       auto: false
