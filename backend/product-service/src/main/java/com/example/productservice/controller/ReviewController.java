@@ -21,7 +21,7 @@ public class ReviewController {
 
     @GetMapping("/{productId}/{lastReviewId}")
     public ResponseEntity<BaseResponseDto<List<ReviewResponseDto>>> getProductReview(@PathVariable("productId") Long productId,
-                                                                                    @PathVariable("lastReviewId") Long lastReviewId) {
+                                                                                     @PathVariable("lastReviewId") Long lastReviewId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", reviewService.getProductReview(productId, lastReviewId)));
     }
@@ -46,7 +46,7 @@ public class ReviewController {
 
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<BaseResponseDto<?>> deleteProductReview(HttpServletRequest request,
-                                                                 @PathVariable("reviewId") Long reviewId) {
+                                                                  @PathVariable("reviewId") Long reviewId) {
         reviewService.deleteProductReview(getUserId(request), reviewId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(new BaseResponseDto<>(204, "success"));

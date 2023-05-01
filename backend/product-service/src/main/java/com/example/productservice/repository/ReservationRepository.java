@@ -33,4 +33,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     // 숨긴 내 품목 리스트
     @Query("SELECT r FROM Reservation r Where r.product.ownerId = :ownerId AND r.product.isHide = true")
     List<Reservation> findAllByOwnerIdIsHidden(@Param("ownerId") Long ownerId);
+
+    void deleteAllByProductId(Long productId);
 }
