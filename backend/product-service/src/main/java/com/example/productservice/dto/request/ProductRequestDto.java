@@ -3,6 +3,7 @@ package com.example.productservice.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -23,8 +24,6 @@ public class ProductRequestDto {
     private String description;
 
     private String location;
-
-    private List<MultipartFile> productImg;
 
     private List<String> tag;
 

@@ -38,11 +38,11 @@ public class ProductResponseDto {
 
     private List<String> tag;
 
-    private LocalDate startDate;
+    private String startDate;
 
-    private LocalDate endDate;
+    private String endDate;
 
-    private List<HashMap<String, LocalDate>> reservation;
+    private List<HashMap<String, String>> reservation;
 
     private Boolean isSafe;
 
@@ -53,7 +53,7 @@ public class ProductResponseDto {
     public static ProductResponseDto of(Product product,
                                         List<ProductImg> productImgList,
                                         List<ProductTag> productTagList,
-                                        List<HashMap<String, LocalDate>> reservationList,
+                                        List<HashMap<String, String>> reservationList,
                                         double totalScore,
                                         UserClientResponseDto responseDto) {
 
@@ -67,8 +67,8 @@ public class ProductResponseDto {
                 .productImgList(productImgList.stream().map(ProductImg::getProductImg).collect(toList()))
                 .description(product.getDescription())
                 .tag(productTagList.stream().map(ProductTag::getTag).collect(toList()))
-                .startDate(product.getStartDate())
-                .endDate(product.getEndDate())
+                .startDate(product.getStartDate().toString())
+                .endDate(product.getEndDate().toString())
                 .reservation(reservationList)
                 .isSafe(product.getIsSafe())
                 .score(totalScore)
