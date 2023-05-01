@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,17 +28,6 @@ public class UserController {
     @GetMapping("/health_check")
     public String status() {
         return String.format("It's Working in User Service on PORT %s", env.getProperty("local.server.port"));
-    }
-
-    /**
-     * Data를 리턴해주는 API
-     *
-     * @return
-     */
-    @GetMapping("/oauth/kakao")
-    public ResponseEntity<BaseResponseDto<?>> kakaoCallback(@RequestParam String code) {
-        System.out.println(code);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new BaseResponseDto<>(201, "성공적으로 카카오 로그인 API 코드를 불러왔습니다."));
     }
 
     /**
@@ -77,7 +65,7 @@ public class UserController {
     }
 
     /**
-     * 챌린지, 결제 마이크로 서비스에서 사용자 정보를 FeignClient 로 가져가기 위한 API 입니다.
+     * 마이크로 서비스에서 사용자 정보를 FeignClient 로 가져가기 위한 API 입니다.
      *
      * @param userId
      * @return

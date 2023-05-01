@@ -5,6 +5,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class NicknameCheckRequestDto {
-    private String newNickname;
+public class NicknameRequestDto {
+
+    private String nickname;
+
+    private String email;
+
+    private String password;
 }
