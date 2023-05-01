@@ -1,4 +1,4 @@
-import React, { FunctionComponent, HTMLProps } from 'react';
+import React, { FunctionComponent, HTMLProps, useState } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
 import { AiFillStar } from 'react-icons/ai';
@@ -17,6 +17,12 @@ function ItemCard() {
         price: '4400',
         score: '4.8',
     };
+
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    function Dropdown() {
+        setDropdownVisible(!dropdownVisible);
+    }
+
     return (
         <div className="w-[100%]">
             {/* <span className="bg-black rounded-full text-white px-[0.8rem] py-[0.2rem]">
@@ -28,9 +34,19 @@ function ItemCard() {
                     <Button.Heart isActive={false} className="absolute right-0 top-1" />
                 </div>
                 <div className="flex flex-col w-[70%]">
-                    <span className="font-bold w-[100%] flex items-center justify-between">
+                    <span className="font-bold w-[100%] flex items-center justify-between relative">
                         <span className="truncate w-[11.87rem]">{data.title}</span>
-                        <SlOptions className="bg-[#F2F2F2] h-[1.5rem] p-[0.2rem] w-[1.5rem]" />
+                        <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.2rem] w-[1.5rem]" onClick={Dropdown} />
+                        {dropdownVisible && (
+                            <div className="bg-white shadow-md rounded absolute top-[1.5rem] right-0 rounded-[3px]">
+                                <a href="#" className="block px-4 py-2">
+                                    대여일정
+                                </a>
+                                <a href="#" className="block px-4 py-2">
+                                    반납하기
+                                </a>
+                            </div>
+                        )}
                     </span>
                     <span className="flex items-center text-darkgrey">
                         <AiFillStar className="mr-[0.2rem]" color="darkgrey" />
