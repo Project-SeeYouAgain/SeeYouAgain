@@ -40,7 +40,7 @@ public class ReservationResponseDto {
         return ReservationResponseDto.builder()
                 .startDate(reservation.getStartDate().toString())
                 .endDate(reservation.getEndDate().toString())
-                .productId(reservation.getId())
+                .productId(product.getId())
                 .title(product.getTitle())
                 .price(product.getPrice())
                 .location(product.getLocation())
