@@ -8,6 +8,8 @@ import ImageUpload from '@/components/ImageUpload';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import CloseHeader from '@/components/Container/components/CloseHeader';
+import TextInput from './components/textinput';
+import Category from './components/Category';
 
 function Write() {
     const [data, setData] = useState<boolean>(false);
@@ -29,36 +31,54 @@ function Write() {
         // 이전페이지로 이동하기
         router.back();
     };
+    // 글 유형 선택 (빌려줘요: 0 구해요 : 1)
+    const [isRenter, setIsRenter] = useState(false);
+    function onHandleData() {
+        setIsRenter(!isRenter);
+    }
     return (
-        <div className="bg-white">
+        <div className="bg-white ">
             {isDesktop && <div>데스크탑화면</div>}
             {isMobile && data && (
                 <Container>
+                    {/* 제목 및 상단 */}
                     <Body>
-                        {/* 제목 및 상단 */}
                         <CloseHeader title="글 작성하기" onClose={handleClose}></CloseHeader>
                         {/* 입력 내용 */}
-                        <div className="text-left">
+                        <div className="text-left ">
                             {/* 글유형 */}
                             <div>
-                                <p className="mb-[1rem] font-semibold"> 글 유형</p>
-                                <Button type="button" buttonType="Cate2">
-                                    구해요
-                                </Button>
+                                <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 글 유형</p>
+                            </div>
+                            <div className="flex">
+                                <div className="mr-[1rem]">
+                                    {!isRenter && <Button.Round bgColor="blue" textColor="white" innerValue="구해요" />}
+                                    {isRenter && <Button.Round bgColor="lightgray" textColor="black" innerValue="구해요" onClick={onHandleData} />}
+                                </div>
+                                <div>
+                                    {!isRenter && <Button.Round bgColor="lightgray" textColor="black" innerValue="빌려줘요" onClick={onHandleData} />}
+                                    {isRenter && <Button.Round bgColor="blue" textColor="white" innerValue="빌려줘요" />}
+                                </div>
                             </div>
                             {/* 이미지 */}
                             <div className="mt-[1rem] ">
-                                <p className="mb-[1rem] font-semibold"> 상품 이미지</p>
+                                <p className="mb-[1rem] font-bold text-[1.2rem] "> 상품 이미지</p>
                                 <ImageUpload />
                             </div>
-                            {/* 제목 */}
+                            {/* 제목/대여가격/설명/일정 */}
                             <div className="mt-[1rem] ">
-                                <p className="mb-[1rem] font-semibold"> 제목</p>
+                                <TextInput />
+                            </div>
+                            {/* 카테고리 */}
+                            <div>
+                                <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 카테고리 </p>
+                                <Category></Category>
+                            </div>
+                            {/* 태그 */}
+                            <div>
+                                <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 태그 </p>
                             </div>
                         </div>
-                        <Button type="button" buttonType="LargeSubmit">
-                            제출 완료
-                        </Button>
                     </Body>
                     <Navbar />
                 </Container>
