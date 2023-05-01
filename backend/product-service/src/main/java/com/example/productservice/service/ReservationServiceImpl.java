@@ -121,7 +121,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
 
         // 대여자가 본인이 아닌 경우 에러
-        if (reservation.getLenderId().equals(userId))
+        if (!reservation.getLenderId().equals(userId))
             throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
 
         reservationRepository.delete(reservation);
