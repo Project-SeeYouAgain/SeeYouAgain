@@ -82,6 +82,7 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
         User user = User.builder()
                 .email(email)
                 .password(new BCryptPasswordEncoder().encode(password))
+                .mannerScore(50)
                 .build();
 
         user.addUserRole(Role.USER);
