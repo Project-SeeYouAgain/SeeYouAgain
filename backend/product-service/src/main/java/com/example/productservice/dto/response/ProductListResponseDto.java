@@ -1,5 +1,7 @@
 package com.example.productservice.dto.response;
 
+import com.example.productservice.entity.Product;
+import com.example.productservice.entity.ProductImg;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,9 +18,30 @@ public class ProductListResponseDto {
 
     private Integer price;
 
-    private Boolean type;
+    private Boolean  type;
 
     private Boolean isCart;
 
     private String thumbnailUrl;
+
+    private double score;
+
+    private Boolean state;
+
+    public static ProductListResponseDto of(Product product,
+                                            double score,
+                                            String productImg,
+                                            boolean isCart
+                                            ) {
+        return ProductListResponseDto.builder()
+                .title(product.getTitle())
+                .location(product.getLocation())
+                .price(product.getPrice())
+                .type(product.getType())
+                .isCart(isCart)
+                .thumbnailUrl(productImg)
+                .score(score)
+                .state(product.getProductState())
+                .build();
+    }
 }
