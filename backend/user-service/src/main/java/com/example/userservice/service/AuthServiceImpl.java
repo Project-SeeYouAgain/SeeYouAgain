@@ -1,10 +1,16 @@
 package com.example.userservice.service;
 
+import com.example.userservice.dto.request.user.MannerCommentRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
+import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
 import com.example.userservice.dto.response.user.ProfileResponseDto;
+import com.example.userservice.entity.Cart;
+import com.example.userservice.entity.MannerComment;
 import com.example.userservice.entity.User;
 import com.example.userservice.exception.ApiException;
 import com.example.userservice.exception.ExceptionEnum;
+import com.example.userservice.repository.CartRepository;
+import com.example.userservice.repository.MannerCommentRepository;
 import com.example.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +25,8 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final MannerCommentRepository mannerCommentRepository;
+    private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
 //    private final AmazonS3Service amazonS3Service;
 
@@ -31,11 +39,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public ProfileResponseDto updateProfile(Long userId, MultipartFile profileImg, String location, String description) {
+    public ProfileResponseDto updateProfile(Long userId, ProfileUpdateRequestDto requestDto) {
         User user = getUser(userId);
 
+        MultipartFile profileImg = requestDto.getProfileImg();
+        String location = requestDto.getLocation();
+        String description = requestDto.getDescription();
+
 //        deleteS3Img(user);
-        user.updateProfile(null, null);
+        user.updateProfile(null, null, location, description);
 
         return ProfileResponseDto.from(user);
     }
@@ -89,6 +101,37 @@ public class AuthServiceImpl implements AuthService {
 
         user.updateNickname(requestDto.getNickname());
         return user.getNickname();
+    }
+
+    @Override
+    @Transactional
+    public void rateUser(Long raterId, MannerCommentRequestDto requestDto, Long userId) {
+        User user = getUser(userId);
+
+        MannerComment mannerComment = MannerComment.of(raterId, requestDto, user);
+
+        mannerCommentRepository.save(mannerComment);
+    }
+
+    @Override
+    @Transactional
+    public void addCart(Long userId, Long productId) {
+        User user = getUser(userId);
+
+        Cart cart = Cart.of(user, productId);
+
+        cartRepository.save(cart);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCart(Long userId, Long productId) {
+        User user = getUser(userId);
+
+        Cart cart = cartRepository.findByUserAndProductId(user, productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.CART_NOT_EXIST_EXCEPTION));
+
+        cartRepository.delete(cart);
     }
 
     private User getUser(Long userId) {
