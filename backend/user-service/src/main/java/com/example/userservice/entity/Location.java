@@ -2,24 +2,36 @@ package com.example.userservice.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-public class Location {
+public class Location extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private double lat;
     private double lng;
-    private long timestamp;
 
+    public static Location of(User user, double lat, double lng) {
+        return Location.builder()
+                .user(user)
+                .lat(lat)
+                .lng(lng)
+                .build();
+    }
+
+    public void updateLatLng(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
 }
