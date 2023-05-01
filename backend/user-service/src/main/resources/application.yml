@@ -13,7 +13,7 @@ spring:
       path: /h2-console
   datasource:
 #    url: jdbc:mysql://도메인주소:3306/seeyouagain?useSSL=false&serverTimezone=UTC
-    url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: root
     password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,7 +21,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     generate-ddl: true
     properties:
@@ -35,6 +35,9 @@ spring:
         max-active: 8
     port: 6379
     host: localhost
+  profiles:
+    include: oauth
+
 eureka:
   instance:
     prefer-ip-address: true
@@ -50,8 +53,9 @@ logging:
     com.example.userservice.client: DEBUG
 
 gateway:
-  ip: 192.168.100.120
+  ip: 192.168.100.51
 
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
+
 

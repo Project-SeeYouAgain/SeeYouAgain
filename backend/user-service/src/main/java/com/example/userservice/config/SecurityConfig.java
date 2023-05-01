@@ -1,5 +1,7 @@
 package com.example.userservice.config;
 
+import com.example.userservice.security.LoginSuccessHandler;
+import com.example.userservice.security.OAuth2UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -7,9 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @Log4j2
@@ -17,7 +21,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-   private final Environment env;
+    private final Environment env;
+    private final OAuth2UserDetailsService oAuth2UserDetailsService;
+    private final LoginSuccessHandler successHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -31,13 +37,18 @@ public class SecurityConfig {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/error/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/**")
-                .access("hasIpAddress('" + gatewayIpAddress + "')")
+                .antMatchers("/**").access("hasIpAddress('" + gatewayIpAddress + "')")
+                .and()
+                .oauth2Login().userInfoEndpoint().userService(oAuth2UserDetailsService)
+                .and().successHandler(successHandler)
                 .and()
                 .headers().frameOptions().disable();
+
         return http.build();
     }
 }

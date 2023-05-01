@@ -12,20 +12,23 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserResponseDto {
 
-    private Long userId;
-
     private String email;
 
     private String nickname;
 
-    private String profileImageUrl;
+    private String profileImg;
+
+    private String location;
+
+    private Integer mannerScore;
 
     public static UserResponseDto from (User user) {
         return UserResponseDto.builder()
-                .userId(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
-                .profileImageUrl(user.getProfileImgUrl())
+                .profileImg(user.getProfileImgUrl())
+                .location(user.getLocation())
+                .mannerScore(user.getMannerScore())
                 .build();
     }
 }

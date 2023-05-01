@@ -32,8 +32,9 @@ public class UserController {
 
     /**
      * 회원가입 API 입니다.
+     *
      * @param requestDto
-     * */
+     */
     @PostMapping("/join")
     public ResponseEntity<BaseResponseDto<?>> join(@Valid @RequestBody SignUpRequestDto requestDto) {
         userService.join(requestDto);
@@ -42,9 +43,10 @@ public class UserController {
 
     /**
      * 로그인 API 입니다.
+     *
      * @param requestDto
      * @return
-     * */
+     */
     @PostMapping("/login")
     public ResponseEntity<BaseResponseDto<LoginResponseDto>> login(@Valid @RequestBody LoginRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -53,8 +55,9 @@ public class UserController {
 
     /**
      * 닉네임을 중복검사하는 API 입니다.
+     *
      * @param requestDto
-     * */
+     */
     @PostMapping("/nickname")
     public ResponseEntity<BaseResponseDto<?>> nicknameCheck(@RequestBody NicknameCheckRequestDto requestDto) {
         userService.nicknameCheck(requestDto.getNewNickname());
@@ -62,10 +65,11 @@ public class UserController {
     }
 
     /**
-     * 챌린지, 결제 마이크로 서비스에서 사용자 정보를 FeignClient 로 가져가기 위한 API 입니다.
+     * 마이크로 서비스에서 사용자 정보를 FeignClient 로 가져가기 위한 API 입니다.
+     *
      * @param userId
      * @return
-     * */
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<BaseResponseDto<UserResponseDto>> getUserInfo(@PathVariable Long userId) {
 
@@ -75,9 +79,10 @@ public class UserController {
 
     /**
      * accessToken 을 refresh 하는 API 입니다.
+     *
      * @param request
      * @return
-     * */
+     */
     @GetMapping("/refresh")
     public ResponseEntity<BaseResponseDto<TokenResponseDto>> refresh(HttpServletRequest request) {
 

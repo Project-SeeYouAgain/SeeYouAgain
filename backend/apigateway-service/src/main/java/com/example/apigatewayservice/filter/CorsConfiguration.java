@@ -31,7 +31,7 @@ public class CorsConfiguration {
                 HttpHeaders headers = response.getHeaders();
 
                 if (origin.startsWith("http://localhost:3000")
-//                        || origin.startsWith("seeyouagain도메인주소")
+                        || origin.startsWith("http://localhost:8000")
                 ) {
                     headers.add("Access-Control-Allow-Origin", origin);
                 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import FifthPage from '../Mobile/FifthPage';
 import SeventhPage from '../Mobile/SeventhPage';
 import SecondPage from '../Mobile/SecondPage';
@@ -10,8 +10,15 @@ import styles from '../Mobile/main.module.scss';
 import classNames from 'classnames';
 import Image from 'next/image';
 import logo from '@/images/logo.png';
+import kakao from '@/assets/icons/kakaobtn.png';
 
 export default function index() {
+    useEffect(() => {}, []);
+
+    const handleKakaoLogin = () => {
+        location.href = 'http://localhost:8000/user-service/oauth2/authorization/kakao';
+    };
+
     return (
         <div>
             <div className={classNames('fixed top-0 h-16 w-full z-30')}>
@@ -41,7 +48,10 @@ export default function index() {
                 </div>
             </div>
             <div className={classNames('fixed bottom-0 h-20 w-full p-3 mb-3', styles.header)}>
-                <button className={classNames(styles.btn, 'rounded-xl bg-white')}>START</button>
+                <button onClick={handleKakaoLogin} className={classNames(styles.btn, 'rounded-xl bg-white')}>
+                    <Image src={kakao} alt="kakaoBtn" className="mr-2" />
+                    <p>카카오톡으로 시작하기</p>
+                </button>
             </div>
         </div>
     );
