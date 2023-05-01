@@ -4,6 +4,7 @@ import Button from '../Button';
 import { AiFillStar } from 'react-icons/ai';
 import img from '../../images/img_step_01.jpg';
 import { SlOptions } from 'react-icons/sl';
+import shield from '../../assets/icons/safezone.png';
 
 // 괄호 안에 << data: object >> 이거 넣으시면 됩니다.
 function ItemCard() {
@@ -31,6 +32,7 @@ function ItemCard() {
             <div className="flex mt-[0.4rem] relative">
                 <div className="w-[30%] relative mr-[0.8rem]">
                     <Image src={data.productImg[0]} alt="임시 사진" className="aspect-square rounded-[0.6rem]" layout="fill" objectFit="cover" />
+                    <Image src={shield} alt="세이프존 표시" className="absolute left-1 top-1 w-[1.5rem]" />
                     <Button.Heart isActive={false} className="absolute right-0 top-1" />
                 </div>
                 <div className="flex flex-col w-[70%]">
