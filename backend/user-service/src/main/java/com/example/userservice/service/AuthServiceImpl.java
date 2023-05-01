@@ -103,37 +103,6 @@ public class AuthServiceImpl implements AuthService {
         return user.getNickname();
     }
 
-    @Override
-    @Transactional
-    public void rateUser(Long raterId, MannerCommentRequestDto requestDto, Long userId) {
-        User user = getUser(userId);
-
-        MannerComment mannerComment = MannerComment.of(raterId, requestDto, user);
-
-        mannerCommentRepository.save(mannerComment);
-    }
-
-    @Override
-    @Transactional
-    public void addCart(Long userId, Long productId) {
-        User user = getUser(userId);
-
-        Cart cart = Cart.of(user, productId);
-
-        cartRepository.save(cart);
-    }
-
-    @Override
-    @Transactional
-    public void deleteCart(Long userId, Long productId) {
-        User user = getUser(userId);
-
-        Cart cart = cartRepository.findByUserAndProductId(user, productId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.CART_NOT_EXIST_EXCEPTION));
-
-        cartRepository.delete(cart);
-    }
-
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));

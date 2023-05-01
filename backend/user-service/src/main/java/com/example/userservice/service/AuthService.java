@@ -16,12 +16,6 @@ public interface AuthService {
 
     String updateNickname(Long userId, NicknameRequestDto requestDto);
 
-    void rateUser(Long raterId, MannerCommentRequestDto requestDto, Long userId);
-
-    void addCart(Long userId, Long productId);
-
-    void deleteCart(Long userId, Long productId);
-
     String updateProfileImg(Long userId, MultipartFile profileImg);
 
 }

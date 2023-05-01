@@ -16,6 +16,7 @@ public class ProfileResponseDto {
     private String nickname;
     private String location;
     private String description;
+    private int mannerScore;
 
     public static ProfileResponseDto from (User user) {
         return ProfileResponseDto.builder()
@@ -23,6 +24,7 @@ public class ProfileResponseDto {
                 .nickname(user.getNickname())
                 .location(user.getLocation())
                 .description(user.getDescription())
+                .mannerScore(user.getMannerScore())
                 .build();
     }
 }
