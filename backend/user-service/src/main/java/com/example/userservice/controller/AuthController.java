@@ -95,39 +95,6 @@ public class AuthController {
 //                .body(new BaseResponseDto<>(200, "success", authService.updateProfileImg(getUserId(request), profileImg)));
 //    }
 
-    /**
-     * 유저 매너 평가 API입니다.
-     *
-     * @param request
-     * @param requestDto
-     * @param userId
-     * @return
-     */
-    @PostMapping("/manner/{userId}")
-    public ResponseEntity<BaseResponseDto<?>> rateUser(HttpServletRequest request,
-                                                       @RequestBody MannerCommentRequestDto requestDto,
-                                                       @PathVariable("userId") Long userId) {
-        Long raterId = getUserId(request);
-        authService.rateUser(raterId, requestDto, userId);
-        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(201, "success"));
-    }
-
-    @PostMapping("/cart/{productId}")
-    public ResponseEntity<BaseResponseDto<?>> addCart(HttpServletRequest request,
-                                                      @PathVariable("productId") Long productId) {
-        Long userId = getUserId(request);
-        authService.addCart(userId, productId);
-        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(201, "success"));
-    }
-
-    @DeleteMapping("/cart/{productId}")
-    public ResponseEntity<BaseResponseDto<?>> deleteCart(HttpServletRequest request,
-                                                      @PathVariable("productId") Long productId) {
-        Long userId = getUserId(request);
-        authService.deleteCart(userId, productId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new BaseResponseDto<>(204, "success"));
-    }
-
     private Long getUserId(HttpServletRequest request) {
         return Long.parseLong(request.getHeader("userId"));
     }
