@@ -57,7 +57,7 @@ function ImageUpload() {
                             <div>
                                 <img key={index} alt="preview" className="w-[4.8rem] h-[4.8rem] object-cover rounded-[.9rem] mr-[.6rem]" src={url} />
                                 <div onClick={() => removeFile(index)}>
-                                    <AiFillCloseCircle className="text-blue absolute top-[11rem] " />
+                                    <AiFillCloseCircle className="text-blue absolute top-[23%]  " />
                                 </div>
                             </div>
                         ))}
