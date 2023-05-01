@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Table(name = "users")
-public class User {
+public class User extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class User {
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 20, unique = true)
+    @Column(length = 20, unique = true)
     private String nickname;
 
     @Column(nullable = false)
@@ -48,12 +48,6 @@ public class User {
     @Builder.Default
     private Set<Role> roleSet = new HashSet<>();
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime modifiedAt;
-
     private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
@@ -66,11 +60,9 @@ public class User {
         this.profileImgUrl = profileImgUrl;
     }
 
-    public User update(String nickname, String profileImgUrl) {
+    public void update(String nickname, String profileImgUrl) {
         this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
-
-        return this;
     }
 
     public void addUserRole(Role role) {

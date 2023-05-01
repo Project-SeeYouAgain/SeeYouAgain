@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -81,9 +83,9 @@ public class AuthServiceImpl implements AuthService {
     public String updateNickname(Long userId, NicknameRequestDto requestDto) {
         User user = getUser(userId);
 
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new ApiException(ExceptionEnum.PASSWORD_NOT_MATCHED_EXCEPTION);
-        }
+        // 이미 존재하는 닉네임이면
+        Optional<User> findUser = userRepository.findByNickname(requestDto.getNickname());
+        if (findUser.isPresent()) throw new ApiException(ExceptionEnum.NICKNAME_EXIST_EXCEPTION);
 
         user.updateNickname(requestDto.getNickname());
         return user.getNickname();

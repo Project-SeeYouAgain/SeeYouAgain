@@ -17,6 +17,7 @@ public enum ExceptionEnum {
     MEMBER_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND,"M0003", "존재하지 않는 계정입니다."),
     PASSWORD_NOT_MATCHED_EXCEPTION(HttpStatus.FORBIDDEN, "M0004", "비밀번호가 일치하지 않습니다."),
     MEMBER_INFO_NOT_MATCHED_EXCEPTION(HttpStatus.NOT_FOUND, "M0006", "일치하는 유저가 없습니다."),
+    NICKNAME_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST,"M0007","이미 존재하는 닉네임입니다."),
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다.");
     private final HttpStatus status;
     private final String code;
