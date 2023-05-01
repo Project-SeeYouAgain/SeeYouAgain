@@ -17,31 +17,39 @@ const UserLocation: React.FC = () => {
         myCheck ? setMyCheck(false) : setMyCheck(true);
     };
     useEffect(() => {
-        let watchId: number | null = null;
+        const getLocation = () => {
+            let watchId: number | null = null;
 
-        if (navigator.geolocation) {
-            const options = {
-                enableHighAccuracy: true,
-                maximumAge: 0,
+            if (navigator.geolocation) {
+                const options = {
+                    maximumAge: 0,
+                };
+
+                watchId = navigator.geolocation.watchPosition(
+                    position => {
+                        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    },
+                    error => {
+                        console.error('Error getting position:', error);
+                    },
+                    options,
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+
+            return () => {
+                if (watchId !== null) {
+                    navigator.geolocation.clearWatch(watchId);
+                }
             };
+        };
 
-            watchId = navigator.geolocation.watchPosition(
-                position => {
-                    setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-                },
-                error => {
-                    console.error('Error getting position:', error);
-                },
-                options,
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-        }
+        getLocation();
+        const intervalId = setInterval(getLocation, 10000); // 10 seconds
 
         return () => {
-            if (watchId !== null) {
-                navigator.geolocation.clearWatch(watchId);
-            }
+            clearInterval(intervalId);
         };
     }, []);
 
@@ -80,7 +88,7 @@ const UserLocation: React.FC = () => {
                         </div>
                     )}
                     <div id="map" className="w-full h-[83%] relative">
-                        {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} level={3} userLocation={userLocation} otherUserLocation={{ lat: 35.1548, lng: 126.8792 }} />}
+                        {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={{ lat: 35.2604, lng: 126.6657 }} />}
                         {!userLocation && (
                             <div className="w-full h-screen text-center font-bold text-xl bg-[#183942] text-white">
                                 <p className={styles.Container}>위치 권한을 확인해보세요.</p>
