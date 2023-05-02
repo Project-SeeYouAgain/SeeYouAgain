@@ -7,14 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChannelResponseDto {
+public class ChannelResponseDto implements Comparable<ChannelResponseDto> {
 
     private String identifier;
 
@@ -40,5 +39,10 @@ public class ChannelResponseDto {
                 .lastMessage(message.getChat())
                 .lastMessageDate(message.getCreatedAt())
                 .build();
+    }
+
+    @Override
+    public int compareTo(ChannelResponseDto o) {
+        return o.getLastMessageDate().compareTo(this.getLastMessageDate());
     }
 }
