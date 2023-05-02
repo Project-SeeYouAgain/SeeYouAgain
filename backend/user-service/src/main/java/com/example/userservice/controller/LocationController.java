@@ -3,21 +3,20 @@ package com.example.userservice.controller;
 import com.example.userservice.dto.BaseResponseDto;
 import com.example.userservice.dto.request.user.LocationRequestDto;
 import com.example.userservice.dto.response.user.LocationResponseDto;
-import com.example.userservice.entity.Location;
 import com.example.userservice.service.LocationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/auth/location")
 public class LocationController {
 
-    private static LocationService locationService;
+    private final LocationService locationService;
 
     /**
      * 본인의 현재 위치를 업데이트 해주는 API입니다.
