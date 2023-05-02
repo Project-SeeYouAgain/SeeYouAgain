@@ -3,12 +3,15 @@ package com.example.chattingservice.service;
 import com.example.chattingservice.client.ProductServiceClient;
 import com.example.chattingservice.client.UserServiceClient;
 import com.example.chattingservice.dto.request.ChannelRequestDto;
+import com.example.chattingservice.dto.response.ChannelDetailResponseDto;
 import com.example.chattingservice.dto.response.ChannelResponseDto;
 import com.example.chattingservice.dto.response.ProductClientResponseDto;
 import com.example.chattingservice.dto.response.UserClientResponseDto;
 import com.example.chattingservice.entity.Channel;
 import com.example.chattingservice.entity.Message;
 import com.example.chattingservice.entity.Participant;
+import com.example.chattingservice.exception.ApiException;
+import com.example.chattingservice.exception.ExceptionEnum;
 import com.example.chattingservice.repository.ChannelRepository;
 import com.example.chattingservice.repository.MessageRepository;
 import com.example.chattingservice.repository.ParticipantRepository;
@@ -49,12 +52,7 @@ public class ChannelServiceImpl implements ChannelService {
             }
         });
 
-        channelResponseDtoList.sort(new Comparator<ChannelResponseDto>() {
-            @Override
-            public int compare(ChannelResponseDto o1, ChannelResponseDto o2) {
-                return o2.getLastMessageDate().compareTo(o1.getLastMessageDate());
-            }
-        });
+        Collections.sort(channelResponseDtoList);
 
         return channelResponseDtoList;
     }
@@ -74,6 +72,26 @@ public class ChannelServiceImpl implements ChannelService {
         if (findChannel.isPresent()) return;
 
         saveChannelInfo(userId, requestDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ChannelDetailResponseDto getChannelDetail(Long userId, String identifier) {
+        Channel channel = channelRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_EXIST_CHANNEL_EXCEPTION));
+
+        ProductClientResponseDto productResponseDto = productServiceClient.getProductInfo(channel.getProductId()).getData();
+
+        UserClientResponseDto userResponseDto = getUserClientResponseDto(userId, channel);
+
+        return ChannelDetailResponseDto.of(channel, productResponseDto, userResponseDto);
+    }
+
+    private UserClientResponseDto getUserClientResponseDto(Long userId, Channel channel) {
+        if (channel.getUserId().equals(userId)) {
+            return userServiceClient.getUserInfo(channel.getOwnerId()).getData();
+        }
+        return userServiceClient.getUserInfo(channel.getUserId()).getData();
     }
 
     private void saveChannelInfo(Long userId, ChannelRequestDto requestDto) {

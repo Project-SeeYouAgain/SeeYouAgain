@@ -2,6 +2,7 @@ package com.example.chattingservice.controller;
 
 import com.example.chattingservice.dto.BaseResponseDto;
 import com.example.chattingservice.dto.request.ChannelRequestDto;
+import com.example.chattingservice.dto.response.ChannelDetailResponseDto;
 import com.example.chattingservice.dto.response.ChannelResponseDto;
 import com.example.chattingservice.dto.response.MessageResponseDto;
 import com.example.chattingservice.service.ChannelService;
@@ -28,6 +29,13 @@ public class ChannelController {
                                                                                     @PathVariable("type") String type) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", channelService.getChannelList(getUserId(request), type)));
+    }
+
+    @GetMapping("/detail/{identifier}")
+    public ResponseEntity<BaseResponseDto<ChannelDetailResponseDto>> getChannelDetail(HttpServletRequest request,
+                                                                                      @PathVariable("identifier") String identifier) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", channelService.getChannelDetail(getUserId(request), identifier)));
     }
 
     @PostMapping
