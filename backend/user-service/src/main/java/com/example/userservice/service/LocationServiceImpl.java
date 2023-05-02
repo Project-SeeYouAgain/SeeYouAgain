@@ -43,14 +43,23 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional(readOnly = true)
-    public LocationResponseDto getLocation(Long userId) {
-        Location location = locationRepository.findByUserId(userId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.LOCATION_NOT_EXIST_EXCEPTION));
-        return LocationResponseDto.from(location);
+    public LocationResponseDto getLocationInfo(Long userId) {
+        return LocationResponseDto.from(getLocation(userId));
+    }
+
+    @Override
+    @Transactional
+    public void deleteLocation(Long userId) {
+        locationRepository.delete(getLocation(userId));
     }
 
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+    }
+
+    private Location getLocation(Long userId) {
+        return locationRepository.findByUserId(userId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.LOCATION_NOT_EXIST_EXCEPTION));
     }
 }
