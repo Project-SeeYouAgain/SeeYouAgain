@@ -12,7 +12,9 @@ interface KeyInterface {
 }
 
 function Search() {
+    const [clickSearch, setClickSearch] = useState(false);
     const [text, setText] = useState('');
+    const [searchText, setSearchText] = useState('');
     const handleTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
     };
@@ -32,7 +34,7 @@ function Search() {
 
         // 키워드가 일치하는 기존 검색어를 찾는다
         const existingKeyword = keywords.find(keyword => keyword.text === text);
-
+        setClickSearch(true);
         // 일치하는 키워드가 있는 경우 이전 기록을 삭제한다
         if (existingKeyword) {
             handleRemoveKeyword(existingKeyword.id);
@@ -41,11 +43,10 @@ function Search() {
                 handleRemoveKeyword(keywords[4].id);
             }
         }
-
         const newKeyword = { id: Date.now(), text };
 
         // 최근 검색어가 5개를 초과하는 경우 가장 오래된 검색어를 삭제
-
+        setSearchText(text);
         setKeywords(prevKeywords => [newKeyword, ...prevKeywords]);
         setText(''); // 검색어 입력 필드 비우기
     };
@@ -97,16 +98,26 @@ function Search() {
                         모두 삭제
                     </button>
                 </div>
-                <ul className="flex flex-wrap">
+                <ul className="flex flex-wrap mt-2">
                     {keywords.map(keyword => (
                         <li key={keyword.id} className="flex">
-                            <p>{keyword.text}</p>
+                            <p
+                                onClick={() => {
+                                    setText(keyword.text);
+                                }}
+                            >
+                                {keyword.text}
+                            </p>
                             <button className="text-red font-bold ml-1 mr-4" onClick={() => handleRemoveKeyword(keyword.id)}>
                                 X
                             </button>
                         </li>
                     ))}
                 </ul>
+                <div>
+                    <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
+                    {clickSearch && <p className="">검색어 - {searchText}</p>}
+                </div>
             </Body>
         </Container>
     );
