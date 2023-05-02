@@ -50,6 +50,7 @@ function Rent() {
                             endDate={item.endDate}
                             isSafe={item.isSafe}
                             isCart={item.isCart}
+                            menuState={menuState}
                         />
                     </Link>
                 ))}
