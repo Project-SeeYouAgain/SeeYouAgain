@@ -13,8 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 public class ProductClientResponseDto {
     private Long ownerId;
+    private String title;
+    private Integer price;
     private String location;
     private String productImg;
+    private Boolean productState;
     private Boolean type;
 
 }
