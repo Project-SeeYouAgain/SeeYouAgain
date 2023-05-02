@@ -14,6 +14,14 @@ interface ChatData {
     updatedAt: string;
 }
 
+interface productInfo {
+    productId: number,
+    productImg: string,
+    title: string,
+    price: number,
+
+}
+
 function Channel() {
     const router = useRouter();
     const [chatList, setChatList] = useState<ChatData[]>([]);
@@ -42,7 +50,7 @@ function Channel() {
     const subscribe = () => {
         client.current?.subscribe('/sub/chat/' + identifier, body => {
             const json_body: ChatData = JSON.parse(body.body);
-            console.log(json_body)
+            console.log(json_body);
             setChatList((_chat_list: ChatData[]) => [..._chat_list, json_body]);
         });
     };
@@ -54,8 +62,8 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                userId: 1,
-                nickname: 'nickname',
+                userId: 2,
+                nickname: 'nwk',
                 chat: chat,
             }),
         });
@@ -87,16 +95,33 @@ function Channel() {
     // }
 
     const getMessage = () => {
+        let api;
+        if (firstMessageId) {
+            api = `/chatting-service/auth/channel/chat/${identifier}/${firstMessageId}`;
+        } else {
+            api = `/chatting-service/auth/channel/chat/${identifier}`;
+        }
+
         axAuth({
-            url: `/chatting-service/auth/channel/${identifier}/20`,
+            url: api,
         }).then(res => {
             setChatList(() => [...res.data.data]);
+            setFirstMessageId(res.data.data[0].messageId);
         });
     };
+
+    // const getProductInfo = () => {
+    //     axAuth({
+
+    //     }).then(res => {
+
+    //     })
+    // } 
 
     useEffect(() => {
         if (!router.isReady) return;
 
+        // getProductInfo();
         getMessage();
         connect();
 
@@ -105,6 +130,12 @@ function Channel() {
 
     return (
         <div>
+            <div className='p-5 text-center border-b border-gray'>
+                <p>씨유씨유어겐어겐</p>
+            </div>
+            <div className='p-5'>
+                
+            </div>
             <div className="chat-list">
                 {chatList.map((chatData, index) => (
                     <div key={index}>

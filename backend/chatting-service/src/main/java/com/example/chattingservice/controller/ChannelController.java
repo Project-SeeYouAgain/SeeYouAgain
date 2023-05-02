@@ -38,9 +38,9 @@ public class ChannelController {
                 .body(new BaseResponseDto<>(201, "success"));
     }
 
-    @GetMapping("/{identifier}/{firstMessageId}")
+    @GetMapping({"/chat/{identifier}", "/chat/{identifier}/{firstMessageId}"})
     public ResponseEntity<BaseResponseDto<List<MessageResponseDto>>> getMessageList(@PathVariable("identifier") String identifier,
-                                                                                    @PathVariable("firstMessageId") Long firstMessageId) {
+                                                                                    @PathVariable(value = "firstMessageId", required = false) Long firstMessageId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", messageService.getMessageByChannelId(identifier, firstMessageId)));
     }
