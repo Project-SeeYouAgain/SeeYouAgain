@@ -22,7 +22,7 @@ function chat() {
         getChannelList(selectedTab);
     }, [selectedTab]);
 
-    const getChannelList = (type: String) => {
+    const getChannelList = (type: string) => {
         axAuth({
             url: `/chatting-service/auth/channel/${type}`,
         })
@@ -30,7 +30,9 @@ function chat() {
                 console.log(res.data.data);
                 setChatRoomList((_chat_room_list: ChatRoomData[]) => res.data.data);
             })
-            .catch(err => {});
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     const selectType = (event: MouseEvent, type: string) => {

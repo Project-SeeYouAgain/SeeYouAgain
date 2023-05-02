@@ -3,10 +3,8 @@ import Header from '../../components/Container/components/Header';
 import Profile from '../../components/Card/Profile';
 import { MenuData1, MenuData2 } from './MenuData';
 import Link from 'next/link';
-import Button from '../../components/Button';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
-import Card from '../../components/Card/ItemCard';
 
 function MyPage() {
     return (
