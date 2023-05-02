@@ -5,6 +5,6 @@ import com.example.userservice.dto.response.user.LocationResponseDto;
 
 public interface LocationService {
     void updateLocation(Long userId, LocationRequestDto requestDto);
-    LocationResponseDto getLocation(Long id);
-
+    LocationResponseDto getLocationInfo(Long id);
+    void deleteLocation(Long userId);
 }

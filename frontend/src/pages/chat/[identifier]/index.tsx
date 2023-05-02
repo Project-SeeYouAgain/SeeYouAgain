@@ -5,8 +5,13 @@ import { Client } from '@stomp/stompjs';
 import { axAuth } from '@/apis/axiosinstance';
 
 interface ChatData {
-    applyId: string;
+    identifier: string;
+    writerId: number;
+    nickname: string;
+    profileImg: string;
     chat: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 function Channel() {
@@ -37,21 +42,21 @@ function Channel() {
     const subscribe = () => {
         client.current?.subscribe('/sub/chat/' + identifier, body => {
             const json_body: ChatData = JSON.parse(body.body);
+            console.log(json_body)
             setChatList((_chat_list: ChatData[]) => [..._chat_list, json_body]);
         });
     };
 
     const publish = (chat: string) => {
-
         if (!client.current?.connected) return;
 
         client.current.publish({
             destination: '/pub/chat',
             body: JSON.stringify({
-                channelId: identifier,
+                identifier: identifier,
                 userId: 1,
                 nickname: 'nickname',
-                message: chat,
+                chat: chat,
             }),
         });
 
@@ -74,33 +79,41 @@ function Channel() {
 
     // const createChannel = () => {
     //     axAuth({
-    //         url: "/chatting-service/auth/channel" + identifier, 
+    //         url: "/chatting-service/auth/channel" + identifier,
     //         method: "post"
     //     }).then((res) => {
 
     //     })
     // }
 
-    // const getMessage = () => {};
+    const getMessage = () => {
+        axAuth({
+            url: `/chatting-service/auth/channel/${identifier}/20`,
+        }).then(res => {
+            setChatList(() => [...res.data.data]);
+        });
+    };
 
     useEffect(() => {
-        // getMessage();
+        if (!router.isReady) return;
 
+        getMessage();
         connect();
 
         return () => disconnect();
-    }, []);
+    }, [router.isReady]);
 
     return (
         <div>
             <div className="chat-list">
                 {chatList.map((chatData, index) => (
                     <div key={index}>
-                        <span>{chatData.applyId}: </span>
+                        <span>{chatData.nickname}: </span>
                         <span>{chatData.chat}</span>
                     </div>
                 ))}
             </div>
+
             <form onSubmit={event => handleSubmit(event, chat)}>
                 <div>
                     <input type={'text'} name={'chatInput'} onChange={handleChange} value={chat} />

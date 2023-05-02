@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class MessageResponseDto {
 
-    private Integer channelId;
-    private Integer writerId;
+    private String Identifier;
+    private Long writerId;
     private String nickname;
     private String profileImg;
     private String chat;
