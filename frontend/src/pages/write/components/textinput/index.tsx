@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import DatePicker from '../Datepicker';
+import Image from 'next/image';
 
 type FormValues = {
     title: string;
@@ -40,12 +41,7 @@ function TextInput() {
         <form onSubmit={handleSubmit(onSubmit)} style={{ height: '100%', overflow: 'auto' }}>
             <label>
                 <p className="font-bold text-[1.2rem] mb-[0.43rem]">제목</p>
-                <input
-                    type="text"
-                    {...register('title', { required: true })}
-                    className=" px-[1rem] w-[100%] h-[2.5rem] border border-darkgrey rounded-[.31rem] focus:outline-none"
-                    onKeyPress={handleKeyPress}
-                />
+                <input type="text" {...register('title', { required: true })} className=" px-[1rem] w-[100%] h-[2.5rem] bg-lightgrey rounded-[.31rem] focus:outline-none" onKeyPress={handleKeyPress} />
                 {errors.title && <span>This field is required</span>}
             </label>
             <br></br>
@@ -56,7 +52,7 @@ function TextInput() {
                 <input
                     type="number"
                     {...register('price', { required: 'Price is required' })}
-                    className="px-[1rem] w-[50%] h-[2.5rem] border border-darkgrey rounded-[.31rem] focus:outline-none
+                    className="px-[1rem] w-[50%] h-[2.5rem] bg-lightgrey rounded-[.31rem] focus:outline-none
                 placeholder:text-darkgrey placeholder: text-[1.2rem] 
                 "
                     onKeyPress={handleKeyPress}
@@ -79,7 +75,7 @@ function TextInput() {
 서로 믿고 거래할 수 있도록,
 자세하고 정확한 정보를 기재해주세요.`}
                         {...register('description', { required: 'Description is required' })}
-                        className="px-[1rem] py-[1rem] w-full h-[16rem] border border-darkgrey rounded-[.6rem] focus:outline-none placeholder:text-darkgrey placeholder:text-[1rem]"
+                        className="px-[1rem] py-[1rem] w-full h-[16rem] bg-lightgrey  rounded-[.6rem] focus:outline-none placeholder:text-darkgrey placeholder:text-[1rem]"
                         style={{ lineHeight: 1.5 }}
                     />
                 </div>
@@ -87,12 +83,6 @@ function TextInput() {
             </label>
             <br></br>
 
-            <div>
-                <p className="font-bold text-[1.2rem] mb-[0.43rem] ">대여일정</p>
-
-                <DatePicker />
-                {/* <Calendar onDatesChange={handleDatesChange} /> */}
-            </div>
             <br></br>
         </form>
     );
