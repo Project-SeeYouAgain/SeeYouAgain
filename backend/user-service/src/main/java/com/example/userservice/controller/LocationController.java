@@ -26,8 +26,8 @@ public class LocationController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<BaseResponseDto<?>> updateLocation(HttpServletRequest request,
-                                                             @RequestBody LocationRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto<?>> updateMyLocation(HttpServletRequest request,
+                                                               @RequestBody LocationRequestDto requestDto) {
         locationService.updateLocation(getUserId(request), requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new BaseResponseDto<>(201, "success"));
     }
@@ -39,9 +39,22 @@ public class LocationController {
      * @return
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<BaseResponseDto<LocationResponseDto>> getLocation(@PathVariable("userId") Long userId) {
+    public ResponseEntity<BaseResponseDto<LocationResponseDto>> getUserLocation(@PathVariable("userId") Long userId) {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new BaseResponseDto<>(200, "success", locationService.getLocation(userId)));
+                    .body(new BaseResponseDto<>(200, "success", locationService.getLocationInfo(userId)));
+    }
+
+    /**
+     * 유저의 현재 위치를 삭제하는 API입니다.
+     *
+     * @param userId
+     * @return
+     */
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<BaseResponseDto<?>> deleteUserLocation(@PathVariable("userId") Long userId) {
+        locationService.deleteLocation(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new BaseResponseDto<>(204, "success"));
     }
 
     private Long getUserId(HttpServletRequest request) {
