@@ -7,8 +7,14 @@ import Image from 'next/image';
 import SquareLg from '@/components/Button/SquareLg';
 import classNames from 'classnames';
 import styles from './contract.module.scss';
+import { useRouter } from 'next/router';
+
 function contract() {
-    const clickClose = () => {};
+    const router = useRouter();
+
+    const clickClose = () => {
+        router.back();
+    };
     const [firstChecked, setFirstChecked] = useState<boolean>(false);
     const [secondChecked, setSecondChecked] = useState<boolean>(false);
     const [thirdChecked, setThirdChecked] = useState<boolean>(false);
@@ -70,10 +76,10 @@ function contract() {
             <div className="absolute bottom-0 w-full px-[1.88rem]">
                 <Image src={promise} alt="promise" className="m-auto" />
                 <div className=" p-2 my-2 flex text-sm text-blue">
-                    <p className="w-[93%]">위 항목을 모두 인지하고 있으며 동의하겠습니다.</p>
+                    <p className="w-[93%] font-bold">위 항목을 모두 인지하고 있으며 동의하겠습니다.</p>
                     <input onClick={changeFifthCheck} type="checkbox" className={classNames(styles.blueCheckBox, 'w-[7%] border-blue-500')} />
                 </div>
-                <div className="p-4 mb-4">
+                <div className="mb-[2rem]">
                     <SquareLg check={check} innerValue="제출완료" bgColor="blue" textColor="white" />
                 </div>
             </div>
