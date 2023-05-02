@@ -50,6 +50,8 @@ public class ProductResponseDto {
 
     private Integer hit;
 
+
+
     public static ProductResponseDto of(Product product,
                                         List<ProductImg> productImgList,
                                         List<ProductTag> productTagList,
