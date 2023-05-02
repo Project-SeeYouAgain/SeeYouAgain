@@ -52,7 +52,7 @@ const UserLocation: React.FC = () => {
                             <p className="text-blue">안전한 세이프존에서 거래하는 것을 추천해요.</p>
                         </div>
                     )}
-                    <div id="map" className="w-full h-[100%-5rem] relative">
+                    <div id="map" className="w-full h-[85%] relative">
                         <KakaoMap onCenterChanged={(lat, lng) => console.log(lat, lng)} lat={userLocation.lat} lng={userLocation.lng} />
                         <div className="absolute bottom-10 w-full z-10" onClick={clickPosition}>
                             {myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-blue pt-2.5">장소 확정</p>}
