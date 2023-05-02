@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @NoArgsConstructor
 public class ProfileUpdateRequestDto {
-    MultipartFile profileImg;
-    String location;
-    String description;
+    private MultipartFile profileImg;
+    private String location;
+    private String description;
 }

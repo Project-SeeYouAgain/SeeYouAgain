@@ -87,8 +87,8 @@ public class ReservationServiceImpl implements ReservationService {
                 throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
 
             // 반납 완료로 변경 + product에서도 대여 가능으로 변경
-            reservation.updateState(ReservationEnum.RETURN);
             product.updateProductState(true);
+            reservation.updateState(ReservationEnum.RETURN);
         }
     }
 
@@ -106,7 +106,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
 
         // 대여 중이 아닌 경우에는 에러
-        if (!reservation.getState().equals("LENDING"))
+        if (!reservation.getState().equals(ReservationEnum.LENDING))
             throw new ApiException(ExceptionEnum.MEMBER_ACCESS_EXCEPTION);
 
         reservation.updateLocation(requestDto);
@@ -115,12 +115,13 @@ public class ReservationServiceImpl implements ReservationService {
      * explain : 예약 삭제
      */
     @Override
+    @Transactional
     public void deleteReservation(Long userId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
 
         // 대여자가 본인이 아닌 경우 에러
-        if (reservation.getLenderId().equals(userId))
+        if (!reservation.getLenderId().equals(userId))
             throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
 
         reservationRepository.delete(reservation);
@@ -131,18 +132,18 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationResponseDto> getReservationList(Long userId, String state) {
+    public List<ReservationResponseDto> getReservationList(Long userId, Integer state) {
 
-        if (state.equals("대여중")) {
+        if (state.equals(1)) {
            List<Reservation> reservationList = reservationRepository.findAllByLenderIdNow(userId);
             return getReservationResponse(reservationList);
 
-        } else if (state.equals("대여 완료")) {
+        } else if (state.equals(3)) {
            List<Reservation> reservationList = reservationRepository.findAllByLenderIdEnd(userId);
            return getReservationResponse(reservationList);
 
-        } else if (state.equals("예약중")) {
-            List<Reservation> reservationList = reservationRepository.findAllByOwnerIdWaiting(userId);
+        } else if (state.equals(2)) {
+            List<Reservation> reservationList = reservationRepository.findAllByLenderIdWaiting(userId);
             return getReservationResponse(reservationList);
 
         }
@@ -153,25 +154,23 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationResponseDto> myProductList(Long userId, String state) {
+    public List<ReservationResponseDto> myProductList(Long userId, Integer state) {
 
-        if (state.equals("대여중")) {
+        if (state.equals(1)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdNow(userId);
             return getReservationResponse(reservationList);
 
-        } else if (state.equals("대기중")) {
+        } else if (state.equals(2)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdWaiting(userId);
             return getReservationResponse(reservationList);
 
-        } else if (state.equals("숨김")) {
+        } else if (state.equals(3)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdIsHidden(userId);
             return getReservationResponse(reservationList);
 
         }
         return null;
     }
-
-
 
     private double getReviewScoreAvg(List<Review> reviewList) {
         int cnt = reviewList.size();

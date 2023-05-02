@@ -13,6 +13,7 @@ public enum ExceptionEnum {
     API_METHOD_NOT_ALLOWED_EXCEPTION(HttpStatus.METHOD_NOT_ALLOWED, "E0004", "지원하지 않는 Method 입니다."),
     API_PARAMETER_EXCEPTION(HttpStatus.BAD_REQUEST, "E0005", "파라미터 타입과 값을 확인하세요."),
     MEMBER_ACCESS_EXCEPTION(HttpStatus.FORBIDDEN, "M0001", "접근 권한이 없습니다."),
+    CART_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "존재하지 않는 카트입니다."),
     PRODUCT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "P0001", "존재하지 않는 상품입니다."),
     OWNER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "P0001", "작성자가 아닙니다."),
     LENDER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "L0001", "대여자가 아닙니다."),

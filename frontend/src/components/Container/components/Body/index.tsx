@@ -8,7 +8,7 @@ interface BodyProps {
 
 const Body = forwardRef<HTMLDivElement, BodyProps>(({ className, children }, ref) => {
     return (
-        <div ref={ref} id="container" className={classNames(className, 'px-[1.88rem]')}>
+        <div ref={ref} id="container" className={classNames(className, 'px-[1.88rem]')} style={{ height: 'calc(100vh - 4.75rem)', overflowY: 'scroll' }}>
             {children}
         </div>
     );

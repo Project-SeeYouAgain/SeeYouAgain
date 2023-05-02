@@ -36,7 +36,6 @@ public class AmazonS3Service {
     }
 
     private String upload(File uploadFile, String dirName) {
-
         String fileName = dirName + "/" + UUID.randomUUID() + "-"+ uploadFile.getName();
         putS3(uploadFile, fileName);
         removeNewFile(uploadFile);

@@ -1,0 +1,6 @@
+.noHover {
+    &:hover {
+        cursor: default;
+        outline: none;
+    }
+}

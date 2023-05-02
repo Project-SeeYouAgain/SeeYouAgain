@@ -1,10 +1,9 @@
 package com.example.productservice.service;
 
 import com.example.productservice.client.UserServiceClient;
+import com.example.productservice.dto.request.ProductListRequestDto;
 import com.example.productservice.dto.request.ProductRequestDto;
-import com.example.productservice.dto.response.ProductClientResponseDto;
-import com.example.productservice.dto.response.ProductResponseDto;
-import com.example.productservice.dto.response.UserClientResponseDto;
+import com.example.productservice.dto.response.*;
 import com.example.productservice.entity.*;
 import com.example.productservice.exception.ApiException;
 import com.example.productservice.exception.ExceptionEnum;
@@ -17,8 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -40,6 +41,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final AmazonS3Service amazonS3Service;
 
+    private final CartRepository cartRepository;
+
     /**
      * explain : 제품 조회
      */
@@ -55,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<Reservation> reservationList = reservationRepository.findAllByProductId(productId);
 
-        List<HashMap<String, LocalDate>> reservationMapList = getReservationPeriod(reservationList);
+        List<HashMap<String, String>> reservationMapList = getReservationPeriod(reservationList);
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
@@ -71,15 +74,15 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     @Transactional
-    public void createProduct(Long userId, ProductRequestDto requestDto) {
+    public void createProduct(Long userId, ProductRequestDto requestDto, List<MultipartFile> productImg) {
+
         Product product = Product.of(userId ,requestDto, true, 0, LocalDateTime.now(), false);
         productRepository.save(product);
 
         List<ProductTag> productTagList = requestDto.getTag().stream().map(t -> ProductTag.of(product, t)).collect(toList());
         productTagRepository.saveAll(productTagList);
 
-        List<ProductImg> productImgList = saveProductImg(requestDto, product);
-        productImgRepository.saveAll(productImgList);
+        saveProductImg(productImg, product);
     }
 
     @Override
@@ -98,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     @Transactional
-    public void updateProduct(Long userId, Long productId, ProductRequestDto requestDto) {
+    public void updateProduct(Long userId, Long productId, ProductRequestDto requestDto, List<MultipartFile> productImg) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
@@ -107,18 +110,25 @@ public class ProductServiceImpl implements ProductService {
         // 제품 수정
         product.updateProduct(requestDto);
 
-        productTagRepository.deleteAllByProductId(productId);
+        updateProductTag(productId, requestDto, product);
 
-        List<ProductTag> newProductTagList = requestDto.getTag().stream().map(t -> ProductTag.of(product, t)).collect(toList());
-        productTagRepository.saveAll(newProductTagList);
+        updateProductImg(productId, productImg, product);
+    }
 
-        // 제품 이미지 삭제 후 생성
+    private void updateProductImg(Long productId, List<MultipartFile> productImg, Product product) {
         List<ProductImg> productImgList = productImgRepository.findAllByProductId(productId);
         deleteProductImg(productImgList);
         productImgRepository.deleteAllByProductId(productId);
+        saveProductImg(productImg, product);
+    }
 
-        List<ProductImg> newProductImgList = saveProductImg(requestDto, product);
-        productImgRepository.saveAll(newProductImgList);
+    private void updateProductTag(Long productId, ProductRequestDto requestDto, Product product) {
+        productTagRepository.deleteAllByProductId(productId);
+        List<ProductTag> newProductTagList = requestDto.getTag()
+                .stream()
+                .map(t -> ProductTag.of(product, t))
+                .collect(toList());
+        productTagRepository.saveAll(newProductTagList);
     }
 
     /**
@@ -132,7 +142,40 @@ public class ProductServiceImpl implements ProductService {
 
         if (!product.getOwnerId().equals(userId)) throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
 
+        reservationRepository.deleteAllByProductId(productId);
+        productTagRepository.deleteAllByProductId(productId);
+        reviewRepository.deleteAllByProductId(productId);
+
+        List<ProductImg> productImgList = productImgRepository.findAllByProductId(productId);
+        deleteProductImg(productImgList);
+        productImgRepository.deleteAllByProductId(productId);
+
         productRepository.delete(product);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductListResponseDto> getProductList(Long userId, ProductListRequestDto requestDto) {
+        List<Product> productList = new ArrayList<>();
+        if (requestDto.getSort().equals(0)) {
+            productList = productRepository.findAllOrderByDate();
+        } else if (requestDto.getSort().equals(1)) {
+            productList = productRepository.findAllOrderByPrice();
+        } else if (requestDto.getSort().equals(2)) {
+            productList = productRepository.findAllOrderByScore();
+        }
+        return getProductResponse(productList, userId);
+    }
+
+    private void saveProductImg(List<MultipartFile> productImg, Product product) {
+        productImg.forEach(i -> {
+            if (!i.isEmpty()) {
+                String fileName = saveS3Img(i);
+                String fileUrl = amazonS3Service.getFileUrl(fileName);
+                ProductImg img = ProductImg.of(product, fileName, fileUrl);
+                productImgRepository.save(img);
+            }
+        });
     }
 
     private void deleteProductImg(List<ProductImg> productImgList) {
@@ -141,18 +184,7 @@ public class ProductServiceImpl implements ProductService {
         });
     }
 
-    private List<ProductImg> saveProductImg(ProductRequestDto requestDto, Product product) {
-        return requestDto.getProductImg().stream()
-                .map(i -> {
-                    String fileName = saveProductImg(i);
-                    String fileUrl = amazonS3Service.getFileUrl(fileName);
-                    return ProductImg.of(product, fileName, fileUrl);
-                })
-                .collect(toList());
-    }
-
-
-    private String saveProductImg(MultipartFile i) {
+    private String saveS3Img(MultipartFile i) {
         try {
             return amazonS3Service.upload(i, "product");
         } catch (IOException e) {
@@ -161,22 +193,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private double getReviewScoreAvg(List<Review> reviewList) {
-        int cnt = reviewList.size();
+
         int totalScore = 0;
         for (Review review : reviewList) {
             totalScore += review.getReviewScore();
         }
-        return (double) totalScore / cnt;
+        return (double) totalScore / reviewList.size();
     }
 
-    private List<HashMap<String, LocalDate>> getReservationPeriod(List<Reservation> reservationList) {
+    private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
         return reservationList.stream()
                 .map(r -> {
-                    HashMap<String, LocalDate> reservationMap = new HashMap<>();
-                    reservationMap.put("startDate", r.getStartDate());
-                    reservationMap.put("endDate", r.getEndDate());
+                    HashMap<String, String> reservationMap = new HashMap<>();
+                    reservationMap.put("startDate", r.getStartDate().toString());
+                    reservationMap.put("endDate", r.getEndDate().toString());
                     return reservationMap;
                 })
                 .collect(toList());
+    }
+
+    private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {
+        return productList.stream().map(p -> {
+            double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
+            ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
+
+            Optional<Cart> cart = cartRepository.findByUserIdAndProduct(userId, p);
+
+            Boolean isCart = false;
+
+            if (cart.isPresent()) isCart = true;
+
+            return ProductListResponseDto.of(p, productScoreAverage, productImg.getProductImg(), isCart);
+
+
+        }).collect(toList());
     }
 }

@@ -13,11 +13,11 @@ import com.example.userservice.repository.CartRepository;
 import com.example.userservice.repository.MannerCommentRepository;
 import com.example.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -27,8 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final MannerCommentRepository mannerCommentRepository;
     private final CartRepository cartRepository;
-    private final PasswordEncoder passwordEncoder;
-//    private final AmazonS3Service amazonS3Service;
+    private final AmazonS3Service amazonS3Service;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
         String location = requestDto.getLocation();
         String description = requestDto.getDescription();
 
-//        deleteS3Img(user);
+        deleteS3Img(user);
         user.updateProfile(null, null, location, description);
 
         return ProfileResponseDto.from(user);
@@ -58,37 +57,38 @@ public class AuthServiceImpl implements AuthService {
         User user = getUser(userId);
 
         // S3 서버에서 프로필 이미지 삭제
-//        deleteS3Img(user);
+        deleteS3Img(user);
 
         // 회원 탈퇴
         userRepository.delete(user);
     }
 
-//    @Override
-//    @Transactional
-//    public String updateProfileImg(Long userId, MultipartFile profileImg) {
-//        User user = getUser(userId);
-//
-//        deleteS3Img(user);
-//
-//        String fileName = saveS3Img(profileImg);
-//        String fileUrl = amazonS3Service.getFileUrl(fileName);
-//        user.updateProfile(fileName, fileUrl);
-//
-//        return user.getProfileImgUrl();
-//    }
-//
-//    private void deleteS3Img(User user) {
-//        if (user.getProfileImgKey() != null && !user.getProfileImgKey().isBlank()) amazonS3Service.delete(user.getProfileImgKey());
-//    }
-//
-//    private String saveS3Img(MultipartFile profileImg) {
-//        try {
-//            return amazonS3Service.upload(profileImg, "UserProfile");
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    @Override
+    @Transactional
+    public String updateProfileImg(Long userId, MultipartFile profileImg) {
+        User user = getUser(userId);
+
+        deleteS3Img(user);
+
+        String fileName = saveS3Img(profileImg);
+        String fileUrl = amazonS3Service.getFileUrl(fileName);
+        user.updateProfile(fileName, fileUrl);
+
+        return user.getProfileImgUrl();
+    }
+
+    private void deleteS3Img(User user) {
+        if (user.getProfileImgKey() != null && !user.getProfileImgKey().isBlank())
+            amazonS3Service.delete(user.getProfileImgKey());
+    }
+
+    private String saveS3Img(MultipartFile profileImg) {
+        try {
+            return amazonS3Service.upload(profileImg, "UserProfile");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     @Transactional
@@ -101,37 +101,6 @@ public class AuthServiceImpl implements AuthService {
 
         user.updateNickname(requestDto.getNickname());
         return user.getNickname();
-    }
-
-    @Override
-    @Transactional
-    public void rateUser(Long raterId, MannerCommentRequestDto requestDto, Long userId) {
-        User user = getUser(userId);
-
-        MannerComment mannerComment = MannerComment.of(raterId, requestDto, user);
-
-        mannerCommentRepository.save(mannerComment);
-    }
-
-    @Override
-    @Transactional
-    public void addCart(Long userId, Long productId) {
-        User user = getUser(userId);
-
-        Cart cart = Cart.of(user, productId);
-
-        cartRepository.save(cart);
-    }
-
-    @Override
-    @Transactional
-    public void deleteCart(Long userId, Long productId) {
-        User user = getUser(userId);
-
-        Cart cart = cartRepository.findByUserAndProductId(user, productId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.CART_NOT_EXIST_EXCEPTION));
-
-        cartRepository.delete(cart);
     }
 
     private User getUser(Long userId) {

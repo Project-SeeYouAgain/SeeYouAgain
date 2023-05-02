@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MannerCommentRequestDto {
-    Long userId;
-    String mannerComment;
-    int mannerScore;
+    private String mannerComment;
+    private int mannerScore;
 }

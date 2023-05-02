@@ -30,21 +30,21 @@ public class CorsConfiguration {
                 ServerHttpResponse response = ctx.getResponse();
                 HttpHeaders headers = response.getHeaders();
 
-                if (origin.startsWith("http://localhost:3000")
-                        || origin.startsWith("http://localhost:8000")
-                ) {
-                    headers.add("Access-Control-Allow-Origin", origin);
+                if (origin.startsWith("http://localhost:3000") || origin.startsWith("http://k8c101.p.ssafy.io")) {
+                    if (!request.getPath().toString().equals("/chatting-service/ws/info")) {
+                        headers.add("Access-Control-Allow-Origin", origin);
+                        headers.setAccessControlAllowCredentials(true);
+                    }
+                    headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
+                    headers.add("Access-Control-Max-Age", MAX_AGE);
+                    headers.add("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+                    headers.add("Access-Control-Expose-Headers", EXPOSE_HEADERS);
+                    if (request.getMethod() == HttpMethod.OPTIONS) {
+                        response.setStatusCode(HttpStatus.OK);
+                        return Mono.empty();
+                    }
                 }
 
-                headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
-                headers.add("Access-Control-Max-Age", MAX_AGE);
-                headers.add("Access-Control-Allow-Headers", ALLOWED_HEADERS);
-                headers.add("Access-Control-Expose-Headers", EXPOSE_HEADERS);
-                headers.setAccessControlAllowCredentials(true);
-                if (request.getMethod() == HttpMethod.OPTIONS) {
-                    response.setStatusCode(HttpStatus.OK);
-                    return Mono.empty();
-                }
             }
             return chain.filter(ctx);
         };

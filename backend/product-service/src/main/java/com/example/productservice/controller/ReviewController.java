@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ReviewController {
 
     @GetMapping("/{productId}/{lastReviewId}")
     public ResponseEntity<BaseResponseDto<List<ReviewResponseDto>>> getProductReview(@PathVariable("productId") Long productId,
-                                                                                    @PathVariable("lastReviewId") Long lastReviewId) {
+                                                                                     @PathVariable("lastReviewId") Long lastReviewId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", reviewService.getProductReview(productId, lastReviewId)));
     }
@@ -29,8 +30,9 @@ public class ReviewController {
     @PostMapping("/{productId}")
     public ResponseEntity<BaseResponseDto<?>> createProductReview(HttpServletRequest request,
                                                                   @PathVariable("productId") Long productId,
-                                                                  @ModelAttribute ReviewRequestDto requestDto) {
-        reviewService.createProductReview(getUserId(request), productId, requestDto);
+                                                                  @RequestPart ReviewRequestDto requestDto,
+                                                                  @RequestPart(required = false) MultipartFile reviewImg) {
+        reviewService.createProductReview(getUserId(request), productId, requestDto, reviewImg);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseDto<>(201, "success"));
     }
@@ -38,15 +40,16 @@ public class ReviewController {
     @PatchMapping("/{reviewId}")
     public ResponseEntity<BaseResponseDto<?>> updateProductReview(HttpServletRequest request,
                                                                   @PathVariable("reviewId") Long reviewId,
-                                                                  @ModelAttribute ReviewRequestDto requestDto) {
-        reviewService.updateProductReview(getUserId(request), reviewId, requestDto);
+                                                                  @RequestPart ReviewRequestDto requestDto,
+                                                                  @RequestPart(required = false) MultipartFile reviewImg) {
+        reviewService.updateProductReview(getUserId(request), reviewId, requestDto, reviewImg);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
     }
 
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<BaseResponseDto<?>> deleteProductReview(HttpServletRequest request,
-                                                                 @PathVariable("reviewId") Long reviewId) {
+                                                                  @PathVariable("reviewId") Long reviewId) {
         reviewService.deleteProductReview(getUserId(request), reviewId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(new BaseResponseDto<>(204, "success"));

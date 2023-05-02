@@ -13,7 +13,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: root
-    password: ssafy
+    password: kp23156385@
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql

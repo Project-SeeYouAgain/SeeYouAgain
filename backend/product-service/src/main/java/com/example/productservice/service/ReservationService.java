@@ -14,9 +14,9 @@ public interface ReservationService {
 
     void doneReservation(Long userId, Long reservationId, String state);
 
-    List<ReservationResponseDto> getReservationList(Long userId, String state);
+    List<ReservationResponseDto> getReservationList(Long userId, Integer state);
 
-    List<ReservationResponseDto> myProductList(Long userId, String state);
+    List<ReservationResponseDto> myProductList(Long userId, Integer state);
 
     void updateReservation(Long userId, Long reservationId, ReservationReturnRequestDto requestDto);
 

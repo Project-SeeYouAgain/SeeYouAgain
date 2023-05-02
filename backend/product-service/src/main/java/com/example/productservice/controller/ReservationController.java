@@ -22,9 +22,9 @@ public class ReservationController {
 
     //대여 예약 생성
     @PostMapping("/reservation/request/{productId}")
-    public ResponseEntity<BaseResponseDto<ReservationRequestDto>> createReservation(HttpServletRequest request,
-                                                                                    @PathVariable("productId") Long productId,
-                                                                                    @RequestBody ReservationRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto<?>> createReservation(HttpServletRequest request,
+                                                                @PathVariable("productId") Long productId,
+                                                                @RequestBody ReservationRequestDto requestDto) {
         reservationService.createReservation(getUserId(request), productId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseDto<>(201, "success"));
@@ -43,8 +43,8 @@ public class ReservationController {
     // 대여 상태 변경
     @PatchMapping("/reservation/done/{reservationId}/{state}")
     public ResponseEntity<BaseResponseDto<?>> doneReservation(HttpServletRequest request,
-                                                             @PathVariable("reservationId") Long reservationId,
-                                                             @PathVariable("state") String state
+                                                              @PathVariable("reservationId") Long reservationId,
+                                                              @PathVariable("state") String state
                                                               ) {
 
         reservationService.doneReservation(getUserId(request), reservationId, state);
@@ -54,9 +54,9 @@ public class ReservationController {
 
     // 대여 날짜 변경
     @PatchMapping("/reservation/return/{reservationId}")
-    public ResponseEntity<BaseResponseDto<ReservationReturnRequestDto>> updateReservation(HttpServletRequest request,
-                                                                                          @PathVariable("reservationId") Long reservationId,
-                                                                                          @RequestBody ReservationReturnRequestDto requestDto) {
+    public ResponseEntity<BaseResponseDto<?>> updateReservation(HttpServletRequest request,
+                                                                @PathVariable("reservationId") Long reservationId,
+                                                                @RequestBody ReservationReturnRequestDto requestDto) {
         reservationService.updateReservation(getUserId(request), reservationId, requestDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
@@ -71,20 +71,20 @@ public class ReservationController {
                 .body(new BaseResponseDto<>(200, "success"));
     }
 
-    //대여 예약 조회(대여중/ 대여완료/ 예약중)
+    //대여 예약 조회(대여중 : 1/ 대여완료 : 3/ 예약중 : 2)
     @GetMapping("/reservation/{state}")
     public ResponseEntity<BaseResponseDto<List<ReservationResponseDto>>> getReservationList(HttpServletRequest request,
-                                                                                      @PathVariable("state") String state) {
+                                                                                            @PathVariable("state") Integer state) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",
                          reservationService.getReservationList(getUserId(request), state)));
     }
 
-    // 내 물품 조회(대여중/ 대기중/ 숨김)
+    // 내 물품 조회(대여중 : 1/ 대기중 : 2/ 숨김 : 3)
     @GetMapping("/myproduct/{state}")
     public ResponseEntity<BaseResponseDto<List<ReservationResponseDto>>> getMyProduct(HttpServletRequest request,
-                                                                                      @PathVariable("state") String state) {
+                                                                                      @PathVariable("state") Integer state) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",

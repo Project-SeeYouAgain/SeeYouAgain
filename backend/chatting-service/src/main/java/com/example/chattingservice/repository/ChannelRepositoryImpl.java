@@ -1,7 +1,6 @@
 package com.example.chattingservice.repository;
 
 import com.example.chattingservice.entity.Channel;
-import com.example.chattingservice.entity.QChannel;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

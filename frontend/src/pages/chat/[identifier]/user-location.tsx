@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ResponsiveChecker from '@/components/ResponsiveChecker';
-import KakaoMap from '@/components/KakaoMap';
+import KakaoMap from '@/components/Location/KakaoMap';
 import findMap from '@/images/findmap.gif';
 import Image from 'next/image';
+import styles from './userLocation.module.scss';
 
 const UserLocation: React.FC = () => {
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
@@ -11,40 +12,51 @@ const UserLocation: React.FC = () => {
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
-
+    const [myCheck, setMyCheck] = useState(true);
+    const clickPosition = () => {
+        myCheck ? setMyCheck(false) : setMyCheck(true);
+    };
     useEffect(() => {
-        let watchId: number | null = null;
+        const getLocation = () => {
+            let watchId: number | null = null;
 
-        if (navigator.geolocation) {
-            const options = {
-                enableHighAccuracy: true,
-                maximumAge: 0,
+            if (navigator.geolocation) {
+                const options = {
+                    maximumAge: 0,
+                };
+
+                watchId = navigator.geolocation.watchPosition(
+                    position => {
+                        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    },
+                    error => {
+                        console.error('Error getting position:', error);
+                    },
+                    options,
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+
+            return () => {
+                if (watchId !== null) {
+                    navigator.geolocation.clearWatch(watchId);
+                }
             };
+        };
 
-            watchId = navigator.geolocation.watchPosition(
-                position => {
-                    setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-                },
-                error => {
-                    console.error('Error getting position:', error);
-                },
-                options,
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-        }
+        getLocation();
+        const intervalId = setInterval(getLocation, 10000); // 10 seconds
 
         return () => {
-            if (watchId !== null) {
-                navigator.geolocation.clearWatch(watchId);
-            }
+            clearInterval(intervalId);
         };
     }, []);
 
     const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
 
     const [dots, setDots] = useState('');
-
+    const check = true;
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (dots.length < 3) {
@@ -52,7 +64,7 @@ const UserLocation: React.FC = () => {
             } else {
                 setDots('');
             }
-        }, 1000);
+        }, 500);
         return () => clearInterval(intervalId);
     }, [dots]);
 
@@ -70,21 +82,24 @@ const UserLocation: React.FC = () => {
                                     <div className="w-8 h-8 rounded-full bg-black m-auto" />
                                     <p className="font-bold">이웃닉넴</p>
                                 </div>
-                                <div className="w-1/2 rounded-full bg-black text-white p-0.5 text-center h-8"> 준비중이예요. </div>
+                                {check && <div className="w-1/2 rounded-full bg-gray-400 text-white p-0.5 text-center h-8"> 준비중이예요. </div>}
+                                {!check && <div className="w-1/2 rounded-full bg-blue text-white p-0.5 text-center h-8"> 출발 했어요. </div>}
                             </div>
                         </div>
                     )}
                     <div id="map" className="w-full h-[83%] relative">
-                        {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} level={3} userLocation={userLocation} otherUserLocation={{ lat: 35.1548, lng: 126.8792 }} />}
+                        {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={{ lat: 35.2604, lng: 126.6657 }} />}
                         {!userLocation && (
                             <div className="w-full h-screen text-center font-bold text-xl bg-[#183942] text-white">
-                                <Image src={findMap} alt="findmap" className="m-auto pt-[50%]" />
+                                <p className={styles.Container}>위치 권한을 확인해보세요.</p>
+                                <Image src={findMap} alt="findmap" className="m-auto" />
                                 <p>{`위치를 가져오는 중입니다${dots}`}</p>
                             </div>
                         )}
                         {userLocation && (
-                            <div className="absolute bottom-10 w-full z-10">
-                                <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-blue pt-2.5">지금 출발해요</p>
+                            <div className="absolute bottom-10 w-full z-10" onClick={clickPosition}>
+                                {myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-blue pt-2.5">출발할까요?</p>}
+                                {!myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-gray-400 pt-2.5">이동중입니다</p>}
                             </div>
                         )}
                     </div>

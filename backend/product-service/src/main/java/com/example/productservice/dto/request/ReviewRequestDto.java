@@ -14,6 +14,4 @@ public class ReviewRequestDto {
     private String content;
 
     private Integer reviewScore;
-
-    private MultipartFile reviewImg;
 }
