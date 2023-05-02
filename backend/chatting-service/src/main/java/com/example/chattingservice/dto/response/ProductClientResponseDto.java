@@ -15,5 +15,6 @@ public class ProductClientResponseDto {
     private Long ownerId;
     private String location;
     private String productImg;
+    private Boolean type;
 
 }

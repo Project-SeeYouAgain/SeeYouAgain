@@ -15,12 +15,14 @@ public class ProductClientResponseDto {
     private Long ownerId;
     private String location;
     private String productImg;
+    private Boolean type;
 
     public static ProductClientResponseDto of(Product product, String productImg) {
         return ProductClientResponseDto.builder()
                 .ownerId(product.getOwnerId())
                 .location(product.getLocation())
                 .productImg(productImg)
+                .type(product.getType())
                 .build();
     }
 }

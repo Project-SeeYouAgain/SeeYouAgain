@@ -17,11 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,16 +37,26 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional(readOnly = true)
     public List<ChannelResponseDto> getChannelList(Long userId, String type) {
         List<Channel> myChannelList = channelRepository.findAllByOwnerIdOrUserId(userId, type);
-        return myChannelList.stream()
-                .map(c -> {
-                    UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
+        List<ChannelResponseDto> channelResponseDtoList = new ArrayList<>();
+        myChannelList.forEach(c -> {
+            UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
 
-                    PageRequest pageRequest = PageRequest.of(0, 1);
-                    List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
+            PageRequest pageRequest = PageRequest.of(0, 1);
+            List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
 
-                    return ChannelResponseDto.of(c, responseDto, latestMessage.get(0));
-                })
-                .collect(toList());
+            if (latestMessage.size() > 0) {
+                channelResponseDtoList.add(ChannelResponseDto.of(c, responseDto, latestMessage.get(0)));
+            }
+        });
+
+        channelResponseDtoList.sort(new Comparator<ChannelResponseDto>() {
+            @Override
+            public int compare(ChannelResponseDto o1, ChannelResponseDto o2) {
+                return o2.getLastMessageDate().compareTo(o1.getLastMessageDate());
+            }
+        });
+
+        return channelResponseDtoList;
     }
 
     private UserClientResponseDto getUserClientResponseDto(String type, Channel c) {
@@ -75,7 +81,12 @@ public class ChannelServiceImpl implements ChannelService {
         UserClientResponseDto ownerUserInfo = userServiceClient.getUserInfo(requestDto.getOwnerId()).getData();
         ProductClientResponseDto productInfo = productServiceClient.getProductInfo(requestDto.getProductId()).getData();
 
-        Channel channel = Channel.of(requestDto, userId, UUID.randomUUID().toString(), productInfo);
+        Channel channel;
+        if (productInfo.getType()) {
+            channel = Channel.of(requestDto.getProductId(), requestDto.getOwnerId(), userId, UUID.randomUUID().toString(), productInfo);
+        } else {
+            channel = Channel.of(requestDto.getProductId(), userId, requestDto.getOwnerId(), UUID.randomUUID().toString(), productInfo);
+        }
         channelRepository.save(channel);
 
         Participant me = Participant.of(channel, userId, myUserInfo, true);
