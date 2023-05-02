@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ChannelResponseDto {
 
-    private Long channelId;
+    private String identifier;
 
     private String nickname;
 
@@ -24,18 +24,19 @@ public class ChannelResponseDto {
 
     private String location;
 
-    private String lastMessage;
-
     private String productImg;
+
+    private String lastMessage;
 
     private LocalDateTime lastMessageDate;
 
     public static ChannelResponseDto of(Channel channel, UserClientResponseDto responseDto, Message message) {
         return ChannelResponseDto.builder()
-                .channelId(channel.getId())
+                .identifier(channel.getIdentifier())
                 .nickname(responseDto.getNickname())
                 .profileImg(responseDto.getProfileImg())
                 .location(responseDto.getLocation())
+                .productImg(channel.getProductImg())
                 .lastMessage(message.getChat())
                 .lastMessageDate(message.getCreatedAt())
                 .build();

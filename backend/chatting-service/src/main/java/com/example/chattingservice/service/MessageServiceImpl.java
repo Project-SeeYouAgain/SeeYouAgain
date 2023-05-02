@@ -29,10 +29,10 @@ public class MessageServiceImpl implements MessageService{
     @Override
     @Transactional
     public void insertMessage(MessageRequestDto requestDto) {
-        Participant participant = participantRepository.findByUserIdAndChannelId(requestDto.getUserId(), requestDto.getChannelId())
+        Participant participant = participantRepository.findByUserIdAndChannelIdentifier(requestDto.getUserId(), requestDto.getIdentifier())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
-        Channel channel = channelRepository.findById(requestDto.getChannelId())
+        Channel channel = channelRepository.findByIdentifier(requestDto.getIdentifier())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_EXIST_CHANNEL_EXCEPTION));
 
         Message message = Message.of(requestDto, channel, participant);

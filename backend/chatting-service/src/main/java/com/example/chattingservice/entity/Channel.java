@@ -29,10 +29,10 @@ public class Channel extends TimeStamped {
 
     private String productImg;
 
-    public static Channel of(ChannelRequestDto requestDto, Long userId, String identifier, ProductClientResponseDto productInfo) {
+    public static Channel of(Long productId, Long ownerId, Long userId, String identifier, ProductClientResponseDto productInfo) {
         return Channel.builder()
-                .productId(requestDto.getProductId())
-                .ownerId(requestDto.getOwnerId())
+                .productId(productId)
+                .ownerId(ownerId)
                 .userId(userId)
                 .identifier(identifier)
                 .productImg(productInfo.getProductImg())
