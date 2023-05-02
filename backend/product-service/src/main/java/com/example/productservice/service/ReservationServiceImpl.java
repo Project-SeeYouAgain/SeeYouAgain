@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -26,6 +27,8 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
 
     private final ReviewRepository reviewRepository;
+
+    private final CartRepository cartRepository;
 
     /**
      * explain : 제품 예약 생성
@@ -136,15 +139,15 @@ public class ReservationServiceImpl implements ReservationService {
 
         if (state.equals(1)) {
            List<Reservation> reservationList = reservationRepository.findAllByLenderIdNow(userId);
-            return getReservationResponse(reservationList);
+            return getReservationResponse(reservationList, userId);
 
         } else if (state.equals(3)) {
            List<Reservation> reservationList = reservationRepository.findAllByLenderIdEnd(userId);
-           return getReservationResponse(reservationList);
+           return getReservationResponse(reservationList, userId);
 
         } else if (state.equals(2)) {
             List<Reservation> reservationList = reservationRepository.findAllByLenderIdWaiting(userId);
-            return getReservationResponse(reservationList);
+            return getReservationResponse(reservationList, userId);
 
         }
         return null;
@@ -158,15 +161,15 @@ public class ReservationServiceImpl implements ReservationService {
 
         if (state.equals(1)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdNow(userId);
-            return getReservationResponse(reservationList);
+            return getReservationResponse(reservationList, userId);
 
         } else if (state.equals(2)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdWaiting(userId);
-            return getReservationResponse(reservationList);
+            return getReservationResponse(reservationList, userId);
 
         } else if (state.equals(3)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdIsHidden(userId);
-            return getReservationResponse(reservationList);
+            return getReservationResponse(reservationList, userId);
 
         }
         return null;
@@ -181,12 +184,18 @@ public class ReservationServiceImpl implements ReservationService {
         return (double) totalScore / cnt;
     }
 
-    private List<ReservationResponseDto> getReservationResponse(List<Reservation> reservationList) {
+    private List<ReservationResponseDto> getReservationResponse(List<Reservation> reservationList, Long userId) {
         return reservationList.stream().map(r -> {
             Product product = r.getProduct();
             double ReviewScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(product.getId()));
             ProductImg productImg = productImgRepository.findAllByProductId(product.getId()).get(0);
-            return ReservationResponseDto.of(r, product, ReviewScoreAverage, productImg);
+
+            Optional<Cart> cart = cartRepository.findByUserIdAndProduct(userId, product);
+
+            Boolean isCart = false;
+
+            if (cart.isPresent()) isCart = true;
+            return ReservationResponseDto.of(r, product, ReviewScoreAverage, productImg, isCart);
         }).collect(toList());
     }  
 }
