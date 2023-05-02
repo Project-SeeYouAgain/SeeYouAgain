@@ -61,7 +61,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged }) => {
         };
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
-    }, []);
+    }, [lat, lng]);
 
     useEffect(() => {
         if (map && marker) {
