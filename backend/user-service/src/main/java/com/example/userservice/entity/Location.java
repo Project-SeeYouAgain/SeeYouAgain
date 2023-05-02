@@ -10,9 +10,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @ToString
+@Table(name = "location")
 public class Location extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "location_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)

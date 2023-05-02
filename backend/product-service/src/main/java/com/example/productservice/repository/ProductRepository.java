@@ -15,6 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p from Product p order by p.price")
     List<Product> findAllOrderByPrice();
 
-    @Query("SELECT r FROM Review r JOIN r.product p ORDER BY r.score DESC")
+    @Query("SELECT distinct p FROM Review r JOIN r.product p GROUP BY p.id ORDER BY Avg(r.reviewScore) DESC")
     List<Product> findAllOrderByScore();
 }

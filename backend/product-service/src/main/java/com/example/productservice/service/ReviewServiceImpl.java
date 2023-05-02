@@ -11,8 +11,10 @@ import com.example.productservice.exception.ExceptionEnum;
 import com.example.productservice.repository.ProductRepository;
 import com.example.productservice.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,32 +39,33 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void createProductReview(Long userId, Long productId, ReviewRequestDto requestDto) {
+    public void createProductReview(Long userId, Long productId, ReviewRequestDto requestDto,
+                                    MultipartFile reviewImg) {
         UserClientResponseDto responseDto = userServiceClient.getUserInfo(userId).getData();
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
-        Review review = getReview(userId, requestDto, responseDto.getNickname(), product);
+        Review review = getReview(userId, requestDto, responseDto.getNickname(), product, reviewImg);
 
         // 리뷰 저장
         reviewRepository.save(review);
     }
 
-    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname, Product product) {
+    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname, Product product, MultipartFile reviewImg) {
 
-        if (requestDto.getReviewImg().isEmpty()) {
+        if (reviewImg.isEmpty()) {
             return Review.of(product, userId, nickname, requestDto, null, null);
         }
 
-        String reviewKey = saveS3Img(requestDto);
+        String reviewKey = saveS3Img(reviewImg);
         String reviewUrl = amazonS3Service.getFileUrl(reviewKey);
         return Review.of(product, userId, nickname, requestDto, reviewKey, reviewUrl);
     }
 
-    private String saveS3Img(ReviewRequestDto requestDto) {
+    private String saveS3Img(MultipartFile reviewImg) {
         try {
-            return amazonS3Service.upload(requestDto.getReviewImg(), "review");
+            return amazonS3Service.upload(reviewImg, "review");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -70,20 +73,21 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void updateProductReview(Long userId, Long reviewId, ReviewRequestDto requestDto) {
+    public void updateProductReview(Long userId, Long reviewId, ReviewRequestDto requestDto,
+                                    MultipartFile reviewImg) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.REVIEW_NOT_EXIST_EXCEPTION));
 
-        writerValidation(reviewId, review);
+        writerValidation(userId, review);
 
         deleteS3Img(review);
 
-        updateReview(requestDto, review);
+        updateReview(reviewImg, requestDto, review);
     }
 
-    private void updateReview(ReviewRequestDto requestDto, Review review) {
-        if (!requestDto.getReviewImg().isEmpty()) {
-            String reviewImgKey = saveS3Img(requestDto);
+    private void updateReview(MultipartFile reviewImg, ReviewRequestDto requestDto, Review review) {
+        if (!reviewImg.isEmpty()) {
+            String reviewImgKey = saveS3Img(reviewImg);
             String reviewImgUrl = amazonS3Service.getFileUrl(reviewImgKey);
             review.updateReview(requestDto, reviewImgKey, reviewImgUrl);
         } else {
@@ -97,7 +101,7 @@ public class ReviewServiceImpl implements ReviewService{
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.REVIEW_NOT_EXIST_EXCEPTION));
 
-        writerValidation(reviewId, review);
+        writerValidation(userId, review);
 
         deleteS3Img(review);
 
@@ -108,8 +112,8 @@ public class ReviewServiceImpl implements ReviewService{
         if (review.getReviewImgKey() != null) amazonS3Service.delete(review.getReviewImgKey());
     }
 
-    private static void writerValidation(Long reviewId, Review review) {
-        if (!review.getLenderId().equals(reviewId)) throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
+    private static void writerValidation(Long userId, Review review) {
+        if (!review.getLenderId().equals(userId)) throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
     }
 
 }
