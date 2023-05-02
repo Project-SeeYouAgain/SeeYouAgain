@@ -16,8 +16,7 @@ function Rent() {
         startDate?: string;
         endDate?: string;
         isSafe?: boolean;
-        isCart: boolean;
-        menuState: number;
+        isCart?: boolean;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
@@ -37,7 +36,7 @@ function Rent() {
 
     return (
         <Container>
-            <Header title="대여 받은 내역"></Header>
+            <Header title="내 아이템"></Header>
             <Body>
                 <Menu onSelectMenu={SelectMenu} />
                 {itemList.map((item, index) => (
@@ -49,8 +48,8 @@ function Rent() {
                             price={item.price}
                             startDate={item.startDate}
                             endDate={item.endDate}
+                            isSafe={item.isSafe}
                             isCart={item.isCart}
-                            menuState={menuState}
                         />
                     </Link>
                 ))}
