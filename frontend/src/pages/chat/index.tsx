@@ -4,7 +4,7 @@ import { VscBell } from 'react-icons/vsc';
 import { axAuth } from '@/apis/axiosinstance';
 
 interface ChatRoomData {
-    channelId: number
+    channelId: number;
     nickname: string;
     profileImg: string;
     location: string;
@@ -26,17 +26,19 @@ function chat() {
             .then(res => {
                 setChatRoomList((_chat_room_list: ChatRoomData[]) => [res.data.data]);
             })
-            .catch(err => {});
+            .catch(err => console.log(err));
     }, []);
 
-    const getChannelList = (type: String) => {
+    const getChannelList = (type: string) => {
         axAuth({
             url: `/chatting-service/auth/channel/${type}`,
         })
             .then(res => {
                 setChatRoomList((_chat_room_list: ChatRoomData[]) => [res.data.data]);
             })
-            .catch(err => {});
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     const selectType = (event: MouseEvent, type: string) => {
@@ -59,7 +61,7 @@ function chat() {
                 </div>
             </div>
             <div>
-                <ChatRoom productImg="" nickname="key" location="c" latestMessageDate="d" latestMessage="넹" profileImg="f" identifier='g' />
+                <ChatRoom productImg="" nickname="key" location="c" latestMessageDate="d" latestMessage="넹" profileImg="f" identifier="g" />
                 {chatRoomList.map((chatRoomData, index) => (
                     <div key={index}>
                         <ChatRoom
