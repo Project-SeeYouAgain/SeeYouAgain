@@ -217,7 +217,7 @@ public class ProductServiceImpl implements ProductService {
             double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
             ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
 
-            Optional<Cart> cart = cartRepository.findByUserAndProductId(userId, p);
+            Optional<Cart> cart = cartRepository.findByUserIdAndProduct(userId, p);
 
             Boolean isCart = false;
 
