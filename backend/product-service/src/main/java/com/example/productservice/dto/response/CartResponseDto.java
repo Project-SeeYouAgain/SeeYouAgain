@@ -12,32 +12,32 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CartResponseDto {
 
-private Long productId;
+    private Long productId;
 
-private Boolean type;
+    private Boolean type;
 
-private String title;
+    private String title;
 
-private Integer price;
+    private Integer price;
 
-private String location;
+    private String location;
 
-private double score;
+    private double score;
 
-private String productImg;
+    private String productImg;
 
-private Boolean isSafe;
+    private Boolean isSafe;
 
-public static CartResponseDto of(Product product, double score, String productImg) {
-    return CartResponseDto.builder()
-            .productId(product.getId())
-            .type(product.getType())
-            .title(product.getTitle())
-            .price(product.getPrice())
-            .location(product.getLocation())
-            .score(score)
-            .productImg(productImg)
-            .isSafe(product.getIsSafe())
-            .build();
-}
+    public static CartResponseDto of(Product product, double score, String productImg) {
+        return CartResponseDto.builder()
+                .productId(product.getId())
+                .type(product.getType())
+                .title(product.getTitle())
+                .price(product.getPrice())
+                .location(product.getLocation())
+                .score(score)
+                .productImg(productImg)
+                .isSafe(product.getIsSafe())
+                .build();
+    }
 }

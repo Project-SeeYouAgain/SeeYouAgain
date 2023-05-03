@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
             ProductImg productImg = productImgRepository.findAllByProductId(product.getId()).get(0);
             return CartResponseDto.of(product, ReviewScoreAverage, productImg.getProductImg());
         }).collect(toList());
-}
+    }
 
     private double getReviewScoreAvg(List<Review> reviewList) {
 
