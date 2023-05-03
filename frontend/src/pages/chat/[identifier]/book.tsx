@@ -34,18 +34,18 @@ function book() {
                 />
                 <div className="mb-4 px-2">
                     {startDate && endDate ? (
-                        <div className="grid grid-cols-2">
-                            <p>
-                                <span className="text-blue font-bold">시작일</span> {format(startDate, 'yyyy.MM.dd', { locale: ko })}
-                            </p>
-                            <p>
-                                <span className="text-blue font-bold">종료일</span> {format(endDate, 'yyyy.MM.dd', { locale: ko })}
-                            </p>
+                        <div className="grid grid-cols-4 text-center">
+                            <p className="text-blue font-bold">시작일</p>
+                            <p>{format(startDate, 'yyyy.MM.dd', { locale: ko })}</p>
+                            <p className="text-blue font-bold">종료일</p>
+                            <p>{format(endDate, 'yyyy.MM.dd', { locale: ko })}</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 text-blue font-bold">
+                        <div className="grid grid-cols-4 text-blue font-bold text-center">
                             <p>시작일</p>
+                            <span></span>
                             <p>종료일</p>
+                            <span></span>
                         </div>
                     )}
                 </div>
