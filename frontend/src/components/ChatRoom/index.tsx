@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import default_user from '@/images/default_user.png';
