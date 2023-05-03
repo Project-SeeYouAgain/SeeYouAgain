@@ -17,12 +17,7 @@ function Cart() {
         isSafe?: boolean;
         isCart?: boolean;
     }
-    const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
-
-    function SelectMenu(data: number) {
-        setMenuState(data);
-    }
 
     useEffect(() => {
         const url = `/product-service/auth/cart`;
@@ -31,7 +26,7 @@ function Cart() {
                 setItemList(res.data);
             })
             .catch(err => console.log(err));
-    }, [menuState]);
+    }, []);
 
     return (
         <Container>
