@@ -23,7 +23,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 MessageResponseDto.class,
                 message.id.as("messageId"),
                 message.channel.identifier.as("identifier"),
-                message.participant.id.as("writerId"),
+                message.participant.userId.as("writerId"),
                 message.nickname,
                 message.participant.profileImg,
                 message.chat,
