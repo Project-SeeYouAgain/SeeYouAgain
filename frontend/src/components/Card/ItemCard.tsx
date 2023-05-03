@@ -14,7 +14,7 @@ interface dataProps {
     endDate?: string;
     isSafe?: boolean;
     isCart?: boolean;
-    menuState: number;
+    menuState?: number;
 }
 
 function ItemCard({ productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState }: dataProps) {
@@ -43,8 +43,12 @@ function ItemCard({ productImg, title, location, price, startDate, endDate, isSa
                 <div className="flex flex-col w-[70%]">
                     <span className="font-semibold w-[100%] flex items-center justify-between relative">
                         <span className="truncate w-[11.87rem] text-[1.2rem]">{title}</span>
-                        <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={Dropdown} />
-                        <ItemCardOption {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                        {menuState !== undefined ? (
+                            <>
+                                <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={Dropdown} />
+                                <ItemCardOption {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                            </>
+                        ) : null}
                     </span>
                     <div className="flex items-center mt-[.5rem]">
                         <span className="text-[#8E8E93] mr-[1.5rem]">{location}</span>

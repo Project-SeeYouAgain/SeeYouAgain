@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import Header from '@/components/Container/components/Header';
-import Menu from '@/components/Card/Menu';
 import { axBase } from '../../apis/axiosinstance';
 import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
 
-function Rent() {
+function Cart() {
     interface RentalItem {
         productImg: string;
         title: string;
@@ -16,8 +15,7 @@ function Rent() {
         startDate?: string;
         endDate?: string;
         isSafe?: boolean;
-        isCart: boolean;
-        menuState: number;
+        isCart?: boolean;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
@@ -27,7 +25,7 @@ function Rent() {
     }
 
     useEffect(() => {
-        const url = `/product-service/auth/reservation/${menuState}`;
+        const url = `/product-service/auth/cart`;
         axBase({ url })
             .then(res => {
                 setItemList(res.data);
@@ -37,9 +35,9 @@ function Rent() {
 
     return (
         <Container>
-            <Header title="대여 받은 내역"></Header>
+            <Header title="찜 목록"></Header>
             <Body>
-                <Menu onSelectMenu={SelectMenu} />
+                <div className="border-b mt-[5rem]"></div>
                 {itemList.map((item, index) => (
                     <Link key={index} href={''}>
                         <Card
@@ -49,8 +47,8 @@ function Rent() {
                             price={item.price}
                             startDate={item.startDate}
                             endDate={item.endDate}
+                            isSafe={item.isSafe}
                             isCart={item.isCart}
-                            menuState={menuState}
                         />
                     </Link>
                 ))}
@@ -59,4 +57,4 @@ function Rent() {
     );
 }
 
-export default Rent;
+export default Cart;
