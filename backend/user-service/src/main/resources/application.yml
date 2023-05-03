@@ -13,7 +13,7 @@ spring:
       path: /h2-console
   datasource:
 #    url: jdbc:mysql://도메인주소:3306/seeyouagain?useSSL=false&serverTimezone=UTC
-    url: jdbc:mysql://localhost:3307/seeyouagain?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://k8c101.p.ssafy.io:3307/seeyouagain?useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: seeyouagain1234
     driver-class-name: com.mysql.cj.jdbc.Driver
