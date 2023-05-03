@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProductListResponseDto {
+
+    private Long productId;
+
     private String title;
 
     private String location;
@@ -34,6 +37,7 @@ public class ProductListResponseDto {
                                             boolean isCart
                                             ) {
         return ProductListResponseDto.builder()
+                .productId(product.getId())
                 .title(product.getTitle())
                 .location(product.getLocation())
                 .price(product.getPrice())

@@ -2,6 +2,7 @@ package com.example.chattingservice.controller;
 
 import com.example.chattingservice.dto.BaseResponseDto;
 import com.example.chattingservice.dto.request.ChannelRequestDto;
+import com.example.chattingservice.dto.response.ChannelDetailResponseDto;
 import com.example.chattingservice.dto.response.ChannelResponseDto;
 import com.example.chattingservice.dto.response.MessageResponseDto;
 import com.example.chattingservice.service.ChannelService;
@@ -30,6 +31,13 @@ public class ChannelController {
                 .body(new BaseResponseDto<>(200, "success", channelService.getChannelList(getUserId(request), type)));
     }
 
+    @GetMapping("/detail/{identifier}")
+    public ResponseEntity<BaseResponseDto<ChannelDetailResponseDto>> getChannelDetail(HttpServletRequest request,
+                                                                                      @PathVariable("identifier") String identifier) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", channelService.getChannelDetail(getUserId(request), identifier)));
+    }
+
     @PostMapping
     public ResponseEntity<BaseResponseDto<Void>> createChannel(HttpServletRequest request,
                                                                @RequestBody ChannelRequestDto requestDto) {
@@ -38,9 +46,9 @@ public class ChannelController {
                 .body(new BaseResponseDto<>(201, "success"));
     }
 
-    @GetMapping("/{identifier}/{firstMessageId}")
+    @GetMapping({"/chat/{identifier}", "/chat/{identifier}/{firstMessageId}"})
     public ResponseEntity<BaseResponseDto<List<MessageResponseDto>>> getMessageList(@PathVariable("identifier") String identifier,
-                                                                                    @PathVariable("firstMessageId") Long firstMessageId) {
+                                                                                    @PathVariable(value = "firstMessageId", required = false) Long firstMessageId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", messageService.getMessageByChannelId(identifier, firstMessageId)));
     }

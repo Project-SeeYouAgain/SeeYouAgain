@@ -3,7 +3,8 @@ import axios, { AxiosInstance } from 'axios';
 export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
-            const token = localStorage.getItem('accessToken');
+            // const token = localStorage.getItem('accessToken');
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzMDAzMTE2LCJleHAiOjE2ODMwODk1MTZ9.DKDkUgc3aSJMvrDg3Lidvyc3tK8DxcVGRvOSsiPEAkw';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },

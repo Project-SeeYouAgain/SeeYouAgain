@@ -22,7 +22,7 @@ public class Cart {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public static Cart of( Product product, Long userId) {
+    public static Cart of(Product product, Long userId) {
         return Cart.builder()
                 .userId(userId)
                 .product(product)

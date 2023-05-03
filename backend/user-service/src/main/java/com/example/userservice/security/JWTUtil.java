@@ -22,7 +22,7 @@ public class JWTUtil {
     private String secretKey;
 
     // 토큰 유효시간 60분
-    private Long accessTokenValidTime = 60 * 60 * 1000L;
+    private Long accessTokenValidTime = 24 * 60 * 60 * 1000L;
 
     // 리프레시 토큰 유효시간 2주
     private Long refreshTokenValidTime = 14 * 24 * 60 * 60 * 1000L;

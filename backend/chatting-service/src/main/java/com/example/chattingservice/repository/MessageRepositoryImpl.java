@@ -21,9 +21,10 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
     public List<MessageResponseDto> findLatestMessageList(String identifier, Long firstMessageId) {
         return queryFactory.select(Projections.constructor(
                 MessageResponseDto.class,
-                message.channel.id.as("channelId"),
+                message.id.as("messageId"),
+                message.channel.identifier.as("identifier"),
                 message.participant.id.as("writerId"),
-                message.participant.nickname,
+                message.nickname,
                 message.participant.profileImg,
                 message.chat,
                 message.createdAt,

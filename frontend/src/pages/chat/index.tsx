@@ -4,7 +4,6 @@ import { VscBell } from 'react-icons/vsc';
 import { axAuth } from '@/apis/axiosinstance';
 
 interface ChatRoomData {
-    channelId: number
     nickname: string;
     profileImg: string;
     location: string;
@@ -20,28 +19,24 @@ function chat() {
     const [selectedTab, setSelectedTab] = useState<string>('borrow');
 
     useEffect(() => {
-        axAuth({
-            url: '/chatting-service/auth/channel/borrow',
-        })
-            .then(res => {
-                setChatRoomList((_chat_room_list: ChatRoomData[]) => [res.data.data]);
-            })
-            .catch(err => {});
-    }, []);
+        getChannelList(selectedTab);
+    }, [selectedTab]);
 
-    const getChannelList = (type: String) => {
+    const getChannelList = (type: string) => {
         axAuth({
             url: `/chatting-service/auth/channel/${type}`,
         })
             .then(res => {
-                setChatRoomList((_chat_room_list: ChatRoomData[]) => [res.data.data]);
+                console.log(res.data.data);
+                setChatRoomList((_chat_room_list: ChatRoomData[]) => res.data.data);
             })
-            .catch(err => {});
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     const selectType = (event: MouseEvent, type: string) => {
         setSelectedTab(type);
-        getChannelList(type);
     };
 
     return (
@@ -59,7 +54,6 @@ function chat() {
                 </div>
             </div>
             <div>
-                <ChatRoom productImg="" nickname="key" location="c" latestMessageDate="d" latestMessage="넹" profileImg="f" identifier='g' />
                 {chatRoomList.map((chatRoomData, index) => (
                     <div key={index}>
                         <ChatRoom

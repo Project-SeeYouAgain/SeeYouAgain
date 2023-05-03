@@ -33,10 +33,13 @@ public class ReservationResponseDto {
 
     private Boolean isSafe;
 
+    private Boolean isCart;
+
     public static ReservationResponseDto of(Reservation reservation,
                                             Product product,
                                             double reviewScore,
-                                            ProductImg productImg) {
+                                            ProductImg productImg,
+                                            Boolean isCart) {
         return ReservationResponseDto.builder()
                 .startDate(reservation.getStartDate().toString())
                 .endDate(reservation.getEndDate().toString())
@@ -47,6 +50,7 @@ public class ReservationResponseDto {
                 .score(reviewScore)
                 .productImg(productImg.getProductImg())
                 .isSafe(product.getIsSafe())
+                .isCart(isCart)
                 .build();
     }
 }

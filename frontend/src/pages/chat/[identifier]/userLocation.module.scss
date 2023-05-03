@@ -1,0 +1,15 @@
+.Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50%;
+}
+/* custom-datepicker.css */
+
+.react-datepicker {
+    width: 100%;
+}
+
+.react-datepicker__month-container {
+    width: 100% !important;
+}

@@ -53,8 +53,9 @@ logging:
     com.example.userservice.client: DEBUG
 
 gateway:
-  ip: 192.168.100.120
-#  ip: 172.20.10.2
+#  ip: 192.168.100.51
+#  ip: 192.168.100.120
+  ip: 172.20.10.2
 
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa

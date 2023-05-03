@@ -66,7 +66,15 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/chatting-service/(?<segment>.*), /$\{segment}
-#            - JwtAuthenticationFilter
+            - JwtAuthenticationFilter
+        - id: chatting-service
+          uri: lb://CHATTING-SERVICE
+          predicates:
+            - Path=/chatting-service/**
+            - Method=GET, POST, PATCH, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/chatting-service/(?<segment>.*), /$\{segment}
 
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa

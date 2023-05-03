@@ -3,12 +3,15 @@ package com.example.chattingservice.service;
 import com.example.chattingservice.client.ProductServiceClient;
 import com.example.chattingservice.client.UserServiceClient;
 import com.example.chattingservice.dto.request.ChannelRequestDto;
+import com.example.chattingservice.dto.response.ChannelDetailResponseDto;
 import com.example.chattingservice.dto.response.ChannelResponseDto;
 import com.example.chattingservice.dto.response.ProductClientResponseDto;
 import com.example.chattingservice.dto.response.UserClientResponseDto;
 import com.example.chattingservice.entity.Channel;
 import com.example.chattingservice.entity.Message;
 import com.example.chattingservice.entity.Participant;
+import com.example.chattingservice.exception.ApiException;
+import com.example.chattingservice.exception.ExceptionEnum;
 import com.example.chattingservice.repository.ChannelRepository;
 import com.example.chattingservice.repository.MessageRepository;
 import com.example.chattingservice.repository.ParticipantRepository;
@@ -17,11 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,16 +40,21 @@ public class ChannelServiceImpl implements ChannelService {
     @Transactional(readOnly = true)
     public List<ChannelResponseDto> getChannelList(Long userId, String type) {
         List<Channel> myChannelList = channelRepository.findAllByOwnerIdOrUserId(userId, type);
-        return myChannelList.stream()
-                .map(c -> {
-                    UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
+        List<ChannelResponseDto> channelResponseDtoList = new ArrayList<>();
+        myChannelList.forEach(c -> {
+            UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
 
-                    PageRequest pageRequest = PageRequest.of(0, 1);
-                    List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
+            PageRequest pageRequest = PageRequest.of(0, 1);
+            List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
 
-                    return ChannelResponseDto.of(c, responseDto, latestMessage.get(0));
-                })
-                .collect(toList());
+            if (latestMessage.size() > 0) {
+                channelResponseDtoList.add(ChannelResponseDto.of(c, responseDto, latestMessage.get(0)));
+            }
+        });
+
+        Collections.sort(channelResponseDtoList);
+
+        return channelResponseDtoList;
     }
 
     private UserClientResponseDto getUserClientResponseDto(String type, Channel c) {
@@ -70,12 +74,37 @@ public class ChannelServiceImpl implements ChannelService {
         saveChannelInfo(userId, requestDto);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ChannelDetailResponseDto getChannelDetail(Long userId, String identifier) {
+        Channel channel = channelRepository.findByIdentifier(identifier)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_EXIST_CHANNEL_EXCEPTION));
+
+        ProductClientResponseDto productResponseDto = productServiceClient.getProductInfo(channel.getProductId()).getData();
+
+        UserClientResponseDto userResponseDto = getUserClientResponseDto(userId, channel);
+
+        return ChannelDetailResponseDto.of(channel, productResponseDto, userResponseDto);
+    }
+
+    private UserClientResponseDto getUserClientResponseDto(Long userId, Channel channel) {
+        if (channel.getUserId().equals(userId)) {
+            return userServiceClient.getUserInfo(channel.getOwnerId()).getData();
+        }
+        return userServiceClient.getUserInfo(channel.getUserId()).getData();
+    }
+
     private void saveChannelInfo(Long userId, ChannelRequestDto requestDto) {
         UserClientResponseDto myUserInfo = userServiceClient.getUserInfo(userId).getData();
         UserClientResponseDto ownerUserInfo = userServiceClient.getUserInfo(requestDto.getOwnerId()).getData();
         ProductClientResponseDto productInfo = productServiceClient.getProductInfo(requestDto.getProductId()).getData();
 
-        Channel channel = Channel.of(requestDto, userId, UUID.randomUUID().toString(), productInfo);
+        Channel channel;
+        if (productInfo.getType()) {
+            channel = Channel.of(requestDto.getProductId(), requestDto.getOwnerId(), userId, UUID.randomUUID().toString(), productInfo);
+        } else {
+            channel = Channel.of(requestDto.getProductId(), userId, requestDto.getOwnerId(), UUID.randomUUID().toString(), productInfo);
+        }
         channelRepository.save(channel);
 
         Participant me = Participant.of(channel, userId, myUserInfo, true);
