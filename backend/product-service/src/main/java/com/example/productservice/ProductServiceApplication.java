@@ -30,5 +30,4 @@ public class ProductServiceApplication {
     JPAQueryFactory jpaQueryFactory(EntityManager em) {
         return new JPAQueryFactory(em);
     }
-    // test
 }
