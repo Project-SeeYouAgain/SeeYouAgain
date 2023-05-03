@@ -1,5 +1,4 @@
 server:
-  # port ??? 0??? ???? ????.
   port: 0
 
 spring:
@@ -12,15 +11,15 @@ spring:
         web-allow-others: true
       path: /h2-console
   datasource:
-    url: jdbc:h2:mem:product
-  #    username: root
-  #    password:
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/seeyouagain?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: seeyouagain1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # ?? ?? ??
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     generate-ddl: true
 
@@ -36,4 +35,16 @@ eureka:
 
 logging:
   level:
-    com.example.userservice.client: DEBUG
+    com.example.productservice.client: DEBUG
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: seeyouagain-s3-bucket
+    credentials:
+      access-key: AKIAZDX46XDEUXV5APLQ
+      secret-key: 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
+    stack:
+      auto: false
