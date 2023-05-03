@@ -4,6 +4,9 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { axAuth } from '@/apis/axiosinstance';
 import Image from 'next/image';
+import ChatBox from '@/components/ChatBox';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { IoMdSend } from 'react-icons/io';
 
 interface ChatData {
     identifier: string;
@@ -67,7 +70,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                userId: 2,
+                writerId: 1,
                 nickname: 'nwk',
                 chat: chat,
             }),
@@ -136,37 +139,46 @@ function Channel() {
     }, [router.isReady]);
 
     return (
-        <div>
-            <div className="p-5 text-center border-b border-gray flex justify-center items-center">
-                <p>{channelInfo?.nickname}</p>
-            </div>
-            <div className="p-5 flex items-center border-b border-gray">
-                <div className="m-2 relative" style={{ width: 50, height: 50 }}>
-                    {channelInfo?.productImg && <Image src={channelInfo.productImg} alt="물품 이미지" className="rounded-md object-cover" fill />}
+        <div className="relative pt-44 pb-20">
+            <div className="fixed inset-x-0 top-0 bg-white z-50">
+                <div className="p-5 text-center border-b border-gray flex justify-center items-center">
+                    <p>{channelInfo?.nickname}</p>
                 </div>
-                <div>
-                    <p>{channelInfo?.title}</p>
-                    <p className="text-sm">
-                        <span className="font-bold">{channelInfo?.price}원</span>
-                        <span className="text-gray-400"> /일</span>
-                    </p>
+                <div className="p-5 flex items-center border-b border-gray">
+                    <div className="m-2 relative" style={{ width: 50, height: 50 }}>
+                        {channelInfo?.productImg && <Image src={channelInfo.productImg} alt="물품 이미지" className="rounded-md object-cover" fill />}
+                    </div>
+                    <div>
+                        <p>{channelInfo?.title}</p>
+                        <p className="text-sm">
+                            <span className="font-bold">{channelInfo?.price}원</span>
+                            <span className="text-gray-400"> /일</span>
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div className="chat-list">
+
+            <div className="chat-list mx-5">
                 {chatList.map((chatData, index) => (
                     <div key={index}>
-                        <span>{chatData.nickname}: </span>
-                        <span>{chatData.chat}</span>
+                        <ChatBox chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={1} />
                     </div>
                 ))}
             </div>
 
-            <form onSubmit={event => handleSubmit(event, chat)}>
-                <div>
-                    <input type={'text'} name={'chatInput'} onChange={handleChange} value={chat} />
-                </div>
-                <button type="submit">보내기</button>
-            </form>
+            <div className="fixed inset-x-0 bottom-0 bg-white">
+                <form onSubmit={event => handleSubmit(event, chat)}>
+                    <div className="flex items-center p-2 relative">
+                        <div className="me-2">
+                            <AiOutlinePlusCircle className="text-3xl" />
+                        </div>
+                        <input type={'text'} name={'chatInput'} onChange={handleChange} value={chat} placeholder="메세지를 입력하세요." className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full" />
+                        <button className="absolute right-3 flex justify-center items-center rounded-full p-1.5" style={{ background: '#5669ff' }}>
+                            <IoMdSend className="text-white text-lg -rotate-90" />
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

@@ -29,7 +29,7 @@ public class MessageServiceImpl implements MessageService{
     @Override
     @Transactional
     public void insertMessage(MessageRequestDto requestDto) {
-        Participant participant = participantRepository.findByUserIdAndChannelIdentifier(requestDto.getUserId(), requestDto.getIdentifier())
+        Participant participant = participantRepository.findByUserIdAndChannelIdentifier(requestDto.getWriterId(), requestDto.getIdentifier())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
         Channel channel = channelRepository.findByIdentifier(requestDto.getIdentifier())
