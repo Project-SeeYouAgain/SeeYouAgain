@@ -1,5 +1,5 @@
 server:
-  # port ??? 0??? ???? ????.
+  # port 번호가 0번이면 랜덤으로 배정된다.
   port: 0
 
 spring:
@@ -12,17 +12,31 @@ spring:
         web-allow-others: true
       path: /h2-console
   datasource:
-        url: jdbc:h2:mem:user
-#    username: root
-#    password:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://도메인주소:3306/seeyouagain?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/seeyouagain?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: seeyouagain1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # ?? ?? ??
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     generate-ddl: true
+    properties:
+      hibernate:
+        default_batch_fetch_size: 500
+  redis:
+    lettuce:
+      pool:
+        min-idle: 0
+        max-idle: 8
+        max-active: 8
+    port: 6379
+    host: localhost
+  profiles:
+    include: oauth
 
 eureka:
   instance:
@@ -38,5 +52,27 @@ logging:
   level:
     com.example.userservice.client: DEBUG
 
+gateway:
+#  ip: 192.168.100.51
+#  ip: 192.168.100.120
+  ip: 172.18.0.7/16
+#  ip: 192.168.0.13
+
+product-service:
+  ip: 172.18.0.8/16
+
+chatting-service:
+  ip: 172.18.0.10/16
+
 token:
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
+
+cloud:
+  aws:
+    s3:
+      bucket: seeyouagain-s3-bucket
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIAZDX46XDEUXV5APLQ
+      secretKey: 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
