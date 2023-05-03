@@ -33,6 +33,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         String gatewayIpAddress = env.getProperty("gateway.ip");
+        String productIpAddress = env.getProperty("product-service.ip");
+        String chattingIpAddress = env.getProperty("chatting-service.ip");
 
         http
                 .httpBasic().disable()
@@ -42,7 +44,11 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/error/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/**").access("hasIpAddress('" + gatewayIpAddress + "')")
+                .antMatchers("/**")
+                .access("hasIpAddress('" + gatewayIpAddress + "') or " +
+                        "hasIpAddress('" + productIpAddress + "') or " +
+                        "hasIpAddress('" + chattingIpAddress + "')"
+                )
                 .and()
                 .oauth2Login().userInfoEndpoint().userService(oAuth2UserDetailsService)
                 .and().successHandler(successHandler)
