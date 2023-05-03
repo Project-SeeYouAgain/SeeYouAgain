@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UserServiceApplication {
 
     public static void main(String[] args) {
-        // test
         SpringApplication.run(UserServiceApplication.class, args);
     }
 }
