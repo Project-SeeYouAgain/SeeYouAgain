@@ -1,5 +1,4 @@
 server:
-  # port ??? 0??? ???? ????.
   port: 0
 
 spring:
@@ -12,15 +11,15 @@ spring:
         web-allow-others: true
       path: /h2-console
   datasource:
-    url: jdbc:h2:mem:chatting
-  #    username: root
-  #    password:
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3309/seeyouagain?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: seeyouagain1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # ?? ?? ??
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     generate-ddl: true
 
@@ -36,4 +35,4 @@ eureka:
 
 logging:
   level:
-    com.example.userservice.client: DEBUG
+    com.example.chattingservice.client: DEBUG
