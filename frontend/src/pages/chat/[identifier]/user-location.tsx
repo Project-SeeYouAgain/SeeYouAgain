@@ -94,6 +94,7 @@ const UserLocation: React.FC = () => {
                                 <p className={styles.Container}>위치 권한을 확인해보세요.</p>
                                 <Image src={findMap} alt="findmap" className="m-auto" />
                                 <p>{`위치를 가져오는 중입니다${dots}`}</p>
+                                <p>{userLocation}</p>
                             </div>
                         )}
                         {userLocation && (
