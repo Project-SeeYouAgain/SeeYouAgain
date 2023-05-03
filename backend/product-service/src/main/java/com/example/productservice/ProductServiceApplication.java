@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 public class ProductServiceApplication {
 
     public static void main(String[] args) {
+        // test
         SpringApplication.run(ProductServiceApplication.class, args);
     }
 
