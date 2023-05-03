@@ -30,5 +30,5 @@ public class ChattingServiceApplication {
     JPAQueryFactory jpaQueryFactory(EntityManager em) {
         return new JPAQueryFactory(em);
     }
-
+    // test
 }
