@@ -30,15 +30,5 @@ public class ChattingServiceApplication {
     JPAQueryFactory jpaQueryFactory(EntityManager em) {
         return new JPAQueryFactory(em);
     }
-
-	@Bean
-	public Logger.Level feignLoggerLevel() {
-		return Logger.Level.FULL;
-	}
-
-	@Bean
-	JPAQueryFactory jpaQueryFactory(EntityManager em) {
-		return new JPAQueryFactory(em);
-	}
-
+    // test
 }
