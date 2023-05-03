@@ -11,5 +11,4 @@ public class ApigatewayServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApigatewayServiceApplication.class, args);
     }
-    // test
 }
