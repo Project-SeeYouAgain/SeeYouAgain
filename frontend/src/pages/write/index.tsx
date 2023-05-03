@@ -115,7 +115,6 @@ function Write() {
                         {/* 입력 내용 */}
                         <div className="text-left ">
                             {/* 글유형 */}
-                            <Button.MannerPoint innerValue="100"></Button.MannerPoint>
                             {/* 이미지 */}
                             <div className="mt-[1rem] ">
                                 <p className="mb-[1rem] font-bold text-[1.2rem] "> 상품 이미지</p>

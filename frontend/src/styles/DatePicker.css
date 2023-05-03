@@ -13,7 +13,7 @@
 .react-datepicker__time-name {
     width: 10vw;
     line-height: 8vw;
-    border-radius: 13px;
+    border-radius: 8px ;
 }
 .react-datepicker__navigation--next {
     top: 8px;
