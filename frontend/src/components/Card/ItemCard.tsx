@@ -1,8 +1,9 @@
-import React, { FunctionComponent, HTMLProps, useState } from 'react';
+import React, { FunctionComponent, HTMLProps, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
 import { SlOptions } from 'react-icons/sl';
 import shield from '../../assets/icons/safezone.png';
+import ItemCardOption from './ItemCardOption';
 
 interface dataProps {
     productImg: string;
@@ -12,16 +13,24 @@ interface dataProps {
     startDate?: string;
     endDate?: string;
     isSafe?: boolean;
-    isCart: boolean;
+    isCart?: boolean;
+    menuState: number;
 }
 
-function ItemCard({ productImg, title, location, price, startDate, endDate, isSafe, isCart }: dataProps) {
-    const [isActive, setIsActive] = useState<boolean>(isCart);
+function ItemCard({ productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState }: dataProps) {
+    const [url, setUrl] = useState<string>('');
+    const [isActive, setIsActive] = useState<boolean>(false);
+    if (isCart !== undefined) {
+        setIsActive(isCart);
+    }
 
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     function Dropdown() {
         setDropdownVisible(!dropdownVisible);
     }
+    useEffect(() => {
+        setUrl(window.location.pathname);
+    }, []);
 
     return (
         <div className="w-[100%]">
@@ -35,21 +44,8 @@ function ItemCard({ productImg, title, location, price, startDate, endDate, isSa
                     <span className="font-semibold w-[100%] flex items-center justify-between relative">
                         <span className="truncate w-[11.87rem] text-[1.2rem]">{title}</span>
                         <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={Dropdown} />
-                        {dropdownVisible && (
-                            <div className="bg-white shadow-md rounded absolute top-[1.5rem] right-0 rounded-[3px]">
-                                <a href="#" className="block px-4 py-2">
-                                    대여일정
-                                </a>
-                                <a href="#" className="block px-4 py-2">
-                                    반납하기
-                                </a>
-                            </div>
-                        )}
+                        <ItemCardOption {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
                     </span>
-                    {/* <span className="flex items-center text-darkgrey leading-[1px]">
-                        <AiFillStar className="mr-[0.2rem]" color="darkgrey" />
-                        {data.score}
-                    </span> */}
                     <div className="flex items-center mt-[.5rem]">
                         <span className="text-[#8E8E93] mr-[1.5rem]">{location}</span>
                         <div>
