@@ -17,9 +17,19 @@ import javax.persistence.EntityManager;
 @EnableFeignClients
 public class ChattingServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ChattingServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ChattingServiceApplication.class, args);
+    }
+
+    @Bean
+    public Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
+    }
+
+    @Bean
+    JPAQueryFactory jpaQueryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
+    }
 
 	@Bean
 	public Logger.Level feignLoggerLevel() {
