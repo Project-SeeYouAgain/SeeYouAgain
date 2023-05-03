@@ -31,31 +31,34 @@ function UserRating() {
                     <p className="text-gray-400">다른 이용자를 위해 평가해주세요!</p>
                 </div>
                 <StarRating maxRating={5} onChange={handleRatingChange} />
-                <div className="flex justify-between my-12">
-                    <Image
-                        src={health}
-                        alt="health"
-                        className={classNames('w-[28%] rounded-3xl', { [styles.clickedImage]: first })}
+                <div className="flex justify-between my-12 text-center text-blue font-bold text-sm whitespace-nowrap">
+                    <div
+                        className="w-[28%]"
                         onClick={() => {
                             setFirst(!first);
                         }}
-                    />
-                    <Image
-                        src={boost}
-                        alt="boost"
-                        className={classNames('w-[28%] rounded-3xl', { [styles.clickedImage]: second })}
+                    >
+                        <Image src={health} alt="health" className={classNames('w-full rounded-3xl', { [styles.clickedImage]: first })} />
+                        <p className="mt-4">친절해요</p>
+                    </div>
+                    <div
+                        className="w-[28%]"
                         onClick={() => {
                             setSecond(!second);
                         }}
-                    />
-                    <Image
-                        src={music}
-                        alt="music"
-                        className={classNames('w-[28%] rounded-3xl', { [styles.clickedImage]: third })}
+                    >
+                        <Image src={boost} alt="boost" className={classNames('w-full rounded-3xl', { [styles.clickedImage]: second })} />
+                        <p className="mt-4">응답이 빨라요</p>
+                    </div>
+                    <div
+                        className="w-[28%]"
                         onClick={() => {
                             setThird(!third);
                         }}
-                    />
+                    >
+                        <Image src={music} alt="music" className={classNames('w-full rounded-3xl', { [styles.clickedImage]: third })} />
+                        <p className="mt-4">약속을 잘 지켜요</p>
+                    </div>
                 </div>
                 <SquareLg bgColor="blue" textColor="white" innerValue="작성 완료" className="mt-4" />
             </Body>
