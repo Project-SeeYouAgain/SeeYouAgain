@@ -1,12 +1,13 @@
 package com.example.productservice.service;
 
-import com.example.productservice.dto.request.SafetyZoneRequestDto;
 import com.example.productservice.dto.response.SafetyZoneResponseDto;
 
 import java.util.List;
 
 public interface SafetyZoneService {
-    List<SafetyZoneResponseDto> getCctvList(SafetyZoneRequestDto safetyZoneRequestDto);
-    List<SafetyZoneResponseDto> getPoliceList(SafetyZoneRequestDto safetyZoneRequestDto);
-    List<SafetyZoneResponseDto> getLightList(SafetyZoneRequestDto safetyZoneRequestDto);
+    List<SafetyZoneResponseDto> getCctvList(String location);
+
+    List<SafetyZoneResponseDto> getPoliceList(String location);
+
+    List<SafetyZoneResponseDto> getLightList(String location);
 }
