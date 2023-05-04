@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 public class MessageResponseDto {
 
     private Long messageId;
-    private String Identifier;
     private Long writerId;
-    private String nickname;
     private String profileImg;
     private String chat;
     private LocalDateTime createdAt;
