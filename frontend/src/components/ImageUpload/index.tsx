@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { AiFillCloseCircle } from 'react-icons/ai';
 import Image from 'next/image';
 
 import camera from '../../../public/icon/3Dcamera.png';
 import close from '../../../public/icon/close.png';
 
-function ImageUpload() {
+type ImageUploadProps = {
+    onChange: (files: File[]) => void;
+};
+
+function ImageUpload({ onChange }: ImageUploadProps) {
     // 이미지
     const [images, setImages] = useState<File[]>([]);
     const [imgPreview, setImgPreview] = useState<{ img: File; url: string }[]>();
+
     const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const imagelist = e.target.files;
         if (!imagelist) {
             return;
         }
-        const imageArray: File[] = Array.from(imagelist);
+        const imageArray = Array.from(imagelist);
         setImages(imageArray);
+        onChange(imageArray);
         // 이미지 미리보기
         const imagePreviewArray = imageArray.map(img => {
             const url = URL.createObjectURL(img);
@@ -23,10 +28,16 @@ function ImageUpload() {
         });
         setImgPreview(imagePreviewArray);
     };
+    // useEffect(() => {
+    //     console.log('됨?', images);
+    // }, [images]);
+
     function removeFile(index: number) {
+        // 이미지 배열 새로 하기
         const newImages = [...images];
         newImages.splice(index, 1);
         setImages(newImages);
+        // 이미지 미리보기 삭제
         const newimagePreview = imgPreview?.filter((_, i) => i !== index);
         imgPreview?.[index].img && URL.revokeObjectURL(imgPreview[index].url);
         setImgPreview(newimagePreview);

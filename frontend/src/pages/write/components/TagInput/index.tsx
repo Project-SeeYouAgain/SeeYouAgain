@@ -1,35 +1,47 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
+import { IoIosCloseCircle } from 'react-icons/io';
 
-function TagInput() {
-    const [tags, setTags] = useState<string[]>([]);
+type TagInputProps = {
+    value: string[];
+    onChange: (newData: Partial<StepTwoData>) => void;
+};
+
+function TagInput({ value, onChange }: TagInputProps) {
+    // const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState('');
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const { key, target } = event;
         const trimmedValue = inputValue.trim();
 
-        if ((key === 'Enter' || key === ' ') && trimmedValue !== '' && tags.length < 3) {
-            setTags([...tags, trimmedValue]);
+        if ((key === 'Enter' || key === ' ') && trimmedValue !== '' && value.length < 3) {
+            const newTags = [...value, trimmedValue];
+            const newData = { tag: newTags };
+            onChange(newData);
             setInputValue('');
         }
     };
-
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
     };
 
     const handleTagDelete = (tagToDelete: string) => {
-        setTags(tags.filter(tag => tag !== tagToDelete));
+        const newTags = value.filter(tag => tag !== tagToDelete);
+        const newData = { tag: newTags };
+        onChange(newData);
     };
+    // useEffect(() => {
+    //     onChange(newData);
+    // }, [onChange, newData]);
 
     return (
         <div className="mb-[1.5rem]">
-            <div className="relative">
-                {tags.map(tag => (
-                    <span key={tag} className="rounded-[2rem] bg-sky px-[.5rem] py-[.3rem] h-[1.2rem] text-blue mr-[.4rem] ">
-                        # {tag}
-                        <button type="button" onClick={() => handleTagDelete(tag)} className="ml-[.4rem] text-sm font-medium text-grey-dark focus:outline-none">
-                            x
+            <div className="relative flex">
+                {value.map(tag => (
+                    <span key={tag} className=" flex  mr-[.4rem] ">
+                        <div className=" font-semibold text-darkgrey bg-lightgrey px-[.4rem] py-[.2rem] rounded-[.4rem]"># {tag}</div>
+                        <button type="button" onClick={() => handleTagDelete(tag)} className="  text-[1.3rem]  px-[.1rem]  rounded-[.4rem]  text-darkgrey focus:outline-none">
+                            <IoIosCloseCircle />
                         </button>
                     </span>
                 ))}
