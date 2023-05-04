@@ -1,43 +1,36 @@
-import Button from '@/components/Button';
 import React, { useState } from 'react';
 import { categoryData } from './categoryData';
+
 interface CategoryProps {
     id: string;
     name: string;
     key: number;
 }
-function Category() {
+
+type Category2Props = {
+    onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
+function Category({ onChange }: Category2Props) {
     // 카테고리 선택
     const [category, setCategory] = useState('');
-    const [isCheck, setIsCheck] = useState(false);
-    function onHandleData() {
-        setIsCheck(!isCheck);
+
+    function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+        const selectedCategory = event.target.value;
+        setCategory(selectedCategory);
+        onChange(event); //
     }
+
     return (
         <div className="flex flex-wrap">
-            {categoryData.map((item: CategoryProps) => {
-                return (
-                    <div key={item.key} className=" m-[.4rem]" onClick={onHandleData}>
-                        <input
-                            className="hidden"
-                            id={item.id}
-                            name="category"
-                            type="radio"
-                            onClick={() => {
-                                setCategory(item.id);
-                            }}
-                        />
-                        <label
-                            htmlFor={item.id}
-                            className={`inline-block cursor-pointer w-100 px-[1rem] py-[.3rem] rounded-[4rem] text-center font-bold ${
-                                category === item.id ? 'bg-blue text-white' : 'bg-lightgrey text-darkgrey'
-                            }`}
-                        >
-                            {item.name}
-                        </label>
-                    </div>
-                );
-            })}
+            <select onChange={handleChange} value={category} className="px-4 py-2 w-[100%] h-[2.5rem] bg-lightgrey rounded-md">
+                <option value="">카테고리를 선택해주세요.</option>
+                {categoryData.map((item: CategoryProps) => (
+                    <option key={item.key} value={item.id}>
+                        {item.name}
+                    </option>
+                ))}
+            </select>
         </div>
     );
 }
