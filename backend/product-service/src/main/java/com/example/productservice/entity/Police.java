@@ -6,15 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Police {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "police_id")
-    private Long id;
-    private String name;
-    private String station;
-    private String address;
+@AttributeOverride(name = "id", column = @Column(name = "police_id"))
+public class Police extends SafetyZone {
+
 }
