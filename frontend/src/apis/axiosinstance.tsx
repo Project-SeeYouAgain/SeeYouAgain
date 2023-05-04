@@ -4,7 +4,7 @@ export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
             // const token = localStorage.getItem('accessToken');
-            const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzMDAzMTE2LCJleHAiOjE2ODMwODk1MTZ9.DKDkUgc3aSJMvrDg3Lidvyc3tK8DxcVGRvOSsiPEAkw"
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjgzMTAwMTUwLCJleHAiOjE2ODMxODY1NTB9.nr8op63O4UzlzcDPGSlLZY_seBg5O4_tR5hlJ1NMFPc';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },
@@ -14,11 +14,12 @@ export const interceptors = (instance: AxiosInstance) => {
 };
 
 // const BASE_URL = '' // 메인서버
-const BASE_URL = 'http://localhost:8000'; // 테스트 로컬 서버
+const BASE_URL = 'http://k8c101.p.ssafy.io:8000'; // 테스트 로컬 서버
 
 // 단순 get요청으로 인증값이 필요없는 경우
 const axiosApi = (url: string, options?: object) => {
     const instance = axios.create({ baseURL: url, ...options });
+    interceptors(instance);
     return instance;
 };
 
