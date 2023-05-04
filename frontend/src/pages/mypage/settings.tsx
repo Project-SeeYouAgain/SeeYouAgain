@@ -25,6 +25,7 @@ function settings() {
 
     const changeThirdValue = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setThirdValue(event.target.value);
+        console.log(thirdValue);
     };
     return (
         <Container className="relative">

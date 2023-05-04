@@ -1,6 +1,7 @@
 import Navbar from '@/components/Container/components/Navbar';
 import React, { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import CheckReservation from '@/components/CheckReservation';
 
 function Test() {
     const [data, setData] = useState<boolean>(false);
@@ -15,12 +16,14 @@ function Test() {
         query: '(max-width:767px)',
     });
     return (
-        <div>
+        <div className="bg-gray-500 h-screen">
             <p>여기는 test 페이지</p>
             {isDesktop && <div>데스크탑화면</div>}
             {isMobile && data && (
                 <div>
-                    폰화면
+                    <div className="m-auto w-4/5 bg-white rounded-xl border-solid border-2">
+                        <CheckReservation />
+                    </div>
                     <div>
                         <Navbar />
                     </div>

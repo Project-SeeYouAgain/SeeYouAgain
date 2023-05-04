@@ -16,7 +16,7 @@ export default function index() {
     useEffect(() => {}, []);
 
     const handleKakaoLogin = () => {
-        location.href = 'http://localhost:8000/user-service/oauth2/authorization/kakao';
+        location.href = 'http://k8c101.p.ssafy.io:8000/user-service/oauth2/authorization/kakao';
     };
 
     return (

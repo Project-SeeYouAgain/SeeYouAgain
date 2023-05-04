@@ -1,71 +1,64 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import DatePicker from '../Datepicker';
+import DatePicker from '../Calender';
 import Image from 'next/image';
 
-type FormValues = {
-    title: string;
-    price: number;
-    description: string;
-    startDate: string;
-    endDate: string;
-};
-
-function TextInput() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<FormValues>();
-
-    const onSubmit: SubmitHandler<FormValues> = data => {
-        console.log(data);
-    };
+function TextInput({ setData, onSubmit, data }: { setData: React.Dispatch<React.SetStateAction<StepTwoData>>; onSubmit: (data: StepTwoData) => void; data: StepTwoData }) {
     // 엔터 눌러서 제출 막기
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             event.preventDefault(); // 제출 동작 막기
         }
     };
-    // 달력
-    const [selectedRange, setSelectedRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-        key: 'selection',
-    });
 
-    const handleDatesChange = (range: any) => {
-        setSelectedRange(range);
+    const [description, setDescription] = useState<string>('');
+
+    // 변화 감지해서 submit하기
+    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value);
+        setData(prevData => ({ ...prevData, title: event.target.value }));
+        onSubmit(data);
     };
+
+    const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.value);
+        setData(prevData => ({ ...prevData, price: Number(event.target.value) }));
+        onSubmit(data);
+    };
+
+    const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        console.log(event.target.value);
+        setData(prevData => ({ ...prevData, description: event.target.value }));
+        onSubmit(data);
+    };
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} style={{ height: '100%', overflow: 'auto' }}>
+        <div>
             <label>
                 <p className="font-bold text-[1.2rem] mb-[0.43rem]">제목</p>
-                <input type="text" {...register('title', { required: true })} className=" px-[1rem] w-[100%] h-[2.5rem] bg-lightgrey rounded-[.31rem] focus:outline-none" onKeyPress={handleKeyPress} />
-                {errors.title && <span>This field is required</span>}
+                <input type="text" className=" px-[1rem] w-[100%] h-[2.5rem] bg-lightgrey rounded-[.31rem] focus:outline-none" onKeyPress={handleKeyPress} onChange={handleTitleChange} />
             </label>
             <br></br>
-
+            {/* AI로 시세 가격 추천이 가능할까?  */}
             <label>
                 <p className="font-bold mt-[1rem] text-[1.2rem] mb-[0.43rem] ">대여가격</p>
                 <p className="text-darkgrey"> 하루 당 금액</p>
                 <input
                     type="number"
-                    {...register('price', { required: 'Price is required' })}
                     className="px-[1rem] w-[50%] h-[2.5rem] bg-lightgrey rounded-[.31rem] focus:outline-none
                 placeholder:text-darkgrey placeholder: text-[1.2rem] 
                 "
                     onKeyPress={handleKeyPress}
+                    onChange={handlePriceChange}
                 />
                 <span className="font-bold ml-[.5rem] text-[1.2rem]">원</span>
-                {errors.price && <span>{errors.price.message}</span>}
             </label>
             <br></br>
-            <label htmlFor="description">
+            <div>
                 <p className="font-bold mt-[1rem] text-[1.2rem] mb-[0.43rem]">설명</p>
                 <div style={{ whiteSpace: 'pre-wrap' }}>
                     <textarea
-                        id="description"
+                        defaultValue={description}
+                        onChange={handleDescriptionChange}
                         placeholder={`올릴 제품에 대한 설명을 작성해주세요.
 
 - 브랜드/모델명
@@ -74,17 +67,12 @@ function TextInput() {
 
 서로 믿고 거래할 수 있도록,
 자세하고 정확한 정보를 기재해주세요.`}
-                        {...register('description', { required: 'Description is required' })}
                         className="px-[1rem] py-[1rem] w-full h-[16rem] bg-lightgrey  rounded-[.6rem] focus:outline-none placeholder:text-darkgrey placeholder:text-[1rem]"
                         style={{ lineHeight: 1.5 }}
                     />
                 </div>
-                {errors.description && <span>{errors.description.message}</span>}
-            </label>
-            <br></br>
-
-            <br></br>
-        </form>
+            </div>
+        </div>
     );
 }
 
