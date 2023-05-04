@@ -11,8 +11,8 @@ interface StepTwoData {
     startDate: Date | null;
     endDate: Date | null;
     location: {
-        lng: number;
-        lat: number;
+        lng: number; // float
+        lat: number; // float
         RegionCode: string;
     };
     isSafe: boolean;
