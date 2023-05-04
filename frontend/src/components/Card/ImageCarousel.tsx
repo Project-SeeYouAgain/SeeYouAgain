@@ -1,27 +1,46 @@
-import React, { FunctionComponent, HTMLProps, useState, useEffect } from 'react';
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import styles from './Carousel.module.css';
 import Image from 'next/image';
 
 interface CarouselProps {
     imgUrl: string[];
 }
 
-const Carousel: FunctionComponent<CarouselProps> = ({ imgUrl }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+function Carousel({ imgUrl }: CarouselProps) {
+    const settings = {
+        customPaging: function (i: number) {
+            return (
+                <a>
+                    <img src={imgUrl[i]} />
+                </a>
+            );
+        },
+        dots: true,
+        infinite: true,
+        variableWidth: true,
+        swipeToSlide: true,
+        dotsClass: 'slick-dots slick-thumb',
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
     return (
-        <div id="default-carousel" className="relative w-full" data-carousel="static">
-            <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-                {imgUrl.map((item: string, index: number) => (
-                    <div className={'duration-700 ease-in-out'} data-carousel-item="active" key={index}>
-                        <Image src={item} className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" width={300} height={400} alt="제품이미지" />
+        <div className="relative">
+            <Slider {...settings} className="relateive">
+                {imgUrl.map((item, index) => (
+                    <div key={index} className="relative">
+                        {/* <img src={item} alt="제품 사진" className="aspect-square w-[100vw]" /> */}
+                        <img src={item} alt="제품 사진" className={`aspect-square w-[100vw]`} width={300} height={400} />
+                        <div className={styles.imageGradient}></div>
                     </div>
                 ))}
-            </div>
-            <div className="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
-                <button type="button" className="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-                <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-            </div>
+            </Slider>
+            <div className={styles.backgroundBlack}></div>
         </div>
     );
-};
+}
 
 export default Carousel;

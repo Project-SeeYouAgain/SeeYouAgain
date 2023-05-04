@@ -17,18 +17,18 @@ import javax.persistence.EntityManager;
 @EnableFeignClients
 public class ProductServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProductServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        // test
+        SpringApplication.run(ProductServiceApplication.class, args);
+    }
 
-	@Bean
-	public Logger.Level feignLoggerLevel() {
-		return Logger.Level.FULL;
-	}
+    @Bean
+    public Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
+    }
 
-	@Bean
-	JPAQueryFactory jpaQueryFactory(EntityManager em) {
-		return new JPAQueryFactory(em);
-	}
-
+    @Bean
+    JPAQueryFactory jpaQueryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
+    }
 }

@@ -9,7 +9,13 @@ interface KakaoMapProps {
     onCenterChanged: (lat: number, lng: number) => void;
 }
 
-declare const kakao: any;
+// 카카오 객체 전역으로 설정
+declare global {
+    interface Window {
+        kakao: any;
+    }
+    const kakao: any;
+}
 
 const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged }) => {
     const [map, setMap] = useState<any>(null);
