@@ -1,8 +1,7 @@
 package com.example.productservice.service;
 
-import com.example.productservice.dto.response.CctvResponseDto;
-import com.example.productservice.dto.response.LightResponseDto;
-import com.example.productservice.dto.response.PoliceResponseDto;
+import com.example.productservice.dto.request.SafetyZoneRequestDto;
+import com.example.productservice.dto.response.SafetyZoneResponseDto;
 import com.example.productservice.entity.Cctv;
 import com.example.productservice.entity.Light;
 import com.example.productservice.entity.Police;
@@ -27,22 +26,22 @@ public class SafetyZoneServiceImpl implements SafetyZoneService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CctvResponseDto> getCctvList(String location) {
-        List<Cctv> cctvList = cctvRepository.findAllByAddressContains(location);
-        return cctvList.stream().map(CctvResponseDto::from).collect(toList());
+    public List<SafetyZoneResponseDto> getCctvList(SafetyZoneRequestDto safetyZoneRequestDto) {
+        List<Cctv> cctvList = cctvRepository.findAllByAddressContains(safetyZoneRequestDto.getLocation());
+        return cctvList.stream().map(SafetyZoneResponseDto::from).collect(toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<PoliceResponseDto> getPoliceList(String location) {
-        List<Police> policeList = policeRepository.findAllByAddressContains(location);
-        return policeList.stream().map(PoliceResponseDto::from).collect(toList());
+    public List<SafetyZoneResponseDto> getPoliceList(SafetyZoneRequestDto safetyZoneRequestDto) {
+        List<Police> policeList = policeRepository.findAllByAddressContains(safetyZoneRequestDto.getLocation());
+        return policeList.stream().map(SafetyZoneResponseDto::from).collect(toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<LightResponseDto> getLightList(String location) {
-        List<Light> lightList = lightRepository.findAllByAddressContains(location);
-        return lightList.stream().map(LightResponseDto::from).collect(toList());
+    public List<SafetyZoneResponseDto> getLightList(SafetyZoneRequestDto safetyZoneRequestDto) {
+        List<Light> lightList = lightRepository.findAllByAddressContains(safetyZoneRequestDto.getLocation());
+        return lightList.stream().map(SafetyZoneResponseDto::from).collect(toList());
     }
 }
