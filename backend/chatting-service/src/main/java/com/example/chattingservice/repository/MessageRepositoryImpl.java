@@ -22,9 +22,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
         return queryFactory.select(Projections.constructor(
                 MessageResponseDto.class,
                 message.id.as("messageId"),
-                message.channel.identifier.as("identifier"),
                 message.participant.userId.as("writerId"),
-                message.nickname,
                 message.participant.profileImg,
                 message.chat,
                 message.createdAt,
@@ -32,7 +30,6 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
         ))
                 .from(message)
                 .join(message.channel, channel)
-                .join(message.participant, participant)
                 .where(channel.identifier.eq(identifier).and(ltMessageId(firstMessageId)))
                 .orderBy(message.id.desc())
                 .limit(20)

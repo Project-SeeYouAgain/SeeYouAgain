@@ -24,8 +24,6 @@ public class Message extends TimeStamped {
     @JoinColumn(name = "participant_id")
     private Participant participant;
 
-    private String nickname;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id")
     private Channel channel;
@@ -34,7 +32,6 @@ public class Message extends TimeStamped {
         return Message.builder()
                 .chat(requestDto.getChat())
                 .participant(participant)
-                .nickname(participant.getNickname())
                 .channel(channel)
                 .build();
     }
