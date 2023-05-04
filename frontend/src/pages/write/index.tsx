@@ -1,37 +1,101 @@
-import Navbar from '@/components/Container/components/Navbar';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import StepOneForm from './components/StepOneForm';
+import StepTwoForm from './components/StepTwoFrom';
 import { useMediaQuery } from 'react-responsive';
-import Button from '@/components/Button';
+import Modal from './components/Modal';
+
+import { MdKeyboardArrowRight } from 'react-icons/md';
+import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import SquareLg from '@/components/Button/SquareLg';
-import calender from '@/assets/icons/3Dcal.png';
-
-import ImageUpload from '@/components/ImageUpload';
-import Container from '@/components/Container';
-import Body from '@/components/Container/components/Body';
-import CloseHeader from '@/components/Container/components/CloseHeader';
-import TextInput from './components/textinput';
-import Category from './components/Category';
-import TagInput from './components/TagInput';
-
-import location from '@/assets/icons/3Dloca.png';
-import want from '../../../public/icon/want.png';
-
-import renter from '../../../public/icon/renter.png';
-import Link from 'next/link';
-
-type Props = {
-    onSubmit: (data: FormData) => void;
-};
-
-type FormData = {};
 
 function Write() {
-    const [data, setData] = useState<boolean>(false);
-    useEffect(() => {
-        setData(true);
-    }, []);
+    const [currentStep, setCurrentStep] = useState<number>(1);
+    const [stepOneData, setStepOneData] = useState<StepOneData | null>(null);
+    const [stepTwoData, setStepTwoData] = useState<StepTwoData | null>(null);
+
+    const router = useRouter();
+
+    const handleStepOneSubmit = (data: StepOneData) => {
+        setStepOneData(data);
+    };
+
+    const handleStepTwoSubmit = (data: StepTwoData) => {
+        setStepTwoData(data);
+    };
+
+    // 이전 단계로 이동
+    const handlePrevious = () => {
+        setCurrentStep(currentStep - 1);
+    };
+    // 제출
+    const handleSubmit = () => {
+        if (stepOneData && stepTwoData) {
+            // 모든 데이터가 입력되었는지 확인
+            const data = {
+                ...stepOneData,
+                ...stepTwoData,
+            };
+
+            console.log('Data submitted:', data); // 데이터 콘솔 출력
+
+            // stepTwoData의 데이터가 기본값인지 아닌지 확인
+            const hasEnteredData = Object.values(stepTwoData);
+
+            // 데이터가 모두 입력되지 않은 경우 제출을 막음
+            if (
+                hasEnteredData[0].length === 0 || // 상품 이미지
+                hasEnteredData[1] === '' || // 제목
+                hasEnteredData[2] === '' || // 카테고리
+                hasEnteredData[3] === 0 || // 가격
+                hasEnteredData[4] === '' || // 설명
+                hasEnteredData[5] === null || // 날짜
+                hasEnteredData[7].lat === 0 || // 거래장소
+                hasEnteredData[7].lng === 0 ||
+                hasEnteredData[7].RegionCode === ''
+            ) {
+                if (hasEnteredData[0].length === 0) {
+                    setIsModalOpen(true);
+                    setModalMessage('상품 이미지');
+                }
+                if (hasEnteredData[1] === '') {
+                    setIsModalOpen(true);
+                    setModalMessage('제목 데이터');
+                }
+                if (hasEnteredData[2] === '') {
+                    setIsModalOpen(true);
+                    setModalMessage('카테고리');
+                }
+                if (hasEnteredData[3] === 0) {
+                    setIsModalOpen(true);
+                    setModalMessage('가격 데이터');
+                }
+                if (hasEnteredData[4] === '') {
+                    setIsModalOpen(true);
+                    setModalMessage('설명 데이터');
+                }
+                if (hasEnteredData[5] === null) {
+                    setIsModalOpen(true);
+                    setModalMessage('일정 데이터');
+                }
+                if (hasEnteredData[7].lat === 0) {
+                    setIsModalOpen(true);
+                    setModalMessage('거래 장소');
+                }
+                // alert('필수 데이터를 모두 입력해주세요!');
+                return;
+            }
+
+            // 데이터가 모두 입력되었으면 제출 가능
+            alert('게시글이 등록되었습니다!');
+            router.push('/home');
+        } else {
+            console.log('Please enter all data.'); // 데이터가 모두 입력되지 않았으면 경고 메시지 출력
+            setIsModalOpen(true);
+            setModalMessage('필수 데이터');
+            return;
+        }
+    };
     // 미디어쿼리
     const isDesktop: boolean = useMediaQuery({
         query: '(min-width:1024px)',
@@ -39,151 +103,46 @@ function Write() {
     const isMobile: boolean = useMediaQuery({
         query: '(max-width:767px)',
     });
-    // 페이지 닫기
-    const router = useRouter();
+    const [view, setView] = useState<boolean>(false);
+    useEffect(() => {
+        setView(true);
+    }, []);
 
-    const handleClose = () => {
-        // 글 작성을 중단하시겠습니까? alert 하기
-        // 이전페이지로 이동하기
-        router.back();
-    };
-    // 글 유형 선택 (빌려줘요: 0 구해요 : 1)
-    const [isRenter, setIsRenter] = useState(false);
-    function onHandleData() {
-        setIsRenter(!isRenter);
-    }
-    // 체크
-    const [check, setCheck] = useState(false);
-
-    // 세이프존
-    const [isSafeZone, setIsSafeZone] = useState(false);
-
-    // 글 유형
-    const StepOneFrom = ({ onSubmit }: Props) => {
-        const [data, setData] = useState<FormData>({});
-        const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            onSubmit(data);
-        };
-        return (
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 글 유형</p>
-                </div>
-                {isRenter && (
-                    <div onClick={onHandleData} className="relative  flex  w-[100%] h-[15rem] rounded-[1rem]  mb-[1rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-                        <span className="font-bold text-blue text-[3rem] absolute bottom-1 left-[1.2rem]"> 구해요 </span>
-                        <Image src={want} alt="want" className="w-[10rem] absolute right-0"></Image>
-                    </div>
-                )}
-                {!isRenter && (
-                    <div className="relative  flex  w-[100%] h-[15rem] rounded-[1rem] bg-blue  mb-[1rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-                        <span className="font-bold text-white text-[3rem] absolute bottom-1 left-[1.2rem]"> 구해요 </span>
-                        <Image src={want} alt="want" className="w-[10rem] absolute right-0"></Image>
-                    </div>
-                )}
-                {!isRenter && (
-                    <div onClick={onHandleData} className="relative  flex  w-[100%] h-[15rem] rounded-[1rem]  mb-[1rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-                        <div>
-                            <span className="font-bold text-blue text-[3rem] absolute top-2 left-[1.2rem]"> 빌려줘요 </span>
-                            <Image src={renter} alt="want" className="w-[12rem] bottom-0 absolute right-0"></Image>
-                        </div>
-                    </div>
-                )}
-                {isRenter && (
-                    <div className="relative  flex  w-[100%] h-[15rem] bg-blue rounded-[1rem]  mb-[1rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-                        <div>
-                            <span className="font-bold text-white text-[3rem] absolute top-2 left-[1.2rem]"> 빌려줘요 </span>
-                            <Image src={renter} alt="want" className="w-[12rem] bottom-0 absolute right-0"></Image>
-                        </div>
-                    </div>
-                )}
-                <button type="submit"> Next </button>
-            </form>
-        );
-    };
-
+    // 모달
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [modalMessage, setModalMessage] = useState<string>('');
     return (
-        <div className="bg-white ">
+        <div>
             {isDesktop && <div>데스크탑화면</div>}
-            {isMobile && data && (
-                <Container>
-                    {/* 제목 및 상단 */}
-                    <Body>
-                        <CloseHeader title="글 작성하기" onClose={handleClose}></CloseHeader>
-                        <div> </div>
-                        {/* 입력 내용 */}
-                        <div className="text-left ">
-                            {/* 글유형 */}
-                            {/* 이미지 */}
-                            <div className="mt-[1rem] ">
-                                <p className="mb-[1rem] font-bold text-[1.2rem] "> 상품 이미지</p>
-                                <ImageUpload />
-                            </div>
-                            {/* 제목/설명/일정 */}
-                            <div className="mt-[1rem] mb-[-1rem] ">
-                                <TextInput />
-                            </div>
-                            {/* 대여 일정 */}
-                            <div className="relative">
-                                <p className="font-bold text-[1.2rem] mb-[0.43rem] ">대여일정</p>
-                                <div className="m-auto w-[100%] h-[5rem] rounded-[.625rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)', opacity: 0.5 }}></div>
-                                <div>
-                                    <Image src={calender} alt="camera" className="w-[4rem] absolute top-11 right-[1.5rem]"></Image>
-                                    <span className="font-bold absolute top-[55%] left-[8%] text-darkgrey "> 대여일정 선택하러 가기 </span>
-                                </div>
-                                {/* <DatePicker /> */}
-                                {/* <Calendar onDatesChange={handleDatesChange} /> */}
-                            </div>
-                            {/* 카테고리 */}
-                            <div className="mt-[1rem]">
-                                <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 카테고리 </p>
-                                <Category></Category>
-                            </div>
-                            {/* 태그 */}
-                            <div className="mt-[1rem]">
-                                <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 태그 </p>
-                                <TagInput />
-                            </div>
-                            {/* 거래장소 */}
-                            <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
-                            <div className="relative">
-                                <div className="m-auto w-[100%] h-[5rem] rounded-[.625rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)', opacity: 0.5 }}></div>
-                                <div>
-                                    <Image src={location} alt="camera" className="w-[4rem] absolute top-2 right-[1.5rem]"></Image>
-                                    <span className="font-bold absolute top-[40%] left-[8%] text-darkgrey "> 거래장소 선택하러 가기 </span>
-                                </div>
-                            </div>
-                            {/* 세이프존 */}
-                            <div className="flex mt-[1rem] mb-[1rem] items-center	 ">
-                                <input
-                                    className="hidden"
-                                    id="isSafeZone"
-                                    name="category"
-                                    type="radio"
-                                    onClick={() => {
-                                        setIsSafeZone(!isSafeZone);
-                                    }}
-                                />
-                                <label
-                                    htmlFor="isSafeZone"
-                                    className={`inline-block cursor-pointer w-[2rem] h-[2rem] rounded-[4rem] text-center font-bold ${
-                                        isSafeZone === true ? 'bg-blue text-white' : 'bg-lightgrey text-darkgrey'
-                                    }`}
-                                ></label>
-                                <span className="ml-[.5rem]">
-                                    <span className="font-bold text-blue">SAFEZONE</span>
-                                    <span className="font-bold text-darkgrey"> 에서 거래 할게요.</span>
-                                </span>
-                            </div>
-                            <div className="mt-4">
-                                <SquareLg check={check} innerValue="제출완료" bgColor="blue" textColor="white" />
-                            </div>
-                            <div className="mt-[5rem]"></div>
-                        </div>
-                    </Body>
-                    <Navbar />
-                </Container>
+            {isMobile && view && (
+                <div>
+                    {currentStep === 1 && <StepOneForm onSubmit={handleStepOneSubmit} />}
+                    {currentStep === 2 && <StepTwoForm onSubmit={handleStepTwoSubmit} />}
+                    {currentStep === 3 && <p>Thank you for your submission!</p>}
+                    {currentStep !== 3 && (
+                        <>
+                            {currentStep !== 1 && (
+                                <button className="absolute mt-[1rem] text-white text-[2rem] bg-[#d2d2d2] left-8 w-[3.2rem] h-[3rem] rounded-[.4rem]" onClick={handlePrevious}>
+                                    <div className="ml-[20%]">
+                                        <MdKeyboardArrowLeft />
+                                    </div>
+                                </button>
+                            )}
+                            {currentStep === 2 ? (
+                                <button onClick={handleSubmit} className="absolute mt-[1rem] text-white text-[1rem] bg-blue right-8 w-[70vw] h-[3rem] rounded-[.4rem]">
+                                    등록하기
+                                </button>
+                            ) : (
+                                <button className="absolute  text-white  mt-[1rem] text-[2rem] bg-blue right-8 w-[3.2rem] h-[3rem] rounded-[.4rem]" onClick={() => setCurrentStep(currentStep + 1)}>
+                                    <div className="ml-[20%]">
+                                        <MdKeyboardArrowRight />
+                                    </div>
+                                </button>
+                            )}
+                        </>
+                    )}
+                    <Modal isModalOpen={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />
+                </div>
             )}
         </div>
     );
