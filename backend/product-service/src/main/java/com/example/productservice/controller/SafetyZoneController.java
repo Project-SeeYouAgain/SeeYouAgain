@@ -1,7 +1,6 @@
 package com.example.productservice.controller;
 
 import com.example.productservice.dto.BaseResponseDto;
-import com.example.productservice.dto.request.SafetyZoneRequestDto;
 import com.example.productservice.dto.response.SafetyZoneResponseDto;
 import com.example.productservice.service.SafetyZoneService;
 import lombok.RequiredArgsConstructor;
@@ -18,24 +17,24 @@ public class SafetyZoneController {
 
     private final SafetyZoneService safetyZoneService;
 
-    @GetMapping("/cctv")
-    public ResponseEntity<BaseResponseDto<List<SafetyZoneResponseDto>>> getCctvList(@RequestBody
-                                                                                    SafetyZoneRequestDto safetyZoneRequestDto) {
+    @GetMapping("/cctv/{location}")
+    public ResponseEntity<BaseResponseDto<List<SafetyZoneResponseDto>>> getCctvList(@PathVariable("location")
+                                                                                    String location) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", safetyZoneService.getCctvList(safetyZoneRequestDto)));
+                .body(new BaseResponseDto<>(200, "success", safetyZoneService.getCctvList(location)));
     }
 
-    @GetMapping("/police")
-    public ResponseEntity<BaseResponseDto<List<SafetyZoneResponseDto>>> getPoliceList(@RequestBody
-                                                                                          SafetyZoneRequestDto safetyZoneRequestDto) {
+    @GetMapping("/police/{location}")
+    public ResponseEntity<BaseResponseDto<List<SafetyZoneResponseDto>>> getPoliceList(@PathVariable("location")
+                                                                                      String location) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", safetyZoneService.getPoliceList(safetyZoneRequestDto)));
+                .body(new BaseResponseDto<>(200, "success", safetyZoneService.getPoliceList(location)));
     }
 
-    @GetMapping("/light")
-    public ResponseEntity<BaseResponseDto<List<SafetyZoneResponseDto>>> getLightList(@RequestBody
-                                                                                         SafetyZoneRequestDto safetyZoneRequestDto) {
+    @GetMapping("/light/{location}")
+    public ResponseEntity<BaseResponseDto<List<SafetyZoneResponseDto>>> getLightList(@PathVariable("location")
+                                                                                     String location) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", safetyZoneService.getLightList(safetyZoneRequestDto)));
+                .body(new BaseResponseDto<>(200, "success", safetyZoneService.getLightList(location)));
     }
 }
