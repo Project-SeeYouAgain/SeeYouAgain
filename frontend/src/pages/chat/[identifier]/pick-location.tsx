@@ -35,6 +35,7 @@ const UserLocation: React.FC = () => {
     return (
         <div className="w-full h-screen">
             <ResponsiveChecker message={message} onIsMobileChanged={handleIsMobileChanged} />
+            <p>{isMobile}</p>
             {isMobile && (
                 <>
                     {/* 나머지 페이지 내용 */}
@@ -55,7 +56,7 @@ const UserLocation: React.FC = () => {
                         </div>
                     )}
                     <div id="map" className="w-full h-[85vh] relative">
-                        <KakaoMap onCenterChanged={(lat, lng) => console.log(lat, lng)} lat={userLocation.lat} lng={userLocation.lng} />
+                        <KakaoMap lat={userLocation.lat} lng={userLocation.lng} />
                         <div className="absolute bottom-10 w-full z-10" onClick={clickPosition}>
                             {myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-blue pt-2.5">장소 확정</p>}
                             {!myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-gray-400 pt-2.5">확정 완료</p>}
