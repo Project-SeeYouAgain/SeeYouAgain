@@ -38,9 +38,8 @@ function Write() {
             ...stepTwoData,
         };
 
-        console.log('Data submitted:', data); // 데이터 콘솔 출력
-
         // stepTwoData의 데이터가 기본값인지 아닌지 확인
+        console.log(data.type);
         const hasEnteredData = Object.values(stepTwoData);
 
         // 데이터가 모두 입력되지 않은 경우 제출을 막음
@@ -86,9 +85,20 @@ function Write() {
             // alert('필수 데이터를 모두 입력해주세요!');
             return;
         }
-
+        // 5:스타트 6: end 7: 위도경도 8: 세이프존 9:태그:리스트
         // 데이터가 모두 입력되었으면 제출 가능
-
+        const submitData = {
+            title: data.title,
+            type: data.type,
+            category: data.category,
+            price: data.price,
+            description: data.description,
+            location: data.location,
+            tag: data.tag,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            isSafe: data.isSafe,
+        };
         // 폼데이터 생성
         const formData = new FormData();
 
@@ -100,22 +110,25 @@ function Write() {
         }
 
         // 사진 삭제
-        delete data.productImg;
+        // delete data.productImg;
         // console.log(data); // 사진이 잘 지워졌는지 확인
 
         // requestDto object를 json으로 변환한 후 blob객체에 담기
-        const blob = new Blob([JSON.stringify(data)], {
+        const blob = new Blob([JSON.stringify(submitData)], {
             // type에 JSON 타입 지정
             type: 'application/json',
         });
 
         // 폼데이터에 넣기
-        formData.append('requestDto', blob);
+
+        formData.append('productImg', blob);
+
         axAuth({
             method: 'post',
             url: '/product-service/auth',
             headers: { 'Content-Type': 'multipart/form-data' },
             data: formData,
+            params: submitData,
         })
             .then(res => {
                 alert('게시글이 등록되었습니다!');

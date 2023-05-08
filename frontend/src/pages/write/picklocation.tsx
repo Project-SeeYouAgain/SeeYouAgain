@@ -16,6 +16,10 @@ const pickLocation = ({
     data: StepTwoData;
     onSubmit: (data: StepTwoData) => void;
 }) => {
+    if (typeof window === 'undefined' || typeof kakao === 'undefined') {
+        return <div>Loading...</div>; // 서버 사이드 렌더링 시에 표시할 컴포넌트 또는 메시지를 반환합니다.
+    }
+
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     // 좌표-주소 변환 객체를 생성합니다
     const geocoder = new kakao.maps.services.Geocoder();
