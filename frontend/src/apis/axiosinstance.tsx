@@ -10,7 +10,7 @@ export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
             const token = getCookie('accessToken');
-            // const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzNDk1NzQwLCJleHAiOjE2ODM1ODIxNDB9.4V_r_BHH6H-cLc53xfbmDukEy4kqsx8vOBCEAuL8gcc';
+            // const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjgzNTEzNjQ0LCJleHAiOjE2ODM2MDAwNDR9.dxklLMBJBQ4-Csn2qEdzXx7ZQ90YKq_DtX3Q1hu1BPQ';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },
