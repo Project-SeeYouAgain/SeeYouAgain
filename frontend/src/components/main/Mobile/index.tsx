@@ -18,7 +18,7 @@ export default function index() {
     const handleKakaoLogin = () => {
         location.href = 'http://k8c101.p.ssafy.io:8000/user-service/oauth2/authorization/kakao';
     };
-    
+
     return (
         <div>
             <div className={classNames('fixed top-0 h-16 w-full z-30')}>

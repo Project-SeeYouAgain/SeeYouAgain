@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 
 function getCookie(name: string) {
     const cookie = document.cookie;
+
     const matches = cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
     return matches ? decodeURIComponent(matches[1]) : undefined;
 }
