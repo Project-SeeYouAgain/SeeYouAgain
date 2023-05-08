@@ -29,7 +29,7 @@ function Carousel({ imgUrl }: CarouselProps) {
     };
     return (
         <div className="relative">
-            <Slider {...settings} className="relateive">
+            <Slider {...settings} className={`absolute ${styles.sliderContainer}`}>
                 {imgUrl.map((item, index) => (
                     <div key={index} className="relative">
                         {/* <img src={item} alt="제품 사진" className="aspect-square w-[100vw]" /> */}

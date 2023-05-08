@@ -4,7 +4,7 @@ export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
             // const token = localStorage.getItem('accessToken');
-            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjgzMTU5Nzc0LCJleHAiOjE2ODMyNDYxNzR9.4pYgO4vtOwLrEKuctZy6t3JqQYqMRBAvXkFH56bqfic';
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjgzNTA0ODE1LCJleHAiOjE2ODM1OTEyMTV9.bfh2-iL0WefJ7e7Sso2A87GQqTQx26z1aS4LnTcqspY';
             // const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjgzMTY2NjM3LCJleHAiOjE2ODMyNTMwMzd9.i3fakee1wZtH36sfdVMHHmpFv8L1ggJgnAPHjmR6zbU';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
