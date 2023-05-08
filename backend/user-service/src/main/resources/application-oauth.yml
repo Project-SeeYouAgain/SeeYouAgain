@@ -13,6 +13,7 @@ spring:
               - account_email
             authorization-grant-type: authorization_code
             redirect-uri: http://k8c101.p.ssafy.io:8000/user-service/login/oauth2/code/kakao
+#            redirect-uri: http://localhost:8000/user-service/login/oauth2/code/kakao
             client-authentication-method: POST
         provider:
           kakao:

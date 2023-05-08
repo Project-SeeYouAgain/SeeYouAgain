@@ -25,6 +25,10 @@ public class ReservationResponseDto {
 
     private Integer price;
 
+    private Float lng;
+
+    private Float lat;
+
     private String location;
 
     private double score;
@@ -46,6 +50,8 @@ public class ReservationResponseDto {
                 .productId(product.getId())
                 .title(product.getTitle())
                 .price(product.getPrice())
+                .lng(reservation.getLng())
+                .lat(reservation.getLat())
                 .location(product.getLocation())
                 .score(reviewScore)
                 .productImg(productImg.getProductImg())
