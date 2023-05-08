@@ -27,10 +27,12 @@ public class ProductAuthController {
 
     // 대여 물품 조회
     @GetMapping("/{productId}")
-    public ResponseEntity<BaseResponseDto<ProductResponseDto>> getDetailProduct(@PathVariable("productId") Long productId) {
+    public ResponseEntity<BaseResponseDto<ProductResponseDto>> getDetailProduct(HttpServletRequest request,
+                                                                                @PathVariable("productId") Long productId) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", productService.getDetailProduct(productId)));
+                .body(new BaseResponseDto<>(200, "success", productService
+                        .getDetailProduct(getUserId(request),productId)));
     }
 
     // 대여 물품 생성
@@ -65,7 +67,7 @@ public class ProductAuthController {
     }
 
     // 대여 물품 목록(sort:최신순(0), 가격순(1), 별점순(2))
-    @GetMapping
+    @PostMapping("/productlist")
     public ResponseEntity<BaseResponseDto<List<ProductListResponseDto>>> getProductList(HttpServletRequest request,
                                                                                         @RequestBody ProductListRequestDto requestDto) {
 

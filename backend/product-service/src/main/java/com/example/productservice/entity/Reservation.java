@@ -33,6 +33,12 @@ public class Reservation {
     private LocalDate endDate;
 
     @Column(nullable = false)
+    private Float lng;
+
+    @Column(nullable = false)
+    private Float lat;
+
+    @Column(nullable = false)
     private String location;
 
     @Column(nullable = false)
@@ -55,6 +61,8 @@ public class Reservation {
                 .lenderId(userId)
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
+                .lng(dto.getLng())
+                .lat(dto.getLat())
                 .location(dto.getLocation())
                 .isCheck(false)
                 .isReturnCheck(false)
@@ -76,6 +84,11 @@ public class Reservation {
 
     public void updateLocation(ReservationReturnRequestDto requestDto) {
         this.endDate = requestDto.getEndDate();
+
+        this.lng = requestDto.getLng();
+
+        this.lat = requestDto.getLat();
+
         this.location = requestDto.getLocation();
 
     }
