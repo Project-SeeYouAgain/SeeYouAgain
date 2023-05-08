@@ -22,7 +22,6 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
     public List<Message> findNotReadMessageList(String identifier, Long userId, Long lastMessageId) {
         return queryFactory
                 .selectFrom(message)
-                .from(message)
                 .where(message.channel.identifier.eq(identifier)
                         .and(message.participant.userId.eq(userId))
                         .and(message.id.gt(lastMessageId))
@@ -38,6 +37,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 message.participant.userId.as("writerId"),
                 message.participant.profileImg,
                 message.chat,
+                message.isRead,
                 message.createdAt,
                 message.updatedAt
         ))
