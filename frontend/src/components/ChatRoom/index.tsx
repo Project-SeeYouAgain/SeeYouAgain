@@ -11,6 +11,7 @@ type ChatRoomProps = {
     latestMessage: string;
     productImg: string;
     identifier: string;
+    notReadMessageSize: number;
 };
 
 function timeAgo(date: string): string {
@@ -41,22 +42,27 @@ function timeAgo(date: string): string {
     return `${diffInYears}년 전`;
 }
 
-function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMessage, productImg, identifier }: ChatRoomProps) {
+function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMessage, productImg, identifier, notReadMessageSize }: ChatRoomProps) {
     return (
-        <Link href={`/chat/${identifier}`} className="border-b-1 flex mb-5" role="button">
-            <div className="w-1/6 me-4 relative" style={{ width: 50, height: 50 }}>
-                <Image src={profileImg ? profileImg : default_user} alt="프로필 이미지" className="rounded-full object-cover" fill />
-            </div>
-            <div className="w-4/6">
-                <div className="flex items-end">
-                    <p className="font-medium me-2">{nickname}</p>
-                    <p className="text-gray-500 me-1 font-light">{location}</p>
-                    <p className="text-gray-500 font-light">{timeAgo(latestMessageDate)}</p>
+        <Link href={`/chat/${identifier}`} className="border-b-1 flex mb-5 items-center" role="button">
+            <div className="w-9/12 flex">
+                <div className="w-3/12 me-2 relative" style={{ width: 45, height: 45 }}>
+                    <Image src={profileImg ? profileImg : default_user} alt="프로필 이미지" className="rounded-full object-cover" fill />
                 </div>
-                <p>{latestMessage}</p>
+                <div className="w-9/12">
+                    <div className="flex items-end">
+                        <p className="font-medium me-2">{nickname}</p>
+                        <p className="text-gray-500 me-1 font-light">{location}</p>
+                        <p className="text-gray-500 font-light">{timeAgo(latestMessageDate)}</p>
+                    </div>
+                    <p className="truncate">{latestMessage}</p>
+                </div>
             </div>
-            <div className="w-1/6 relative" style={{ width: 50, height: 50 }}>
-                <Image src={productImg} alt="물품 이미지" className="rounded-md object-cover" fill />
+            <div className="w-3/12 flex justify-end items-center">
+                {notReadMessageSize > 0 && <p className="text-white text-center text-sm rounded-full bg-blue aspect-square w-5 h-5 me-2">{notReadMessageSize}</p>}
+                <div className="relative" style={{ width: 50, height: 50 }}>
+                    <Image src={productImg} alt="물품 이미지" className="rounded-md object-cover" fill />
+                </div>
             </div>
         </Link>
     );

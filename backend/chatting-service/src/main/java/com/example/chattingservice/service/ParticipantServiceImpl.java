@@ -5,6 +5,7 @@ import com.example.chattingservice.entity.Message;
 import com.example.chattingservice.entity.Participant;
 import com.example.chattingservice.exception.ApiException;
 import com.example.chattingservice.exception.ExceptionEnum;
+import com.example.chattingservice.repository.ChannelRepository;
 import com.example.chattingservice.repository.MessageRepository;
 import com.example.chattingservice.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,21 +22,24 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final MessageRepository messageRepository;
 
+    private final ChannelRepository channelRepository;
+
     @Override
     @Transactional
     public void enterChatRoom(Long userId, String identifier) {
         Participant participant = participantRepository.findByUserIdAndChannelIdentifier(userId, identifier)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
+        Long youId = findYouId(userId, participant);
+
         int totalMessageSize = messageRepository
-                .countMessageByParticipantUserIdAndChannelIdentifier(findYouId(userId, participant), identifier);
+                .countMessageByParticipantUserIdAndChannelIdentifier(youId, identifier);
 
         participant.updateIsOut(true);
         participant.updateReadMessageSize(totalMessageSize);
 
         List<Message> notReadMessageList = messageRepository
-                .findNotReadMessageList(identifier, userId, participant.getLastReadMessageId());
-
+                .findNotReadMessageList(identifier, youId, participant.getLastReadMessageId());
         notReadMessageList.forEach(Message::updateIsRead);
     }
 
@@ -49,10 +53,11 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     @Transactional
-    public void outChatRoom(Long userId, String identifier) {
+    public void outChatRoom(Long userId, String identifier, Long lastReadMessageId) {
         Participant participant = participantRepository.findByUserIdAndChannelIdentifier(userId, identifier)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
         participant.updateIsOut(false);
+        participant.updateLastReadMessageId(lastReadMessageId);
     }
 }
