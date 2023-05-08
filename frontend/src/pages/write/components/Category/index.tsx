@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { categoryData } from './categoryData';
+import { categoryData } from '../../../../data/categoryData';
 
 interface CategoryProps {
     id: string;

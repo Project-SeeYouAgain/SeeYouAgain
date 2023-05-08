@@ -14,7 +14,7 @@ interface SafetyGrid {
     score: number;
 }
 
-const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged }) => {
+const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
     const [map, setMap] = useState<any>(null);
     const [myCheck, setMyCheck] = useState(true);
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
@@ -172,8 +172,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged }) => {
 
         return () => {
             if (map) {
-                kakao.maps.event.removeListener(map, 'dragstart');
-                kakao.maps.event.removeListener(map, 'dragend');
+                kakao.maps.event.removeListener(map, 'dragstart', handleBoundsChanged);
+                kakao.maps.event.removeListener(map, 'dragend', handleBoundsChanged);
                 kakao.maps.event.removeListener(map, 'bounds_changed', handleBoundsChanged);
             }
         };
