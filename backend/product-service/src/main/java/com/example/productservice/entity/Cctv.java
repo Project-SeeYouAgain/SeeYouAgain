@@ -6,15 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Cctv {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cctv_id")
-    private Long id;
-    private String address;
-    private double lat;
-    private double lng;
+@AttributeOverride(name = "id", column = @Column(name = "cctv_id"))
+public class Cctv extends SafetyZone {
+
 }

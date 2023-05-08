@@ -1,8 +1,6 @@
 package com.example.productservice.service;
 
-import com.example.productservice.dto.response.CctvResponseDto;
-import com.example.productservice.dto.response.LightResponseDto;
-import com.example.productservice.dto.response.PoliceResponseDto;
+import com.example.productservice.dto.response.SafetyZoneResponseDto;
 import com.example.productservice.entity.Cctv;
 import com.example.productservice.entity.Light;
 import com.example.productservice.entity.Police;
@@ -27,22 +25,22 @@ public class SafetyZoneServiceImpl implements SafetyZoneService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CctvResponseDto> getCctvList(String location) {
+    public List<SafetyZoneResponseDto> getCctvList(String location) {
         List<Cctv> cctvList = cctvRepository.findAllByAddressContains(location);
-        return cctvList.stream().map(CctvResponseDto::from).collect(toList());
+        return cctvList.stream().map(SafetyZoneResponseDto::from).collect(toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<PoliceResponseDto> getPoliceList(String location) {
+    public List<SafetyZoneResponseDto> getPoliceList(String location) {
         List<Police> policeList = policeRepository.findAllByAddressContains(location);
-        return policeList.stream().map(PoliceResponseDto::from).collect(toList());
+        return policeList.stream().map(SafetyZoneResponseDto::from).collect(toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<LightResponseDto> getLightList(String location) {
+    public List<SafetyZoneResponseDto> getLightList(String location) {
         List<Light> lightList = lightRepository.findAllByAddressContains(location);
-        return lightList.stream().map(LightResponseDto::from).collect(toList());
+        return lightList.stream().map(SafetyZoneResponseDto::from).collect(toList());
     }
 }

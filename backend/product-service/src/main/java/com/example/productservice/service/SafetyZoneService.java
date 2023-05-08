@@ -1,13 +1,13 @@
 package com.example.productservice.service;
 
-import com.example.productservice.dto.response.CctvResponseDto;
-import com.example.productservice.dto.response.LightResponseDto;
-import com.example.productservice.dto.response.PoliceResponseDto;
+import com.example.productservice.dto.response.SafetyZoneResponseDto;
 
 import java.util.List;
 
 public interface SafetyZoneService {
-    List<CctvResponseDto> getCctvList(String location);
-    List<PoliceResponseDto> getPoliceList(String location);
-    List<LightResponseDto> getLightList(String location);
+    List<SafetyZoneResponseDto> getCctvList(String location);
+
+    List<SafetyZoneResponseDto> getPoliceList(String location);
+
+    List<SafetyZoneResponseDto> getLightList(String location);
 }
