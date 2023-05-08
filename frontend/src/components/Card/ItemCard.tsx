@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Button from '../Button';
 import { SlOptions } from 'react-icons/sl';
 import shield from '../../assets/icons/safezone.png';
-import Itemcardoption from './Itemcardoption';
+import Itemcardoption from '../Card/Itemcardoption';
 
 interface dataProps {
     productImg: string;
