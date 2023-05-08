@@ -6,7 +6,7 @@ type TagInputProps = {
     onChange: (newData: Partial<StepTwoData>) => void;
 };
 
-function TagInput({ value, onChange }: TagInputProps) {
+function TagInput({ value = [], onChange }: TagInputProps) {
     // const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState('');
 

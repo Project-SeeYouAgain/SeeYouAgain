@@ -13,7 +13,7 @@ import logo from '@/images/logo.png';
 import kakao from '@/assets/icons/kakaobtn.png';
 
 export default function index() {
-    useEffect(() => {}, []);
+    // useEffect(() => {}, []);
 
     const handleKakaoLogin = () => {
         location.href = 'http://k8c101.p.ssafy.io:8000/user-service/oauth2/authorization/kakao';
