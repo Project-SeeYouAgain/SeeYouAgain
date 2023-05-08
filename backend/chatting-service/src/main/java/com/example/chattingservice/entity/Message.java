@@ -20,6 +20,8 @@ public class Message extends TimeStamped {
 
     private String chat;
 
+    private Boolean isRead;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
     private Participant participant;
@@ -28,11 +30,16 @@ public class Message extends TimeStamped {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    public static Message of(MessageRequestDto requestDto, Channel channel, Participant participant) {
+    public static Message of(MessageRequestDto requestDto, Channel channel, Participant participant, Boolean isRead) {
         return Message.builder()
                 .chat(requestDto.getChat())
+                .isRead(isRead)
                 .participant(participant)
                 .channel(channel)
                 .build();
+    }
+
+    public void updateIsRead() {
+        this.isRead = true;
     }
 }
