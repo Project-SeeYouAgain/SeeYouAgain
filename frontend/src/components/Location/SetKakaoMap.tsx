@@ -27,7 +27,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }) => {
             center: new kakao.maps.LatLng(lat, lng),
             level: 3,
             minLevel: 3,
-            maxLevel: 5,
+            maxLevel: 4,
         };
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
