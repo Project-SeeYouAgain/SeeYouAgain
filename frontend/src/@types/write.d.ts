@@ -3,7 +3,7 @@ interface StepOneData {
 }
 
 interface StepTwoData {
-    productImg: File[];
+    productImg?: File[];
     title: string;
     category: string;
     price: number;
@@ -11,8 +11,8 @@ interface StepTwoData {
     startDate: Date | null;
     endDate: Date | null;
     location: {
-        lng: number;
-        lat: number;
+        lng: number; // float
+        lat: number; // float
         RegionCode: string;
     };
     isSafe: boolean;

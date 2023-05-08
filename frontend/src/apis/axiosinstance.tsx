@@ -1,5 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
 
+function getCookie(name: string) {
+    const cookie = document.cookie;
+
+    const matches = cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
 export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
@@ -14,18 +21,14 @@ export const interceptors = (instance: AxiosInstance) => {
     return instance;
 };
 
-const BASE_URL = 'http://k8c101.p.ssafy.io:8000'; // 메인서버
+const BASE_URL = 'http://k8c101.p.ssafy.io:8000';
 
-// const BASE_URL = 'http://localhost:8000'; // 테스트 로컬 서버
-
-// 단순 get요청으로 인증값이 필요없는 경우
 const axiosApi = (url: string, options?: object) => {
     const instance = axios.create({ baseURL: url, ...options });
     interceptors(instance);
     return instance;
 };
 
-// post, delete등 api요청 시 인증값이 필요한 경우
 const axiosAuthApi = (url: string, options?: object) => {
     const instance = axios.create({ baseURL: url, ...options });
     interceptors(instance);

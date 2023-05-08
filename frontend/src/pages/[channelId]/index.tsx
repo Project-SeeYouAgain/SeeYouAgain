@@ -11,8 +11,8 @@ import { BsDot } from 'react-icons/bs';
 import MannerScore from '../../components/Card/MannerScore';
 import Menu from '../../components/Card/Menu';
 import Square from '../../components/Button/Square';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import CustomDatePicker from '../write/components/Calender';
+import { AiOutlineHeart, AiFillHeart, AiOutlineConsoleSql } from 'react-icons/ai';
+import Calender from '../../components/Card/Calender';
 
 interface ProductData {
     title: string;
@@ -87,7 +87,7 @@ function Detail() {
                         <Menu onSelectMenu={SelectMenu} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
                         {menuState === 1 ? (
                             <div>
-                                <CustomDatePicker reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
+                                <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
                             </div>
                         ) : menuState === 2 ? (
                             <div>
@@ -100,7 +100,7 @@ function Detail() {
                         )}
                     </div>
                 </Body>
-                <footer className="fixed bottom-0 border-t-2 w-[100vw] h-[3rem] flex items-center justify-evenly">
+                <footer className="fixed bottom-0 border-t-2 w-[100vw] h-[3rem] flex items-center justify-evenly bg-white">
                     {/* {isCart === true ? <AiFillHeart color="blue" size={34} /> : <AiOutlineHeart color="blue" size={34} />} */}
                     <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[2rem] py-[0.3rem] rounded-[0.5rem]" />
                     <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[1rem] py-[0.3rem] rounded-[0.5rem] border-[#5669FF] border-2" />

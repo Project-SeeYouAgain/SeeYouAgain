@@ -35,8 +35,21 @@ public class MessageServiceImpl implements MessageService{
         Channel channel = channelRepository.findByIdentifier(requestDto.getIdentifier())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_EXIST_CHANNEL_EXCEPTION));
 
-        Message message = Message.of(requestDto, channel, participant);
+        boolean isOut = getIsOut(participant, channel);
+
+        Message message = Message.of(requestDto, channel, participant, isOut);
         messageRepository.save(message);
+    }
+
+    private boolean getIsOut(Participant participant, Channel channel) {
+        if (channel.getOwnerId().equals(participant.getUserId())) {
+            Participant you = participantRepository.findByUserId(channel.getUserId())
+                    .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
+            return you.getIsOut();
+        }
+        Participant you = participantRepository.findByUserId(channel.getOwnerId())
+                .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
+        return you.getIsOut();
     }
 
     @Override
