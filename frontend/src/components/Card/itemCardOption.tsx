@@ -6,7 +6,7 @@ interface ItemCardOptionProps {
     dropdownVisible: boolean;
 }
 
-const Itemcardoption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible }) => {
+const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible }) => {
     if (dropdownVisible) {
         return (
             <div className="bg-white shadow-md rounded absolute top-[1.5rem] right-0 rounded-[3px]">
@@ -64,4 +64,4 @@ const Itemcardoption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
     }
 };
 
-export default Itemcardoption;
+export default ItemCardOption;
