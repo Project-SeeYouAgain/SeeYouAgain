@@ -8,8 +8,7 @@ import TagInput from '../TagInput';
 import Image from 'next/image';
 import locationImg from '../../../../../public/icon/3Dloca.png';
 import Calender from '../Calender';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+
 import PickLocation from '../../picklocation';
 import { BsFillCheckSquareFill } from 'react-icons/bs';
 import { BsSquare } from 'react-icons/bs';
@@ -37,11 +36,6 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
         tag: [],
     });
 
-    const handleImageChange = (files: File[]) => {
-        setData(prevData => ({ ...prevData, productImg: files }));
-        onSubmit(data);
-    };
-
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setData(prevData => ({ ...prevData, category: event.target.value }));
         onSubmit(data);
@@ -68,7 +62,7 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
             <Body>
                 <div className="mt-[1rem] ">
                     <p className="mb-[1rem] font-bold text-[1.2rem] "> 상품 이미지</p>
-                    <ImageUpload onChange={handleImageChange} />
+                    <ImageUpload data={data} setData={setData} onSubmit={onSubmit} />
                 </div>
                 {/* 카테고리 */}
                 <div className="mt-[1rem]">
@@ -111,7 +105,7 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
                     className="flex mt-[1rem] items-center "
                     onClick={() => {
                         setIsSafe(!isSafe);
-                        setData(prevData => ({ ...prevData, isSafe }));
+                        setData(prevData => ({ ...prevData, isSafe: isSafe }));
                         onSubmit(data);
                     }}
                 >

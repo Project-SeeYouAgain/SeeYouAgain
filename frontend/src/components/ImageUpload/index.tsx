@@ -8,7 +8,7 @@ type ImageUploadProps = {
     onChange: (files: File[]) => void;
 };
 
-function ImageUpload({ onChange }: ImageUploadProps) {
+function ImageUpload({ setData, onSubmit, data }: { setData: React.Dispatch<React.SetStateAction<StepTwoData>>; onSubmit: (data: StepTwoData) => void; data: StepTwoData }) {
     // 이미지
     const [images, setImages] = useState<File[]>([]);
     const [imgPreview, setImgPreview] = useState<{ img: File; url: string }[]>();
@@ -20,7 +20,8 @@ function ImageUpload({ onChange }: ImageUploadProps) {
         }
         const imageArray = Array.from(imagelist);
         setImages(imageArray);
-        onChange(imageArray);
+        setData(prevData => ({ ...prevData, productImg: imageArray }));
+        onSubmit(data);
         // 이미지 미리보기
         const imagePreviewArray = imageArray.map(img => {
             const url = URL.createObjectURL(img);
