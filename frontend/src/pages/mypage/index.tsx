@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../components/Container/components/Header';
 import Profile from '../../components/Card/Profile';
-import { MenuData1, MenuData2 } from './MenuData';
+import { MenuData1, MenuData2 } from '../../data/MenuData';
 import Link from 'next/link';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';

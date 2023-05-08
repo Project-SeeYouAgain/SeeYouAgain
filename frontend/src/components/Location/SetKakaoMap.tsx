@@ -15,7 +15,11 @@ interface SafetyGrid {
     score: number;
 }
 
+<<<<<<< HEAD
 const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter }) => {
+=======
+const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
+>>>>>>> 872a1c6b12502a1593a1e96e3b29eaf174e4470f
     const [map, setMap] = useState<any>(null);
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
     const [visitedAreas, setVisitedAreas] = useState<string[]>([]);

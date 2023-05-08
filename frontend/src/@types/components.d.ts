@@ -1,6 +1,6 @@
 interface ButtonProps {
-    bgColor?: 'red' | 'black' | 'white' | 'blue' | 'lightgray' | 'orange' | 'darkgray';
-    textColor?: 'white' | 'black';
+    bgColor?: 'red' | 'black' | 'blue' | 'white' | 'lightgray' | 'orange' | 'darkgray' | 'sky';
+    textColor?: 'white' | 'black' | 'blue';
     innerValue?: string;
     className?: string;
     isActive?: boolean;
