@@ -12,4 +12,6 @@ public interface MessageRepository extends JpaRepository<Message, Long>, Message
 
     @Query("select m from Message m where m.channel.id = :channelId order by m.createdAt desc")
     List<Message> findLatestMessage(@Param("channelId") Long channelId, Pageable pageable);
+
+    int countMessageByParticipantUserIdAndChannelIdentifier(Long userId, String identifier);
 }

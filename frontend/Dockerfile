@@ -19,6 +19,4 @@ RUN npm run build
 EXPOSE 80
 
 # Start the app 이거는 docker run이 될때 이 명령어가 불리는거임
-CMD ["npm", "start"]
-
-# deploy test
+CMD ["npm", "run", "dev"]

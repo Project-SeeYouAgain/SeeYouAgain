@@ -29,7 +29,9 @@ public class ChannelResponseDto implements Comparable<ChannelResponseDto> {
 
     private LocalDateTime lastMessageDate;
 
-    public static ChannelResponseDto of(Channel channel, UserClientResponseDto responseDto, Message message) {
+    private Integer notReadMessageSize;
+
+    public static ChannelResponseDto of(Channel channel, UserClientResponseDto responseDto, Message message, Integer notReadMessageSize) {
         return ChannelResponseDto.builder()
                 .identifier(channel.getIdentifier())
                 .nickname(responseDto.getNickname())
@@ -38,6 +40,7 @@ public class ChannelResponseDto implements Comparable<ChannelResponseDto> {
                 .productImg(channel.getProductImg())
                 .lastMessage(message.getChat())
                 .lastMessageDate(message.getCreatedAt())
+                .notReadMessageSize(notReadMessageSize)
                 .build();
     }
 
