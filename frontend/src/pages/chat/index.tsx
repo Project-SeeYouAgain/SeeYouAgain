@@ -11,6 +11,7 @@ interface ChatRoomData {
     productImg: string;
     lastMessageDate: string;
     identifier: string;
+    notReadMessageSize: number;
 }
 
 function chat() {
@@ -27,7 +28,6 @@ function chat() {
             url: `/chatting-service/auth/channel/${type}`,
         })
             .then(res => {
-                console.log(res.data.data);
                 setChatRoomList((_chat_room_list: ChatRoomData[]) => res.data.data);
             })
             .catch(err => {
@@ -64,6 +64,7 @@ function chat() {
                             latestMessage={chatRoomData.lastMessage}
                             profileImg={chatRoomData.profileImg}
                             identifier={chatRoomData.identifier}
+                            notReadMessageSize={chatRoomData.notReadMessageSize}
                         />
                     </div>
                 ))}
