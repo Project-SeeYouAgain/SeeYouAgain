@@ -9,6 +9,5 @@ public class MessageRequestDto {
 
     private String identifier;
     private Long writerId;
-    private String nickname;
     private String chat;
 }

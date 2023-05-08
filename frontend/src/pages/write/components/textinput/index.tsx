@@ -14,19 +14,16 @@ function TextInput({ setData, onSubmit, data }: { setData: React.Dispatch<React.
 
     // 변화 감지해서 submit하기
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.value);
         setData(prevData => ({ ...prevData, title: event.target.value }));
         onSubmit(data);
     };
 
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.value);
         setData(prevData => ({ ...prevData, price: Number(event.target.value) }));
         onSubmit(data);
     };
 
     const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        console.log(event.target.value);
         setData(prevData => ({ ...prevData, description: event.target.value }));
         onSubmit(data);
     };

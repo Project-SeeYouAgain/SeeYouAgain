@@ -33,10 +33,15 @@ public class Participant extends TimeStamped {
 
     private Boolean isOut;
 
+    private Long lastReadMessageId;
+
+    private int readMessageSize;
+
     public static Participant of(Channel channel,
                                  Long userId,
                                  UserClientResponseDto responseDto,
                                  boolean isOut) {
+
         return Participant.builder()
                 .channel(channel)
                 .userId(userId)
@@ -44,6 +49,16 @@ public class Participant extends TimeStamped {
                 .profileImg(responseDto.getProfileImg())
                 .location(responseDto.getLocation())
                 .isOut(isOut)
+                .lastReadMessageId(0L)
+                .readMessageSize(0)
                 .build();
+    }
+
+    public void updateIsOut(Boolean isOut) {
+        this.isOut = isOut;
+    }
+
+    public void updateReadMessageSize(Integer readMessageSize) {
+        this.readMessageSize = readMessageSize;
     }
 }
