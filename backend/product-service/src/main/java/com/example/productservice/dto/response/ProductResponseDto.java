@@ -24,6 +24,10 @@ public class ProductResponseDto {
 
     private Integer price;
 
+    private Float lng;
+
+    private Float lat;
+
     private String location;
 
     private String category;
@@ -52,6 +56,8 @@ public class ProductResponseDto {
 
     private Integer hit;
 
+    private Boolean isCart;
+
     private Integer reviewCnt;
 
     public static ProductResponseDto of(Product product,
@@ -60,11 +66,14 @@ public class ProductResponseDto {
                                         List<HashMap<String, String>> reservationList,
                                         double totalScore,
                                         UserClientResponseDto responseDto,
+                                        Boolean isCart,
                                         Integer reviewCnt) {
 
         return ProductResponseDto.builder()
                 .title(product.getTitle())
                 .price(product.getPrice())
+                .lng(product.getLng())
+                .lat(product.getLat())
                 .location(product.getLocation())
                 .category(product.getCategory())
                 .ownerId(product.getOwnerId())
@@ -78,6 +87,7 @@ public class ProductResponseDto {
                 .reservation(reservationList)
                 .isSafe(product.getIsSafe())
                 .score(totalScore)
+                .isCart(isCart)
                 .reviewCnt(reviewCnt)
                 .build();
     }
