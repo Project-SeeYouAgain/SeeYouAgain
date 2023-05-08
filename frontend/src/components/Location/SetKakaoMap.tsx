@@ -5,7 +5,7 @@ import pin from '@/images/pin.png';
 interface KakaoMapProps {
     lat: number;
     lng: number;
-    onCenterChanged?: (lat: number, lng:number) => void 
+    onCenterChanged?: (lat: number, lng: number) => void;
 }
 
 interface SafetyGrid {
@@ -177,7 +177,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
                 kakao.maps.event.removeListener(map, 'bounds_changed', handleBoundsChanged);
             }
         };
-    }, [map]);
+    }, [map, onCenterChanged]);
     return (
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Image src={pin} alt="pins" className="absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 z-10" />
