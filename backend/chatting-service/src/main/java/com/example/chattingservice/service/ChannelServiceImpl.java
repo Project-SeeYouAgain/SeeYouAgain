@@ -42,19 +42,35 @@ public class ChannelServiceImpl implements ChannelService {
         List<Channel> myChannelList = channelRepository.findAllByOwnerIdOrUserId(userId, type);
         List<ChannelResponseDto> channelResponseDtoList = new ArrayList<>();
         myChannelList.forEach(c -> {
-            UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
-
             PageRequest pageRequest = PageRequest.of(0, 1);
             List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
 
+            Participant participant = participantRepository.findByUserIdAndChannelIdentifier(userId, c.getIdentifier())
+                    .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
+
+            int totalMessageSize = getTotalMessageSize(userId, c);
+
             if (latestMessage.size() > 0) {
-                channelResponseDtoList.add(ChannelResponseDto.of(c, responseDto, latestMessage.get(0)));
+                UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
+                channelResponseDtoList.add(ChannelResponseDto.of(c, responseDto, latestMessage.get(0), totalMessageSize - participant.getReadMessageSize()));
             }
         });
 
         Collections.sort(channelResponseDtoList);
 
         return channelResponseDtoList;
+    }
+
+    private int getTotalMessageSize(Long userId, Channel channel) {
+        Long youId;
+        if (channel.getOwnerId().equals(userId)) {
+            youId = channel.getUserId();
+        } else {
+            youId = channel.getOwnerId();
+        }
+
+        return messageRepository
+                .countMessageByParticipantUserIdAndChannelIdentifier(youId, channel.getIdentifier());
     }
 
     private UserClientResponseDto getUserClientResponseDto(String type, Channel c) {
@@ -69,9 +85,29 @@ public class ChannelServiceImpl implements ChannelService {
     public void createChannel(Long userId, ChannelRequestDto requestDto) {
         Optional<Channel> findChannel = channelRepository.findByOwnerIdAndUserId(requestDto.getOwnerId(), userId);
 
-        if (findChannel.isPresent()) return;
+        if (findChannel.isEmpty()) saveChannelInfo(userId, requestDto);
+    }
 
-        saveChannelInfo(userId, requestDto);
+    private void saveChannelInfo(Long userId, ChannelRequestDto requestDto) {
+        UserClientResponseDto myUserInfo = userServiceClient.getUserInfo(userId).getData();
+        UserClientResponseDto ownerUserInfo = userServiceClient.getUserInfo(requestDto.getOwnerId()).getData();
+        ProductClientResponseDto productInfo = productServiceClient.getProductInfo(requestDto.getProductId()).getData();
+
+        Channel channel = getChannel(userId, requestDto, productInfo);
+        channelRepository.save(channel);
+
+        Participant me = Participant.of(channel, userId, myUserInfo, false);
+        participantRepository.save(me);
+
+        Participant you = Participant.of(channel, requestDto.getOwnerId(), ownerUserInfo, false);
+        participantRepository.save(you);
+    }
+
+    private static Channel getChannel(Long userId, ChannelRequestDto requestDto, ProductClientResponseDto productInfo) {
+        if (productInfo.getType()) {
+            return Channel.of(requestDto.getProductId(), requestDto.getOwnerId(), userId, UUID.randomUUID().toString(), productInfo);
+        }
+        return Channel.of(requestDto.getProductId(), userId, requestDto.getOwnerId(), UUID.randomUUID().toString(), productInfo);
     }
 
     @Override
@@ -92,25 +128,5 @@ public class ChannelServiceImpl implements ChannelService {
             return userServiceClient.getUserInfo(channel.getOwnerId()).getData();
         }
         return userServiceClient.getUserInfo(channel.getUserId()).getData();
-    }
-
-    private void saveChannelInfo(Long userId, ChannelRequestDto requestDto) {
-        UserClientResponseDto myUserInfo = userServiceClient.getUserInfo(userId).getData();
-        UserClientResponseDto ownerUserInfo = userServiceClient.getUserInfo(requestDto.getOwnerId()).getData();
-        ProductClientResponseDto productInfo = productServiceClient.getProductInfo(requestDto.getProductId()).getData();
-
-        Channel channel;
-        if (productInfo.getType()) {
-            channel = Channel.of(requestDto.getProductId(), requestDto.getOwnerId(), userId, UUID.randomUUID().toString(), productInfo);
-        } else {
-            channel = Channel.of(requestDto.getProductId(), userId, requestDto.getOwnerId(), UUID.randomUUID().toString(), productInfo);
-        }
-        channelRepository.save(channel);
-
-        Participant me = Participant.of(channel, userId, myUserInfo, true);
-        participantRepository.save(me);
-
-        Participant you = Participant.of(channel, requestDto.getOwnerId(), ownerUserInfo, false);
-        participantRepository.save(you);
     }
 }
