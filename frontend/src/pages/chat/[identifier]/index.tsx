@@ -86,7 +86,8 @@ function Channel() {
         axAuth({
             url: `/chatting-service/auth/participant/out/${identifier}`,
             method: 'patch',
-        }).then(res => {});
+        })
+        // .then(res => {});
 
         client.current?.deactivate();
     };
@@ -161,7 +162,8 @@ function Channel() {
         axAuth({
             url: `/chatting-service/auth/participant/in/${identifier}`,
             method: 'patch',
-        }).then(res => {});
+        })
+        // .then(res => {});
     };
 
     useEffect(() => {
