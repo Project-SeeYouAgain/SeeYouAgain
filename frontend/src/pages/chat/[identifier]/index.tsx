@@ -74,7 +74,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 1,
+                writerId: 2,
                 chat: chat,
             }),
         });
@@ -83,6 +83,11 @@ function Channel() {
     };
 
     const disconnect = () => {
+        axAuth({
+            url: `/chatting-service/auth/participant/out/${identifier}`,
+            method: 'patch',
+        }).then(res => {});
+
         client.current?.deactivate();
     };
 
@@ -136,7 +141,7 @@ function Channel() {
     const isItemLoaded = (index: number, chatList: ChatData[]) => index !== 0 && index < chatList.length;
 
     const loadMoreItems = (startIndex: number, endIndex: number, getMessage: () => void, chatList: ChatData[]) => {
-        if (startIndex === 0 && chatList.length >= 20) {
+        if (startIndex === 0 && chatList.length >= 30) {
             getMessage();
         }
         return Promise.resolve();
@@ -152,9 +157,17 @@ function Channel() {
         );
     };
 
+    const saveReadMessageSize = () => {
+        axAuth({
+            url: `/chatting-service/auth/participant/in/${identifier}`,
+            method: 'patch',
+        }).then(res => {});
+    };
+
     useEffect(() => {
         if (!router.isReady) return;
 
+        saveReadMessageSize();
         getChannelInfo();
         getMessage();
         connect();
