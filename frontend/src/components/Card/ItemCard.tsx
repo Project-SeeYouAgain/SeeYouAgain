@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Button from '../Button';
 import { SlOptions } from 'react-icons/sl';
 import shield from '../../assets/icons/safezone.png';
-import ItemCardOption from './ItemCardOption';
+import Itemcardoption from './Itemcardoption';
 
 interface dataProps {
     productImg: string;
@@ -46,7 +46,7 @@ function ItemCard({ productImg, title, location, price, startDate, endDate, isSa
                         {menuState !== undefined ? (
                             <>
                                 <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={Dropdown} />
-                                <ItemCardOption {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                                <Itemcardoption {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
                             </>
                         ) : null}
                     </span>
