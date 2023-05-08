@@ -40,7 +40,7 @@ const StepOneForm = ({ onSubmit }: StepProps) => {
 
                     <div
                         onClick={() => onHandleData(true)}
-                        className={`relative  flex ${isRenter && 'bg-blue'} w-[100%] h-[15rem] rounded-[1rem]  mb-[1rem]`}
+                        className={`relative  flex ${isRenter && 'bg-blue'} w-[100%] h-[15rem] rounded-[1rem]  mb-[1rem] hover: `}
                         style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
                     >
                         <div>
