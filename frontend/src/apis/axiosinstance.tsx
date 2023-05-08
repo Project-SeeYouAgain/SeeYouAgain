@@ -20,7 +20,8 @@ export const interceptors = (instance: AxiosInstance) => {
     return instance;
 };
 
-const BASE_URL = 'http://k8c101.p.ssafy.io:8000';
+// const BASE_URL = 'http://k8c101.p.ssafy.io:8000';
+const BASE_URL = 'http://localhost:8000';
 
 const axiosApi = (url: string, options?: object) => {
     const instance = axios.create({ baseURL: url, ...options });
