@@ -10,6 +10,7 @@ export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
             const token = getCookie('accessToken');
+            // const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzNDk1NzQwLCJleHAiOjE2ODM1ODIxNDB9.4V_r_BHH6H-cLc53xfbmDukEy4kqsx8vOBCEAuL8gcc';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },

@@ -1,0 +1,43 @@
+package com.example.chattingservice.controller;
+
+import com.example.chattingservice.dto.BaseResponseDto;
+import com.example.chattingservice.service.ParticipantService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/auth/participant")
+public class ParticipantController {
+
+    private final ParticipantService participantService;
+
+    @PatchMapping("/in/{identifier}")
+    public ResponseEntity<BaseResponseDto<?>> enterChatRoom(HttpServletRequest request,
+                                                            @PathVariable("identifier") String identifier) {
+
+        participantService.enterChatRoom(getUserId(request), identifier);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
+
+    @PatchMapping("/out/{identifier}")
+    public ResponseEntity<BaseResponseDto<?>> outChatRoom(HttpServletRequest request,
+                                                          @PathVariable("identifier") String identifier) {
+
+        participantService.outChatRoom(getUserId(request), identifier);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
+
+    private Long getUserId(HttpServletRequest request) {
+        return Long.parseLong(request.getHeader("userId"));
+    }
+}
