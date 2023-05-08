@@ -3,7 +3,7 @@ interface StepOneData {
 }
 
 interface StepTwoData {
-    productImg: File[];
+    productImg?: File[];
     title: string;
     category: string;
     price: number;
