@@ -38,7 +38,13 @@ public class Product extends TimeStamped {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
+    private Float lng;
+
+    @Column(nullable = false)
+    private Float lat;
+
+    @Column(nullable = false)
     private String location;
 
     // 대여 가능 : true, 대여중 : false
@@ -76,7 +82,9 @@ public class Product extends TimeStamped {
                 .category(dto.getCategory())
                 .price(dto.getPrice())
                 .description(dto.getDescription())
-                .location(dto.getLocation())
+                .lng(dto.getLng())
+                .lat(dto.getLat())
+                .location(dto.getRegionCode())
                 .productState(productState)
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
@@ -93,7 +101,9 @@ public class Product extends TimeStamped {
         this.category = requestDto.getCategory();
         this.price = requestDto.getPrice();
         this.description = requestDto.getDescription();
-        this.location = requestDto.getLocation();
+        this.lng = requestDto.getLng();
+        this.lat = requestDto.getLat();
+        this.location = requestDto.getRegionCode();
         this.startDate = requestDto.getStartDate();
         this.endDate = requestDto.getEndDate();
         this.isSafe = requestDto.getIsSafe();
