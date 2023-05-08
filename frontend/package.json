@@ -39,11 +39,8 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.8.0",
-<<<<<<< HEAD
     "react-kakao-maps-sdk": "^1.1.9",
     "react-redux": "^8.0.5",
-=======
->>>>>>> 6e7aa04d5acb28f5cbe4311af6f9d822c188ce8a
     "react-responsive": "^9.0.2",
     "react-scroll": "^1.8.9",
     "react-slick": "^0.29.0",
