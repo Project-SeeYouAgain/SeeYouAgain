@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ProductResponseDto getDetailProduct(Long productId) {
+    public ProductResponseDto getDetailProduct(Long userId, Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
@@ -68,7 +68,14 @@ public class ProductServiceImpl implements ProductService {
 
         UserClientResponseDto userInfo = userServiceClient.getUserInfo(product.getOwnerId()).getData();
 
-        return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo, reviewCnt);
+        Optional<Cart> cart = cartRepository.findByUserIdAndProduct(userId, product);
+
+        Boolean isCart = false;
+
+        if (cart.isPresent()) isCart = true;
+
+        return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo,
+                isCart, reviewCnt);
     }
 
     /**

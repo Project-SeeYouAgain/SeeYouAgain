@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public interface ProductService {
-    ProductResponseDto getDetailProduct(Long productId);
+    ProductResponseDto getDetailProduct(Long userId, Long productId);
 
     void createProduct(Long userId, ProductRequestDto requestDto, List<MultipartFile> productImg);
 
