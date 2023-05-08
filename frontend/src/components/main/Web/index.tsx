@@ -13,15 +13,16 @@ import logo from '@/images/logo.png';
 import kakao from '@/assets/icons/kakao_login_medium_narrow.png';
 
 export default function index() {
-    useEffect(() => {}, []);
+    // useEffect(() => {}, []);
 
-    const handleKakaoLogin = () => {};
+    // const handleKakaoLogin = () => {};
 
     return (
         <div>
             <div className={classNames('fixed top-0 h-16 w-full p-4 pl-12 pr-12', styles.header)}>
                 <Image src={logo} alt="logo" width={100} />
-                <div onClick={handleKakaoLogin} className={classNames(styles.btn, 'rounded-xl')}>
+                {/* <div onClick={handleKakaoLogin} className={classNames(styles.btn, 'rounded-xl')}> */}
+                <div className={classNames(styles.btn, 'rounded-xl')}>
                     <Image src={kakao} alt="kakaologin" className="p-0 m-0 rounded-xl" />
                 </div>
             </div>

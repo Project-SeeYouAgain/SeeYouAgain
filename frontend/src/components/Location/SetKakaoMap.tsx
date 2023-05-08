@@ -5,6 +5,7 @@ import pin from '@/images/pin.png';
 interface KakaoMapProps {
     lat: number;
     lng: number;
+    onCenterChanged?: (lat: number, lng:number) => void 
 }
 
 interface SafetyGrid {
@@ -13,7 +14,7 @@ interface SafetyGrid {
     score: number;
 }
 
-const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }) => {
+const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
     const [map, setMap] = useState<any>(null);
     const [myCheck, setMyCheck] = useState(true);
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
@@ -159,14 +160,20 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }) => {
             kakao.maps.event.addListener(map, 'dragend', () => {
                 drawVisibleSafetyRectangles();
                 kakao.maps.event.addListener(map, 'bounds_changed', handleBoundsChanged);
+                const center = map.getCenter();
+                const newLat = center.getLat();
+                const newLng = center.getLng();
+                if (onCenterChanged) {
+                    onCenterChanged(newLat, newLng);
+                }
             });
             kakao.maps.event.addListener(map, 'bounds_changed', handleBoundsChanged);
         }
 
         return () => {
             if (map) {
-                kakao.maps.event.removeListener(map, 'dragstart');
-                kakao.maps.event.removeListener(map, 'dragend');
+                kakao.maps.event.removeListener(map, 'dragstart', handleBoundsChanged);
+                kakao.maps.event.removeListener(map, 'dragend', handleBoundsChanged);
                 kakao.maps.event.removeListener(map, 'bounds_changed', handleBoundsChanged);
             }
         };
