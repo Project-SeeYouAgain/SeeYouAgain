@@ -62,11 +62,13 @@ public class ProductServiceImpl implements ProductService {
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
+        Integer reviewCnt = reviewList.size();
+
         double totalScore = getReviewScoreAvg(reviewList);
 
         UserClientResponseDto userInfo = userServiceClient.getUserInfo(product.getOwnerId()).getData();
 
-        return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo);
+        return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo, reviewCnt);
     }
 
     /**
