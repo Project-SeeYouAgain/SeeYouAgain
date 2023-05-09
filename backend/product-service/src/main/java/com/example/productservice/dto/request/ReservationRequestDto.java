@@ -16,6 +16,10 @@ public class ReservationRequestDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endDate;
 
+    private Float lng;
+
+    private Float lat;
+
     private String location;
 
 }

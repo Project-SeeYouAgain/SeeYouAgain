@@ -28,11 +28,12 @@ public class ParticipantController {
                 .body(new BaseResponseDto<>(200, "success"));
     }
 
-    @PatchMapping("/out/{identifier}")
+    @PatchMapping("/out/{identifier}/{lastReadMessageId}")
     public ResponseEntity<BaseResponseDto<?>> outChatRoom(HttpServletRequest request,
-                                                          @PathVariable("identifier") String identifier) {
+                                                          @PathVariable("identifier") String identifier,
+                                                          @PathVariable("lastReadMessageId") Long lastReadMessageId) {
 
-        participantService.outChatRoom(getUserId(request), identifier);
+        participantService.outChatRoom(getUserId(request), identifier, lastReadMessageId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
     }

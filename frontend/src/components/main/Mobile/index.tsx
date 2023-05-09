@@ -16,7 +16,8 @@ export default function index() {
     // useEffect(() => {}, []);
 
     const handleKakaoLogin = () => {
-        location.href = 'http://k8c101.p.ssafy.io:8000/user-service/oauth2/authorization/kakao';
+        location.href = 'https://k8c101.p.ssafy.io:8000/user-service/oauth2/authorization/kakao';
+        // location.href = 'https://localhost:8000/user-service/oauth2/authorization/kakao';
     };
 
     return (
@@ -50,7 +51,6 @@ export default function index() {
             <div className={classNames('fixed bottom-0 h-20 w-full p-3 mb-3', styles.header)}>
                 <button onClick={handleKakaoLogin} className={classNames(styles.btn, 'rounded-xl bg-white')}>
                     <Image src={kakao} alt="kakaoBtn" className="mr-2" />
-                    <p>카카오톡으로 시작하기</p>
                 </button>
             </div>
         </div>

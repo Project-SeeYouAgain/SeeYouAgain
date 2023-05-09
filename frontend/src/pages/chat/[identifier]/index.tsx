@@ -7,15 +7,15 @@ import Image from 'next/image';
 import ChatBox from '@/components/ChatBox';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { IoMdSend } from 'react-icons/io';
-import { VariableSizeList as VList } from 'react-window';
-import InfiniteLoader from 'react-window-infinite-loader';
 import Button from '@/components/Button';
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface ChatData {
     messageId: number;
     writerId: number;
     profileImg: string;
     chat: string;
+    isRead: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -36,16 +36,17 @@ function Channel() {
     const [chatList, setChatList] = useState<ChatData[]>([]);
     const [chat, setChat] = useState<string>('');
     const [firstMessageId, setFirstMessageId] = useState<number>();
+    const [lastReadMessageId, setLastReadMessageId] = useState<number>(0);
     const [channelInfo, setChannelInfo] = useState<ChannelInfo>();
-    const lastMessageRef = useRef<VList | null>(null);
+    const [hasMore, setHasMore] = useState<boolean>(true);
 
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
-
-    const [windowHeight, setWindowHeight] = useState<number>(0);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     const connect = () => {
-        const socket = new SockJS('http://localhost:8000/chatting-service/ws');
+        const socket = new SockJS('http://k8c101.p.ssafy.io:8000/chatting-service/ws');
+        // const socket = new SockJS('http://localhost:8000/chatting-service/ws');
 
         client.current = new Client({
             webSocketFactory: () => socket,
@@ -74,7 +75,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 2,
+                writerId: 4,
                 chat: chat,
             }),
         });
@@ -83,10 +84,14 @@ function Channel() {
     };
 
     const disconnect = () => {
+        if (chatList.length > 0) {
+            setLastReadMessageId(chatList[0].messageId);
+        }
+
         axAuth({
-            url: `/chatting-service/auth/participant/out/${identifier}`,
+            url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
             method: 'patch',
-        })
+        });
         // .then(res => {});
 
         client.current?.deactivate();
@@ -117,10 +122,12 @@ function Channel() {
         axAuth({
             url: api,
         }).then(res => {
-            if (res.data.data && res.data.data.length > 0) {
+            if (res.data.data.length > 0) {
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
-                setFirstMessageId(messageList.at(-1).messageId);
+                setFirstMessageId(messageList[messageList.length - 1].messageId);
+            } else if (res.data.data.length < 30) {
+                setHasMore(false);
             }
         });
     };
@@ -133,37 +140,11 @@ function Channel() {
         });
     };
 
-    const scrollToBottom = () => {
-        if (lastMessageRef.current) {
-            lastMessageRef.current.scrollToItem(chatList.length - 1, 'end');
-        }
-    };
-
-    const isItemLoaded = (index: number, chatList: ChatData[]) => index !== 0 && index < chatList.length;
-
-    const loadMoreItems = (startIndex: number, endIndex: number, getMessage: () => void, chatList: ChatData[]) => {
-        if (startIndex === 0 && chatList.length >= 30) {
-            getMessage();
-        }
-        return Promise.resolve();
-    };
-
-    const ItemRenderer = ({ index, style, chatList }: { index: number; style: React.CSSProperties; chatList: ChatData[] }) => {
-        const reversedIndex = chatList.length - index - 1;
-        const chatData = chatList[reversedIndex];
-        return (
-            <div style={style} key={index}>
-                <ChatBox chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={1} />
-            </div>
-        );
-    };
-
     const saveReadMessageSize = () => {
         axAuth({
             url: `/chatting-service/auth/participant/in/${identifier}`,
             method: 'patch',
-        })
-        // .then(res => {});
+        });
     };
 
     useEffect(() => {
@@ -177,15 +158,9 @@ function Channel() {
         return () => disconnect();
     }, [router.isReady]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowHeight(window.innerHeight);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({});
+    };
 
     useEffect(() => {
         scrollToBottom();
@@ -219,18 +194,15 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-10" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'scroll' }}>
-                <InfiniteLoader
-                    isItemLoaded={index => isItemLoaded(index, chatList)}
-                    itemCount={chatList.length + 1}
-                    loadMoreItems={(startIndex, endIndex) => loadMoreItems(startIndex, endIndex, getMessage, chatList)}
-                >
-                    {({ onItemsRendered }) => (
-                        <VList ref={lastMessageRef} itemCount={chatList.length} itemSize={index => 50} onItemsRendered={onItemsRendered} width="100%" height={windowHeight - 250} layout="vertical">
-                            {({ index, style }) => <ItemRenderer index={index} style={style} chatList={chatList} />}
-                        </VList>
+            <div className="chat-list mx-5 pb-16">
+                {chatList
+                    .slice()
+                    .reverse()
+                    .map(
+                        (chatData, index): React.ReactNode => (
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={4} isRead={chatData.isRead} />
+                        ),
                     )}
-                </InfiniteLoader>
             </div>
 
             <div className="fixed inset-x-0 bottom-0 bg-white">

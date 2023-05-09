@@ -24,6 +24,14 @@ function Write() {
     const handleStepTwoSubmit = (data: StepTwoData) => {
         setStepTwoData(data);
     };
+    // 날짜 변환 함수
+    function formatDate(dateStr: any) {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
 
     // 이전 단계로 이동
     const handlePrevious = () => {
@@ -85,7 +93,7 @@ function Write() {
             // alert('필수 데이터를 모두 입력해주세요!');
             return;
         }
-        // 5:스타트 6: end 7: 위도경도 8: 세이프존 9:태그:리스트
+
         // 데이터가 모두 입력되었으면 제출 가능
         const submitData = {
             title: data.title,
@@ -93,15 +101,16 @@ function Write() {
             category: data.category,
             price: data.price,
             description: data.description,
-            location: data.location,
+            lat: data.location.lat,
+            lng: data.location.lng,
+            regionCode: data.location.RegionCode,
             tag: data.tag,
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: formatDate(data.startDate),
+            endDate: formatDate(data.endDate),
             isSafe: data.isSafe,
         };
         // 폼데이터 생성
         const formData = new FormData();
-
         // 사진 넣기
         if (data.productImg) {
             for (let i = 0; i < data.productImg.length; i++) {
@@ -121,14 +130,17 @@ function Write() {
 
         // 폼데이터에 넣기
 
-        formData.append('productImg', blob);
+        formData.append('requestDto', blob);
+
+        console.log('폼데이터 입니다.', formData);
+        console.log('제출 데이터 입니다.', submitData);
+        console.log('난 그냥 데이터', data);
 
         axAuth({
             method: 'post',
             url: '/product-service/auth',
             headers: { 'Content-Type': 'multipart/form-data' },
             data: formData,
-            params: submitData,
         })
             .then(res => {
                 alert('게시글이 등록되었습니다!');

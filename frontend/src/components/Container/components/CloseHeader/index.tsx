@@ -1,4 +1,4 @@
-import React, { FunctionComponent, HTMLProps } from 'react';
+import React, { FunctionComponent } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 interface HeaderProps {

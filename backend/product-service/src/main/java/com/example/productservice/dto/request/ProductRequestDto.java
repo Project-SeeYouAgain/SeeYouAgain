@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,7 +24,11 @@ public class ProductRequestDto {
 
     private String description;
 
-    private String location;
+    private Float lng;
+
+    private Float lat;
+
+    private String regionCode;
 
     private List<String> tag;
 
