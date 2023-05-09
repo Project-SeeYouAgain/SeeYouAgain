@@ -1,6 +1,6 @@
 import React, { FunctionComponent, HTMLProps } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import { RiBattery2ChargeFill } from 'react-icons/ri';
+import MannerScore from './MannerScore';
 
 // << data: object >> 괄호에 넣어주세요
 function Profile() {
@@ -20,10 +20,7 @@ function Profile() {
                 <div className="flex flex-col justify-center">
                     <div className="flex">
                         <span className="mr-[0.3rem] text-[16px] font-bold">{data.nickname}</span>
-                        <div className="bg-[#EAECFF] flex justify-center items-center rounded-[0.31rem] w-[3.75rem]">
-                            <span className="text-[#5669FF]">{data.mannerScore}%</span>
-                            <RiBattery2ChargeFill color="#5669FF" />
-                        </div>
+                        <MannerScore score={data.mannerScore} />
                     </div>
                     <span className="text-[#959595]">{data.location}</span>
                 </div>
