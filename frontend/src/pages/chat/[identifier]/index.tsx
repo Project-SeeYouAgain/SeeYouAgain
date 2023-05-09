@@ -75,7 +75,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 2,
+                writerId: 4,
                 chat: chat,
             }),
         });
@@ -194,16 +194,15 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-16" style={{ height: 500, overflow: 'auto' }}>
-                <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
-                    {chatList
-                        .slice()
-                        .reverse()
-                        .map((chatData, index) => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={2} isRead={chatData.isRead} />
-                        ))}
-                    <div ref={messagesEndRef} />
-                </InfiniteScroll>
+            <div className="chat-list mx-5 pb-16">
+                {chatList
+                    .slice()
+                    .reverse()
+                    .map(
+                        (chatData, index): React.ReactNode => (
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={4} isRead={chatData.isRead} />
+                        ),
+                    )}
             </div>
 
             <div className="fixed inset-x-0 bottom-0 bg-white">
