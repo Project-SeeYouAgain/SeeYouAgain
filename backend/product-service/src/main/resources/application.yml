@@ -11,11 +11,11 @@ spring:
         web-allow-others: true
       path: /h2-console
   datasource:
-#    url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
-    url: jdbc:mysql://k8c101.p.ssafy.io:3308/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+#    url: jdbc:mysql://k8c101.p.ssafy.io:3308/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: root
-    password: seeyouagain1234
-#    password: ssafy
+#    password: seeyouagain1234
+    password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql

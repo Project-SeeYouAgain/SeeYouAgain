@@ -15,8 +15,8 @@ spring:
 #    url: jdbc:mysql://localhost:3306/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
     url: jdbc:mysql://k8c101.p.ssafy.io:3307/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: seeyouagain1234
-#    password: ssafy
+#    password: seeyouagain1234
+    password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -54,9 +54,9 @@ logging:
     com.example.userservice.client: DEBUG
 
 gateway:
-#    ip: 192.168.100.51
+    ip: 192.168.100.51
 #  ip: 192.168.100.120
-  ip: 172.18.0.7/16
+#  ip: 172.18.0.7/16
 #  ip: 192.168.0.100
 #  ip: 172.20.10.2
 
