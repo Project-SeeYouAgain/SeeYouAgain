@@ -24,6 +24,14 @@ function Write() {
     const handleStepTwoSubmit = (data: StepTwoData) => {
         setStepTwoData(data);
     };
+    // 날짜 변환 함수
+    function formatDate(dateStr: any) {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
 
     // 이전 단계로 이동
     const handlePrevious = () => {
@@ -85,7 +93,7 @@ function Write() {
             // alert('필수 데이터를 모두 입력해주세요!');
             return;
         }
-        // 5:스타트 6: end 7: 위도경도 8: 세이프존 9:태그:리스트
+
         // 데이터가 모두 입력되었으면 제출 가능
         const submitData = {
             title: data.title,
@@ -95,10 +103,10 @@ function Write() {
             description: data.description,
             lat: data.location.lat,
             lng: data.location.lng,
-            RegionCode: data.location.RegionCode,
+            regionCode: data.location.RegionCode,
             tag: data.tag,
-            startDate: '2023-02-28',
-            endDate: '2023-11-15',
+            startDate: formatDate(data.startDate),
+            endDate: formatDate(data.endDate),
             isSafe: data.isSafe,
         };
         // 폼데이터 생성
