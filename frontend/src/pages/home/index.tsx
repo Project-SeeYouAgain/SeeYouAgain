@@ -28,13 +28,10 @@ function Home() {
         //     sort: 0,
         // };
         axAuth({
-            url: '/product-service/auth',
-            params: {
-                productSearchCondition: {
-                    // location: '',
-                    // category: '',
-                    sort: 0,
-                },
+            method: 'post',
+            url: '/product-service/auth/productlist',
+            data: {
+                sort: 0,
             },
         })
             .then(res => {
