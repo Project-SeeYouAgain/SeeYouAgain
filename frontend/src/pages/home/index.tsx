@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
-import { useRouter } from 'next/router';
-import Image from 'next/image';
-
 import { axAuth } from '@/apis/axiosinstance';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
@@ -24,10 +20,6 @@ interface dataProps {
     menuState?: number;
 }
 function Home() {
-    const cookie = new Cookies();
-    const router = useRouter();
-    // 이용자 로그인 여부 및 로그인
-    const [userData, setUserData] = useRecoilState<UserState>(userState);
     const user = useRecoilValue(userState);
     // 물품리스트 불러오기
     const [listdata, setListData] = useState<dataProps[]>();
@@ -35,18 +27,9 @@ function Home() {
     const [like, setLike] = useState<boolean>(false);
 
     useEffect(() => {
-        const accessToken = getCookie('accessToken');
-        const nickname = getCookie('nickname');
-        if (nickname === '') {
-            router.push('/check');
-        }
-        if (accessToken !== undefined) {
-            setUserData(prev => ({ ...prev, accessToken }));
-        }
-        if (nickname !== undefined) {
-            setUserData(prev => ({ ...prev, nickname }));
-        }
-
+        // const productSearchCondition = {
+        //     sort: 0,
+        // };
         axAuth({
             method: 'post',
             url: '/product-service/auth/productlist',
@@ -60,12 +43,6 @@ function Home() {
             })
             .catch(err => console.log(err));
     }, []);
-
-    function getCookie(name: string) {
-        console.log(cookie.get('accessToken'));
-        const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
 
     return (
         <Container>
