@@ -93,15 +93,16 @@ function Write() {
             category: data.category,
             price: data.price,
             description: data.description,
-            location: data.location,
+            lat: data.location.lat,
+            lng: data.location.lng,
+            RegionCode: data.location.RegionCode,
             tag: data.tag,
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: '2023-02-28',
+            endDate: '2023-11-15',
             isSafe: data.isSafe,
         };
         // 폼데이터 생성
         const formData = new FormData();
-
         // 사진 넣기
         if (data.productImg) {
             for (let i = 0; i < data.productImg.length; i++) {
@@ -121,14 +122,17 @@ function Write() {
 
         // 폼데이터에 넣기
 
-        formData.append('productImg', blob);
+        formData.append('requestDto', blob);
+
+        console.log('폼데이터 입니다.', formData);
+        console.log('제출 데이터 입니다.', submitData);
+        console.log('난 그냥 데이터', data);
 
         axAuth({
             method: 'post',
             url: '/product-service/auth',
             headers: { 'Content-Type': 'multipart/form-data' },
             data: formData,
-            params: submitData,
         })
             .then(res => {
                 alert('게시글이 등록되었습니다!');
