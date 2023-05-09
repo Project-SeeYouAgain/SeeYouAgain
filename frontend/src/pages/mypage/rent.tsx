@@ -30,7 +30,8 @@ function Rent() {
         const url = `/product-service/auth/reservation/${menuState}`;
         axBase({ url })
             .then(res => {
-                setItemList(res.data);
+                console.log(res.data.data);
+                setItemList(res.data.data);
             })
             .catch(err => console.log(err));
     }, [menuState]);
@@ -39,7 +40,7 @@ function Rent() {
         <Container>
             <Header title="대여 받은 내역"></Header>
             <Body>
-                <Menu onSelectMenu={SelectMenu} />
+                <Menu onSelectMenu={SelectMenu} title1={'대여중'} title2={'예약중'} title3={'반납완료'} />
                 {itemList.map((item, index) => (
                     <Link key={index} href={''}>
                         <Card
