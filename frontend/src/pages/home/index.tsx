@@ -1,31 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
-import { useRouter } from 'next/router';
 import { axAuth } from '@/apis/axiosinstance';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import MainHeader from '@/components/Container/components/MainHeader';
 
 function Home() {
-    const cookie = new Cookies();
-    const router = useRouter();
-    const [userData, setUserData] = useRecoilState<UserState>(userState);
-    const [data, setData] = useState();
     const user = useRecoilValue(userState);
     useEffect(() => {
-        const accessToken = getCookie('accessToken');
-        const nickname = getCookie('nickname');
-        if (nickname === '') {
-            router.push('/check');
-        }
-        if (accessToken !== undefined) {
-            setUserData(prev => ({ ...prev, accessToken }));
-        }
-        if (nickname !== undefined) {
-            setUserData(prev => ({ ...prev, nickname }));
-        }
         // const productSearchCondition = {
         //     sort: 0,
         // };
@@ -42,12 +25,6 @@ function Home() {
             })
             .catch(err => console.log(err));
     }, []);
-
-    function getCookie(name: string) {
-        console.log(cookie.get('accessToken'));
-        const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
 
     return (
         <Container>
