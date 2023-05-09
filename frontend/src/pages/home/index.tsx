@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
 import { useRouter } from 'next/router';
@@ -8,6 +9,7 @@ import Body from '@/components/Container/components/Body';
 import MainHeader from '@/components/Container/components/MainHeader';
 
 function Home() {
+    const cookie = new Cookies();
     const router = useRouter();
     const [userData, setUserData] = useRecoilState<UserState>(userState);
     const [data, setData] = useState();
@@ -40,8 +42,9 @@ function Home() {
             })
             .catch(err => console.log(err));
     }, []);
+
     function getCookie(name: string) {
-        const cookie = document.cookie;
+        console.log(cookie.get('accessToken'));
         const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }

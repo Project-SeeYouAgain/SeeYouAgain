@@ -42,8 +42,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         User user = userRepository.findByEmail(authMember.getEmail())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
-
-
         String token = jwtUtil.createToken(user.getId());
         String name = user.getNickname();
 
@@ -56,18 +54,19 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         accessTokenCookie.setPath("/");
         nickname.setPath("/");
 
+        accessTokenCookie.setMaxAge(60 * 60 * 24);
+        nickname.setMaxAge(60 * 60 * 24);
+
         response.addCookie(accessTokenCookie);
         response.addCookie(nickname);
 
         String url = makeRedirectUrl();
 
         redirectStrategy.sendRedirect(request, response, url);
-        response.setContentType("text/plain");
-        response.getOutputStream().write(token.getBytes());
     }
 
     private String makeRedirectUrl() {
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/home")
+        return UriComponentsBuilder.fromUriString("https://k8c101.p.ssafy.io/home")
                 .build().toUriString();
     }
 }

@@ -1,4 +1,7 @@
 import { backgroundColor, txtColor } from './color';
+import { AiTwotoneAlert } from 'react-icons/ai';
+
+// 신고버튼입니다.
 function SquareSm({ bgColor, textColor, innerValue, className, onClick }: ButtonProps) {
     return (
         <button
@@ -6,6 +9,7 @@ function SquareSm({ bgColor, textColor, innerValue, className, onClick }: Button
             type="button"
             onClick={onClick}
         >
+            <AiTwotoneAlert size={20} className="" />
             {innerValue}
         </button>
     );
