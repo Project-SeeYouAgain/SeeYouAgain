@@ -8,6 +8,7 @@ import ChatBox from '@/components/ChatBox';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { IoMdSend } from 'react-icons/io';
 import Button from '@/components/Button';
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface ChatData {
     messageId: number;
@@ -35,13 +36,17 @@ function Channel() {
     const [chatList, setChatList] = useState<ChatData[]>([]);
     const [chat, setChat] = useState<string>('');
     const [firstMessageId, setFirstMessageId] = useState<number>();
+    const [lastReadMessageId, setLastReadMessageId] = useState<number>(0);
     const [channelInfo, setChannelInfo] = useState<ChannelInfo>();
+    const [hasMore, setHasMore] = useState<boolean>(true);
 
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     const connect = () => {
-        const socket = new SockJS('http://localhost:8000/chatting-service/ws');
+        const socket = new SockJS('http://k8c101.p.ssafy.io:8000/chatting-service/ws');
+        // const socket = new SockJS('http://localhost:8000/chatting-service/ws');
 
         client.current = new Client({
             webSocketFactory: () => socket,
@@ -79,10 +84,8 @@ function Channel() {
     };
 
     const disconnect = () => {
-        let lastReadMessageId = 0;
-
         if (chatList.length > 0) {
-            lastReadMessageId = chatList[0].messageId;
+            setLastReadMessageId(chatList[0].messageId);
         }
 
         axAuth({
@@ -123,6 +126,8 @@ function Channel() {
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
                 setFirstMessageId(messageList[messageList.length - 1].messageId);
+            } else if (res.data.data.length < 30) {
+                setHasMore(false);
             }
         });
     };
@@ -140,7 +145,6 @@ function Channel() {
             url: `/chatting-service/auth/participant/in/${identifier}`,
             method: 'patch',
         });
-        // .then(res => {});
     };
 
     useEffect(() => {
@@ -153,6 +157,14 @@ function Channel() {
 
         return () => disconnect();
     }, [router.isReady]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({});
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [chatList]);
 
     return (
         <div className="relative pt-48">
