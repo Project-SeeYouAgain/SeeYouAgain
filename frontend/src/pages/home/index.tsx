@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
 import { axAuth } from '@/apis/axiosinstance';
