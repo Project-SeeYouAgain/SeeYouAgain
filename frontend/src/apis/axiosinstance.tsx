@@ -5,8 +5,8 @@ import { userState } from 'recoil/user/atoms';
 export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
-            const token = useRecoilValue(userState).accessToken;
-            // const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzNDk1NzQwLCJleHAiOjE2ODM1ODIxNDB9.4V_r_BHH6H-cLc53xfbmDukEy4kqsx8vOBCEAuL8gcc';
+            // const token = useRecoilValue(userState).accessToken;
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2IiwiaWF0IjoxNjgzNjMwNDEzLCJleHAiOjE2ODM3MTY4MTN9.vXIgSho22yO2I6xl8rBkPfTNc6lI5WZSetUnwn9sCpA';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },

@@ -201,7 +201,7 @@ public class ReservationServiceImpl implements ReservationService {
             double ReviewScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(product.getId()));
             ProductImg productImg = productImgRepository.findAllByProductId(product.getId()).get(0);
 
-            Optional<Cart> cart = cartRepository.findByUserIdAndProduct(userId, product);
+            Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, product.getId());
 
             Boolean isCart = false;
 
