@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port that the app will run on2332
-EXPOSE 3000
+EXPOSE 80
 
 # Start the app 이거는 docker run이 될때 이 명령어가 불리는거임
 CMD ["npm", "run", "dev"]
