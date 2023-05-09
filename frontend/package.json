@@ -59,6 +59,7 @@
     "@storybook/nextjs": "^7.0.6",
     "@storybook/testing-library": "^0.0.14-next.2",
     "@types/aos": "^3.0.4",
+    "@types/jquery": "^3.5.16",
     "@types/react-date-range": "^1.4.4",
     "@types/react-datepicker": "^4.11.2",
     "@types/react-scroll": "^1.8.6",

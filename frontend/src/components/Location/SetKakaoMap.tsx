@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import pin from '@/images/pin.png';
+import { useRouter } from 'next/router';
+import { BiCurrentLocation } from 'react-icons/bi';
 
 interface KakaoMapProps {
     lat: number;
@@ -20,7 +22,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
     const [visitedAreas, setVisitedAreas] = useState<string[]>([]);
     const [data, setData] = useState<Array<{ lat: number; lng: number; score: number }> | []>([]);
-
+    const router = useRouter();
     useEffect(() => {
         const container = document.getElementById('map');
         if (!container) return;
@@ -207,6 +209,9 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
             }
         };
     }, [map, onCenterChanged]);
+    const reload = () => {
+        router.reload();
+    };
     return (
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative' }}>
             <div className=" absolute top-4 right-4 z-10 text-center px-3 py-2 text-[.9rem] bg-white/80 font-bold rounded">
@@ -224,6 +229,9 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
                     <span className="whitespace-nowrap w-1/2">3단계</span>
                 </div>
             </div>
+            <button className="rounded-full absolute bottom-[15vh] right-4 z-10 h-[12vw] w-[12vw] bg-white drop-shadow-lg ">
+                <BiCurrentLocation className="w-full h-full p-1" onClick={reload} />
+            </button>
             <Image src={pin} alt="pins" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full z-10" />
         </div>
     );
