@@ -11,7 +11,7 @@ export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
             // const token = getCookie('accessToken');
-            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNjgzNTk4ODgxLCJleHAiOjE2ODM2ODUyODF9.wra81cJI72Sr5FuZte9WUs-XKnqAbyq_SEcs7kdOCj8';
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjgzNjA5MjY5LCJleHAiOjE2ODM2OTU2Njl9.MfNtTxez3-0IRh6i0lz6aH4xZkN4u3CgGm7TPsiOjYI';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },
@@ -20,7 +20,7 @@ export const interceptors = (instance: AxiosInstance) => {
     return instance;
 };
 
-const BASE_URL = 'https://k8c101.p.ssafy.io:8000';
+const BASE_URL = 'http://k8c101.p.ssafy.io:8000';
 // const BASE_URL = 'http://localhost:8000';
 
 const axiosApi = (url: string, options?: object) => {
