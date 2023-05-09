@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
-import { useRouter } from 'next/router';
 import { axAuth } from '@/apis/axiosinstance';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import MainHeader from '@/components/Container/components/MainHeader';
-
+import ItemCard from '@/components/Card/ItemCard';
+import Navbar from '@/components/Container/components/Navbar';
+interface dataProps {
+    thumbnailUrl: string;
+    title: string;
+    location: string;
+    price: number;
+    startDate?: string;
+    endDate?: string;
+    isSafe?: boolean;
+    isCart?: boolean;
+    productId: number;
+    menuState?: number;
+}
 function Home() {
-    const cookie = new Cookies();
-    const router = useRouter();
-    const [userData, setUserData] = useRecoilState<UserState>(userState);
-    const [data, setData] = useState();
     const user = useRecoilValue(userState);
+    // 물품리스트 불러오기
+    const [listdata, setListData] = useState<dataProps[]>();
+    // 찜하기
+    const [like, setLike] = useState<boolean>(false);
+
     useEffect(() => {
-        const accessToken = getCookie('accessToken');
-        const nickname = getCookie('nickname');
-        if (nickname === '') {
-            router.push('/check');
-        }
-        if (accessToken !== undefined) {
-            setUserData(prev => ({ ...prev, accessToken }));
-        }
-        if (nickname !== undefined) {
-            setUserData(prev => ({ ...prev, nickname }));
-        }
         // const productSearchCondition = {
         //     sort: 0,
         // };
@@ -37,17 +38,11 @@ function Home() {
             },
         })
             .then(res => {
-                console.log(res);
-                // setData(res.data.data);
+                console.log(res.data.data);
+                setListData(res.data.data);
             })
             .catch(err => console.log(err));
     }, []);
-
-    function getCookie(name: string) {
-        console.log(cookie.get('accessToken'));
-        const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
 
     return (
         <Container>
@@ -66,8 +61,18 @@ function Home() {
                     <div></div>
                 </div>
                 {/* 제품 목록 */}
-                <div></div>
+                <div className="mt-[3rem]">
+                    <div>
+                        {listdata &&
+                            listdata.map((item, index) => (
+                                <div className="mb-[1rem]">
+                                    <ItemCard key={index} productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                </div>
+                            ))}
+                    </div>
+                </div>
             </Body>
+            <Navbar />
         </Container>
     );
 }

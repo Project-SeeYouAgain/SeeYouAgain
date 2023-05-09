@@ -1,17 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
-
-function getCookie(name: string) {
-    const cookie = document.cookie;
-
-    const matches = cookie.match(new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
-            // const token = getCookie('accessToken');
-            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjgzNjA5MjY5LCJleHAiOjE2ODM2OTU2Njl9.MfNtTxez3-0IRh6i0lz6aH4xZkN4u3CgGm7TPsiOjYI';
+            // const token = useRecoilValue(userState).accessToken;
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2IiwiaWF0IjoxNjgzNjMwNDEzLCJleHAiOjE2ODM3MTY4MTN9.vXIgSho22yO2I6xl8rBkPfTNc6lI5WZSetUnwn9sCpA';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },

@@ -10,7 +10,7 @@ public interface ChannelService {
 
     List<ChannelResponseDto> getChannelList(Long userId, String type);
 
-    void createChannel(Long userId, ChannelRequestDto requestDto);
+    String createChannel(Long userId, ChannelRequestDto requestDto);
 
     ChannelDetailResponseDto getChannelDetail(Long userId, String identifier);
 }

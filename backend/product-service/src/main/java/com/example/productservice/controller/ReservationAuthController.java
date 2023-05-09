@@ -3,6 +3,7 @@ package com.example.productservice.controller;
 import com.example.productservice.dto.BaseResponseDto;
 import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.request.ReservationReturnRequestDto;
+import com.example.productservice.dto.response.ReservationListResponseDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 import com.example.productservice.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class ReservationController {
+public class ReservationAuthController {
 
     private final ReservationService reservationService;
 
@@ -91,6 +92,13 @@ public class ReservationController {
                         reservationService.myProductList(getUserId(request), state)));
     }
 
+    @GetMapping("/reservation/list/{productId}")
+    public ResponseEntity<BaseResponseDto<List<ReservationListResponseDto>>> getReservation(@PathVariable("productId")
+                                                                                           Long productId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success",
+                        reservationService.getReservation(productId)));
+    }
 
     public Long getUserId(HttpServletRequest request) {
         return Long.parseLong(request.getHeader("userId"));

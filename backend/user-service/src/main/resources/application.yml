@@ -16,7 +16,7 @@ spring:
     url: jdbc:mysql://k8c101.p.ssafy.io:3307/seeyouagain?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: seeyouagain1234
-#    password: ssafy
+#    password: kp23156385@
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql

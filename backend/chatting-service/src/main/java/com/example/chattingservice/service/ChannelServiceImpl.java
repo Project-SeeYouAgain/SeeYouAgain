@@ -82,13 +82,15 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     @Transactional
-    public void createChannel(Long userId, ChannelRequestDto requestDto) {
+    public String createChannel(Long userId, ChannelRequestDto requestDto) {
         Optional<Channel> findChannel = channelRepository.findByOwnerIdAndUserId(requestDto.getOwnerId(), userId);
 
-        if (findChannel.isEmpty()) saveChannelInfo(userId, requestDto);
+        if (findChannel.isEmpty()) return saveChannelInfo(userId, requestDto);
+
+        return findChannel.get().getIdentifier();
     }
 
-    private void saveChannelInfo(Long userId, ChannelRequestDto requestDto) {
+    private String saveChannelInfo(Long userId, ChannelRequestDto requestDto) {
         UserClientResponseDto myUserInfo = userServiceClient.getUserInfo(userId).getData();
         UserClientResponseDto ownerUserInfo = userServiceClient.getUserInfo(requestDto.getOwnerId()).getData();
         ProductClientResponseDto productInfo = productServiceClient.getProductInfo(requestDto.getProductId()).getData();
@@ -101,6 +103,8 @@ public class ChannelServiceImpl implements ChannelService {
 
         Participant you = Participant.of(channel, requestDto.getOwnerId(), ownerUserInfo, false);
         participantRepository.save(you);
+
+        return channel.getIdentifier();
     }
 
     private static Channel getChannel(Long userId, ChannelRequestDto requestDto, ProductClientResponseDto productInfo) {
