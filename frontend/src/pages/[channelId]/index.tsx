@@ -13,6 +13,7 @@ import Menu from '../../components/Card/Menu';
 import Square from '../../components/Button/Square';
 import { AiOutlineHeart, AiFillHeart, AiOutlineConsoleSql } from 'react-icons/ai';
 import Calender from '../../components/Card/Calender';
+import KakaoMapMini from '../../components/Location/KakaoMapMini';
 
 interface ProductData {
     title: string;
@@ -31,6 +32,8 @@ interface ProductData {
     score: number;
     mannerScore: number;
     // isCart: boolean;
+    lng: number;
+    lat: number;
 }
 
 function Detail() {
@@ -40,7 +43,6 @@ function Detail() {
         const url = `/product-service/auth${productId}`;
         axBase({ url })
             .then(res => {
-                console.log(res.data.data);
                 setData(res.data.data);
             })
             .catch(err => console.log(err));
@@ -86,16 +88,16 @@ function Detail() {
                         </div>
                         <Menu onSelectMenu={SelectMenu} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
                         {menuState === 1 ? (
-                            <div>
+                            <div className="flex justify-center">
                                 <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
                             </div>
                         ) : menuState === 2 ? (
-                            <div>
-                                <div></div>
+                            <div className="flex justify-center w-[100%] h-[20rem]">
+                                <KakaoMapMini lat={data.lat} lng={data.lng} />
                             </div>
                         ) : (
                             <div>
-                                <div></div>
+                                <div>리뷰주세요</div>
                             </div>
                         )}
                     </div>

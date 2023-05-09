@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { subDays, addDays } from 'date-fns';
+// import 'react-datepicker/dist/react-datepicker.css';
+import styles from './Calender.module.css';
+import { subDays } from 'date-fns';
 
 interface ReservationPeriod {
     startDate: string;
@@ -19,15 +20,7 @@ interface CustomDatePickerProps {
 }
 
 function CustomDatePicker({ reservationPeriods, availablePeriod }: CustomDatePickerProps) {
-    const isReserved = (date: Date): boolean => {
-        return reservationPeriods.some(period => new Date(period.startDate) <= date && date <= new Date(period.endDate));
-    };
-
-    const isAvailable = (date: Date): boolean => {
-        return new Date(availablePeriod.startDate) <= date && date <= new Date(availablePeriod.endDate);
-    };
-
-    const [startDate, setStartDate] = useState(null);
+    const [selectDate, setSelectDate] = useState<Date | null>(null);
 
     const minday = () => {
         return new Date(availablePeriod.startDate) <= new Date() ? new Date(availablePeriod.startDate) : new Date();
@@ -42,18 +35,20 @@ function CustomDatePicker({ reservationPeriods, availablePeriod }: CustomDatePic
         end: new Date(period.endDate),
     }));
 
+    const isReservationDay = (date: Date) => {
+        return reservationdays.some(period => date >= subDays(new Date(period.start), 1) && date <= period.end);
+    };
+
     return (
         <DatePicker
-            onChange={() => setStartDate(null)}
-            onSelect={() => {
-                null;
-            }}
-            excludeDateIntervals={reservationdays}
+            onChange={day => setSelectDate(day)}
+            selected={selectDate}
             minDate={new Date(minday())}
             maxDate={new Date(maxday())}
             readOnly
-            inline
             disabled
+            inline
+            dayClassName={date => (date <= subDays(minday(), 1) || date >= maxday() || isReservationDay(date) ? styles.dayDisabled : styles.day)}
         />
     );
 }
