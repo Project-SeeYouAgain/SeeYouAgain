@@ -4,8 +4,10 @@ import Button from '../Button';
 import { SlOptions } from 'react-icons/sl';
 import shield from '../../assets/icons/safezone.png';
 import ItemCardOption from '../CardOption/ItemCardOption';
+import { axAuth } from '@/apis/axiosinstance';
 
 interface dataProps {
+    productId?: number;
     productImg: string;
     title: string;
     location: string;
@@ -17,7 +19,7 @@ interface dataProps {
     menuState?: number;
 }
 
-function ItemCard({ productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState }: dataProps) {
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>(false);
     if (isCart !== undefined) {
@@ -31,6 +33,17 @@ function ItemCard({ productImg, title, location, price, startDate, endDate, isSa
     useEffect(() => {
         setUrl(window.location.pathname);
     }, []);
+
+    // 찜하기 axios
+    useEffect(() => {
+        const product_id = productId;
+        axAuth({
+            method: 'post',
+            url: `/product-service/auth/cart/${product_id}`,
+        })
+            .then(res => {}) // 잘 들어갔는지 확인
+            .catch(err => console.log(err)); // 어떤 오류인지 확인)
+    });
 
     return (
         <div className="w-[100%]">
