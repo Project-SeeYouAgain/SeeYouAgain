@@ -41,7 +41,8 @@ function Channel() {
     const client = useRef<Client | null>(null);
 
     const connect = () => {
-        const socket = new SockJS('http://localhost:8000/chatting-service/ws');
+        const socket = new SockJS('http://k8c101.p.ssafy.io:8000/chatting-service/ws');
+        // const socket = new SockJS('http://localhost:8000/chatting-service/ws');
 
         client.current = new Client({
             webSocketFactory: () => socket,
