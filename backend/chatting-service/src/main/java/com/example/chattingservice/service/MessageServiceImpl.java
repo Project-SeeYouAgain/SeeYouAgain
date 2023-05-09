@@ -42,13 +42,14 @@ public class MessageServiceImpl implements MessageService{
     }
 
     private boolean getIsOut(Participant participant, Channel channel) {
+        Participant you;
         if (channel.getOwnerId().equals(participant.getUserId())) {
-            Participant you = participantRepository.findByUserId(channel.getUserId())
+            you = participantRepository.findByUserId(channel.getUserId())
                     .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
-            return you.getIsOut();
+        } else {
+            you = participantRepository.findByUserId(channel.getOwnerId())
+                    .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
         }
-        Participant you = participantRepository.findByUserId(channel.getOwnerId())
-                .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
         return you.getIsOut();
     }
 
