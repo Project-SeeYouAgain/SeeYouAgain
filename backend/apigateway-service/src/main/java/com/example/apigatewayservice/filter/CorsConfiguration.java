@@ -31,8 +31,9 @@ public class CorsConfiguration {
                 HttpHeaders headers = response.getHeaders();
 
                 if (origin.startsWith("http://localhost:3000")
+                        || origin.startsWith("https://localhost:3000")
                         || origin.startsWith("http://k8c101.p.ssafy.io")
-                        || origin.startsWith("http://k8c101.p.ssafy.io")) {
+                        || origin.startsWith("https://k8c101.p.ssafy.io")) {
                     if (!request.getPath().toString().equals("/chatting-service/ws/info")) {
                         headers.add("Access-Control-Allow-Origin", origin);
                         headers.setAccessControlAllowCredentials(true);
