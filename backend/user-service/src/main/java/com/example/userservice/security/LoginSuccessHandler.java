@@ -66,7 +66,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private String makeRedirectUrl() {
-        return UriComponentsBuilder.fromUriString("http://k8c101.p.ssafy.io:3000/home")
+        return UriComponentsBuilder.fromUriString("https://k8c101.p.ssafy.io/home")
                 .build().toUriString();
     }
 }
