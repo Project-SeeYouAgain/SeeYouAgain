@@ -70,7 +70,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 2,
+                writerId: 4,
                 chat: chat,
             }),
         });
@@ -188,7 +188,7 @@ function Channel() {
                     .reverse()
                     .map(
                         (chatData, index): React.ReactNode => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={2} isRead={chatData.isRead} />
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={4} isRead={chatData.isRead} />
                         ),
                     )}
             </div>
