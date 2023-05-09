@@ -11,7 +11,7 @@ export const interceptors = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
         config => {
             // const token = getCookie('accessToken');
-            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjgzNjA5MjY5LCJleHAiOjE2ODM2OTU2Njl9.MfNtTxez3-0IRh6i0lz6aH4xZkN4u3CgGm7TPsiOjYI';
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzNjE1NTc4LCJleHAiOjE2ODM3MDE5Nzh9.XIBrzNfYdlPEaBxOo4U56eynItOQ-HotTUTkFQRzvFs';
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },

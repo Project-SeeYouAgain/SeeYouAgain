@@ -3,17 +3,37 @@ import { Cookies } from 'react-cookie';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+
 import { axAuth } from '@/apis/axiosinstance';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import MainHeader from '@/components/Container/components/MainHeader';
-
+import ItemCard from '@/components/Card/ItemCard';
+import Navbar from '@/components/Container/components/Navbar';
+interface dataProps {
+    thumbnailUrl: string;
+    title: string;
+    location: string;
+    price: number;
+    startDate?: string;
+    endDate?: string;
+    isSafe?: boolean;
+    isCart?: boolean;
+    productId: number;
+    menuState?: number;
+}
 function Home() {
     const cookie = new Cookies();
     const router = useRouter();
+    // 이용자 로그인 여부 및 로그인
     const [userData, setUserData] = useRecoilState<UserState>(userState);
-    const [data, setData] = useState();
     const user = useRecoilValue(userState);
+    // 물품리스트 불러오기
+    const [listdata, setListData] = useState<dataProps[]>();
+    // 찜하기
+    const [like, setLike] = useState<boolean>(false);
+
     useEffect(() => {
         const accessToken = getCookie('accessToken');
         const nickname = getCookie('nickname');
@@ -26,9 +46,7 @@ function Home() {
         if (nickname !== undefined) {
             setUserData(prev => ({ ...prev, nickname }));
         }
-        // const productSearchCondition = {
-        //     sort: 0,
-        // };
+
         axAuth({
             method: 'post',
             url: '/product-service/auth/productlist',
@@ -37,8 +55,8 @@ function Home() {
             },
         })
             .then(res => {
-                console.log(res);
-                // setData(res.data.data);
+                console.log(res.data.data);
+                setListData(res.data.data);
             })
             .catch(err => console.log(err));
     }, []);
@@ -66,8 +84,18 @@ function Home() {
                     <div></div>
                 </div>
                 {/* 제품 목록 */}
-                <div></div>
+                <div className="mt-[3rem]">
+                    <div>
+                        {listdata &&
+                            listdata.map(item => (
+                                <div className="mb-[1rem]">
+                                    <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                </div>
+                            ))}
+                    </div>
+                </div>
             </Body>
+            <Navbar />
         </Container>
     );
 }
