@@ -35,13 +35,13 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }, []);
 
     // 찜하기 axios
-    useEffect(() => {
-        const product_id = productId;
-        axAuth({
-            method: 'post',
-            url: `/product-service/auth/cart/${product_id}`,
-        })
-    });
+    // useEffect(() => {
+    //     const product_id = productId;
+    //     axAuth({
+    //         method: 'post',
+    //         url: `/product-service/auth/cart/${product_id}`,
+    //     })
+    // });
 
     return (
         <div className="w-[100%]">
