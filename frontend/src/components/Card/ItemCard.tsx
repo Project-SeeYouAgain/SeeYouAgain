@@ -41,8 +41,6 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
             method: 'post',
             url: `/product-service/auth/cart/${product_id}`,
         })
-            .then(res => {}) // 잘 들어갔는지 확인
-            .catch(err => console.log(err)); // 어떤 오류인지 확인)
     });
 
     return (
