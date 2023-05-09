@@ -11,6 +11,7 @@ function Calender({ onChange }: CalenderProps) {
     const [endDate, setEndDate] = useState<Date | null>(null);
 
     function handleDateChange(update: [Date, Date]) {
+        
         setStartDate(update[0]);
         setEndDate(update[1]);
         if (onChange) {
@@ -20,15 +21,15 @@ function Calender({ onChange }: CalenderProps) {
 
     return (
         <div>
-            <DatePicker locale={ko} inline={true} startDate={startDate} endDate={endDate} selectsRange onChange={handleDateChange} />
+            <DatePicker locale={ko} inline={true} dateFormat="yyyy-MM-dd" startDate={startDate} endDate={endDate} selectsRange onChange={handleDateChange} />
             <div className="mt-[.5rem] mb-4 px-2 py-1 text-center bg-lightgrey rounded-[.3rem]">
                 {startDate && endDate ? (
                     <div className="grid grid-cols-2 ">
                         <p>
-                            <span className="text-blue font-bold ">시작일</span> {format(startDate, 'yyyy.MM.dd', { locale: ko })}
+                            <span className="text-blue font-bold ">시작일</span> {format(startDate, 'yyyy-MM-dd', { locale: ko })}
                         </p>
                         <p>
-                            <span className="text-blue font-bold">종료일</span> {format(endDate, 'yyyy.MM.dd', { locale: ko })}
+                            <span className="text-blue font-bold">종료일</span> {format(endDate, 'yyyy-MM-dd', { locale: ko })}
                         </p>
                     </div>
                 ) : (
