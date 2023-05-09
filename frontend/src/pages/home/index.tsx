@@ -64,9 +64,9 @@ function Home() {
                 <div className="mt-[3rem]">
                     <div>
                         {listdata &&
-                            listdata.map(item => (
+                            listdata.map((item, index) => (
                                 <div className="mb-[1rem]">
-                                    <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                    <ItemCard key={index} productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
                                 </div>
                             ))}
                     </div>
