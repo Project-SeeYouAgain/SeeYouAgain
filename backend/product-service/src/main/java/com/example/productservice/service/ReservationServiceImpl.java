@@ -2,6 +2,7 @@ package com.example.productservice.service;
 
 import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.request.ReservationReturnRequestDto;
+import com.example.productservice.dto.response.ReservationListResponseDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 import com.example.productservice.entity.*;
 import com.example.productservice.exception.ApiException;
@@ -131,6 +132,15 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.delete(reservation);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReservationListResponseDto> getReservation(Long productId) {
+        List<Reservation> reservationList = reservationRepository.findAllByProductId(productId);
+
+        return reservationList.stream().map((r)-> ReservationListResponseDto.from(r)).collect(toList());
+
+    }
+
     /**
      * explain : 대여 받은 내역 조회
      */
@@ -198,5 +208,5 @@ public class ReservationServiceImpl implements ReservationService {
             if (cart.isPresent()) isCart = true;
             return ReservationResponseDto.of(r, product, ReviewScoreAverage, productImg, isCart);
         }).collect(toList());
-    }  
+    }
 }
