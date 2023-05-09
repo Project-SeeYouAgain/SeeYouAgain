@@ -39,11 +39,11 @@ public class ChannelController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponseDto<Void>> createChannel(HttpServletRequest request,
+    public ResponseEntity<BaseResponseDto<String>> createChannel(HttpServletRequest request,
                                                                @RequestBody ChannelRequestDto requestDto) {
-        channelService.createChannel(getUserId(request), requestDto);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new BaseResponseDto<>(201, "success"));
+                .body(new BaseResponseDto<>(201, "success", channelService.createChannel(getUserId(request), requestDto)));
     }
 
     @GetMapping({"/chat/{identifier}", "/chat/{identifier}/{firstMessageId}"})
