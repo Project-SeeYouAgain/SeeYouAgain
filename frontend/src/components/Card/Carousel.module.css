@@ -1,0 +1,23 @@
+.imageGradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 10%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0.6) 60%, rgb(255, 255, 255, 1) 100%);
+    z-index: 1;
+}
+
+.backgroundBlack {
+    background-color: black;
+    opacity: 0.4;
+    position: absolute;
+    bottom: -25px;
+    width: 100vw;
+    height: 35px;
+    z-index: 0;
+}
+
+.sliderContainer {
+    z-index: 1;
+}

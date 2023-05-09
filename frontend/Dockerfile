@@ -20,3 +20,5 @@ EXPOSE 3000
 
 # Start the app 이거는 docker run이 될때 이 명령어가 불리는거임
 CMD ["npm", "run", "dev"]
+
+# test

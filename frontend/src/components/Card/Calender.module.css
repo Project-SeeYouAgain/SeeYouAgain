@@ -1,0 +1,10 @@
+.day {
+    background-color: white !important;
+    color: black !important;
+    cursor: default !important;
+}
+.dayDisabled {
+    background-color: white !important;
+    color: #ccc !important;
+    cursor: default !important;
+}
