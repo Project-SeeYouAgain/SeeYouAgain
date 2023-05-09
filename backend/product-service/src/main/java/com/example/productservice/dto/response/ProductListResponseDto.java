@@ -34,8 +34,7 @@ public class ProductListResponseDto {
     public static ProductListResponseDto of(Product product,
                                             double score,
                                             String productImg,
-                                            boolean isCart
-                                            ) {
+                                            boolean isCart) {
         return ProductListResponseDto.builder()
                 .productId(product.getId())
                 .title(product.getTitle())
