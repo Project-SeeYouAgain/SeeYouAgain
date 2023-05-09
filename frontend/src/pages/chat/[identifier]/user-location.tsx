@@ -4,6 +4,7 @@ import KakaoMap from '@/components/Location/KakaoMap';
 import findMap from '@/images/findmap.gif';
 import Image from 'next/image';
 import styles from './userLocation.module.scss';
+import { axAuth } from '@/apis/axiosinstance';
 
 const UserLocation: React.FC = () => {
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
@@ -16,8 +17,17 @@ const UserLocation: React.FC = () => {
     const clickPosition = () => {
         myCheck ? setMyCheck(false) : setMyCheck(true);
     };
+    const userId = 2;
     useEffect(() => {
         const getLocation = () => {
+            axAuth({
+                method: 'get',
+                url: `/user-service/auth/location/${userId}`,
+            })
+                .then((res: any) => {
+                    console.log(res);
+                }) // 잘 들어갔는지 확인
+                .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
             let watchId: number | null = null;
 
             if (navigator.geolocation) {
@@ -28,6 +38,18 @@ const UserLocation: React.FC = () => {
                 watchId = navigator.geolocation.watchPosition(
                     position => {
                         setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                        if (position) {
+                            const data = { lat: position.coords.latitude, lng: position.coords.longitude };
+                            axAuth({
+                                method: 'post',
+                                url: '/user-service/auth/location',
+                                data: data,
+                            })
+                                .then((res: any) => {
+                                    console.log(res);
+                                }) // 잘 들어갔는지 확인
+                                .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
+                        }
                     },
                     error => {
                         console.error('Error getting position:', error);

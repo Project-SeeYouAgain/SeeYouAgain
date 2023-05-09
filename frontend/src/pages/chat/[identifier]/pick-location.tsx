@@ -5,14 +5,20 @@ import pin from '@/images/location-pin.png';
 import Image from 'next/image';
 import styles from './userLocation.module.scss';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
 
 const UserLocation: React.FC = () => {
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
-    const userLocation = { lat: 35.1548, lng: 126.8792 };
+    const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({ lat: 35.149409, lng: 126.914957 });
+    const [lng, setLng] = useState<number>(0);
+    const [lat, setLat] = useState<number>(0);
+    const [score, setScore] = useState<number>(0);
 
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
+    const router = useRouter();
+    const { identifier } = router.query;
     const [myCheck, setMyCheck] = useState(true);
     const clickPosition = () => {
         console.log(lat, lng, score);
@@ -29,6 +35,8 @@ const UserLocation: React.FC = () => {
             }).then(result => {
                 if (result.isConfirmed) {
                     // 확인 버튼 클릭 시 처리할 로직
+                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                    router.push(`/chat/${identifier}/book`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }
@@ -45,7 +53,8 @@ const UserLocation: React.FC = () => {
                 cancelButtonText: '취소',
             }).then(result => {
                 if (result.isConfirmed) {
-                    // 확인 버튼 클릭 시 처리할 로직
+                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                    router.push(`/chat/${identifier}/book`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }
@@ -62,7 +71,8 @@ const UserLocation: React.FC = () => {
                 cancelButtonText: '취소',
             }).then(result => {
                 if (result.isConfirmed) {
-                    // 확인 버튼 클릭 시 처리할 로직
+                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                    router.push(`/chat/${identifier}/book`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }
@@ -79,16 +89,51 @@ const UserLocation: React.FC = () => {
                 cancelButtonText: '취소',
             }).then(result => {
                 if (result.isConfirmed) {
-                    // 확인 버튼 클릭 시 처리할 로직
+                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                    router.push(`/chat/${identifier}/book`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }
             });
         }
     };
-    const [lng, setLng] = useState<number>(0);
-    const [lat, setLat] = useState<number>(0);
-    const [score, setScore] = useState<number>(0);
+
+    useEffect(() => {
+        const getLocation = () => {
+            let watchId: number | null = null;
+
+            if (navigator.geolocation) {
+                const options = {
+                    maximumAge: 0,
+                };
+
+                watchId = navigator.geolocation.watchPosition(
+                    position => {
+                        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    },
+                    error => {
+                        console.error('Error getting position:', error);
+                    },
+                    options,
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+
+            return () => {
+                if (watchId !== null) {
+                    navigator.geolocation.clearWatch(watchId);
+                }
+            };
+        };
+
+        getLocation();
+        const intervalId = setInterval(getLocation, 10000); // 10 seconds
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
     const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
 
@@ -129,15 +174,17 @@ const UserLocation: React.FC = () => {
                         </div>
                     )}
                     <div id="map" className="w-full h-[85vh] relative">
-                        <KakaoMap
-                            lat={userLocation.lat}
-                            lng={userLocation.lng}
-                            onCenter={(lat, lng, score) => {
-                                setLat(lat);
-                                setLng(lng);
-                                setScore(score);
-                            }}
-                        />
+                        {userLocation && (
+                            <KakaoMap
+                                lat={userLocation.lat}
+                                lng={userLocation.lng}
+                                onCenter={(lat, lng, score) => {
+                                    setLat(lat);
+                                    setLng(lng);
+                                    setScore(score);
+                                }}
+                            />
+                        )}
                         <div className="absolute bottom-10 z-10 w-full">
                             <button className="w-2/3 h-12 m-auto block rounded-xl text-center text-white text-xl  bg-blue" onClick={clickPosition}>
                                 장소 확정
