@@ -3,10 +3,6 @@ package com.example.productservice.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.List;
 
