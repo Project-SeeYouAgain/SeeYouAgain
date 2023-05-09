@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import Body from './components/Body';
 import Navbar from './components/Navbar';
 import CloseHeader from './components/CloseHeader';
+import MainHeader from './components/MainHeader';
 
 interface ContainerProps {
     children: ReactNode;
@@ -19,5 +20,6 @@ function Container({ children, className }: ContainerProps) {
 Container.Body = Body;
 Container.Navbar = Navbar;
 Container.CloseHeader = CloseHeader;
+Container.MainHeader = MainHeader;
 
 export default Container;
