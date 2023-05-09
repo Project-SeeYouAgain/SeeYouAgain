@@ -7,8 +7,6 @@ import Image from 'next/image';
 import ChatBox from '@/components/ChatBox';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { IoMdSend } from 'react-icons/io';
-import { VariableSizeList as VList } from 'react-window';
-import InfiniteLoader from 'react-window-infinite-loader';
 import Button from '@/components/Button';
 
 interface ChatData {
@@ -16,6 +14,7 @@ interface ChatData {
     writerId: number;
     profileImg: string;
     chat: string;
+    isRead: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -37,12 +36,9 @@ function Channel() {
     const [chat, setChat] = useState<string>('');
     const [firstMessageId, setFirstMessageId] = useState<number>();
     const [channelInfo, setChannelInfo] = useState<ChannelInfo>();
-    const lastMessageRef = useRef<VList | null>(null);
 
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
-
-    const [windowHeight, setWindowHeight] = useState<number>(0);
 
     const connect = () => {
         const socket = new SockJS('http://localhost:8000/chatting-service/ws');
@@ -83,10 +79,16 @@ function Channel() {
     };
 
     const disconnect = () => {
+        let lastReadMessageId = 0;
+
+        if (chatList.length > 0) {
+            lastReadMessageId = chatList[0].messageId;
+        }
+
         axAuth({
-            url: `/chatting-service/auth/participant/out/${identifier}`,
+            url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
             method: 'patch',
-        })
+        });
         // .then(res => {});
 
         client.current?.deactivate();
@@ -117,10 +119,10 @@ function Channel() {
         axAuth({
             url: api,
         }).then(res => {
-            if (res.data.data && res.data.data.length > 0) {
+            if (res.data.data.length > 0) {
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
-                setFirstMessageId(messageList.at(-1).messageId);
+                setFirstMessageId(messageList[messageList.length - 1].messageId);
             }
         });
     };
@@ -133,36 +135,11 @@ function Channel() {
         });
     };
 
-    const scrollToBottom = () => {
-        if (lastMessageRef.current) {
-            lastMessageRef.current.scrollToItem(chatList.length - 1, 'end');
-        }
-    };
-
-    const isItemLoaded = (index: number, chatList: ChatData[]) => index !== 0 && index < chatList.length;
-
-    const loadMoreItems = (startIndex: number, endIndex: number, getMessage: () => void, chatList: ChatData[]) => {
-        if (startIndex === 0 && chatList.length >= 30) {
-            getMessage();
-        }
-        return Promise.resolve();
-    };
-
-    const ItemRenderer = ({ index, style, chatList }: { index: number; style: React.CSSProperties; chatList: ChatData[] }) => {
-        const reversedIndex = chatList.length - index - 1;
-        const chatData = chatList[reversedIndex];
-        return (
-            <div style={style} key={index}>
-                <ChatBox chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={1} />
-            </div>
-        );
-    };
-
     const saveReadMessageSize = () => {
         axAuth({
             url: `/chatting-service/auth/participant/in/${identifier}`,
             method: 'patch',
-        })
+        });
         // .then(res => {});
     };
 
@@ -176,20 +153,6 @@ function Channel() {
 
         return () => disconnect();
     }, [router.isReady]);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowHeight(window.innerHeight);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [chatList]);
 
     return (
         <div className="relative pt-48">
@@ -219,18 +182,15 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-10" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'scroll' }}>
-                <InfiniteLoader
-                    isItemLoaded={index => isItemLoaded(index, chatList)}
-                    itemCount={chatList.length + 1}
-                    loadMoreItems={(startIndex, endIndex) => loadMoreItems(startIndex, endIndex, getMessage, chatList)}
-                >
-                    {({ onItemsRendered }) => (
-                        <VList ref={lastMessageRef} itemCount={chatList.length} itemSize={index => 50} onItemsRendered={onItemsRendered} width="100%" height={windowHeight - 250} layout="vertical">
-                            {({ index, style }) => <ItemRenderer index={index} style={style} chatList={chatList} />}
-                        </VList>
+            <div className="chat-list mx-5 pb-16">
+                {chatList
+                    .slice()
+                    .reverse()
+                    .map(
+                        (chatData, index): React.ReactNode => (
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={2} isRead={chatData.isRead} />
+                        ),
                     )}
-                </InfiniteLoader>
             </div>
 
             <div className="fixed inset-x-0 bottom-0 bg-white">

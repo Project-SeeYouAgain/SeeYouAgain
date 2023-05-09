@@ -6,6 +6,7 @@ interface KakaoMapProps {
     lat: number;
     lng: number;
     onCenterChanged?: (lat: number, lng: number) => void;
+    onCenter?: (lat: number, lng: number, score: number) => void;
 }
 
 interface SafetyGrid {
@@ -14,11 +15,11 @@ interface SafetyGrid {
     score: number;
 }
 
-const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
+const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter }) => {
     const [map, setMap] = useState<any>(null);
-    const [myCheck, setMyCheck] = useState(true);
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
     const [visitedAreas, setVisitedAreas] = useState<string[]>([]);
+    const [data, setData] = useState<Array<{ lat: number; lng: number; score: number }> | []>([]);
 
     useEffect(() => {
         const container = document.getElementById('map');
@@ -35,29 +36,15 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
     }, [lat, lng]);
 
     const safetyScoreToColor = (score: number) => {
-        if (score >= 18) {
+        if (score >= 7.5) {
             return '#008000'; // dark green
-        } else if (score >= 16) {
-            return '#00b300'; // dark green
-        } else if (score >= 14) {
+        } else if (score >= 5) {
             return '#00e600'; // green
-        } else if (score >= 12) {
-            return '#00ff00'; // lime green
-        } else if (score >= 10) {
-            return '#33ff33'; // neon green
-        } else if (score >= 8) {
+        } else if (score >= 2.5) {
             return '#66ff66'; // light green
-        } else if (score >= 6) {
-            return '#99ff99'; // pale green
-        } else if (score >= 4) {
-            return '#ccffcc'; // very pale green
         } else {
             return 'transparent'; // transparent
         }
-    };
-
-    const clickPosition = () => {
-        setMyCheck(!myCheck);
     };
 
     const createSafetyRectangle = (lat: number, lng: number, color: string) => {
@@ -102,7 +89,6 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
                 setVisitedAreas(prevVisitedAreas => [...prevVisitedAreas, id]); // 방문한 곳으로 추가
 
                 try {
-                    console.log(lat_index, lng_index);
                     const response = await fetch(`/output/grid_scores_${lat_index}_${lng_index}.json`);
                     const data = await response.json();
                     visibleSafetyData.push(...data);
@@ -142,6 +128,44 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
         });
     };
 
+    const getCenterSafetyScore = async (center: kakao.maps.LatLng) => {
+        const min_lat = 35.09;
+        const max_lat = 35.25;
+        const min_lng = 126.66;
+        const max_lng = 126.99;
+
+        const lat_splits = 72;
+        const lng_splits = 145;
+        const lat_step = (max_lat - min_lat) / lat_splits;
+        const lng_step = (max_lng - min_lng) / lng_splits;
+
+        const lat_index = Math.floor((center.getLat() - min_lat) / lat_step) + 1;
+        const lng_index = Math.floor((center.getLng() - min_lng) / lng_step) + 1;
+
+        try {
+            const response = await fetch(`/output/grid_scores_${lat_index}_${lng_index}.json`);
+            const data = await response.json();
+
+            // center가 포함되어 있는 사각형의 점수를 찾음
+            const rectangle = data.find((item: SafetyGrid) => {
+                const latDiff = Math.abs(center.getLat() - item.lat);
+                const lngDiff = Math.abs(center.getLng() - item.lng);
+                const gridInterval = 0.0005; // 사각형의 한 변 길이
+
+                return latDiff < gridInterval / 2 && lngDiff < gridInterval / 2;
+            });
+
+            if (rectangle) {
+                return rectangle.score;
+            }
+        } catch (error) {
+            console.error('Failed to load JSON file:', error);
+        }
+
+        // 데이터를 찾을 수 없을 경우 기본값인 0을 반환
+        return 0;
+    };
+
     useEffect(() => {
         drawVisibleSafetyRectangles();
     }, [map]);
@@ -150,23 +174,28 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
         const handleBoundsChanged = () => {
             drawVisibleSafetyRectangles();
         };
-        const handleDragEnd = () => {
+        const handleDragEnd = async () => {
             drawVisibleSafetyRectangles();
+            kakao.maps.event.addListener(map, 'bounds_changed', handleBoundsChanged);
+            const center = map.getCenter();
+            const newLat = center.getLat();
+            const newLng = center.getLng();
+
+            if (onCenterChanged) {
+                onCenterChanged(newLat, newLng);
+            }
+            const centerScore = await getCenterSafetyScore(center);
+            if (onCenter) {
+                onCenter(newLat, newLng, centerScore);
+            }
+
+            // do something with the data
         };
         if (map) {
             kakao.maps.event.addListener(map, 'dragstart', () => {
                 kakao.maps.event.removeListener(map, 'bounds_changed', handleBoundsChanged);
             });
-            kakao.maps.event.addListener(map, 'dragend', () => {
-                drawVisibleSafetyRectangles();
-                kakao.maps.event.addListener(map, 'bounds_changed', handleBoundsChanged);
-                const center = map.getCenter();
-                const newLat = center.getLat();
-                const newLng = center.getLng();
-                if (onCenterChanged) {
-                    onCenterChanged(newLat, newLng);
-                }
-            });
+            kakao.maps.event.addListener(map, 'dragend', handleDragEnd);
             kakao.maps.event.addListener(map, 'bounds_changed', handleBoundsChanged);
         }
 
@@ -180,11 +209,22 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }, onCenterChanged) => {
     }, [map, onCenterChanged]);
     return (
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <Image src={pin} alt="pins" className="absolute -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2 z-10" />
-            <div className="absolute bottom-10 w-full z-10" onClick={clickPosition}>
-                {myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-blue pt-2.5">출발할까요?</p>}
-                {!myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-gray-400 pt-2.5">이동중입니다</p>}
+            <div className=" absolute top-4 right-4 z-10 text-center px-3 py-2 text-[.9rem] bg-white/80 font-bold rounded">
+                <p className="px-1">안전지수</p>
+                <div className="flex text-xs">
+                    <div className="w-1/2 bg-[#66ff66] mr-1"></div>
+                    <span className="whitespace-nowrap w-1/2">1단계</span>
+                </div>
+                <div className="flex text-xs">
+                    <div className="w-1/2 bg-[#00e600] mr-1"></div>
+                    <span className="whitespace-nowrap w-1/2">2단계</span>
+                </div>
+                <div className="flex text-xs">
+                    <div className="w-1/2 bg-[#008000] mr-1"></div>
+                    <span className="whitespace-nowrap w-1/2">3단계</span>
+                </div>
             </div>
+            <Image src={pin} alt="pins" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full z-10" />
         </div>
     );
 };

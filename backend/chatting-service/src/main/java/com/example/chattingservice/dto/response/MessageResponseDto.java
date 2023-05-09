@@ -17,6 +17,7 @@ public class MessageResponseDto {
     private Long writerId;
     private String profileImg;
     private String chat;
+    private Boolean isRead;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
