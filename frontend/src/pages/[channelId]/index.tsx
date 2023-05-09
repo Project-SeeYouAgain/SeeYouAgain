@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { axBase } from '../../apis/axiosinstance';
+import { axBase, axAuth } from '../../apis/axiosinstance';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import Carousel from '../../components/Card/ImageCarousel';
@@ -14,13 +14,15 @@ import Square from '../../components/Button/Square';
 import { AiOutlineHeart, AiFillHeart, AiOutlineConsoleSql } from 'react-icons/ai';
 import Calender from '../../components/Card/Calender';
 import KakaoMapMini from '../../components/Location/KakaoMapMini';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface ProductData {
     title: string;
     price: number;
     location: string;
     category: string;
-    userId: number;
+    ownerId: number;
     nickname: string;
     productImgList: string[];
     description: string;
@@ -31,22 +33,45 @@ interface ProductData {
     isSafe: boolean;
     score: number;
     mannerScore: number;
-    // isCart: boolean;
+    isCart: boolean;
     lng: number;
     lat: number;
 }
 
 function Detail() {
+    const router = useRouter();
     const [data, setData] = useState<ProductData>();
+    const [isCart, setIsCart] = useState<boolean>(false);
+    const [chatRoomData, setChatRoomData] = useState();
+
     useEffect(() => {
         const productId = window.location.pathname;
         const url = `/product-service/auth${productId}`;
         axBase({ url })
             .then(res => {
+                console.log(res.data.data);
                 setData(res.data.data);
+                setIsCart(res.data.data.isCart);
             })
             .catch(err => console.log(err));
     }, []);
+
+    function GoChatRoom() {
+        const url = `/chatting-service/auth/channel`;
+        const productId = Number(window.location.pathname.substring(1));
+        if (data) {
+            console.log(data.ownerId);
+            const myData = {
+                productId: productId,
+                ownerId: data.ownerId,
+            };
+            axAuth({ method: 'post', url: url, data: myData })
+                .then(res => {
+                    router.push(`/chat/${res.data.data}`);
+                })
+                .catch(err => console.log(err));
+        }
+    }
 
     const [menuState, setMenuState] = useState<number>(1);
 
@@ -103,9 +128,9 @@ function Detail() {
                     </div>
                 </Body>
                 <footer className="fixed bottom-0 border-t-2 w-[100vw] h-[3rem] flex items-center justify-evenly bg-white">
-                    {/* {isCart === true ? <AiFillHeart color="blue" size={34} /> : <AiOutlineHeart color="blue" size={34} />} */}
+                    {data.isCart === true ? <AiFillHeart color="blue" size={34} /> : <AiOutlineHeart color="blue" size={34} />}
                     <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[2rem] py-[0.3rem] rounded-[0.5rem]" />
-                    <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[1rem] py-[0.3rem] rounded-[0.5rem] border-[#5669FF] border-2" />
+                    <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[1rem] py-[0.3rem] rounded-[0.5rem] border-[#5669FF] border-2" onClick={GoChatRoom} />
                 </footer>
             </Container>
         );

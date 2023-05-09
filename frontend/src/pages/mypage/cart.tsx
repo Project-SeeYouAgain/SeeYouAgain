@@ -5,17 +5,20 @@ import Header from '@/components/Container/components/Header';
 import { axBase } from '../../apis/axiosinstance';
 import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
+import Image from 'next/image';
+import noresult from '@/images/no-results.png';
 
 function Cart() {
     interface RentalItem {
-        productImg: string;
+        productId: number;
+        type: boolean;
+        // true가 빌려줘요
         title: string;
-        location: string;
         price: number;
-        startDate?: string;
-        endDate?: string;
-        isSafe?: boolean;
-        isCart?: boolean;
+        location: string;
+        score: number;
+        productImg: string;
+        isSafe: boolean;
     }
     const [itemList, setItemList] = useState<RentalItem[]>([]);
 
@@ -23,7 +26,7 @@ function Cart() {
         const url = `/product-service/auth/cart`;
         axBase({ url })
             .then(res => {
-                setItemList(res.data);
+                setItemList(res.data.data);
             })
             .catch(err => console.log(err));
     }, []);
@@ -33,20 +36,15 @@ function Cart() {
             <Header title="찜 목록"></Header>
             <Body>
                 <div className="border-b mt-[5rem]"></div>
-                {itemList.map((item, index) => (
-                    <Link key={index} href={''}>
-                        <Card
-                            productImg={item.productImg}
-                            title={item.title}
-                            location={item.location}
-                            price={item.price}
-                            startDate={item.startDate}
-                            endDate={item.endDate}
-                            isSafe={item.isSafe}
-                            isCart={item.isCart}
-                        />
-                    </Link>
-                ))}
+                {itemList.length === 0 ? (
+                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                ) : (
+                    itemList.map((item, index) => (
+                        <Link key={index} href={''}>
+                            <Card productImg={item.productImg} title={item.title} location={item.location} price={item.price} isSafe={item.isSafe} />
+                        </Link>
+                    ))
+                )}
             </Body>
         </Container>
     );

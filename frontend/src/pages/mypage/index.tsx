@@ -1,18 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Container/components/Header';
 import Profile from '../../components/Card/Profile';
 import { MenuData1, MenuData2 } from '../../data/MenuData';
 import Link from 'next/link';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
+import { axBase } from '@/apis/axiosinstance';
 
 function MyPage() {
+    interface profile {
+        profileImg: string;
+        nickname: string;
+        location: string;
+        description: string;
+        mannerScore: number;
+    }
+    const [profileData, setProfileData] = useState<profile | null>(null);
+    useEffect(() => {
+        const url = `/user-service/auth/profile`;
+        axBase({ url })
+            .then(res => {
+                console.log(res.data.data);
+                setProfileData(res.data.data);
+            })
+            .catch(err => console.log(err));
+    }, []);
+
     return (
         <Container>
             <div>
                 <Header title="마이페이지" />
                 <Body className="mt-[3rem]">
-                    <Profile />
+                    {profileData ? (
+                        <Profile
+                            profileImg={profileData.profileImg}
+                            nickname={profileData.nickname}
+                            location={profileData.location}
+                            description={profileData.description}
+                            mannerScore={profileData.mannerScore}
+                        />
+                    ) : null}
                     <div className="mt-[2.3rem]">
                         <div className="flex flex-col">
                             <span className="font-bold text-[20px]">나의 거래</span>
