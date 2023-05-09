@@ -45,7 +45,7 @@ public class CartServiceImpl implements CartService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
-        Cart cart = cartRepository.findByUserIdAndProduct(userId, product)
+        Cart cart = cartRepository.findByUserIdAndProductId(userId, product.getId())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.CART_NOT_EXIST_EXCEPTION));
 
         cartRepository.delete(cart);

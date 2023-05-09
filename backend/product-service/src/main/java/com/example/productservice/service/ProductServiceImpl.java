@@ -62,20 +62,29 @@ public class ProductServiceImpl implements ProductService {
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
-        Integer reviewCnt = reviewList.size();
+        int reviewCnt = reviewList.size();
 
         double totalScore = getReviewScoreAvg(reviewList);
 
         UserClientResponseDto userInfo = userServiceClient.getUserInfo(product.getOwnerId()).getData();
 
-        Optional<Cart> cart = cartRepository.findByUserIdAndProduct(userId, product);
+        Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, product.getId());
 
-        Boolean isCart = false;
-
-        if (cart.isPresent()) isCart = true;
+        boolean isCart = cart.isPresent();
 
         return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo,
                 isCart, reviewCnt);
+    }
+
+    private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
+        return reservationList.stream()
+                .map(r -> {
+                    HashMap<String, String> reservationMap = new HashMap<>();
+                    reservationMap.put("startDate", r.getStartDate().toString());
+                    reservationMap.put("endDate", r.getEndDate().toString());
+                    return reservationMap;
+                })
+                .collect(toList());
     }
 
     /**
@@ -176,6 +185,19 @@ public class ProductServiceImpl implements ProductService {
         return getProductResponse(productList, userId);
     }
 
+    private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {
+        return productList.stream().map(p -> {
+            double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
+            ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
+
+            Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, p.getId());
+
+            boolean isCart = cart.isPresent();
+
+            return ProductListResponseDto.of(p, productScoreAverage, productImg.getProductImg(), isCart);
+        }).collect(toList());
+    }
+
     private void saveProductImg(List<MultipartFile> productImg, Product product) {
         productImg.forEach(i -> {
             if (!i.isEmpty()) {
@@ -210,31 +232,4 @@ public class ProductServiceImpl implements ProductService {
         return (double) totalScore / reviewList.size();
     }
 
-    private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
-        return reservationList.stream()
-                .map(r -> {
-                    HashMap<String, String> reservationMap = new HashMap<>();
-                    reservationMap.put("startDate", r.getStartDate().toString());
-                    reservationMap.put("endDate", r.getEndDate().toString());
-                    return reservationMap;
-                })
-                .collect(toList());
-    }
-
-    private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {
-        return productList.stream().map(p -> {
-            double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
-            ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
-
-            Optional<Cart> cart = cartRepository.findByUserIdAndProduct(userId, p);
-
-            Boolean isCart = false;
-
-            if (cart.isPresent()) isCart = true;
-
-            return ProductListResponseDto.of(p, productScoreAverage, productImg.getProductImg(), isCart);
-
-
-        }).collect(toList());
-    }
 }

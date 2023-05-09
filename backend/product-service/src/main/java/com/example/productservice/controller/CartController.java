@@ -18,7 +18,6 @@ public class CartController {
 
     private final CartService cartService;
 
-
     @GetMapping
     public ResponseEntity<BaseResponseDto<List<CartResponseDto>>> getMyCart(HttpServletRequest request) {
 
