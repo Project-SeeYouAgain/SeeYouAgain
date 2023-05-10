@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
 import { useRouter } from 'next/router';
+import { recoilPersist } from 'recoil-persist';
 
 function Redirect() {
     const cookie = new Cookies();
