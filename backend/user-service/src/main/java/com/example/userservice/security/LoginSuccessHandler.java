@@ -91,7 +91,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private String makeRedirectUrl() {
-        return UriComponentsBuilder.fromUriString("https://localhost/redirect")
+        return UriComponentsBuilder.fromUriString("http://localhost:3000/redirect")
                 .build().toUriString();
     }
 }
