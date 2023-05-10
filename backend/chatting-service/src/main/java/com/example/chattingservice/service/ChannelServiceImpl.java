@@ -49,6 +49,7 @@ public class ChannelServiceImpl implements ChannelService {
                     .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
             int totalMessageSize = getTotalMessageSize(userId, c);
+            System.out.println(totalMessageSize);
 
             if (latestMessage.size() > 0) {
                 UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
@@ -70,7 +71,7 @@ public class ChannelServiceImpl implements ChannelService {
         }
 
         return messageRepository
-                .countMessageByParticipantUserIdAndChannelIdentifier(youId, channel.getIdentifier());
+                .findTotalMessage(youId, channel.getIdentifier()).size();
     }
 
     private UserClientResponseDto getUserClientResponseDto(String type, Channel c) {
