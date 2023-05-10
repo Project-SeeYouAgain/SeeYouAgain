@@ -229,7 +229,11 @@ public class ProductServiceImpl implements ProductService {
         for (Review review : reviewList) {
             totalScore += review.getReviewScore();
         }
-        return (double) totalScore / reviewList.size();
+
+        if (reviewList.size() > 0) {
+            return (double) totalScore / reviewList.size();
+        }
+        return 0;
     }
 
 }
