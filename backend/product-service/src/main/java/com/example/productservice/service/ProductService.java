@@ -22,4 +22,6 @@ public interface ProductService {
     void deleteProduct(Long userId, Long productId);
 
     List<ProductListResponseDto> getProductList(Long userId, ProductListRequestDto requestDto);
+
+    List<ProductListResponseDto> getProductListByKeyword(Long userId, ProductListRequestDto requestDto, String keyword);
 }
