@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class LocationResponseDto {
 
     private Long userId;
-    private double lat;
-    private double lng;
+    private Float lat;
+    private Float lng;
 
     public static LocationResponseDto from(Location location) {
         return LocationResponseDto.builder()
