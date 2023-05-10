@@ -35,7 +35,9 @@ function settings() {
         const formData = new FormData();
         formData.append('location', firstValue);
         formData.append('description', secondValue);
-        formData.append('profileImg', image);
+        if (image) {
+            formData.append('image', image);
+        }
         console.log(image);
         axAuth(token)({
             method: 'patch',
