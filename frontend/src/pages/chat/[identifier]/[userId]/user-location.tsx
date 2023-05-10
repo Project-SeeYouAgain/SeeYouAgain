@@ -11,16 +11,15 @@ import { useRouter } from 'next/router';
 
 const UserLocation: React.FC = () => {
     const router = useRouter();
-    const [userId, setUserId] = useState<any>(0);
+    const [userId, setUserId] = useState<any>('');
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
-        if (!router.isReady) return;
         console.log(router.query);
         setUserId(router.query.userId);
-    }, [router.isReady]);
+    }, []);
 
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
@@ -30,18 +29,10 @@ const UserLocation: React.FC = () => {
         myCheck ? setMyCheck(false) : setMyCheck(true);
     };
     useEffect(() => {
+        if (!router.isReady) return;
         const getLocation = () => {
             console.log(userId);
-            if (userId) {
-                axAuth(token)({
-                    method: 'get',
-                    url: `/user-service/auth/location/${userId}`,
-                })
-                    .then((res: any) => {
-                        console.log(res);
-                    }) // 잘 들어갔는지 확인
-                    .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
-            }
+
             let watchId: number | null = null;
 
             if (navigator.geolocation) {
@@ -58,6 +49,16 @@ const UserLocation: React.FC = () => {
                                 method: 'post',
                                 url: '/user-service/auth/location',
                                 data: data,
+                            })
+                                .then((res: any) => {
+                                    console.log(res);
+                                }) // 잘 들어갔는지 확인
+                                .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
+                        }
+                        if (router.query.userId) {
+                            axAuth(token)({
+                                method: 'get',
+                                url: `/user-service/auth/location/${router.query.userId}`,
                             })
                                 .then((res: any) => {
                                     console.log(res);
@@ -87,7 +88,7 @@ const UserLocation: React.FC = () => {
         return () => {
             clearInterval(intervalId);
         };
-    }, []);
+    }, [router.isReady]);
 
     const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
 
