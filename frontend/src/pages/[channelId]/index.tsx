@@ -122,8 +122,8 @@ function Detail() {
         return (
             <Container>
                 <Carousel imgUrl={data.productImgList}></Carousel>
-                <Body>
-                    <div className="mt-[2rem]">
+                <Body className="mb-[3rem]">
+                    <div className="mt-[35px]">
                         <div className="font-bold flex text-[1.3rem]">
                             {data.isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-[2rem] mr-[0.7rem]" /> : null}
                             {data.title}
@@ -136,7 +136,7 @@ function Detail() {
                             <DeclareButton bgColor="red" textColor="white" innerValue="신고" className="ml-[0.5rem]" />
                         </div>
                         <div className="mb-[0.5rem]">
-                            <span className="font-bold text-[1.3rem]">{data.price}원</span>
+                            <span className="font-bold text-[1.3rem]">{data.price.toLocaleString('ko-KR')}원</span>
                             <span>/일</span>
                         </div>
                         <div className="mb-[1.5rem]">
@@ -156,8 +156,10 @@ function Detail() {
                                 <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
                             </div>
                         ) : menuState === 2 ? (
-                            <div className="flex justify-center w-[100%] h-[20rem]">
-                                <KakaoMapMini lat={data.lat} lng={data.lng} />
+                            <div className="flex justify-center w-[100%] aspect-[4/3] relative">
+                                <div className="absolute w-[100%] aspect-[4/3] z-0">
+                                    <KakaoMapMini lat={data.lat} lng={data.lng} />
+                                </div>
                             </div>
                         ) : (
                             <div>

@@ -16,27 +16,61 @@ function ReviewList(propdata: dataprop) {
         reviewScore: number;
         createdAt: string;
         reviewImgUrl: string;
+        reviewId: number;
     }
     const [reviewList, setReviewList] = useState<reviewdata[]>([]);
     const [page, setPage] = useState<number>(1);
     const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
-        const url = `/product-service/auth/review/${propdata.productId}`;
+        let url = '';
+        if (page === 1) {
+            url = `/product-service/auth/review/${propdata.productId}`;
+        } else {
+            url = `/product-service/auth/review/${propdata.productId}/${reviewList[reviewList.length - 1].reviewId}`;
+        }
+
         axBase(token)({ url: url })
             .then(res => {
                 console.log(res.data.data);
                 setReviewList(res.data.data);
             })
             .catch(err => console.log(err));
-    });
+    }, [page]);
+
+    function PageLeft() {
+        if (page !== 1) {
+            setPage(page - 1);
+        }
+    }
+
+    function PageRight() {
+        if (page !== Math.ceil(propdata.reviewListSize / 3)) {
+            setPage(page + 1);
+        }
+    }
 
     return (
         <div>
             {reviewList.length !== 0 ? (
-                reviewList.map((item, index) => (
-                    <Review nickname={item.nickname} content={item.content} reviewScore={item.reviewScore} createdAt={item.createdAt} reviewImgUrl={item.reviewImgUrl} key={index} />
-                ))
+                <>
+                    {reviewList.map((item, index) => (
+                        <Review nickname={item.nickname} content={item.content} reviewScore={item.reviewScore} createdAt={item.createdAt} reviewImgUrl={item.reviewImgUrl} key={index} />
+                    ))}
+                    <div className="flex justify-center">
+                        <span className={page === 1 ? 'text-white mr-[0.5rem]' : 'text-black mr-[0.5rem]'} onClick={PageLeft}>
+                            &lt;
+                        </span>
+                        {Array.from({ length: Math.ceil(propdata.reviewListSize / 3) }).map((_, index) => (
+                            <span className={page === index + 1 ? 'text-black mr-[0.5rem] underline underline-offset-4' : 'text-[#C6C6C6] mr-[0.5rem]'} key={index} onClick={() => setPage(index + 1)}>
+                                {index + 1}
+                            </span>
+                        ))}
+                        <span className={page === Math.ceil(propdata.reviewListSize / 3) ? 'text-white' : 'text-black'} onClick={PageRight}>
+                            &gt;
+                        </span>
+                    </div>
+                </>
             ) : (
                 <div>리뷰가 없습니다.</div>
             )}
