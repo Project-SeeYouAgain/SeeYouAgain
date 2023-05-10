@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import static com.example.productservice.entity.QProduct.product;
 import static com.example.productservice.entity.QReview.review;
 
 @RequiredArgsConstructor
@@ -27,8 +28,9 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                     review.reviewImgUrl
                 ))
                 .from(review)
-                .where(review.product.id.eq(productId).and(ltReviewId(lastReviewId)))
-                .limit(5)
+                .join(review.product, product)
+                .where(product.id.eq(productId).and(ltReviewId(lastReviewId)))
+                .limit(3)
                 .fetch();
     }
 
