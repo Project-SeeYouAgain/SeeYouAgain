@@ -13,8 +13,11 @@ function Redirect() {
     useEffect(() => {
         const accessToken = cookie.get('accessToken');
         const nickname = cookie.get('nickname');
-
-        setUserData(prev => ({ ...prev, accessToken }));
+        const id = cookie.get('userId');
+        const profileImg = cookie.get('profileImg');
+        const location = cookie.get('location');
+        const mannerScore = cookie.get('mannerScore');
+        setUserData(prev => ({ ...prev, accessToken, id, profileImg, location, mannerScore }));
 
         if (nickname === '') {
             router.push('/check');
