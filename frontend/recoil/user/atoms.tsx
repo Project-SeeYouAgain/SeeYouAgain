@@ -1,12 +1,10 @@
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 
-// const sessionStorage = typeof window !== 'undefined' ? window.sessionStorage : undefined;
-
-// const { persistAtom } = recoilPersist({
-//     key: 'seesionStorage',
-//     storage: sessionStorage,
-// });
+const { persistAtom } = recoilPersist({
+    key: 'recoil-persist',
+    storage: typeof window === 'undefined' ? undefined : sessionStorage,
+});
 
 export const userState = atom<UserState>({
     key: 'userState',
@@ -18,5 +16,5 @@ export const userState = atom<UserState>({
         location: '',
         mannerScore: '',
     },
-    // effects_UNSTABLE: [persistAtom],
+    effects_UNSTABLE: [persistAtom],
 });
