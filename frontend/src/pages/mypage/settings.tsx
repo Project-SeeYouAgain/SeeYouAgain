@@ -16,7 +16,7 @@ import { userState } from 'recoil/user/atoms';
 function settings() {
     const [firstValue, setFirstValue] = useState<string>('');
     const [secondValue, setSecondValue] = useState<string>('');
-    const [image, setImage] = useState<string>('');
+    const [image, setImage] = useState<File | undefined>();
     const router = useRouter();
 
     const changeFirstValue = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +25,9 @@ function settings() {
 
     const changeSecondValue = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSecondValue(event.target.value);
+    };
+    const handleImageChange = (file: File) => {
+        setImage(file);
     };
 
     const token = useRecoilValue(userState).accessToken;
@@ -51,14 +54,7 @@ function settings() {
         <Container className="relative">
             <Header title="프로필 수정"></Header>
             <Body>
-                <ProfileImage
-                    defaultImage={defaultUserImage}
-                    onChange={image => {
-                        console.log('asd');
-                        console.log(image);
-                        setImage(image);
-                    }}
-                />
+                <ProfileImage defaultImage={defaultUserImage} onChange={setImage} />
                 <div className="mt-4">
                     <p className="m-1 font-bol">동네설정</p>
                     <div className="flex items-center bg-gray-200 p-2 rounded-xl">
