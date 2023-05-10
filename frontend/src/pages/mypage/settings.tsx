@@ -56,7 +56,7 @@ function settings() {
         <Container className="relative">
             <Header title="프로필 수정"></Header>
             <Body>
-                <ProfileImage defaultImage={defaultUserImage} onChange={setImage} />
+                <ProfileImage defaultImage={defaultUserImage} onChange={handleImageChange} />
                 <div className="mt-4">
                     <p className="m-1 font-bol">동네설정</p>
                     <div className="flex items-center bg-gray-200 p-2 rounded-xl">
