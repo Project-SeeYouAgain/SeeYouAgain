@@ -58,16 +58,13 @@ public class ProductResponseDto {
 
     private Boolean isCart;
 
-    private Long lastReviewId;
-
     public static ProductResponseDto of(Product product,
                                         List<ProductImg> productImgList,
                                         List<ProductTag> productTagList,
                                         List<HashMap<String, String>> reservationList,
                                         double totalScore,
                                         UserClientResponseDto responseDto,
-                                        Boolean isCart,
-                                        Long reviewId) {
+                                        Boolean isCart) {
 
         return ProductResponseDto.builder()
                 .title(product.getTitle())
@@ -88,7 +85,6 @@ public class ProductResponseDto {
                 .isSafe(product.getIsSafe())
                 .score(totalScore)
                 .isCart(isCart)
-                .lastReviewId(reviewId)
                 .build();
     }
 }
