@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class LocationRequestDto {
-    private double lat;
-    private double lng;
+    private Float lat;
+    private Float lng;
 }

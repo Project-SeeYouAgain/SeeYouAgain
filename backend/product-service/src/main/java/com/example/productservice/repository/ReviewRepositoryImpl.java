@@ -21,6 +21,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         return queryFactory
                 .select(Projections.constructor(
                     ReviewResponseDto.class,
+                    review.id.as("reviewId"),
                     review.nickname,
                     review.content,
                     review.reviewScore,
