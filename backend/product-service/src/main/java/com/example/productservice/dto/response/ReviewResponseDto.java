@@ -12,13 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ReviewResponseDto {
+
+    private Long reviewId;
+
     private String nickname;
 
     private String content;
 
     private Integer reviewScore;
 
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     private String reviewImgUrl;
 }

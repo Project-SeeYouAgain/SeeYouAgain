@@ -3,13 +3,16 @@ import ResponsiveChecker from '@/components/ResponsiveChecker';
 import KakaoMap from '@/components/Location/KakaoMap';
 import findMap from '@/images/findmap.gif';
 import Image from 'next/image';
-import styles from './userLocation.module.scss';
+import styles from '../userLocation.module.scss';
 import { axAuth } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+import { useRouter } from 'next/router';
 
 const UserLocation: React.FC = () => {
+    const router = useRouter();
+    const [identifier, userId] = router.query.params || [];
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const token = useRecoilValue(userState).accessToken;
@@ -21,7 +24,6 @@ const UserLocation: React.FC = () => {
     const clickPosition = () => {
         myCheck ? setMyCheck(false) : setMyCheck(true);
     };
-    const userId = 2;
     useEffect(() => {
         const getLocation = () => {
             axAuth(token)({
