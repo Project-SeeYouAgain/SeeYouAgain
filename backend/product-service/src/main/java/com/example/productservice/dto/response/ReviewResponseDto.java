@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ReviewResponseDto {
+
+    private Long reviewId;
+
     private String nickname;
 
     private String content;
