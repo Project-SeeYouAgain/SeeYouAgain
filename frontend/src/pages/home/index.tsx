@@ -21,16 +21,32 @@ interface dataProps {
     productId: number;
     menuState?: number;
 }
+
+interface user {
+    accessToken: string | null;
+    nickname: string | null;
+    id: string | null;
+    profileImg: string | null;
+    location: string | null;
+    mannerScore: string | null;
+}
 function Home() {
-    const user = useRecoilValue(userState);
     // 물품리스트 불러오기
     const [listdata, setListData] = useState<dataProps[]>();
     // 찜하기
     const token = useRecoilValue(userState).accessToken;
-
+    const [user, setUser] = useState<user>({
+        accessToken: '',
+        nickname: '',
+        id: '',
+        profileImg: '',
+        location: '',
+        mannerScore: '',
+    });
     const router = useRouter();
-
+    const userset = useRecoilValue(userState);
     useEffect(() => {
+        setUser(userset);
         axAuth(token)({
             method: 'post',
             url: '/product-service/auth/productlist',
@@ -43,7 +59,7 @@ function Home() {
                 setListData(res.data.data);
             })
             .catch(err => console.log(err));
-    }, []);
+    }, [userset]);
 
     const onClick = (id: number) => {
         router.push(`/${id}`);
@@ -55,7 +71,7 @@ function Home() {
             <Body>
                 {/* 이용자 안내 페이지 */}
                 <div className="w-[100%] h-[4.5rem] bg-blue rounded-[.7rem]"></div>
-                <div>{user.nickname}</div>
+                {/* <div>{user.nickname}</div> */}
                 {/* 정렬 */}
                 <div>
                     {/* 카테고리 */}
@@ -70,8 +86,8 @@ function Home() {
                     <div>
                         {listdata &&
                             listdata.map((item, index) => (
-                                <div className="mb-[1rem]" onClick={() => onClick(item.productId)}>
-                                    <ItemCard key={index} productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
+                                    <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
                                 </div>
                             ))}
                     </div>
