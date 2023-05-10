@@ -20,6 +20,7 @@ function SignUp() {
 
     const sendNickName = () => {
         if (nickName === '') {
+            console.log(token);
             alert('닉네임을 입력해주세요');
         } else {
             axAuth(token)({
