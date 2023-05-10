@@ -21,10 +21,10 @@ public class Location extends TimeStamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private double lat;
-    private double lng;
+    private Float lat;
+    private Float lng;
 
-    public static Location of(User user, double lat, double lng) {
+    public static Location of(User user, Float lat, Float lng) {
         return Location.builder()
                 .user(user)
                 .lat(lat)
@@ -32,7 +32,7 @@ public class Location extends TimeStamped {
                 .build();
     }
 
-    public void updateLatLng(double lat, double lng) {
+    public void updateLatLng(Float lat, Float lng) {
         this.lat = lat;
         this.lng = lng;
     }

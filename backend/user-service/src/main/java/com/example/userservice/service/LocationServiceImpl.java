@@ -27,8 +27,8 @@ public class LocationServiceImpl implements LocationService {
     @Transactional
     public void updateLocation(Long userId, LocationRequestDto requestDto) {
 
-        double lat = requestDto.getLat();
-        double lng = requestDto.getLng();
+        Float lat = requestDto.getLat();
+        Float lng = requestDto.getLng();
 
         Optional<Location> findLocation = locationRepository.findByUserId(userId);
 
