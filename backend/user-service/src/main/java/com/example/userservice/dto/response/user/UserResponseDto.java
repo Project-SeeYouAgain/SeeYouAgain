@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserResponseDto {
 
+    private Long userId;
+
     private String email;
 
     private String nickname;
@@ -24,6 +26,7 @@ public class UserResponseDto {
 
     public static UserResponseDto from (User user) {
         return UserResponseDto.builder()
+                .userId(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .profileImg(user.getProfileImgUrl())

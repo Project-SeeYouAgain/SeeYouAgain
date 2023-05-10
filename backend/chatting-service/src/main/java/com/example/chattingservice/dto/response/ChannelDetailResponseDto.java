@@ -20,6 +20,8 @@ public class ChannelDetailResponseDto {
 
     private Integer price;
 
+    private Long userId;
+
     private String nickname;
 
     private Integer mannerScore;
@@ -34,6 +36,7 @@ public class ChannelDetailResponseDto {
                 .productImg(productResponseDto.getProductImg())
                 .title(productResponseDto.getTitle())
                 .price(productResponseDto.getPrice())
+                .userId(userResponseDto.getUserId())
                 .nickname(userResponseDto.getNickname())
                 .mannerScore(userResponseDto.getMannerScore())
                 .productState(productResponseDto.getProductState())
