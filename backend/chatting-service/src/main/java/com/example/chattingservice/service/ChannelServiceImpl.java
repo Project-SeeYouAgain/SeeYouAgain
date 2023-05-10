@@ -71,7 +71,7 @@ public class ChannelServiceImpl implements ChannelService {
         }
 
         return messageRepository
-                .countMessageByParticipantUserIdAndChannelIdentifier(youId, channel.getIdentifier());
+                .findTotalMessage(youId, channel.getIdentifier()).size();
     }
 
     private UserClientResponseDto getUserClientResponseDto(String type, Channel c) {
