@@ -1,15 +1,11 @@
 package com.example.userservice.service;
 
-import com.example.userservice.dto.request.user.MannerCommentRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
 import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
 import com.example.userservice.dto.response.user.ProfileResponseDto;
-import com.example.userservice.entity.Cart;
-import com.example.userservice.entity.MannerComment;
 import com.example.userservice.entity.User;
 import com.example.userservice.exception.ApiException;
 import com.example.userservice.exception.ExceptionEnum;
-import com.example.userservice.repository.CartRepository;
 import com.example.userservice.repository.MannerCommentRepository;
 import com.example.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +21,7 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final MannerCommentRepository mannerCommentRepository;
-    private final CartRepository cartRepository;
+
     private final AmazonS3Service amazonS3Service;
 
     @Override

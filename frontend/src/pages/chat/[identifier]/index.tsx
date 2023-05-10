@@ -28,6 +28,7 @@ interface ChannelInfo {
     productImg: string;
     title: string;
     price: number;
+    userId: number;
     nickname: string;
     mannerScore: number;
     productState: boolean;

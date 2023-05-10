@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
-        int reviewCnt = reviewList.size();
+        Long reviewId = reviewRepository.findAllByProductIdOrderByCreatedAt(productId).get(0).getId();
 
         double totalScore = getReviewScoreAvg(reviewList);
 
@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         boolean isCart = cart.isPresent();
 
         return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo,
-                isCart, reviewCnt);
+                isCart, reviewId);
     }
 
     private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
