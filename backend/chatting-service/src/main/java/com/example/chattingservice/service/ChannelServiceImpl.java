@@ -45,14 +45,11 @@ public class ChannelServiceImpl implements ChannelService {
             PageRequest pageRequest = PageRequest.of(0, 1);
             List<Message> latestMessage = messageRepository.findLatestMessage(c.getId(), pageRequest);
 
-            System.out.println(1111);
             Participant participant = participantRepository.findByUserIdAndChannelIdentifier(userId, c.getIdentifier())
                     .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
-            System.out.println(2222);
             int totalMessageSize = getTotalMessageSize(userId, c);
 
-            System.out.println(3333);
             if (latestMessage.size() > 0) {
                 UserClientResponseDto responseDto = getUserClientResponseDto(type, c);
                 channelResponseDtoList.add(ChannelResponseDto.of(c, responseDto, latestMessage.get(0), totalMessageSize - participant.getReadMessageSize()));
