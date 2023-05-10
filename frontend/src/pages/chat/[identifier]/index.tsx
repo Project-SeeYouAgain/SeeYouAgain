@@ -75,7 +75,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 4,
+                writerId: 6,
                 chat: chat,
             }),
         });
@@ -92,7 +92,6 @@ function Channel() {
             url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
             method: 'patch',
         });
-        // .then(res => {});
 
         client.current?.deactivate();
     };
@@ -194,15 +193,23 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-16">
-                {chatList
-                    .slice()
-                    .reverse()
-                    .map(
-                        (chatData, index): React.ReactNode => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={4} isRead={chatData.isRead} />
-                        ),
-                    )}
+            <div className="chat-list mx-5 pb-16" style={{ height: 500, overflow: 'auto' }}>
+                <InfiniteScroll
+                    initialLoad={false}
+                    loadMore={getMessage}
+                    hasMore={true} // 원하는 조건에 따라서 변경하세요. 더 이상 로드할 데이터가 없으면 false로 변경하세요.
+                    isReverse={true}
+                    useWindow={false}
+                    threshold={50}
+                >
+                    {chatList
+                        .slice()
+                        .reverse()
+                        .map((chatData, index) => (
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={6} isRead={chatData.isRead} />
+                        ))}
+                    <div ref={messagesEndRef} />
+                </InfiniteScroll>
             </div>
 
             <div className="fixed inset-x-0 bottom-0 bg-white">

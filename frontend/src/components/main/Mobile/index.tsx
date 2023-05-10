@@ -10,7 +10,7 @@ import styles from '../Mobile/main.module.scss';
 import classNames from 'classnames';
 import Image from 'next/image';
 import logo from '@/images/logo.png';
-import kakao from '@/assets/icons/kakaobtn.png';
+import kakao from '@/assets/icons/kakaologo.png';
 
 export default function index() {
     // useEffect(() => {}, []);
@@ -50,7 +50,8 @@ export default function index() {
             </div>
             <div className={classNames('fixed bottom-0 h-20 w-full p-3 mb-3', styles.header)}>
                 <button onClick={handleKakaoLogin} className={classNames(styles.btn, 'rounded-xl bg-white')}>
-                    <Image src={kakao} alt="kakaoBtn" className="mr-2" />
+                    <Image onClick={handleKakaoLogin} src={kakao} alt="kakaoBtn" className="mr-2 " />
+                    <p>카카오로 시작하기</p>
                 </button>
             </div>
         </div>
