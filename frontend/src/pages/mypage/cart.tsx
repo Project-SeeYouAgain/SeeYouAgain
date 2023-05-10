@@ -5,6 +5,9 @@ import Header from '@/components/Container/components/Header';
 import { axBase } from '../../apis/axiosinstance';
 import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 function Cart() {
     interface RentalItem {
@@ -18,10 +21,11 @@ function Cart() {
         isCart?: boolean;
     }
     const [itemList, setItemList] = useState<RentalItem[]>([]);
+    const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
         const url = `/product-service/auth/cart`;
-        axBase({ url })
+        axBase(token)({ url })
             .then(res => {
                 setItemList(res.data);
             })
