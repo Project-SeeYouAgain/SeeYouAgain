@@ -1,4 +1,5 @@
 // settings.tsx
+import { axAuth } from '@/apis/axiosinstance';
 import SquareLg from '@/components/Button/SquareLg';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
@@ -7,12 +8,16 @@ import ProfileImage from '@/components/UserAvatar';
 import defaultUserImage from '@/images/default_user.png';
 import pen from '@/images/pen.png';
 import Image from 'next/image';
-
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 function settings() {
     const [firstValue, setFirstValue] = useState<string>('');
     const [secondValue, setSecondValue] = useState<string>('');
+    const [image, setImage] = useState<string>('');
+    const router = useRouter();
 
     const changeFirstValue = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFirstValue(event.target.value);
@@ -20,13 +25,40 @@ function settings() {
 
     const changeSecondValue = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSecondValue(event.target.value);
-        console.log(secondValue);
     };
+
+    const token = useRecoilValue(userState).accessToken;
+    const setting = () => {
+        const formData = new FormData();
+        formData.append('location', firstValue);
+        formData.append('description', secondValue);
+        formData.append('image', image);
+        console.log(image);
+        axAuth(token)({
+            method: 'patch',
+            url: '/user-service/auth/profile',
+            headers: { 'Content-Type': 'multipart/form-data' },
+            data: formData,
+        })
+            .then((res: any) => {
+                alert('프로필이 수정되었습니다!');
+                router.push('/home');
+            })
+            .catch((err: any) => console.log(err));
+    };
+
     return (
         <Container className="relative">
             <Header title="프로필 수정"></Header>
             <Body>
-                <ProfileImage defaultImage={defaultUserImage} />
+                <ProfileImage
+                    defaultImage={defaultUserImage}
+                    onChange={image => {
+                        console.log('asd');
+                        console.log(image);
+                        setImage(image);
+                    }}
+                />
                 <div className="mt-4">
                     <p className="m-1 font-bol">동네설정</p>
                     <div className="flex items-center bg-gray-200 p-2 rounded-xl">
@@ -42,7 +74,7 @@ function settings() {
                     </div>
                 </div>
             </Body>
-            <SquareLg divClass="absolute bottom-1 w-full px-[1.88rem]" bgColor="blue" textColor="white" innerValue="수정 완료" />
+            <SquareLg divClass="absolute bottom-1 w-full px-[1.88rem]" bgColor="blue" textColor="white" innerValue="수정 완료" onClick={setting} />
         </Container>
     );
 }
