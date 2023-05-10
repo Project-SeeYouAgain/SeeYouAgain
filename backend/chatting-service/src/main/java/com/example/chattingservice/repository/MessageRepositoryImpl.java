@@ -49,6 +49,16 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Message> findTotalMessage(Long userId, String identifier) {
+        return queryFactory
+                .selectFrom(message)
+                .where(message.participant.userId.eq(userId)
+                        .and(message.channel.identifier.eq(identifier))
+                )
+                .fetch();
+    }
+
     private BooleanExpression ltMessageId(Long firstMessageId) {
         return firstMessageId != null ? message.id.lt(firstMessageId) : null;
     }
