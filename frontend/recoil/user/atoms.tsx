@@ -10,5 +10,9 @@ export const userState = atom<UserState>({
     default: {
         accessToken: '',
         nickname: '',
+        id: '',
+        profileImg: '',
+        location: '',
+        mannerScore: '',
     },
 });
