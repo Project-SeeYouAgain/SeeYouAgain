@@ -175,6 +175,11 @@ function Channel() {
         scrollToBottom();
     }, [chatList]);
 
+    const goToBook = () => [router.push(`/chat/${identifier}/book`)];
+    const goToUserLocation = () => {
+        router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
+    };
+
     return (
         <div className="relative pt-48">
             <div className="fixed inset-x-0 top-0 bg-white z-50">
@@ -197,8 +202,14 @@ function Channel() {
                             </p>
                         </div>
                     </div>
-                    <div>
-                        <button className="border border-blue px-3 my-1 text-blue rounded-lg">예약하기</button>
+                    <div className="grid gird-cols-3">
+                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToBook}>
+                            예약하기
+                        </button>
+                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToUserLocation}>
+                            실시간 위치
+                        </button>
+                        <span></span>
                     </div>
                 </div>
             </div>
