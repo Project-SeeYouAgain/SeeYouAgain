@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableDiscoveryClient
 @EnableJpaAuditing
 public class UserServiceApplication {
-
+    // test
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
     }
