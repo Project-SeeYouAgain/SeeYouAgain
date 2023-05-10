@@ -3,7 +3,8 @@ import axios, { AxiosInstance } from 'axios';
 export const interceptors = (instance: AxiosInstance, token: string | null) => {
     instance.interceptors.request.use(
         config => {
-            config.headers.Authorization = `Bearer ${token}`;
+            const cookie = new Cookies();
+            config.headers.Authorization = `Bearer ${cookie.get('accessToken')}`;
             return config;
         },
         error => Promise.reject(error.response),
@@ -11,8 +12,8 @@ export const interceptors = (instance: AxiosInstance, token: string | null) => {
     return instance;
 };
 
-const BASE_URL = 'https://k8c101.p.ssafy.io';
-// const BASE_URL = 'http://localhost:8000';
+// const BASE_URL = 'https://k8c101.p.ssafy.io';
+const BASE_URL = 'http://localhost:8000';
 
 const axiosApi = (url: string, token: string | null, options?: object) => {
     const instance = axios.create({ baseURL: url, ...options });
