@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 
 const UserLocation: React.FC = () => {
     const router = useRouter();
-    const [identifier, userId] = router.query.params || [];
+    const [identifier, userId] = router.query || [];
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const token = useRecoilValue(userState).accessToken;
