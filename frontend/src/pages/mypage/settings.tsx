@@ -32,7 +32,7 @@ function settings() {
         const formData = new FormData();
         formData.append('location', firstValue);
         formData.append('description', secondValue);
-        formData.append('image', image);
+        formData.append('profileImg', image);
         console.log(image);
         axAuth(token)({
             method: 'patch',
