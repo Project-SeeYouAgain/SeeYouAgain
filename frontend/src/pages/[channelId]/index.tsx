@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { axBase } from '../../apis/axiosinstance';
+import { axBase, axAuth } from '../../apis/axiosinstance';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import Carousel from '../../components/Card/ImageCarousel';
@@ -14,17 +14,17 @@ import Square from '../../components/Button/Square';
 import { AiOutlineHeart, AiFillHeart, AiOutlineConsoleSql } from 'react-icons/ai';
 import Calender from '../../components/Card/Calender';
 import KakaoMapMini from '../../components/Location/KakaoMapMini';
-
-import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+import ReviewList from '../../components/Card/ReviewList';
 
 interface ProductData {
     title: string;
     price: number;
     location: string;
     category: string;
-    userId: number;
+    ownerId: number;
     nickname: string;
     productImgList: string[];
     description: string;
@@ -35,29 +35,87 @@ interface ProductData {
     isSafe: boolean;
     score: number;
     mannerScore: number;
-    // isCart: boolean;
+    isCart: boolean;
     lng: number;
     lat: number;
+    reviewListSize: number;
 }
 
 function Detail() {
+    const router = useRouter();
     const [data, setData] = useState<ProductData>();
+    const [isHeartFill, setIsHeartFill] = useState<boolean>(false);
     const token = useRecoilValue(userState).accessToken;
+    const [menuState, setMenuState] = useState<number>(1);
+    const [product, setProduct] = useState<number>(1);
 
     useEffect(() => {
-        const productId = window.location.pathname;
-        const url = `/product-service/auth${productId}`;
+        const productId = Number(window.location.pathname.substring(1));
+        setProduct(productId);
+        const url = `/product-service/auth/${productId}`;
         axBase(token)({ url })
             .then(res => {
+                console.log(res.data.data);
                 setData(res.data.data);
+                setIsHeartFill(res.data.data.isCart);
             })
             .catch(err => console.log(err));
-    }, []);
+    }, [isHeartFill]);
 
-    const [menuState, setMenuState] = useState<number>(1);
+    function GoChatRoom() {
+        const url = `/chatting-service/auth/channel`;
+        const productId = Number(window.location.pathname.substring(1));
+        if (data) {
+            console.log(data.ownerId);
+            const myData = {
+                productId: productId,
+                ownerId: data.ownerId,
+            };
+            axAuth(token)({ method: 'post', url: url, data: myData })
+                .then(res => {
+                    router.push(`/chat/${res.data.data}`);
+                })
+                .catch(err => console.log(err));
+        }
+    }
 
-    function SelectMenu(data: number) {
-        setMenuState(data);
+    function GoBook() {
+        const url = `/chatting-service/auth/channel`;
+        const productId = Number(window.location.pathname.substring(1));
+        if (data) {
+            console.log(data.ownerId);
+            const myData = {
+                productId: productId,
+                ownerId: data.ownerId,
+            };
+            axAuth(token)({ method: 'post', url: url, data: myData })
+                .then(res => {
+                    router.push(`/chat/${res.data.data}/book`);
+                })
+                .catch(err => console.log(err));
+        }
+    }
+
+    function ClickHeart() {
+        const productId = Number(window.location.pathname.substring(1));
+        const url = `/product-service/auth/cart/${productId}`;
+        if (isHeartFill === false) {
+            axAuth(token)({ method: 'post', url: url })
+                .then(() => {
+                    setIsHeartFill(!isHeartFill);
+                })
+                .catch(err => console.log(err));
+        } else {
+            axAuth(token)({ method: 'delete', url: url })
+                .then(() => {
+                    setIsHeartFill(!isHeartFill);
+                })
+                .catch(err => console.log(err));
+        }
+    }
+
+    function SelectMenu(state: number) {
+        setMenuState(state);
     }
 
     if (data !== undefined) {
@@ -73,7 +131,7 @@ function Detail() {
                         <div className="flex items-center my-[0.5rem] text-[grey]">
                             <span>{data.location}</span>
                             <BsDot size={24} />
-                            <span>{data.nickname}</span>
+                            <span className="mr-[1rem]">{data.nickname}</span>
                             <MannerScore score={data.mannerScore} />
                             <DeclareButton bgColor="red" textColor="white" innerValue="신고" className="ml-[0.5rem]" />
                         </div>
@@ -82,7 +140,7 @@ function Detail() {
                             <span>/일</span>
                         </div>
                         <div className="mb-[1.5rem]">
-                            <RoundButton bgColor="lightgray" textColor="black" innerValue={data.category} />
+                            <RoundButton bgColor="lightgrey" textColor="black" innerValue={data.category} />
                         </div>
                         <div className="mb-[1.5rem]">{data.description}</div>
                         <div className="mb-[2rem]">
@@ -103,15 +161,15 @@ function Detail() {
                             </div>
                         ) : (
                             <div>
-                                <div>리뷰주세요</div>
+                                <ReviewList productId={product} reviewListSize={data.reviewListSize} />
                             </div>
                         )}
                     </div>
                 </Body>
                 <footer className="fixed bottom-0 border-t-2 w-[100vw] h-[3rem] flex items-center justify-evenly bg-white">
-                    {/* {isCart === true ? <AiFillHeart color="blue" size={34} /> : <AiOutlineHeart color="blue" size={34} />} */}
-                    <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[2rem] py-[0.3rem] rounded-[0.5rem]" />
-                    <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[1rem] py-[0.3rem] rounded-[0.5rem] border-[#5669FF] border-2" />
+                    {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
+                    <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[2rem] py-[0.3rem] rounded-[0.5rem]" onClick={GoBook} />
+                    <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[1rem] py-[0.3rem] rounded-[0.5rem] border-[#5669FF] border-2" onClick={GoChatRoom} />
                 </footer>
             </Container>
         );
