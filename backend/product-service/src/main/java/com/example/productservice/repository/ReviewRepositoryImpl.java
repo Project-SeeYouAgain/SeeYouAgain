@@ -31,6 +31,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .from(review)
                 .join(review.product, product)
                 .where(product.id.eq(productId).and(ltReviewId(lastReviewId)))
+                .orderBy(review.id.desc())
                 .limit(3)
                 .fetch();
     }

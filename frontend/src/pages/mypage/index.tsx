@@ -9,6 +9,7 @@ import { axBase } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+import Navbar from '@/components/Container/components/Navbar';
 
 function MyPage() {
     interface profile {
@@ -64,6 +65,7 @@ function MyPage() {
                     </div>
                 </Body>
             </div>
+            <Navbar />
         </Container>
     );
 }
