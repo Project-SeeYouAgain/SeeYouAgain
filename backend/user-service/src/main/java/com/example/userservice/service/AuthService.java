@@ -15,6 +15,4 @@ public interface AuthService {
 
     String updateNickname(Long userId, NicknameRequestDto requestDto);
 
-    String updateProfileImg(Long userId, MultipartFile profileImg);
-
 }
