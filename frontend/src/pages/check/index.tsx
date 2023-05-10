@@ -3,11 +3,13 @@ import { axAuth } from '@/apis/axiosinstance';
 import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
+import axios, { AxiosInstance } from 'axios';
 
 function SignUp() {
     const router = useRouter();
     const [nickName, setNickName] = useState<string>('');
     const [userData, setUserData] = useRecoilState<UserState>(userState);
+    const token = useRecoilValue(userState).accessToken;
 
     // 엔터 제출 막기
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -20,7 +22,7 @@ function SignUp() {
         if (nickName === '') {
             alert('닉네임을 입력해주세요');
         } else {
-            axAuth({
+            axAuth(token)({
                 method: 'patch',
                 url: `/user-service/auth/nickname`,
                 data: { nickname: nickName },
@@ -42,7 +44,7 @@ function SignUp() {
     const getNickName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNickName(event.target.value);
     };
-    
+
     return (
         <div className="relative flex pb-24 h-[100vh] w-[100vw] ">
             <div className="absolute top-1/4 w-[100%] flexbox px-10">
