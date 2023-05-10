@@ -6,8 +6,7 @@ import Menu from '@/components/Card/Menu';
 import { axBase } from '../../apis/axiosinstance';
 import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
-import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 
 function Rent() {
