@@ -14,6 +14,7 @@ const UserLocation: React.FC = () => {
     const [userId, setUserId] = useState<any>('');
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
@@ -62,6 +63,7 @@ const UserLocation: React.FC = () => {
                             })
                                 .then((res: any) => {
                                     console.log(res);
+                                    setOtherUserLocation({ lat: res.data.lat, lng: res.data.lng });
                                 }) // 잘 들어갔는지 확인
                                 .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
                         }
@@ -125,7 +127,7 @@ const UserLocation: React.FC = () => {
                         </div>
                     )}
                     <div id="map" className="w-full h-[83%] relative">
-                        {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={{ lat: 35.2604, lng: 126.6657 }} />}
+                        {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={otherUserLocation} />}
                         {!userLocation && (
                             <div className="w-full h-screen text-center font-bold text-xl bg-[#183942] text-white">
                                 <p className={styles.Container}>위치 권한을 확인해보세요.</p>
