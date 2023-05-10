@@ -3,7 +3,7 @@ import ResponsiveChecker from '@/components/ResponsiveChecker';
 import KakaoMap from '@/components/Location/KakaoMap';
 import findMap from '@/images/findmap.gif';
 import Image from 'next/image';
-import styles from './userLocation.module.scss';
+import styles from '../userLocation.module.scss';
 import { axAuth } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
