@@ -43,22 +43,47 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 .orElseThrow(() -> new ApiException(ExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
         String token = jwtUtil.createToken(user.getId());
+        String refreshToken = jwtUtil.createRefreshToken(user.getId());
         String name = user.getNickname();
+        Long userId = user.getId();
+        String profileImg = user.getProfileImgUrl();
+        String location = user.getLocation();
+        Integer mannerScore = user.getMannerScore();
 
         log.info("token" + token);
         log.info("name" + name);
 
         Cookie accessTokenCookie = new Cookie("accessToken", token);
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         Cookie nickname = new Cookie("nickname", name);
+        Cookie id = new Cookie("userId", userId.toString());
+        Cookie profile = new Cookie("profileImg", profileImg);
+        Cookie local = new Cookie("location", location);
+        Cookie manner = new Cookie("mannerScore", mannerScore.toString());
 
         accessTokenCookie.setPath("/");
+        refreshTokenCookie.setPath("/");
         nickname.setPath("/");
+        id.setPath("/");
+        profile.setPath("/");
+        local.setPath("/");
+        manner.setPath("/");
 
         accessTokenCookie.setMaxAge(60 * 60 * 24);
+        refreshTokenCookie.setMaxAge(60 * 60 * 24);
         nickname.setMaxAge(60 * 60 * 24);
+        id.setMaxAge(60 * 60 * 24);
+        profile.setMaxAge(60 * 60 * 24);
+        local.setMaxAge(60 * 60 * 24);
+        manner.setMaxAge(60 * 60 * 24);
 
         response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
         response.addCookie(nickname);
+        response.addCookie(id);
+        response.addCookie(profile);
+        response.addCookie(local);
+        response.addCookie(manner);
 
         String url = makeRedirectUrl();
 

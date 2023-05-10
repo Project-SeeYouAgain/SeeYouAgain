@@ -24,13 +24,10 @@ function Home() {
     // 물품리스트 불러오기
     const [listdata, setListData] = useState<dataProps[]>();
     // 찜하기
-    const [like, setLike] = useState<boolean>(false);
+    const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
-        // const productSearchCondition = {
-        //     sort: 0,
-        // };
-        axAuth({
+        axAuth(token)({
             method: 'post',
             url: '/product-service/auth/productlist',
             data: {
