@@ -22,9 +22,6 @@ public class ProductAuthController {
 
     private final ProductService productService;
 
-    // 전체 대여 물품 조회(sorted)
-
-
     // 대여 물품 조회
     @GetMapping("/{productId}")
     public ResponseEntity<BaseResponseDto<ProductResponseDto>> getDetailProduct(HttpServletRequest request,
@@ -74,6 +71,16 @@ public class ProductAuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",
                         productService.getProductList(getUserId(request), requestDto)));
+    }
+
+    // 해당 키워드 물품 목록 조회
+    @PostMapping("/search/{keyword}")
+    public ResponseEntity<BaseResponseDto<List<ProductListResponseDto>>> getProductListByKeyword(HttpServletRequest request,
+                                                                                                 @RequestBody ProductListRequestDto requestDto,
+                                                                                                 @PathVariable("keyword") String keyword) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success",
+                        productService.getProductListByKeyword(getUserId(request), requestDto, keyword)));
     }
 
     public Long getUserId(HttpServletRequest request) {

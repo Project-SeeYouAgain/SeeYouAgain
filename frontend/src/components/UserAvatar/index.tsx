@@ -1,5 +1,5 @@
 // components/ProfileImage.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import type { StaticImageData } from 'next/image';
 import defaultUserImage from '@/images/default_user.png';
@@ -8,9 +8,10 @@ import settingProfile from '@/images/settingProfile.png';
 
 interface ProfileImageProps {
     defaultImage?: string | StaticImageData;
+    onChange?: (image: string) => void;
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage }) => {
+const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage, onChange }) => {
     const [image, setImage] = useState<string | undefined>();
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +21,9 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage }) => {
             reader.onload = e => {
                 if (e.target) {
                     setImage(e.target.result as string);
+                }
+                if (onChange && e.target) {
+                    onChange(e.target.result as string);
                 }
             };
 
