@@ -3,8 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 export const interceptors = (instance: AxiosInstance, token: string | null) => {
     instance.interceptors.request.use(
         config => {
-            const cookie = new Cookies();
-            config.headers.Authorization = `Bearer ${cookie.get('accessToken')}`;
+            config.headers.Authorization = `Bearer ${token}`;
             return config;
         },
         error => Promise.reject(error.response),
