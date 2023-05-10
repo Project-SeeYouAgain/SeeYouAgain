@@ -64,7 +64,11 @@ public class ProductServiceImpl implements ProductService {
 
         Long reviewId = reviewRepository.findAllByProductIdOrderByCreatedAt(productId).get(0).getId();
 
+        System.out.println(11111);
+
         double totalScore = getReviewScoreAvg(reviewList);
+
+        System.out.println(totalScore);
 
         UserClientResponseDto userInfo = userServiceClient.getUserInfo(product.getOwnerId()).getData();
 
