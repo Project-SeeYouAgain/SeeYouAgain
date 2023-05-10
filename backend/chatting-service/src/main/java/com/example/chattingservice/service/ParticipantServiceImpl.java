@@ -22,8 +22,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final MessageRepository messageRepository;
 
-    private final ChannelRepository channelRepository;
-
     @Override
     @Transactional
     public void enterChatRoom(Long userId, String identifier) {
@@ -33,7 +31,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         Long youId = findYouId(userId, participant);
 
         int totalMessageSize = messageRepository
-                .countMessageByParticipantUserIdAndChannelIdentifier(youId, identifier);
+                .findTotalMessage(youId, identifier).size();
 
         participant.updateIsOut(true);
         participant.updateReadMessageSize(totalMessageSize);
