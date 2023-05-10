@@ -20,9 +20,9 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/{productId}/{lastReviewId}")
+    @GetMapping({"/{productId}", "/{productId}/{lastReviewId}"})
     public ResponseEntity<BaseResponseDto<List<ReviewResponseDto>>> getProductReview(@PathVariable("productId") Long productId,
-                                                                                     @PathVariable("lastReviewId") Long lastReviewId) {
+                                                                                     @PathVariable(value = "lastReviewId", required = false) Long lastReviewId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", reviewService.getProductReview(productId, lastReviewId)));
     }
