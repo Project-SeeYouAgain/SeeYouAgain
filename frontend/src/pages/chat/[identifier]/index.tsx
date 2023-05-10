@@ -75,7 +75,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 4,
+                writerId: 6,
                 chat: chat,
             }),
         });
@@ -206,7 +206,7 @@ function Channel() {
                         .slice()
                         .reverse()
                         .map((chatData, index) => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={2} isRead={chatData.isRead} />
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={6} isRead={chatData.isRead} />
                         ))}
                     <div ref={messagesEndRef} />
                 </InfiniteScroll>
