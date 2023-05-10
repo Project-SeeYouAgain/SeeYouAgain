@@ -15,6 +15,10 @@ import { AiOutlineHeart, AiFillHeart, AiOutlineConsoleSql } from 'react-icons/ai
 import Calender from '../../components/Card/Calender';
 import KakaoMapMini from '../../components/Location/KakaoMapMini';
 
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
+
 interface ProductData {
     title: string;
     price: number;
@@ -38,10 +42,12 @@ interface ProductData {
 
 function Detail() {
     const [data, setData] = useState<ProductData>();
+    const token = useRecoilValue(userState).accessToken;
+
     useEffect(() => {
         const productId = window.location.pathname;
         const url = `/product-service/auth${productId}`;
-        axBase({ url })
+        axBase(token)({ url })
             .then(res => {
                 setData(res.data.data);
             })

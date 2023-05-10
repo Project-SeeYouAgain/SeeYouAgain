@@ -3,7 +3,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 
 export const interceptors = (instance: AxiosInstance, token: string | null) => {
-    // const user = useRecoilValue(userState);
     instance.interceptors.request.use(
         config => {
             // const token = user.accessToken;
