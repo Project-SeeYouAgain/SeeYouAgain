@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ResponsiveChecker from '@/components/ResponsiveChecker';
+import ResponsiveChecker from '@/components/ResponsiveChecker.tsx';
 import KakaoMap from '@/components/Location/KakaoMap';
 import findMap from '@/images/findmap.gif';
 import Image from 'next/image';
@@ -12,10 +12,16 @@ import { useRouter } from 'next/router';
 
 const UserLocation: React.FC = () => {
     const router = useRouter();
-    const [identifier, userId] = router.query || [];
+    const [userId, setUserId] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const token = useRecoilValue(userState).accessToken;
+
+    useEffect(() => {
+        if (!router.isReady) return;
+        console.log(router.query);
+        setUserId(router.query.userId);
+    }, [router.isReady]);
 
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
@@ -26,14 +32,17 @@ const UserLocation: React.FC = () => {
     };
     useEffect(() => {
         const getLocation = () => {
-            axAuth(token)({
-                method: 'get',
-                url: `/user-service/auth/location/${userId}`,
-            })
-                .then((res: any) => {
-                    console.log(res);
-                }) // 잘 들어갔는지 확인
-                .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
+            console.log(userId);
+            if (userId) {
+                axAuth(token)({
+                    method: 'get',
+                    url: `/user-service/auth/location/${userId}`,
+                })
+                    .then((res: any) => {
+                        console.log(res);
+                    }) // 잘 들어갔는지 확인
+                    .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
+            }
             let watchId: number | null = null;
 
             if (navigator.geolocation) {
