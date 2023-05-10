@@ -1,6 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
 
 export const interceptors = (instance: AxiosInstance, token: string | null) => {
     instance.interceptors.request.use(
