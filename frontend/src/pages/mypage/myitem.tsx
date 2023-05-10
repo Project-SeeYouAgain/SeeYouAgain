@@ -6,6 +6,8 @@ import Menu from '@/components/Card/Menu';
 import { axBase } from '../../apis/axiosinstance';
 import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 function Rent() {
     interface RentalItem {
@@ -20,6 +22,7 @@ function Rent() {
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
+    const token = useRecoilValue(userState).accessToken;
 
     function SelectMenu(data: number) {
         setMenuState(data);
@@ -27,7 +30,7 @@ function Rent() {
 
     useEffect(() => {
         const url = `/product-service/auth/myproduct/${menuState}`;
-        axBase({ url })
+        axBase(token)({ url })
             .then(res => {
                 setItemList(res.data.data);
             })

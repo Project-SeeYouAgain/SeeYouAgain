@@ -14,8 +14,10 @@ import Square from '../../components/Button/Square';
 import { AiOutlineHeart, AiFillHeart, AiOutlineConsoleSql } from 'react-icons/ai';
 import Calender from '../../components/Card/Calender';
 import KakaoMapMini from '../../components/Location/KakaoMapMini';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
+import ReviewList from '../../components/Card/ReviewList';
 
 interface ProductData {
     title: string;
@@ -36,18 +38,22 @@ interface ProductData {
     isCart: boolean;
     lng: number;
     lat: number;
-    lastReviewId: number;
+    reviewListSize: number;
 }
 
 function Detail() {
     const router = useRouter();
     const [data, setData] = useState<ProductData>();
     const [isHeartFill, setIsHeartFill] = useState<boolean>(false);
+    const token = useRecoilValue(userState).accessToken;
+    const [menuState, setMenuState] = useState<number>(1);
+    const [product, setProduct] = useState<number>(1);
 
     useEffect(() => {
-        const productId = window.location.pathname;
-        const url = `/product-service/auth${productId}`;
-        axBase({ url })
+        const productId = Number(window.location.pathname.substring(1));
+        setProduct(productId);
+        const url = `/product-service/auth/${productId}`;
+        axBase(token)({ url })
             .then(res => {
                 console.log(res.data.data);
                 setData(res.data.data);
@@ -65,7 +71,7 @@ function Detail() {
                 productId: productId,
                 ownerId: data.ownerId,
             };
-            axAuth({ method: 'post', url: url, data: myData })
+            axAuth(token)({ method: 'post', url: url, data: myData })
                 .then(res => {
                     router.push(`/chat/${res.data.data}`);
                 })
@@ -82,7 +88,7 @@ function Detail() {
                 productId: productId,
                 ownerId: data.ownerId,
             };
-            axAuth({ method: 'post', url: url, data: myData })
+            axAuth(token)({ method: 'post', url: url, data: myData })
                 .then(res => {
                     router.push(`/chat/${res.data.data}/book`);
                 })
@@ -94,21 +100,19 @@ function Detail() {
         const productId = Number(window.location.pathname.substring(1));
         const url = `/product-service/auth/cart/${productId}`;
         if (isHeartFill === false) {
-            axAuth({ method: 'post', url: url })
+            axAuth(token)({ method: 'post', url: url })
                 .then(() => {
                     setIsHeartFill(!isHeartFill);
                 })
                 .catch(err => console.log(err));
         } else {
-            axAuth({ method: 'delete', url: url })
+            axAuth(token)({ method: 'delete', url: url })
                 .then(() => {
                     setIsHeartFill(!isHeartFill);
                 })
                 .catch(err => console.log(err));
         }
     }
-
-    const [menuState, setMenuState] = useState<number>(1);
 
     function SelectMenu(state: number) {
         setMenuState(state);
@@ -157,7 +161,7 @@ function Detail() {
                             </div>
                         ) : (
                             <div>
-                                <div>리뷰주세요</div>
+                                <ReviewList productId={product} reviewListSize={data.reviewListSize} />
                             </div>
                         )}
                     </div>

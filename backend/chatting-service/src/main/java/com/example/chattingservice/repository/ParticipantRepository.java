@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
     Optional<Participant> findByUserIdAndChannelIdentifier(Long userId, String identifier);
-
-    Optional<Participant> findByUserId(Long userId);
 }

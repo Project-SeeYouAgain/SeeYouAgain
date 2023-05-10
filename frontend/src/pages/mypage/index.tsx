@@ -6,6 +6,9 @@ import Link from 'next/link';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import { axBase } from '@/apis/axiosinstance';
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 function MyPage() {
     interface profile {
@@ -16,9 +19,10 @@ function MyPage() {
         mannerScore: number;
     }
     const [profileData, setProfileData] = useState<profile | null>(null);
+    const token = useRecoilValue(userState).accessToken;
     useEffect(() => {
         const url = `/user-service/auth/profile`;
-        axBase({ url })
+        axBase(token)({ url })
             .then(res => {
                 console.log(res.data.data);
                 setProfileData(res.data.data);

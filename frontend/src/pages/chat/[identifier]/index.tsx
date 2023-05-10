@@ -9,6 +9,9 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { IoMdSend } from 'react-icons/io';
 import Button from '@/components/Button';
 import InfiniteScroll from 'react-infinite-scroller';
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 interface ChatData {
     messageId: number;
@@ -25,6 +28,7 @@ interface ChannelInfo {
     productImg: string;
     title: string;
     price: number;
+    userId: number;
     nickname: string;
     mannerScore: number;
     productState: boolean;
@@ -32,6 +36,8 @@ interface ChannelInfo {
 }
 
 function Channel() {
+    const token = useRecoilValue(userState).accessToken;
+
     const router = useRouter();
     const [chatList, setChatList] = useState<ChatData[]>([]);
     const [chat, setChat] = useState<string>('');
@@ -75,7 +81,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 4,
+                writerId: 6,
                 chat: chat,
             }),
         });
@@ -88,7 +94,7 @@ function Channel() {
             setLastReadMessageId(chatList[0].messageId);
         }
 
-        axAuth({
+        axAuth(token)({
             url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
             method: 'patch',
         });
@@ -118,7 +124,7 @@ function Channel() {
             api = `/chatting-service/auth/channel/chat/${identifier}`;
         }
 
-        axAuth({
+        axAuth(token)({
             url: api,
         }).then(res => {
             if (res.data.data.length > 0) {
@@ -132,7 +138,7 @@ function Channel() {
     };
 
     const getChannelInfo = () => {
-        axAuth({
+        axAuth(token)({
             url: `/chatting-service/auth/channel/detail/${identifier}`,
         }).then(res => {
             setChannelInfo(res.data.data);
@@ -140,7 +146,7 @@ function Channel() {
     };
 
     const saveReadMessageSize = () => {
-        axAuth({
+        axAuth(token)({
             url: `/chatting-service/auth/participant/in/${identifier}`,
             method: 'patch',
         });
@@ -206,7 +212,7 @@ function Channel() {
                         .slice()
                         .reverse()
                         .map((chatData, index) => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={2} isRead={chatData.isRead} />
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={6} isRead={chatData.isRead} />
                         ))}
                     <div ref={messagesEndRef} />
                 </InfiniteScroll>

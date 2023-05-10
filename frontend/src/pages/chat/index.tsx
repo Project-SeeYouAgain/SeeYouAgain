@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef, MouseEvent } from 'react';
 import ChatRoom from '@/components/ChatRoom';
 import { VscBell } from 'react-icons/vsc';
 import { axAuth } from '@/apis/axiosinstance';
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 interface ChatRoomData {
     nickname: string;
@@ -18,13 +21,14 @@ function chat() {
     const [chatRoomList, setChatRoomList] = useState<ChatRoomData[]>([]);
 
     const [selectedTab, setSelectedTab] = useState<string>('borrow');
+    const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
         getChannelList(selectedTab);
     }, [selectedTab]);
 
     const getChannelList = (type: string) => {
-        axAuth({
+        axAuth(token)({
             url: `/chatting-service/auth/channel/${type}`,
         })
             .then(res => {

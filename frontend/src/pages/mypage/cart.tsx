@@ -7,6 +7,9 @@ import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
 import Image from 'next/image';
 import noresult from '@/images/no-results.png';
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 function Cart() {
     interface RentalItem {
@@ -21,10 +24,11 @@ function Cart() {
         isSafe: boolean;
     }
     const [itemList, setItemList] = useState<RentalItem[]>([]);
+    const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
         const url = `/product-service/auth/cart`;
-        axBase({ url })
+        axBase(token)({ url })
             .then(res => {
                 setItemList(res.data.data);
             })

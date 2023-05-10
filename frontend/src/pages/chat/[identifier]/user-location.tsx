@@ -5,10 +5,14 @@ import findMap from '@/images/findmap.gif';
 import Image from 'next/image';
 import styles from './userLocation.module.scss';
 import { axAuth } from '@/apis/axiosinstance';
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 const UserLocation: React.FC = () => {
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const token = useRecoilValue(userState).accessToken;
 
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
@@ -20,7 +24,7 @@ const UserLocation: React.FC = () => {
     const userId = 2;
     useEffect(() => {
         const getLocation = () => {
-            axAuth({
+            axAuth(token)({
                 method: 'get',
                 url: `/user-service/auth/location/${userId}`,
             })
@@ -40,7 +44,7 @@ const UserLocation: React.FC = () => {
                         setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
                         if (position) {
                             const data = { lat: position.coords.latitude, lng: position.coords.longitude };
-                            axAuth({
+                            axAuth(token)({
                                 method: 'post',
                                 url: '/user-service/auth/location',
                                 data: data,

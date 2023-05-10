@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserClientResponseDto {
+    private Long userId;
     private String email;
     private String nickname;
     private String profileImg;

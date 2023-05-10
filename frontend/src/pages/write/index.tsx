@@ -10,10 +10,15 @@ import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { useRouter } from 'next/router';
 import { axAuth } from '@/apis/axiosinstance';
 
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
+
 function Write() {
     const [currentStep, setCurrentStep] = useState<number>(1);
     const [stepOneData, setStepOneData] = useState<StepOneData | null>(null);
     const [stepTwoData, setStepTwoData] = useState<StepTwoData | null>(null);
+    const token = useRecoilValue(userState).accessToken;
 
     const router = useRouter();
 
@@ -136,7 +141,7 @@ function Write() {
         console.log('제출 데이터 입니다.', submitData);
         console.log('난 그냥 데이터', data);
 
-        axAuth({
+        axAuth(token)({
             method: 'post',
             url: '/product-service/auth',
             headers: { 'Content-Type': 'multipart/form-data' },
