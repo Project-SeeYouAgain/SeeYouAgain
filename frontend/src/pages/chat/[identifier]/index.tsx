@@ -51,7 +51,7 @@ function Channel() {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     const connect = () => {
-        const socket = new SockJS('http://k8c101.p.ssafy.io:8000/chatting-service/ws');
+        const socket = new SockJS('https://k8c101.p.ssafy.io:8000/chatting-service/ws');
         // const socket = new SockJS('http://localhost:8000/chatting-service/ws');
 
         client.current = new Client({
