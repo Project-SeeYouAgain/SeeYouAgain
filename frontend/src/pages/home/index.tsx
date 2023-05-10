@@ -7,6 +7,8 @@ import Body from '@/components/Container/components/Body';
 import MainHeader from '@/components/Container/components/MainHeader';
 import ItemCard from '@/components/Card/ItemCard';
 import Navbar from '@/components/Container/components/Navbar';
+import { useRouter } from 'next/router';
+
 interface dataProps {
     thumbnailUrl: string;
     title: string;
@@ -26,6 +28,8 @@ function Home() {
     // 찜하기
     const token = useRecoilValue(userState).accessToken;
 
+    const router = useRouter();
+
     useEffect(() => {
         axAuth(token)({
             method: 'post',
@@ -40,6 +44,10 @@ function Home() {
             })
             .catch(err => console.log(err));
     }, []);
+
+    const onClick = (id: number) => {
+        router.push(`/${id}`);
+    };
 
     return (
         <Container>
@@ -62,7 +70,7 @@ function Home() {
                     <div>
                         {listdata &&
                             listdata.map((item, index) => (
-                                <div className="mb-[1rem]">
+                                <div className="mb-[1rem]" onClick={() => onClick(item.productId)}>
                                     <ItemCard key={index} productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
                                 </div>
                             ))}
