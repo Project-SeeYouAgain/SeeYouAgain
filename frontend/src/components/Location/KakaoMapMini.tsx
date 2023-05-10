@@ -1,6 +1,5 @@
 // KakaoMap.tsx
 import React, { useEffect, useState } from 'react';
-import pin from '@/images/pin.png';
 
 interface KakaoMapProps {
     lat: number;
