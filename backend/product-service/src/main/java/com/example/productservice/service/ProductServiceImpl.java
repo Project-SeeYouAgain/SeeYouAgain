@@ -62,13 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
-        Long reviewId = reviewRepository.findAllByProductIdOrderByCreatedAt(productId).get(0).getId();
-
-        System.out.println(11111);
-
         double totalScore = getReviewScoreAvg(reviewList);
-
-        System.out.println(totalScore);
 
         UserClientResponseDto userInfo = userServiceClient.getUserInfo(product.getOwnerId()).getData();
 
@@ -77,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
         boolean isCart = cart.isPresent();
 
         return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo,
-                isCart, reviewId);
+                isCart);
     }
 
     private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
