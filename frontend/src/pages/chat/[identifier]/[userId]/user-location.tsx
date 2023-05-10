@@ -63,7 +63,7 @@ const UserLocation: React.FC = () => {
                             })
                                 .then((res: any) => {
                                     console.log(res);
-                                    setOtherUserLocation({ lat: res.data.lat, lng: res.data.lng });
+                                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng });
                                 }) // 잘 들어갔는지 확인
                                 .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
                         }
