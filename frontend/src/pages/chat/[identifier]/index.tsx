@@ -12,6 +12,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+import { Cookies } from 'react-cookie';
 
 interface ChatData {
     messageId: number;
@@ -36,6 +37,7 @@ interface ChannelInfo {
 }
 
 function Channel() {
+    const cookie = new Cookies();
     const token = useRecoilValue(userState).accessToken;
 
     const router = useRouter();
@@ -45,6 +47,7 @@ function Channel() {
     const [lastReadMessageId, setLastReadMessageId] = useState<number>(0);
     const [channelInfo, setChannelInfo] = useState<ChannelInfo>();
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const [userId, setUserId] = useState<number>(0);
 
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
@@ -81,7 +84,7 @@ function Channel() {
             destination: '/pub/chat',
             body: JSON.stringify({
                 identifier: identifier,
-                writerId: 6,
+                writerId: userId,
                 chat: chat,
             }),
         });
@@ -155,6 +158,7 @@ function Channel() {
     useEffect(() => {
         if (!router.isReady) return;
 
+        setUserId(Number(cookie.get("userId")));
         saveReadMessageSize();
         getChannelInfo();
         getMessage();
@@ -170,6 +174,11 @@ function Channel() {
     useEffect(() => {
         scrollToBottom();
     }, [chatList]);
+
+    const goToBook = () => [router.push(`/chat/${identifier}/book`)];
+    const goToUserLocation = () => {
+        router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
+    };
 
     return (
         <div className="relative pt-48">
@@ -193,8 +202,14 @@ function Channel() {
                             </p>
                         </div>
                     </div>
-                    <div>
-                        <button className="border border-blue px-3 my-1 text-blue rounded-lg">예약하기</button>
+                    <div className="grid gird-cols-3">
+                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToBook}>
+                            예약하기
+                        </button>
+                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToUserLocation}>
+                            실시간 위치
+                        </button>
+                        <span></span>
                     </div>
                 </div>
             </div>
@@ -203,7 +218,7 @@ function Channel() {
                 <InfiniteScroll
                     initialLoad={false}
                     loadMore={getMessage}
-                    hasMore={true} // 원하는 조건에 따라서 변경하세요. 더 이상 로드할 데이터가 없으면 false로 변경하세요.
+                    hasMore={hasMore} // 원하는 조건에 따라서 변경하세요. 더 이상 로드할 데이터가 없으면 false로 변경하세요.
                     isReverse={true}
                     useWindow={false}
                     threshold={50}
@@ -212,7 +227,7 @@ function Channel() {
                         .slice()
                         .reverse()
                         .map((chatData, index) => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={6} isRead={chatData.isRead} />
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={userId} isRead={chatData.isRead} />
                         ))}
                     <div ref={messagesEndRef} />
                 </InfiniteScroll>

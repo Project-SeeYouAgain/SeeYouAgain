@@ -1,5 +1,5 @@
 // components/ProfileImage.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import type { StaticImageData } from 'next/image';
 import defaultUserImage from '@/images/default_user.png';
@@ -8,29 +8,23 @@ import settingProfile from '@/images/settingProfile.png';
 
 interface ProfileImageProps {
     defaultImage?: string | StaticImageData;
+    onChange?: (image: File) => void;
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage }) => {
-    const [image, setImage] = useState<string | undefined>();
-
+const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage, onChange }) => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = e => {
-                if (e.target) {
-                    setImage(e.target.result as string);
-                }
-            };
-
-            reader.readAsDataURL(e.target.files[0]);
+            const image = e.target.files[0];
+            if (onChange) {
+                onChange(image);
+            }
         }
     };
 
     return (
         <div className="w-fit m-auto relative mt-8">
             <Image
-                src={image || (defaultImage as string) || defaultUserImage}
+                src={(defaultImage as string) || defaultUserImage}
                 alt="프로필 사진"
                 className={styles.profileImage}
                 onClick={() => document.getElementById('imageInput')?.click()}

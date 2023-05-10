@@ -1,14 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
-import { Cookies } from 'react-cookie';
 
 export const interceptors = (instance: AxiosInstance, token: string | null) => {
     instance.interceptors.request.use(
         config => {
-            const cookie = new Cookies();
-            // config.headers.Authorization = `Bearer ${cookie.get('accessToken')}`;
-            config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzNzAxMDM2LCJleHAiOjE2ODM3ODc0MzZ9.MLtImaBMcIXH8SuSTr-70woTGDpqGzpn-mXmdk-WJ7Y`;
+            config.headers.Authorization = `Bearer ${token}`;
             return config;
         },
         error => Promise.reject(error.response),

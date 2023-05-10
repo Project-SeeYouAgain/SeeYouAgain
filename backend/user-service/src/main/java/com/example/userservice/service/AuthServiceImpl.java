@@ -41,7 +41,14 @@ public class AuthServiceImpl implements AuthService {
         String description = requestDto.getDescription();
 
         deleteS3Img(user);
-        user.updateProfile(null, null, location, description);
+
+        if (requestDto.getProfileImg().isEmpty()) {
+            user.updateProfile(null, null, location, description);
+        } else {
+            String profileImgKey = saveS3Img(profileImg);
+            String profileImgUrl = amazonS3Service.getFileUrl(profileImgKey);
+            user.updateProfile(profileImgKey, profileImgUrl, location, description);
+        }
 
         return ProfileResponseDto.from(user);
     }
@@ -56,20 +63,6 @@ public class AuthServiceImpl implements AuthService {
 
         // 회원 탈퇴
         userRepository.delete(user);
-    }
-
-    @Override
-    @Transactional
-    public String updateProfileImg(Long userId, MultipartFile profileImg) {
-        User user = getUser(userId);
-
-        deleteS3Img(user);
-
-        String fileName = saveS3Img(profileImg);
-        String fileUrl = amazonS3Service.getFileUrl(fileName);
-        user.updateProfile(fileName, fileUrl);
-
-        return user.getProfileImgUrl();
     }
 
     private void deleteS3Img(User user) {
