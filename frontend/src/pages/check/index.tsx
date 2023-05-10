@@ -25,7 +25,7 @@ function SignUp() {
         } else {
             axAuth(token)({
                 method: 'patch',
-                url: `/user-service/auth/nickname`,
+                url: '/user-service/auth/nickname',
                 data: { nickname: nickName },
             })
                 .then(res => {
