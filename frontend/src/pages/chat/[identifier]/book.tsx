@@ -10,6 +10,9 @@ import location from '@/assets/icons/3Dloca.png';
 import { useRouter } from 'next/router';
 import { axAuth } from '@/apis/axiosinstance';
 import Swal from 'sweetalert2';
+import axios, { AxiosInstance } from 'axios';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 function formatDate(date: any) {
     const year = date.getFullYear();
@@ -19,6 +22,8 @@ function formatDate(date: any) {
 }
 
 function book() {
+    const token = useRecoilValue(userState).accessToken;
+
     const close = () => {
         console.log('dd');
     };
@@ -66,7 +71,7 @@ function book() {
             lat: lat,
             location: dong,
         };
-        axAuth({
+        axAuth(token)({
             method: 'post',
             url: `/product-service/auth/reservation/request/${identifier}`,
             data: data,
