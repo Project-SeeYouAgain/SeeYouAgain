@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void createProduct(Long userId, ProductRequestDto requestDto, List<MultipartFile> productImg) {
 
-        Product product = Product.of(userId ,requestDto, true, 0, LocalDateTime.now(), false);
+        Product product = Product.of(userId, requestDto, true, 0, LocalDateTime.now(), false);
         productRepository.save(product);
 
         List<ProductTag> productTagList = requestDto.getTag().stream().map(t -> ProductTag.of(product, t)).collect(toList());
@@ -178,6 +177,21 @@ public class ProductServiceImpl implements ProductService {
             productList = productRepository.findAllOrderByPrice();
         } else if (requestDto.getSort().equals(2)) {
             productList = productRepository.findAllOrderByScore();
+        }
+        return getProductResponse(productList, userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductListResponseDto> getProductListByKeyword(Long userId,
+                                                                ProductListRequestDto requestDto, String keyword) {
+        List<Product> productList = new ArrayList<>();
+        if (requestDto.getSort().equals(0)) {
+            productList = productRepository.findAllByTitleOrderByDate(keyword);
+        } else if (requestDto.getSort().equals(1)) {
+            productList = productRepository.findAllByTitleOrderByPrice(keyword);
+        } else if (requestDto.getSort().equals(2)) {
+            productList = productRepository.findAllByTitleOrderByScore(keyword);
         }
         return getProductResponse(productList, userId);
     }
