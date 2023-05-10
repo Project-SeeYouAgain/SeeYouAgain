@@ -70,8 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
         boolean isCart = cart.isPresent();
 
-        return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo,
-                isCart);
+        return ProductResponseDto.of(product, productImgList, productTagList, reservationMapList, totalScore, userInfo, isCart, reviewList.size());
     }
 
     private List<HashMap<String, String>> getReservationPeriod(List<Reservation> reservationList) {
