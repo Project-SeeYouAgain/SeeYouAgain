@@ -74,7 +74,7 @@ public class ProductAuthController {
     }
 
     // 해당 키워드 물품 목록 조회
-    @GetMapping("/search/{keyword}")
+    @PostMapping("/search/{keyword}")
     public ResponseEntity<BaseResponseDto<List<ProductListResponseDto>>> getProductListByKeyword(HttpServletRequest request,
                                                                                                  @RequestBody ProductListRequestDto requestDto,
                                                                                                  @PathVariable("keyword") String keyword) {
