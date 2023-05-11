@@ -32,13 +32,23 @@ function settings() {
 
     const token = useRecoilValue(userState).accessToken;
     const setting = () => {
-        const formData = new FormData();
-        formData.append('location', firstValue);
-        formData.append('description', secondValue);
-        if (image) {
-            formData.append('image', image);
+        const submitData = {
+            location: firstValue,
+            description: secondValue
         }
-        console.log(image);
+
+        const blob = new Blob([JSON.stringify(submitData)], {
+            // type에 JSON 타입 지정
+            type: 'application/json',
+        });
+
+        const formData = new FormData();
+        formData.append('requestDto', blob);
+
+        if (image) {
+            formData.append('profileImg', image);
+        }
+
         axAuth(token)({
             method: 'patch',
             url: '/user-service/auth/profile',

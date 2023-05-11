@@ -33,16 +33,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public ProfileResponseDto updateProfile(Long userId, ProfileUpdateRequestDto requestDto) {
+    public ProfileResponseDto updateProfile(Long userId, ProfileUpdateRequestDto requestDto, MultipartFile profileImg) {
         User user = getUser(userId);
 
-        MultipartFile profileImg = requestDto.getProfileImg();
         String location = requestDto.getLocation();
         String description = requestDto.getDescription();
 
         deleteS3Img(user);
 
-        if (requestDto.getProfileImg().isEmpty()) {
+        if (profileImg.isEmpty()) {
             user.updateProfile(null, null, location, description);
         } else {
             String profileImgKey = saveS3Img(profileImg);
