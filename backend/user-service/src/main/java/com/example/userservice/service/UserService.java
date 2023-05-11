@@ -1,7 +1,5 @@
 package com.example.userservice.service;
 
-import com.example.userservice.dto.request.user.*;
-import com.example.userservice.dto.response.user.LoginResponseDto;
 import com.example.userservice.dto.response.user.TokenResponseDto;
 import com.example.userservice.dto.response.user.UserResponseDto;
 
