@@ -15,7 +15,6 @@ function Cart() {
     interface RentalItem {
         productId: number;
         type: boolean;
-        // true가 빌려줘요
         title: string;
         price: number;
         location: string;
@@ -25,6 +24,7 @@ function Cart() {
     }
     const [itemList, setItemList] = useState<RentalItem[]>([]);
     const token = useRecoilValue(userState).accessToken;
+    const isCart = true;
 
     useEffect(() => {
         const url = `/product-service/auth/cart`;
@@ -45,7 +45,7 @@ function Cart() {
                 ) : (
                     itemList.map((item, index) => (
                         <Link key={index} href={''}>
-                            <Card productImg={item.productImg} title={item.title} location={item.location} price={item.price} isSafe={item.isSafe} />
+                            <Card productImg={item.productImg} title={item.title} location={item.location} price={item.price} isSafe={item.isSafe} productId={item.productId} isCart={isCart} />
                         </Link>
                     ))
                 )}
