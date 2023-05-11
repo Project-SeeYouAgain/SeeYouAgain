@@ -10,8 +10,5 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
     List<Review> findAllByProductId(Long productId);
 
-    @Query("SELECT r FROM Review r WHERE r.product.id = :ownerId ORDER BY r.createdAt DESC")
-    List<Review> findAllByProductIdOrderByCreatedAt(@Param("ownerId") Long ownerId);
-
     void deleteAllByProductId(Long productId);
 }

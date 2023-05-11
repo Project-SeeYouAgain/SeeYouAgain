@@ -57,6 +57,14 @@ public class AuthServiceImpl implements AuthService {
         return ProfileResponseDto.from(user);
     }
 
+    private String saveS3Img(MultipartFile profileImg) {
+        try {
+            return amazonS3Service.upload(profileImg, "UserProfile");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     @Transactional
     public void deleteUser(Long userId) {
@@ -72,14 +80,6 @@ public class AuthServiceImpl implements AuthService {
     private void deleteS3Img(User user) {
         if (user.getProfileImgKey() != null && !user.getProfileImgKey().isBlank())
             amazonS3Service.delete(user.getProfileImgKey());
-    }
-
-    private String saveS3Img(MultipartFile profileImg) {
-        try {
-            return amazonS3Service.upload(profileImg, "UserProfile");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
