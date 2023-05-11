@@ -126,17 +126,7 @@ function Home() {
                 {/* 제품 목록 */}
                 <div className="mt-[3rem] pb-20">
                     <div>
-                        <ItemCard
-                            startDate={chw.startDate}
-                            endDate={chw.endDate}
-                            productId={chw.productId}
-                            productImg={chw.thumbnailUrl}
-                            location={chw.location}
-                            price={chw.price}
-                            title={chw.title}
-                            isSafe={true}
-                            isCart={true}
-                        />
+                        <ItemCard productId={chw.productId} productImg={chw.thumbnailUrl} location={chw.location} price={chw.price} title={chw.title} isSafe={true} isCart={true} />
                         <ItemCard
                             startDate={chw.startDate}
                             endDate={chw.endDate}
@@ -150,7 +140,7 @@ function Home() {
                         />
                         {listdata &&
                             listdata.map((item, index) => (
-                                <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
+                                <div onClick={() => onClick(item.productId)} key={index}>
                                     <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
                                 </div>
                             ))}
