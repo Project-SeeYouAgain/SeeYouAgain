@@ -122,7 +122,7 @@ function Detail() {
         return (
             <Container>
                 <Carousel imgUrl={data.productImgList}></Carousel>
-                <Body className="mb-[3rem]">
+                <Body>
                     <div className="mt-[35px]">
                         <div className="font-bold flex text-[1.3rem]">
                             {data.isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-[2rem] mr-[0.7rem]" /> : null}
