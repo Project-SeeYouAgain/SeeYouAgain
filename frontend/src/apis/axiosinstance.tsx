@@ -4,6 +4,7 @@ export const interceptors = (instance: AxiosInstance, token: string | null) => {
     instance.interceptors.request.use(
         config => {
             // config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2IiwiaWF0IjoxNjgzNzkzMDEzLCJleHAiOjE2ODM4Nzk0MTN9.7OFJnT85xYpNCLtV-Ugbyl_DHoJhFiO7X1ZwVgGxG2c`;
+
             config.headers.Authorization = `Bearer ${token}`;
             return config;
         },
