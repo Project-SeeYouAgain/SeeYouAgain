@@ -48,7 +48,6 @@ function Channel() {
     const [channelInfo, setChannelInfo] = useState<ChannelInfo>();
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [userId, setUserId] = useState<number>(0);
-
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -178,7 +177,7 @@ function Channel() {
         scrollToBottom();
     }, [chatList]);
 
-    const goToBook = () => [router.push(`/chat/${identifier}/book`)];
+    const goToBook = () => [router.push(`/chat/${identifier}/book/${channelInfo?.productId}`)];
     const goToUserLocation = () => {
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
