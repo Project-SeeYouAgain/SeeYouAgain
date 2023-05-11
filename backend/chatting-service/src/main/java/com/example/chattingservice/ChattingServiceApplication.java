@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 public class ChattingServiceApplication {
 
     public static void main(String[] args) {
-        // test
         SpringApplication.run(ChattingServiceApplication.class, args);
     }
 
