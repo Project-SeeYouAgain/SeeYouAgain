@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,24 +122,35 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     @Transactional
-    public void deleteReservation(Long userId, Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
-
-        // 대여자가 본인이 아닌 경우 에러
-        if (!reservation.getLenderId().equals(userId))
+    public void deleteReservation(Long userId, Long productId) {
+        Reservation reservation = reservationRepository.findReservationId(productId, userId).get(0);
+        // 본인이 대여자가 아니거나, 본인이 주인이 아니라면 에러
+        if (!reservation.getLenderId().equals(userId) || reservation.getProduct().getOwnerId().equals(userId))
             throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
 
         reservationRepository.delete(reservation);
     }
 
+    // 물품 전체 예약 리스트
     @Override
     @Transactional(readOnly = true)
     public List<ReservationListResponseDto> getReservation(Long productId) {
+        List<ReservationListResponseDto> returnList = new ArrayList<>();
+
+        Product findProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+
+        returnList.add(ReservationListResponseDto.from(findProduct));
+
         List<Reservation> reservationList = reservationRepository.findAllByProductId(productId);
+        List<ReservationListResponseDto> reservationListResponseDtoList =
+                reservationList.stream().map((r)-> ReservationListResponseDto.from(r)).collect(toList());
 
-        return reservationList.stream().map((r)-> ReservationListResponseDto.from(r)).collect(toList());
+        for (ReservationListResponseDto reservationListResponseDto : reservationListResponseDtoList) {
+            returnList.add(reservationListResponseDto);
+        }
 
+        return returnList;
     }
 
     /**
