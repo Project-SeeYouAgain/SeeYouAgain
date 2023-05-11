@@ -29,16 +29,17 @@ public class LocationServiceImpl implements LocationService {
 
         Float lat = requestDto.getLat();
         Float lng = requestDto.getLng();
+        Boolean moving = requestDto.getMoving();
 
         Optional<Location> findLocation = locationRepository.findByUserId(userId);
 
         if (findLocation.isEmpty()) {
-            Location location = Location.of(getUser(userId), lat, lng);
+            Location location = Location.of(getUser(userId), lat, lng, moving);
             locationRepository.save(location);
             return;
         }
 
-        findLocation.get().updateLatLng(lat, lng);
+        findLocation.get().updateLatLngMoving(lat, lng, moving);
     }
 
     @Override
