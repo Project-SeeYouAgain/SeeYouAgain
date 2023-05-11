@@ -40,9 +40,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
 
     return (
         <div className="w-[100%]" onClick={GoDetail}>
-            <div className="flex mt-[0.4rem] relative">
-                <div className="w-[8rem] h-[7.4rem] relative mr-[0.8rem]">
-                    <Image src={productImg} alt="제품 사진" className="aspect-square rounded-[0.6rem]" layout="fill" objectFit="cover" />
+            <div className="flex relative">
+                <div className="relative w-[6rem] h-[6rem] mr-[0.8rem] ">
+                    <img alt="제품사진" className="w-full  rounded-[.5rem] h-full object-cover " src={productImg} />
                     {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute left-1 top-1 w-[1.5rem]" /> : null}
                     {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute right-0 top-1" /> : null}
                 </div>
