@@ -10,7 +10,8 @@ import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Navbar from '@/components/Container/components/Navbar';
-
+import { useRouter } from 'next/router';
+import { Cookies } from 'react-cookie';
 function MyPage() {
     interface profile {
         profileImg: string;
@@ -19,6 +20,19 @@ function MyPage() {
         description: string;
         mannerScore: number;
     }
+    const cookie = new Cookies();
+    const Router = useRouter();
+    const logout = () => {
+        cookie.remove('nickname');
+        cookie.remove('userId');
+        cookie.remove('location');
+        cookie.remove('accessToken');
+        cookie.remove('refreshToken');
+        cookie.remove('mannerScore');
+        sessionStorage.removeItem('recoil-persist');
+
+        Router.push('/');
+    };
     const [profileData, setProfileData] = useState<profile | null>(null);
     const token = useRecoilValue(userState).accessToken;
     useEffect(() => {
@@ -61,6 +75,9 @@ function MyPage() {
                                     <Link href={item.url}>{item.title}</Link>
                                 </span>
                             ))}
+                            <span onClick={logout} className={`text-[16px] mt-[0.5rem] dark:text-black`}>
+                                로그아웃
+                            </span>
                         </div>
                     </div>
                 </Body>
