@@ -8,14 +8,9 @@ interface HeaderProps {
 
 const MainHeader: FunctionComponent<HeaderProps> = ({ title1, title2 }) => {
     return (
-        <div className="flex items-center p-4">
-            <div>
-                <AiOutlineLeft color="#5669FF" size="24" />
-            </div>
-            <div className="text-center ml-[28vw]">
-                <p className=" font-semibold  text-[20px] text-[#5669FF]">{title1}</p>
-                <p className="font-bold   text-[20px] text-[#5669FF]">{title2}</p>
-            </div>
+        <div className="p-4 text-center">
+            <p className="font-semibold text-[20px] text-[#5669FF]">{title1} </p>
+            <p className="font-bold text-[20px] text-[#5669FF]">{title2}</p>
         </div>
     );
 };
