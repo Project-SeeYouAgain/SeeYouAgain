@@ -140,7 +140,6 @@ function Detail() {
                             <BsDot size={24} />
                             <span className="mr-[1rem]">{data.nickname}</span>
                             <MannerScore score={data.mannerScore} />
-                            {/* <DeclareButton bgColor="red" textColor="white" innerValue="신고" className="ml-[0.5rem]" /> */}
                         </div>
                         <div className="mb-[0.5rem]">
                             <span className="font-bold text-[1.3rem] dark:text-black">{data.price.toLocaleString('ko-KR')}원</span>
@@ -175,10 +174,16 @@ function Detail() {
                         )}
                     </div>
                 </Body>
-                <footer className="fixed bottom-0 border-t-2 w-[100vw] h-[4rem] flex items-center justify-evenly bg-white">
+                <footer className="fixed bottom-0 border-t border-solid w-[100vw] h-[5rem] flex items-center justify-evenly bg-white">
                     {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
-                    <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[3rem] py-[1.3rem] rounded-[0.5rem]" onClick={GoBook} />
-                    <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[2rem] py-[1.3rem] rounded-[0.5rem] border-[#5669FF] border-2" onClick={GoChatRoom} />
+                    <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[3.2rem] py-[1.3rem] rounded-[0.5rem]" onClick={GoBook} />
+                    <Square
+                        bgColor="white"
+                        textColor="blue"
+                        innerValue="채팅하기"
+                        className="text-[1.3rem] px-[3rem] py-[1.3rem] rounded-[0.5rem] border-[#5669FF] border-[.1rem]"
+                        onClick={GoChatRoom}
+                    />
                 </footer>
             </Container>
         );
