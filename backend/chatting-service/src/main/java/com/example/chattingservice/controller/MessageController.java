@@ -1,6 +1,7 @@
 package com.example.chattingservice.controller;
 
 import com.example.chattingservice.dto.request.MessageRequestDto;
+import com.example.chattingservice.dto.response.MessageResponseDto;
 import com.example.chattingservice.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,7 +18,7 @@ public class MessageController {
 
     @MessageMapping("/chat")
     public void sendMessage(MessageRequestDto chatDto) {
-        messageService.insertMessage(chatDto);
-        template.convertAndSend("/sub/chat/" + chatDto.getIdentifier(), chatDto);
+        MessageResponseDto messageResponseDto = messageService.insertMessage(chatDto);
+        template.convertAndSend("/sub/chat/" + chatDto.getIdentifier(), messageResponseDto);
     }
 }
