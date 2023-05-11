@@ -36,7 +36,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }) => {
         marker.setMap(map);
     });
 
-    return <div id="map" style={{ width: '100%', height: '100%' }} />;
+    return <div className="rounded-[1.5rem]" id="map" style={{ width: '100%', height: '100%' }} />;
 };
 
 export default KakaoMap;
