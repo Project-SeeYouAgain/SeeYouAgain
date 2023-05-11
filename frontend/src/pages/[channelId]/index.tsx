@@ -90,7 +90,7 @@ function Detail() {
             };
             axAuth(token)({ method: 'post', url: url, data: myData })
                 .then(res => {
-                    router.push(`/chat/${res.data.data}/book`);
+                    router.push(`/chat/${res.data.data}/book/${product}`);
                 })
                 .catch(err => console.log(err));
         }

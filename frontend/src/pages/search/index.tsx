@@ -88,7 +88,7 @@ function Search() {
                         placeholder="무엇을 빌리고 싶으세요?"
                         maxLength={20}
                     />
-                    <AiOutlineSearch className="dark:text-black" size={30} onClick={handleAddKeyword} />
+                    <AiOutlineSearch size={30} onClick={handleAddKeyword} />
                 </div>
             </div>
             <Body>
@@ -102,7 +102,6 @@ function Search() {
                     {keywords.map(keyword => (
                         <li key={keyword.id} className="flex">
                             <p
-                                className="dark:text-black"
                                 onClick={() => {
                                     setText(keyword.text);
                                 }}
@@ -117,7 +116,7 @@ function Search() {
                 </ul>
                 <div>
                     <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
-                    {clickSearch && <p className="dark:text-black">검색어 - {searchText}</p>}
+                    {clickSearch && <p className="">검색어 - {searchText}</p>}
                 </div>
             </Body>
         </Container>
