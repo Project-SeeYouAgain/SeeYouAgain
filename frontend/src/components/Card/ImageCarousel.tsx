@@ -50,6 +50,7 @@ function Carousel({ imgUrl }: CarouselProps) {
                         {/* <img src={item} alt="제품 사진" className="aspect-square w-[100vw]" /> */}
                         <img src={item} alt="제품 사진" className={`aspect-square w-[100vw]`} width={300} height={400} />
                         <div className={`${styles.imageGradient} w-[100vw] aspect-square`}></div>
+                        <div className={`${styles.imageGradientbottom} w-[100vw] aspect-square`}></div>
                     </div>
                 ))}
             </Slider>
