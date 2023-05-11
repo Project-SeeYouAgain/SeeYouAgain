@@ -6,6 +6,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Navbar from '@/components/Container/components/Navbar';
+import { useRouter } from 'next/router';
 
 interface KeyInterface {
     id: number;
@@ -75,11 +76,17 @@ function Search() {
             localStorage.setItem('keywords', JSON.stringify(keywords));
         }
     }, [keywords]);
+    const router = useRouter();
 
     return (
         <Container className="flex flex-col h-screen">
             <div className="flex p-4 pt-5 px-[1.88rem] items-center">
-                <BsArrowLeft size={30} />
+                <BsArrowLeft
+                    size={30}
+                    onClick={() => {
+                        router.back();
+                    }}
+                />
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
                     <input
                         type="text"

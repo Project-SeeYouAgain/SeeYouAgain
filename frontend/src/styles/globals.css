@@ -23,3 +23,7 @@ body {
 #__next-build-watcher {
     display: none;
 }
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
+}

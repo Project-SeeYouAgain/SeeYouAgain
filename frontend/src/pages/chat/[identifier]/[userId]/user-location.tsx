@@ -162,8 +162,8 @@ const UserLocation: React.FC = () => {
                                     <div className="w-8 h-8 rounded-full bg-black m-auto" />
                                     <p className="font-bold">{userNickName}</p>
                                 </div>
-                                {otherUserLocation?.moving && <div className="w-1/2 rounded-full bg-gray-400 text-white p-0.5 text-center h-8"> 준비중이예요. </div>}
-                                {!otherUserLocation?.moving && <div className="w-1/2 rounded-full bg-blue text-white p-0.5 text-center h-8"> 출발 했어요. </div>}
+                                {!otherUserLocation?.moving && <div className="w-1/2 rounded-full bg-gray-400 text-white p-0.5 text-center h-8"> 준비중이예요. </div>}
+                                {otherUserLocation?.moving && <div className="w-1/2 rounded-full bg-blue text-white p-0.5 text-center h-8"> 출발 했어요. </div>}
                             </div>
                         </div>
                     )}

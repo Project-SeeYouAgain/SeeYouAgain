@@ -23,34 +23,28 @@ const StepOneForm = ({ onSubmit }: StepProps) => {
     }
 
     return (
-        <Container>
-            <Body>
-                <div>
-                    <p className="text-center mt-[30%] font-semibold text-[1.2rem] text-blue "> 게시글 유형을 선택해주세요.</p>
+        <div className="w-[100vw] h-[90vh] px-[1.88rem] flex items-center justify-center">
+            <div className="w-full">
+                <p className="text-center font-semibold text-[1.2rem] text-blue mb-[5%]"> 게시글 유형을 선택해주세요.</p>
+                <div
+                    onClick={() => onHandleData(false)}
+                    className={`relative w-[100%] h-[25vh] rounded-[1rem]  mb-[1rem] ${!isRenter && 'bg-blue'}`}
+                    style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
+                >
+                    <span className={`font-bold ${isRenter ? 'text-blue' : 'text-white'} text-[13vw] absolute bottom-1 left-[1.2rem]`}> 구해요 </span>
+                    <Image src={want} alt="want" className="w-[40%] h-[90%] absolute bottom-0 right-0" />
                 </div>
-                <div className="mt-[4rem]">
-                    <div
-                        onClick={() => onHandleData(false)}
-                        className={`relative flex w-[100%] h-[15rem] rounded-[1rem]  mb-[1rem] ${!isRenter && 'bg-blue'}`}
-                        style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
-                    >
-                        <span className={`font-bold ${isRenter ? 'text-blue' : 'text-white'} text-[3rem] absolute bottom-1 left-[1.2rem]`}> 구해요 </span>
-                        <Image src={want} alt="want" className="w-[10rem] absolute right-0"></Image>
-                    </div>
 
-                    <div
-                        onClick={() => onHandleData(true)}
-                        className={`relative  flex ${isRenter && 'bg-blue'} w-[100%] h-[15rem] rounded-[1rem]  mb-[1rem] hover: `}
-                        style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
-                    >
-                        <div>
-                            <span className={`font-bold ${isRenter ? 'text-white' : 'text-blue'} text-[3rem] absolute top-2 left-[1.2rem]`}> 빌려줘요 </span>
-                            <Image src={renter} alt="want" className="w-[12rem] bottom-0 absolute right-0"></Image>
-                        </div>
-                    </div>
+                <div
+                    onClick={() => onHandleData(true)}
+                    className={`relative  ${isRenter && 'bg-blue'} w-[100%] h-[25vh] rounded-[1rem]  mb-[1rem] hover: `}
+                    style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
+                >
+                    <span className={`font-bold ${isRenter ? 'text-white' : 'text-blue'} text-[13vw] absolute top-2 left-[1.2rem]`}> 빌려줘요 </span>
+                    <Image src={renter} alt="want" className="w-[55%] h-[90%] absolute bottom-0 right-0" />
                 </div>
-            </Body>
-        </Container>
+            </div>
+        </div>
     );
 };
 
