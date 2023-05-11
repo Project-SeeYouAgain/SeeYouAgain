@@ -28,7 +28,7 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     @Transactional
-    public void insertMessage(MessageRequestDto requestDto) {
+    public MessageResponseDto insertMessage(MessageRequestDto requestDto) {
         Participant participant = participantRepository.findByUserIdAndChannelIdentifier(requestDto.getWriterId(), requestDto.getIdentifier())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
@@ -39,6 +39,7 @@ public class MessageServiceImpl implements MessageService{
 
         Message message = Message.of(requestDto, channel, participant, isOut);
         messageRepository.save(message);
+        return MessageResponseDto.from(message);
     }
 
     private boolean getIsOut(Participant participant, Channel channel) {

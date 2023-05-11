@@ -52,6 +52,7 @@ function Channel() {
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const connect = () => {
         const socket = new SockJS('https://k8c101.p.ssafy.io/chatting-service/ws');
@@ -117,6 +118,8 @@ function Channel() {
         } else {
             setChat('');
         }
+
+        setTimeout(() => inputRef.current?.focus(), 0);
     };
 
     const getMessage = () => {
@@ -158,7 +161,7 @@ function Channel() {
     useEffect(() => {
         if (!router.isReady) return;
 
-        setUserId(Number(cookie.get("userId")));
+        setUserId(Number(cookie.get('userId')));
         saveReadMessageSize();
         getChannelInfo();
         getMessage();
@@ -185,7 +188,7 @@ function Channel() {
             <div className="fixed inset-x-0 top-0 bg-white z-50">
                 {channelInfo && (
                     <div className="p-5 text-center border-b border-gray flex justify-center items-center">
-                        <p className="me-1 font-bold">{channelInfo?.nickname}</p>
+                        <p className="me-1 font-bold dark:text-black">{channelInfo?.nickname}</p>
                         <Button.MannerPoint innerValue={`${channelInfo?.mannerScore}`} />
                     </div>
                 )}
@@ -195,21 +198,21 @@ function Channel() {
                             {channelInfo?.productImg && <Image src={channelInfo.productImg} alt="물품 이미지" className="rounded-md object-cover" fill />}
                         </div>
                         <div>
-                            <p>{channelInfo?.title}</p>
+                            <p className="dark:text-black">{channelInfo?.title}</p>
                             <p className="text-sm">
-                                <span className="font-bold">{channelInfo?.price}원</span>
+                                <span className="font-bold dark:text-black">{channelInfo?.price}원</span>
                                 <span className="text-gray-400"> /일</span>
                             </p>
                         </div>
                     </div>
-                    <div className="grid gird-cols-3">
-                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToBook}>
+                    <div className="grid grid-cols-3 gap-3 px-2">
+                        <button className="border border-blue text-blue rounded-lg" onClick={goToBook}>
                             예약하기
                         </button>
-                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToUserLocation}>
+                        <button className="border border-blue text-blue rounded-lg" onClick={goToUserLocation}>
                             실시간 위치
                         </button>
-                        <span></span>
+                        <div />
                     </div>
                 </div>
             </div>
@@ -239,7 +242,14 @@ function Channel() {
                         <div className="me-2">
                             <AiOutlinePlusCircle className="text-3xl" />
                         </div>
-                        <input type={'text'} name={'chatInput'} onChange={handleChange} value={chat} placeholder="메세지를 입력하세요." className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full" />
+                        <input
+                            type={'text'}
+                            name={'chatInput'}
+                            onChange={handleChange}
+                            value={chat}
+                            placeholder="메세지를 입력하세요."
+                            className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full dark:text-black"
+                        />
                         <button className="absolute right-3 flex justify-center items-center rounded-full p-1.5" style={{ background: '#5669ff' }}>
                             <IoMdSend className="text-white text-lg -rotate-90" />
                         </button>

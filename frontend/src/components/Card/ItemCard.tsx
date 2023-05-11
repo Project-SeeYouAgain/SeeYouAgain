@@ -53,7 +53,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                 </div>
                 <div className="flex flex-col w-[70%]">
                     <span className="font-semibold w-[100%] flex items-center justify-between relative">
-                        <span className="truncate w-[11.87rem] text-[1.2rem]">{title}</span>
+                        <span className="truncate w-[11.87rem] text-[1.2rem] dark:text-black">{title}</span>
                         {menuState !== undefined ? (
                             <>
                                 <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={Dropdown} />
@@ -64,7 +64,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                     <div className="flex items-center mt-[.5rem]">
                         <span className="text-[#8E8E93] mr-[1.5rem]">{location}</span>
                         <div>
-                            <span className="font-bold text-[1.3rem]">{price.toLocaleString('ko-KR')}</span>
+                            <span className="font-bold text-[1.3rem] dark:text-black">{price.toLocaleString('ko-KR')}</span>
                             <span className="text-[#8E8E93]">원 /일</span>
                         </div>
                     </div>

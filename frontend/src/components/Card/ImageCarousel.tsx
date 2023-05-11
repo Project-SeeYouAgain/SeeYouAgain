@@ -28,17 +28,17 @@ function Carousel({ imgUrl }: CarouselProps) {
         slidesToScroll: 1,
     };
     return (
-        <div className="relative">
-            <Slider {...settings} className={`absolute ${styles.sliderContainer}`}>
+        <div className="relative w-[100vw]">
+            <Slider {...settings} className={`absolute w-[100vw] ${styles.sliderContainer}`}>
                 {imgUrl.map((item, index) => (
-                    <div key={index} className="relative">
+                    <div key={index} className="relative w-[100vw]">
                         {/* <img src={item} alt="제품 사진" className="aspect-square w-[100vw]" /> */}
                         <img src={item} alt="제품 사진" className={`aspect-square w-[100vw]`} width={300} height={400} />
-                        <div className={styles.imageGradient}></div>
+                        <div className={`${styles.imageGradient} w-[100vw] aspect-square`}></div>
                     </div>
                 ))}
             </Slider>
-            <div className={styles.backgroundBlack}></div>
+            <div className={`${styles.backgroundBlack} w-[100vw]`}></div>
         </div>
     );
 }
