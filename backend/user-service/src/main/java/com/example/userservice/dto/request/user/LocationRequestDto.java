@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class LocationRequestDto {
     private Float lat;
     private Float lng;
+    private Boolean moving;
 }
