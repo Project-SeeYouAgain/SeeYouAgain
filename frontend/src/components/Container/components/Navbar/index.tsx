@@ -7,6 +7,7 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { BsPerson } from 'react-icons/bs';
 import { BsChatDots } from 'react-icons/bs';
 import { useRouter } from 'next/router';
+import classNames from 'classnames';
 
 function Navbar() {
     const router = useRouter();
@@ -39,26 +40,30 @@ function Navbar() {
     const MenuDataNods = () => {
         return MenuData.map((item, index: number) => {
             const isActive = currentUrl === item.url; // 현재 선택된 아이템인지 확인
-            const iconClass = isActive ? 'w-[1.8rem] h-[1.8rem] text-blue mt-[.2rem]' : 'w-[1.8rem] h-[1.8rem] text-darkgrey mt-[.2rem]';
+            const iconClass = isActive ? 'text-blue  ' : 'text-darkgrey';
+            const base = 'm-auto w-[1.5rem] h-[1.5rem] mt-[.2rem]';
             return (
                 <Link key={index} href={item.url}>
-                    <li className="whitespace-nowrap text-darkgrey  items-center " style={{ fontFamily: 'Pretendard-Bold' }}>
-                        <div>
-                            {item.icon === 'BiHomeAlt2' && <BiHomeAlt2 className={iconClass} />}
-                            {item.icon === 'AiOutlineSearch' && <AiOutlineSearch className={iconClass} />}
-                            {item.icon === 'AiOutlinePlusCircle' && <AiOutlinePlusCircle className={iconClass} />}
-                            {item.icon === 'BsPerson' && <BsPerson className={iconClass} />}
-                            {item.icon === 'BsChatDots' && <BsChatDots className={iconClass} />}
-                        </div>
-                        <div className={iconClass}>{item.title}</div>
+                    <li className={classNames('whitespace-nowrap text-darkgrey  items-center ', iconClass)} style={{ fontFamily: 'Pretendard-Bold' }}>
+                        {item.icon === 'BiHomeAlt2' && <BiHomeAlt2 className={base} />}
+                        {item.icon === 'AiOutlineSearch' && <AiOutlineSearch className={base} />}
+                        {item.icon === 'AiOutlinePlusCircle' && <AiOutlinePlusCircle className={base} />}
+                        {item.icon === 'BsPerson' && <BsPerson className={base} />}
+                        {item.icon === 'BsChatDots' && <BsChatDots className={base} />}
+                        <div className="w-full text-center h-[1.5rem] mt-[.2rem]">{item.title}</div>
                     </li>
                 </Link>
             );
         });
     };
     return (
+<<<<<<< HEAD
+        <div className="fixed bottom-0 z-30">
+            <ul className="grid grid-cols-5 gap-4 absolute bottom-0 h-[3.7rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey">{MenuDataNods()}</ul>
+=======
         <div className={`fixed bottom-0 z-30 ${!isVisible ? '' : 'hidden'}`}>
             <ul className="flex absolute bottom-0 h-[4.5rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey">{MenuDataNods()}</ul>
+>>>>>>> 0f64539b4e010209e183787f021e5ea0a55f224a
         </div>
     );
 }
