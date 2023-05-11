@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { axBase } from '@/apis/axiosinstance';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+import write from '../../../public/icon/create-file.png';
+import Image from 'next/image';
 
 interface dataprop {
     productId: number;
@@ -73,7 +75,12 @@ function ReviewList(propdata: dataprop) {
                     <div className="h-[5rem]"></div>
                 </>
             ) : (
-                <div>리뷰가 없습니다.</div>
+                <div className="relative ">
+                    <div className="absolute left-1/2 transform -translate-x-1/2 ">
+                        <Image src={write} alt="리뷰작성" />
+                        <p className="text-center text-darkgrey mt-[1rem]">아직 작성된 리뷰가 없어요.</p>
+                    </div>
+                </div>
             )}
         </div>
     );
