@@ -52,8 +52,9 @@ public class AuthController {
      */
     @PatchMapping("/profile")
     public ResponseEntity<BaseResponseDto<ProfileResponseDto>> updateProfile(HttpServletRequest request,
-                                                                             @RequestPart(required = false) ProfileUpdateRequestDto requestDto) {
-        ProfileResponseDto responseDto = authService.updateProfile(getUserId(request), requestDto);
+                                                                             @RequestPart ProfileUpdateRequestDto requestDto,
+                                                                             @RequestPart(required = false) MultipartFile profileImg) {
+        ProfileResponseDto responseDto = authService.updateProfile(getUserId(request), requestDto, profileImg);
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(200, "success", responseDto));
     }
 
@@ -81,19 +82,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", authService.updateNickname(getUserId(request), requestDto)));
     }
-
-//    /**
-//     * 프로필 사진을 변경하는 API입니다.
-//     * @param request
-//     * @param profileImg
-//     * */
-//    @PatchMapping("/user/img")
-//    public ResponseEntity<BaseResponseDto<String>> updateProfileImg(HttpServletRequest request,
-//                                                                    @RequestPart MultipartFile profileImg) {
-//
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(new BaseResponseDto<>(200, "success", authService.updateProfileImg(getUserId(request), profileImg)));
-//    }
 
     private Long getUserId(HttpServletRequest request) {
         return Long.parseLong(request.getHeader("userId"));

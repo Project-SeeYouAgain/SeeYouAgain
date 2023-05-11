@@ -82,7 +82,7 @@ function Home() {
                     <div></div>
                 </div>
                 {/* 제품 목록 */}
-                <div className="mt-[3rem]">
+                <div className="mt-[3rem] ">
                     <div>
                         {listdata &&
                             listdata.map((item, index) => (

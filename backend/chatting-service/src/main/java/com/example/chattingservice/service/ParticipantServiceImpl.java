@@ -1,5 +1,6 @@
 package com.example.chattingservice.service;
 
+import com.example.chattingservice.dto.request.ProfileImgRequestDto;
 import com.example.chattingservice.entity.Channel;
 import com.example.chattingservice.entity.Message;
 import com.example.chattingservice.entity.Participant;
@@ -57,5 +58,11 @@ public class ParticipantServiceImpl implements ParticipantService {
 
         participant.updateIsOut(false);
         participant.updateLastReadMessageId(lastReadMessageId);
+    }
+
+    @Override
+    @Transactional
+    public void updateProfileImg(Long userId, ProfileImgRequestDto requestDto) {
+        participantRepository.updateProfileImg(userId, requestDto.getProfileImg());
     }
 }
