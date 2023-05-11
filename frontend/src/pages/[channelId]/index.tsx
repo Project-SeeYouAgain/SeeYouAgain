@@ -136,13 +136,13 @@ function Detail() {
                             <DeclareButton bgColor="red" textColor="white" innerValue="신고" className="ml-[0.5rem]" />
                         </div>
                         <div className="mb-[0.5rem]">
-                            <span className="font-bold text-[1.3rem]">{data.price.toLocaleString('ko-KR')}원</span>
+                            <span className="font-bold text-[1.3rem] dark:text-black">{data.price.toLocaleString('ko-KR')}원</span>
                             <span>/일</span>
                         </div>
                         <div className="mb-[1.5rem]">
                             <RoundButton bgColor="lightgrey" textColor="black" innerValue={data.category} />
                         </div>
-                        <div className="mb-[1.5rem]">{data.description}</div>
+                        <div className="mb-[1.5rem] dark:text-black">{data.description}</div>
                         <div className="mb-[2rem]">
                             {data.tag.map((value, index) => (
                                 <span key={index} className="text-[#BDBDBD]">

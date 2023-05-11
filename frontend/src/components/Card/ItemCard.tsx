@@ -64,7 +64,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                     <div className="flex items-center mt-[.5rem]">
                         <span className="text-[#8E8E93] mr-[1.5rem]">{location}</span>
                         <div>
-                            <span className="font-bold text-[1.3rem]">{price.toLocaleString('ko-KR')}</span>
+                            <span className="font-bold text-[1.3rem] dark:text-black">{price.toLocaleString('ko-KR')}</span>
                             <span className="text-[#8E8E93]">원 /일</span>
                         </div>
                     </div>
