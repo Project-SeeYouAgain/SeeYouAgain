@@ -11,7 +11,6 @@ function Calender({ onChange }: CalenderProps) {
     const [endDate, setEndDate] = useState<Date | null>(null);
 
     function handleDateChange(update: [Date, Date]) {
-        
         setStartDate(update[0]);
         setEndDate(update[1]);
         if (onChange) {
