@@ -36,7 +36,7 @@ public class ParticipantController {
                 .body(new BaseResponseDto<>(200, "success"));
     }
 
-    @PatchMapping("/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<BaseResponseDto<?>> updateProfileImg(@PathVariable("userId") Long userId,
                                                                @RequestBody ProfileImgRequestDto requestDto) {
 
