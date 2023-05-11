@@ -62,9 +62,7 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                     {isRent ? (
                         menuState === 1 ? (
                             <>
-                                <div className="block px-4 py-2" onclick={(event: React.MouseEvent) => OpenCalender(event)}>
-                                    대여일정
-                                </div>
+                                <div className="block px-4 py-2">대여일정</div>
                                 <div className="block px-4 py-2">반납하기</div>
                             </>
                         ) : menuState === 2 ? (
