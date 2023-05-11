@@ -7,21 +7,37 @@ import classNames from 'classnames';
 import styles from './index.module.scss';
 import Navbar from '@/components/Container/components/Navbar';
 import { useRouter } from 'next/router';
-
+import { axAuth } from '@/apis/axiosinstance';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
+import ItemCard from '@/components/Card/ItemCard';
 interface KeyInterface {
     id: number;
     text: string;
 }
+interface dataProps {
+    thumbnailUrl: string;
+    title: string;
+    location: string;
+    price: number;
+    startDate?: string;
+    endDate?: string;
+    isSafe?: boolean;
+    isCart?: boolean;
+    productId: number;
+    menuState?: number;
+}
 
 function Search() {
     const [clickSearch, setClickSearch] = useState(false);
+    const [listdata, setListData] = useState<dataProps[]>();
     const [text, setText] = useState('');
     const [searchText, setSearchText] = useState('');
     const handleTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
     };
     const [keywords, setKeywords] = useState<KeyInterface[]>([]);
-
+    const token = useRecoilValue(userState).accessToken;
     // 페이지 로드 시 로컬스토리지에서 기존 검색어 불러오기
     useEffect(() => {
         const storedKeywords = localStorage.getItem('keywords');
@@ -33,6 +49,19 @@ function Search() {
     // 검색 버튼 클릭 시, 검색어 추가하기
     const handleAddKeyword = () => {
         if (!text) return; // 검색어가 입력되어 있지 않으면 추가하지 않음
+
+        axAuth(token)({
+            method: 'post',
+            url: `/product-service/auth/search/${text}`,
+            data: {
+                sort: 0,
+            },
+        })
+            .then(res => {
+                console.log(res.data.data);
+                setListData(res.data.data);
+            }) // 잘 들어갔는지 확인
+            .catch(err => console.log(err)); // 어떤 오류인지 확인
 
         // 키워드가 일치하는 기존 검색어를 찾는다
         const existingKeyword = keywords.find(keyword => keyword.text === text);
@@ -51,6 +80,10 @@ function Search() {
         setSearchText(text);
         setKeywords(prevKeywords => [newKeyword, ...prevKeywords]);
         setText(''); // 검색어 입력 필드 비우기
+    };
+
+    const onClick = (id: number) => {
+        router.push(`/${id}`);
     };
 
     // 검색어 삭제하기
@@ -124,7 +157,14 @@ function Search() {
                 </ul>
                 <div>
                     <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
-                    {clickSearch && <p className="">검색어 - {searchText}</p>}
+                    <div>
+                        {listdata &&
+                            listdata.map((item, index) => (
+                                <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
+                                    <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                </div>
+                            ))}
+                    </div>
                 </div>
             </div>
             <Navbar />
