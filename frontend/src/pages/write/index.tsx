@@ -13,6 +13,7 @@ import { axAuth } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+import Navbar from '@/components/Container/components/Navbar';
 
 function Write() {
     const [currentStep, setCurrentStep] = useState<number>(1);
@@ -179,23 +180,25 @@ function Write() {
                     {currentStep === 3 && <p>Thank you for your submission!</p>}
                     {currentStep !== 3 && (
                         <>
-                            {currentStep !== 1 && (
-                                <button className="absolute mt-[1rem] text-white text-[2rem] bg-[#d2d2d2] left-8 w-[3.2rem] h-[3rem] rounded-[.4rem]" onClick={handlePrevious}>
-                                    <div className="ml-[20%]">
-                                        <MdKeyboardArrowLeft />
-                                    </div>
-                                </button>
+                            {currentStep == 1 && (
+                                <>
+                                    <button className="absolute bottom-24 right-8 text-white text-[2rem] bg-blue w-[3.2rem] h-[3rem] rounded-[.4rem]" onClick={() => setCurrentStep(currentStep + 1)}>
+                                        <MdKeyboardArrowRight className="m-auto" />
+                                    </button>
+                                    <Navbar />
+                                </>
                             )}
-                            {currentStep === 2 ? (
-                                <button onClick={handleSubmit} className="absolute mt-[1rem] text-white text-[1rem] bg-blue right-8 w-[70vw] h-[3rem] rounded-[.4rem]">
-                                    등록하기
-                                </button>
-                            ) : (
-                                <button className="absolute  text-white  mt-[1rem] text-[2rem] bg-blue right-8 w-[3.2rem] h-[3rem] rounded-[.4rem]" onClick={() => setCurrentStep(currentStep + 1)}>
-                                    <div className="ml-[20%]">
-                                        <MdKeyboardArrowRight />
+                            {currentStep == 2 && (
+                                <div className="fixed bottom-5 w-full flex">
+                                    <div className="flex m-auto">
+                                        <button className=" text-white text-[2rem] bg-[#d2d2d2] w-[3.2rem] h-[3rem] rounded-l-[.4rem]" onClick={handlePrevious}>
+                                            <MdKeyboardArrowLeft className="m-auto" />
+                                        </button>
+                                        <button onClick={handleSubmit} className="text-white text-[1rem] bg-blue w-[70vw] h-[3rem] rounded-r-[.4rem]">
+                                            등록하기
+                                        </button>
                                     </div>
-                                </button>
+                                </div>
                             )}
                         </>
                     )}
