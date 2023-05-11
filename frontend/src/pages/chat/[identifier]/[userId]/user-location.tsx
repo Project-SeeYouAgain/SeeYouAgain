@@ -18,7 +18,7 @@ const UserLocation: React.FC = () => {
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number; moving: boolean } | null>(null);
     const token = useRecoilValue(userState).accessToken;
-    const myId = useRecoilValue(userState).userId;
+    const myId = useRecoilValue(userState).id;
 
     useEffect(() => {
         console.log(router.query);
