@@ -36,6 +36,19 @@ interface user {
 
 function Home() {
     // 물품리스트 불러오기
+    const chw = {
+        isCart: false,
+        location: '화정동',
+        price: 1000,
+        productId: 11,
+        score: 0,
+        state: true,
+        thumbnailUrl: 'https://seeyouagain-s3-bucket.s3.ap-northeast-2.amazonaws.com/product/ca5410a0-c8d4-407f-b8a0-fa938bdfcda0-%EC%8B%B8%EC%9D%B8.png',
+        title: '고양이를 볼수있는 컵을 빌려드려욬ㅋㅋ',
+        type: true,
+        startDate: '22.02.02',
+        endDate: '22.02.02',
+    };
     const [listdata, setListData] = useState<dataProps[]>([]);
     // 찜하기
     const token = useRecoilValue(userState).accessToken;
@@ -113,6 +126,17 @@ function Home() {
                 {/* 제품 목록 */}
                 <div className="mt-[3rem] pb-20">
                     <div>
+                        <ItemCard
+                            startDate={chw.startDate}
+                            endDate={chw.endDate}
+                            productId={chw.productId}
+                            productImg={chw.thumbnailUrl}
+                            location={chw.location}
+                            price={chw.price}
+                            title={chw.title}
+                            isSafe={true}
+                            isCart={true}
+                        />
                         {listdata &&
                             listdata.map((item, index) => (
                                 <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
