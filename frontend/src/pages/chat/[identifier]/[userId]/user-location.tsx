@@ -8,14 +8,17 @@ import { axAuth } from '@/apis/axiosinstance';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import { useRouter } from 'next/router';
+import Navbar from './../../../../components/Container/components/Navbar/index';
 
 const UserLocation: React.FC = () => {
     const router = useRouter();
+    const [userNickName, setUserNickName] = useState<string | null>('이웃닉넴');
     const [userId, setUserId] = useState<any>('');
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number; moving: boolean } | null>(null);
     const token = useRecoilValue(userState).accessToken;
+    const myId = useRecoilValue(userState).userId;
 
     useEffect(() => {
         console.log(router.query);
@@ -30,42 +33,54 @@ const UserLocation: React.FC = () => {
         myCheck ? setMyCheck(false) : setMyCheck(true);
     };
     useEffect(() => {
+        myId;
+    });
+    useEffect(() => {
         if (!router.isReady) return;
-        const getLocation = () => {
+
+        const updateLocation = async () => {
             console.log(userId);
 
-            let watchId: number | null = null;
+            if (router.query.userId) {
+                try {
+                    const profileRes = await axAuth(token)({
+                        method: 'get',
+                        url: `/user-service/auth/profile/${router.query.userId}`,
+                    });
+                    console.log(profileRes);
+                    setUserNickName(profileRes.data.data.nickname);
+
+                    const locationRes = await axAuth(token)({
+                        method: 'get',
+                        url: `/user-service/auth/location/${router.query.userId}`,
+                    });
+                    console.log(locationRes);
+                    setOtherUserLocation({ lat: locationRes.data.data.lat, lng: locationRes.data.data.lng, moving: locationRes.data.data.moving });
+                } catch (err) {
+                    console.log(err);
+                }
+            }
 
             if (navigator.geolocation) {
                 const options = {
                     maximumAge: 0,
                 };
 
-                watchId = navigator.geolocation.watchPosition(
-                    position => {
+                const watchId = navigator.geolocation.watchPosition(
+                    async position => {
                         setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
                         if (position) {
-                            const data = { lat: position.coords.latitude, lng: position.coords.longitude };
-                            axAuth(token)({
-                                method: 'post',
-                                url: '/user-service/auth/location',
-                                data: data,
-                            })
-                                .then((res: any) => {
-                                    console.log(res);
-                                }) // 잘 들어갔는지 확인
-                                .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
-                        }
-                        if (router.query.userId) {
-                            axAuth(token)({
-                                method: 'get',
-                                url: `/user-service/auth/location/${router.query.userId}`,
-                            })
-                                .then((res: any) => {
-                                    console.log(res);
-                                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng });
-                                }) // 잘 들어갔는지 확인
-                                .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
+                            const data = { lat: position.coords.latitude, lng: position.coords.longitude, moving: myCheck };
+                            try {
+                                const res = await axAuth(token)({
+                                    method: 'post',
+                                    url: '/user-service/auth/location',
+                                    data: data,
+                                });
+                                console.log(res);
+                            } catch (err) {
+                                console.log(err);
+                            }
                         }
                     },
                     error => {
@@ -73,29 +88,49 @@ const UserLocation: React.FC = () => {
                     },
                     options,
                 );
+
+                return () => {
+                    if (watchId !== null) {
+                        navigator.geolocation.clearWatch(watchId);
+                    }
+                };
             } else {
                 console.error('Geolocation is not supported by this browser.');
             }
-
-            return () => {
-                if (watchId !== null) {
-                    navigator.geolocation.clearWatch(watchId);
-                }
-            };
         };
 
-        getLocation();
-        const intervalId = setInterval(getLocation, 10000); // 10 seconds
+        updateLocation();
+        const intervalId = setInterval(updateLocation, 10000); // 10 seconds
 
         return () => {
             clearInterval(intervalId);
+
+            // 페이지를 벗어날 때 실행되는 cleanup 함수
+            (async () => {
+                if (userLocation) {
+                    const data = {
+                        lat: null,
+                        lng: null,
+                        moving: false, // 원하는 값으로 설정
+                    };
+
+                    try {
+                        await axAuth(token)({
+                            method: 'post',
+                            url: '/user-service/auth/location',
+                            data: data,
+                        });
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            })();
         };
-    }, [router.isReady]);
+    }, [router.isReady, token, userId]);
 
     const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
 
     const [dots, setDots] = useState('');
-    const check = true;
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (dots.length < 3) {
@@ -108,41 +143,40 @@ const UserLocation: React.FC = () => {
     }, [dots]);
 
     return (
-        <div className="w-full h-screen">
+        <div className="flex flex-col h-screen">
             <ResponsiveChecker message={message} onIsMobileChanged={handleIsMobileChanged} />
             {isMobile && (
                 <>
-                    {/* 나머지 페이지 내용 */}
+                    {!userLocation && (
+                        <div className="w-full h-screen text-center font-bold text-xl bg-[#183942] text-white">
+                            <p className={styles.Container}>위치 권한을 확인해보세요.</p>
+                            <Image src={findMap} alt="findmap" className="m-auto" />
+                            <p>{`위치를 가져오는 중입니다${dots}`}</p>
+                        </div>
+                    )}
                     {userLocation && (
                         <div>
                             <p className="p-4 pt-8 text-2xl text-center font-bold text-blue">실시간 위치</p>
                             <div className="flex justify-center pb-4">
-                                <div className="pr-4">
+                                <div className="pr-4 text-center w-fit">
                                     <div className="w-8 h-8 rounded-full bg-black m-auto" />
-                                    <p className="font-bold">이웃닉넴</p>
+                                    <p className="font-bold">{userNickName}</p>
                                 </div>
-                                {check && <div className="w-1/2 rounded-full bg-gray-400 text-white p-0.5 text-center h-8"> 준비중이예요. </div>}
-                                {!check && <div className="w-1/2 rounded-full bg-blue text-white p-0.5 text-center h-8"> 출발 했어요. </div>}
+                                {otherUserLocation?.moving && <div className="w-1/2 rounded-full bg-gray-400 text-white p-0.5 text-center h-8"> 준비중이예요. </div>}
+                                {!otherUserLocation?.moving && <div className="w-1/2 rounded-full bg-blue text-white p-0.5 text-center h-8"> 출발 했어요. </div>}
                             </div>
                         </div>
                     )}
-                    <div id="map" className="w-full h-[83%] relative">
+                    <div id="map" className="w-full flex-grow relative">
                         {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={otherUserLocation} />}
-                        {!userLocation && (
-                            <div className="w-full h-screen text-center font-bold text-xl bg-[#183942] text-white">
-                                <p className={styles.Container}>위치 권한을 확인해보세요.</p>
-                                <Image src={findMap} alt="findmap" className="m-auto" />
-                                <p>{`위치를 가져오는 중입니다${dots}`}</p>
-                                <p>{userLocation}</p>
-                            </div>
-                        )}
-                        {userLocation && (
-                            <div className="absolute bottom-10 w-full z-10" onClick={clickPosition}>
-                                {myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-blue pt-2.5">출발할까요?</p>}
-                                {!myCheck && <p className="w-2/3 h-12 rounded-xl text-center text-white text-xl m-auto bg-gray-400 pt-2.5">이동중입니다</p>}
-                            </div>
-                        )}
                     </div>
+                    {userLocation && (
+                        <div className="absolute bottom-20 right-5 w-1/3 z-10" onClick={clickPosition}>
+                            {myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
+                            {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-gray-400 pt-2.5">이동중</p>}
+                        </div>
+                    )}
+                    {userLocation && <Navbar />}
                 </>
             )}
         </div>
