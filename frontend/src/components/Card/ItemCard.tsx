@@ -43,7 +43,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         const handleResize = () => {
             const windowWidth = window.innerWidth;
             console.log(windowWidth);
-            const containerWidth = windowWidth - 127;
+            const containerWidth = windowWidth - 135;
             setContainerWidth(containerWidth);
         };
 
@@ -58,12 +58,12 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }, []);
 
     return (
-        <div className="w-full flex mt-[0.4rem] relative border-t-2 border-solid py-4" onClick={GoDetail}>
+        <div className="w-full flex relative border-t-2 border-solid py-4" onClick={GoDetail}>
             <div className="w-[95px] h-[95px] relative">
                 <Image src={productImg} alt="제품 사진" fill className="aspect-square rounded-lg w-full h-full" />
                 {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute left-1 bottom-1" /> : null}
             </div>
-            <div className="items-center p-1 pl-4" style={{ width: containerWidth }}>
+            <div className="items-center pl-4 pr-1" style={{ width: containerWidth }}>
                 <span className="font-semibold w-full flex items-center justify-between relative">
                     <p className=" truncate dark:text-black font-bolder">{title}</p>
                     {menuState !== undefined ? (
