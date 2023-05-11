@@ -59,7 +59,7 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
 
     return (
         <Container>
-            <Body>
+            <div className="px-[1.88rem]">
                 <div className="mt-[1rem] ">
                     <p className="mb-[1rem] font-bold text-[1.2rem] "> 상품 이미지</p>
                     <ImageUpload data={data} setData={setData} onSubmit={onSubmit} />
@@ -115,9 +115,8 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
                         <span className="font-bold text-[1.2rem] text-darkgrey"> 에서 거래 할게요.</span>
                     </span>
                 </div>
-                <p className="text-[.8rem] text-darkgrey"> 안전한 세이프존을 거래장소로 이용해보세요!</p>
-                <div className="mb-[2rem]"></div>
-            </Body>
+                <p className="text-[.8rem] text-darkgrey mb-20"> 안전한 세이프존을 거래장소로 이용해보세요!</p>
+            </div>
         </Container>
     );
 };
