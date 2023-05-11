@@ -102,7 +102,7 @@ function Home() {
     return (
         <Container>
             <MainHeader title1="우리 동네에서" title2="찾고 나눠요" />
-            <div className="px-4">
+            <div className="px-5">
                 {/* 이용자 안내 페이지 */}
                 <Link href="/tutorial">
                     <div className="relative flex justify-between w-[100%] h-[5rem] bg-blue rounded-[.7rem] items-center px-2 ">
