@@ -58,11 +58,11 @@ function ReviewList(propdata: dataprop) {
                         <Review nickname={item.nickname} content={item.content} reviewScore={item.reviewScore} createdAt={item.createdAt} reviewImgUrl={item.reviewImgUrl} key={index} />
                     ))}
                     <div className="flex justify-center">
-                        <span className={page === 1 ? 'text-white mr-[0.5rem]' : 'text-black mr-[0.5rem]'} onClick={PageLeft}>
+                        <span className={page === 1 ? 'text-white mr-[0.6rem]' : 'text-black mr-[0.6rem]'} onClick={PageLeft}>
                             &lt;
                         </span>
                         {Array.from({ length: Math.ceil(propdata.reviewListSize / 3) }).map((_, index) => (
-                            <span className={page === index + 1 ? 'text-black mr-[0.5rem] underline underline-offset-4' : 'text-[#C6C6C6] mr-[0.5rem]'} key={index} onClick={() => setPage(index + 1)}>
+                            <span className={page === index + 1 ? 'text-black mr-[0.6rem] underline underline-offset-4' : 'text-[#C6C6C6] mr-[0.6rem]'} key={index} onClick={() => setPage(index + 1)}>
                                 {index + 1}
                             </span>
                         ))}
@@ -70,6 +70,7 @@ function ReviewList(propdata: dataprop) {
                             &gt;
                         </span>
                     </div>
+                    <div className="h-[5rem]"></div>
                 </>
             ) : (
                 <div>리뷰가 없습니다.</div>
