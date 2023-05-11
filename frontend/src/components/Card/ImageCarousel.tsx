@@ -43,12 +43,11 @@ function Carousel({ imgUrl }: CarouselProps) {
         }
     };
     return (
-        <div className="relative w-[100vw] h-[45vh]" onWheel={handleWheel}>
+        <div className="relative w-[100vw] h-[45vh] mb-[1rem]" onWheel={handleWheel}>
             <Slider {...settings} className={`absolute w-[100vw] ${styles.sliderContainer}`}>
                 {imgUrl.map((item, index) => (
                     <div key={index} className="relative w-[100vw]">
-                        {/* <img src={item} alt="제품 사진" className="aspect-square w-[100vw]" /> */}
-                        <img src={item} alt="제품 사진" className={`aspect-square w-[100vw]`} width={300} height={400} />
+                        <img key={index} alt="제품사진" className="w-[100vw] h-[45vh] object-cover " src={item} />
                         <div className={`${styles.imageGradient} w-[100vw] aspect-square`}></div>
                         <div className={`${styles.imageGradientbottom} w-[100vw] aspect-square`}></div>
                     </div>
