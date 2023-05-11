@@ -33,9 +33,10 @@ interface user {
     location: string | null;
     mannerScore: string | null;
 }
+
 function Home() {
     // 물품리스트 불러오기
-    const [listdata, setListData] = useState<dataProps[]>();
+    const [listdata, setListData] = useState<dataProps[]>([]);
     // 찜하기
     const token = useRecoilValue(userState).accessToken;
     const [user, setUser] = useState<user>({
@@ -46,6 +47,7 @@ function Home() {
         location: '',
         mannerScore: '',
     });
+    const [productId, setProductId] = useState<number>();
     const router = useRouter();
     const userset = useRecoilValue(userState);
     useEffect(() => {
@@ -55,14 +57,30 @@ function Home() {
             url: '/product-service/auth/productlist',
             data: {
                 sort: 0,
+                productId: null
             },
         })
             .then(res => {
                 console.log(res.data.data);
-                setListData(res.data.data);
+                const productList = res.data.data;
+                setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
+                setProductId(productList[productList.length - 1].productId);
             })
             .catch(err => console.log(err));
     }, [userset]);
+
+    const getProduct = () => {
+        axAuth(token)({
+            method: 'post',
+            url: '/product-service/auth/productlist',
+            data: {
+                sort: 0,
+                productId: productId
+            },
+        }).then(res => {
+            setListData((_list_data: dataProps[]) => [..._list_data, ...res.data.data]);
+        });
+    };
 
     const onClick = (id: number) => {
         router.push(`/${id}`);
@@ -93,7 +111,7 @@ function Home() {
                     <div></div>
                 </div>
                 {/* 제품 목록 */}
-                <div className="mt-[3rem] ">
+                <div className="mt-[3rem] pb-20">
                     <div>
                         {listdata &&
                             listdata.map((item, index) => (

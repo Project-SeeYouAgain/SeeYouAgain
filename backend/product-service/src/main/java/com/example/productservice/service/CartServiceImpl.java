@@ -42,10 +42,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void deleteCart(Long userId, Long productId) {
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
-
-        Cart cart = cartRepository.findByUserIdAndProductId(userId, product.getId())
+        Cart cart = cartRepository.findByUserIdAndProductId(userId, productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.CART_NOT_EXIST_EXCEPTION));
 
         cartRepository.delete(cart);
