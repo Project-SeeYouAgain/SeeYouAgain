@@ -83,7 +83,7 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     @Transactional
     public String createChannel(Long userId, ChannelRequestDto requestDto) {
-        Optional<Channel> findChannel = channelRepository.findByOwnerIdAndUserId(requestDto.getOwnerId(), userId);
+        Optional<Channel> findChannel = channelRepository.findByOwnerIdAndUserIdAndProductId(requestDto.getOwnerId(), userId, requestDto.getProductId());
 
         if (findChannel.isEmpty()) return saveChannelInfo(userId, requestDto);
 
