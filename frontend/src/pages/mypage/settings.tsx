@@ -9,13 +9,14 @@ import defaultUserImage from '@/images/default_user.png';
 import pen from '@/images/pen.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 
 function settings() {
     const [firstValue, setFirstValue] = useState<string>('');
     const [secondValue, setSecondValue] = useState<string>('');
+    const [profileImg, setProfileImg] = useState<string>('');
     const [image, setImage] = useState<File | undefined>();
     const router = useRouter();
 
@@ -26,6 +27,7 @@ function settings() {
     const changeSecondValue = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSecondValue(event.target.value);
     };
+
     const handleImageChange = (file: File) => {
         setImage(file);
     };
@@ -34,8 +36,8 @@ function settings() {
     const setting = () => {
         const submitData = {
             location: firstValue,
-            description: secondValue
-        }
+            description: secondValue,
+        };
 
         const blob = new Blob([JSON.stringify(submitData)], {
             // type에 JSON 타입 지정
@@ -61,6 +63,17 @@ function settings() {
             })
             .catch((err: any) => console.log(err));
     };
+
+    useEffect(() => {
+        axAuth(token)({
+            url: '/user-service/auth/profile',
+        }).then(res => {
+            console.log(res.data.data);
+            setFirstValue(res.data.data.location);
+            setSecondValue(res.data.data.description);
+            setProfileImg(res.data.data.profileImgUrl);
+        });
+    }, []);
 
     return (
         <Container className="relative">
