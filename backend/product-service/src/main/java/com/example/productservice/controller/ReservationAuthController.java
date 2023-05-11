@@ -64,10 +64,10 @@ public class ReservationAuthController {
     }
 
     // 예약 삭제
-    @DeleteMapping("/reservation/{reservationId}")
+    @DeleteMapping("/reservation/{productId}")
     public ResponseEntity<BaseResponseDto<?>> deleteReservation(HttpServletRequest request,
-                                                                @PathVariable("reservationId") Long reservationId) {
-        reservationService.deleteReservation(getUserId(request), reservationId);
+                                                                @PathVariable("productId") Long productId) {
+        reservationService.deleteReservation(getUserId(request), productId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
     }
