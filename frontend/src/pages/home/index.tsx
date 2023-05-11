@@ -57,7 +57,7 @@ function Home() {
             url: '/product-service/auth/productlist',
             data: {
                 sort: 0,
-                productId: null
+                productId: null,
             },
         })
             .then(res => {
@@ -75,7 +75,7 @@ function Home() {
             url: '/product-service/auth/productlist',
             data: {
                 sort: 0,
-                productId: productId
+                productId: productId,
             },
         }).then(res => {
             setListData((_list_data: dataProps[]) => [..._list_data, ...res.data.data]);

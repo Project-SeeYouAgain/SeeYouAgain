@@ -39,43 +39,49 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }
 
     return (
-        <div className="w-[100%]" onClick={GoDetail}>
-            <div className="flex mt-[0.4rem] relative">
-                <div className="w-[8rem] h-[7.4rem] relative mr-[0.8rem]">
-                    <Image src={productImg} alt="제품 사진" className="aspect-square rounded-[0.6rem]" layout="fill" objectFit="cover" />
-                    {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute left-1 top-1 w-[1.5rem]" /> : null}
-                    {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute right-0 top-1" /> : null}
+        <div className="w-full flex mt-[0.4rem] relative border-t-2 border-solid py-4" onClick={GoDetail}>
+            <div className="w-[82.28px] h-[82.28px] relative">
+                <Image src={productImg} alt="제품 사진" className="aspect-square rounded-2" fill />
+                {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute left-1 top-1 w-4" /> : null}
+                {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute right-1 bottom-1" /> : null}
+            </div>
+            <div className="grid grid-rows-3 items-center w-3/4 py-1 px-2">
+                <span className="font-semibold w-full flex items-center justify-between relative">
+                    <span className="truncate flex-grow dark:text-black">{title}</span>
+                    {menuState !== undefined ? (
+                        <>
+                            <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
+                            <ItemCardOption productId={productId} onRefresh={onRefresh} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                        </>
+                    ) : null}
+                </span>
+                <div className="flex justify-between items-center">
+                    <span className="text-[#8E8E93] text-sm">{location}</span>
+                    {price >= 100000 && (
+                        <span>
+                            <span className="font-bold text-sm dark:text-black">{(price / 10000).toLocaleString('ko-KR')}</span>
+                            <span className="text-[#8E8E93] text-xs">만원 /일</span>
+                        </span>
+                    )}
+                    {price < 100000 && (
+                        <span>
+                            <span className="font-bold text-sm dark:text-black">{price.toLocaleString('ko-KR')}</span>
+                            <span className="text-[#8E8E93] text-xs whitespace-nowrap">원 /일</span>
+                        </span>
+                    )}
                 </div>
-                <div className="flex flex-col w-[70%]">
-                    <span className="font-semibold w-[100%] flex items-center justify-between relative">
-                        <span className="truncate w-[11.87rem] text-[1.2rem] dark:text-black">{title}</span>
-                        {menuState !== undefined ? (
-                            <>
-                                <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
-                                <ItemCardOption productId={productId} onRefresh={onRefresh} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
-                            </>
-                        ) : null}
-                    </span>
-                    <div className="flex items-center mt-[.5rem]">
-                        <span className="text-[#8E8E93] mr-[1.5rem]">{location}</span>
-                        <div>
-                            <span className="font-bold text-[1.3rem] dark:text-black">{price.toLocaleString('ko-KR')}</span>
-                            <span className="text-[#8E8E93]">원 /일</span>
+                {startDate !== undefined && endDate !== undefined ? (
+                    <div className="grid grid-cols-2 gap-2 text-center">
+                        <div className="flex text-darkgrey text-xs">
+                            <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
+                            <p className="whitespace-nowrap">{startDate}</p>
+                        </div>
+                        <div className="flex text-darkgrey text-xs justify-end">
+                            <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
+                            <p className="whitespace-nowrap">{endDate}</p>
                         </div>
                     </div>
-                    {startDate !== undefined && endDate !== undefined ? (
-                        <div className="flex flex-col justify-between absolute bottom-0">
-                            <div className="text-darkgrey text-[0.87rem]">
-                                <span className="font-bold mr-[1rem]">대여일</span>
-                                <span>{startDate}</span>
-                            </div>
-                            <div className="text-darkgrey text-[0.87rem]">
-                                <span className="font-bold mr-[1rem]">반납일</span>
-                                <span>{endDate}</span>
-                            </div>
-                        </div>
-                    ) : null}
-                </div>
+                ) : null}
             </div>
         </div>
     );
