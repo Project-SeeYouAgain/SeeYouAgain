@@ -1,6 +1,5 @@
 package com.example.productservice.dto.response;
 
-import com.example.productservice.entity.Cctv;
 import com.example.productservice.entity.SafetyZone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
