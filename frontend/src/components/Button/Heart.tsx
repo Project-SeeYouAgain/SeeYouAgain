@@ -35,9 +35,9 @@ function Heart({ isActive, className, productId }: ButtonProps) {
     return (
         <>
             {isCart ? (
-                <AiFillHeart className={` w-[1.5rem] h-[1.2rem] ${className}`} color={'blue'} onClick={(event: React.MouseEvent) => ClickHeart(event)} />
+                <AiFillHeart className={` w-[1.5rem] h-[1.2rem] ${className}`} color={'#5669FF'} onClick={(event: React.MouseEvent) => ClickHeart(event)} />
             ) : (
-                <AiOutlineHeart className={` w-[1.5rem] h-[1.2rem] ${className}`} onClick={(event: React.MouseEvent) => ClickHeart(event)} />
+                <AiOutlineHeart className={` w-[1.5rem] h-[1.2rem] ${className}`} color={'#5669FF'} onClick={(event: React.MouseEvent) => ClickHeart(event)} />
             )}
         </>
     );

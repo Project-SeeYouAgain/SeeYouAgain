@@ -4,7 +4,6 @@ import Button from '../Button';
 import { SlOptions } from 'react-icons/sl';
 import shield from '../../assets/icons/safezone.png';
 import ItemCardOption from '../CardOption/ItemCardOption';
-
 import { useRouter } from 'next/router';
 
 interface dataProps {
@@ -25,7 +24,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     const [url, setUrl] = useState<string>('');
 
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
-    function Dropdown() {
+    function Dropdown(event: React.MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
         setDropdownVisible(!dropdownVisible);
     }
     useEffect(() => {
@@ -49,8 +50,8 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                         <span className="truncate w-[11.87rem] text-[1.2rem] dark:text-black">{title}</span>
                         {menuState !== undefined ? (
                             <>
-                                <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={Dropdown} />
-                                <ItemCardOption {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                                <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
+                                <ItemCardOption productId={productId} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
                             </>
                         ) : null}
                     </span>
