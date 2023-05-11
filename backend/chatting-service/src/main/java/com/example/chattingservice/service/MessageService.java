@@ -6,6 +6,6 @@ import com.example.chattingservice.dto.response.MessageResponseDto;
 import java.util.List;
 
 public interface MessageService {
-    void insertMessage(MessageRequestDto chatDto);
+    MessageResponseDto insertMessage(MessageRequestDto chatDto);
     List<MessageResponseDto> getMessageByChannelId(String identifier, Long firstMessageId);
 }
