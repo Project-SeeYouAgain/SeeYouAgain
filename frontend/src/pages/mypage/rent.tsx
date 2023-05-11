@@ -21,6 +21,7 @@ function Rent() {
         isSafe?: boolean;
         isCart: boolean;
         menuState: number;
+        productId: number;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
@@ -55,7 +56,9 @@ function Rent() {
                             startDate={item.startDate}
                             endDate={item.endDate}
                             isCart={item.isCart}
+                            isSafe={item.isSafe}
                             menuState={menuState}
+                            productId={item.productId}
                         />
                     </Link>
                 ))}

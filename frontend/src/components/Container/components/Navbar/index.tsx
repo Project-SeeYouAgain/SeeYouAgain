@@ -41,16 +41,16 @@ function Navbar() {
         return MenuData.map((item, index: number) => {
             const isActive = currentUrl === item.url; // 현재 선택된 아이템인지 확인
             const iconClass = isActive ? 'text-blue  ' : 'text-darkgrey';
-            const base = 'm-auto w-[1.5rem] h-[1.5rem] mt-[.2rem]';
+            const base = 'm-auto w-[1.3rem] h-[1.3rem] mt-[.5rem]';
             return (
                 <Link key={index} href={item.url}>
-                    <li className={classNames('whitespace-nowrap text-darkgrey  items-center ', iconClass)} style={{ fontFamily: 'Pretendard-Bold' }}>
-                        {item.icon === 'BiHomeAlt2' && <BiHomeAlt2 className={base} />}
-                        {item.icon === 'AiOutlineSearch' && <AiOutlineSearch className={base} />}
-                        {item.icon === 'AiOutlinePlusCircle' && <AiOutlinePlusCircle className={base} />}
-                        {item.icon === 'BsPerson' && <BsPerson className={base} />}
-                        {item.icon === 'BsChatDots' && <BsChatDots className={base} />}
-                        <div className="w-full text-center h-[1.5rem] mt-[.2rem]">{item.title}</div>
+                    <li className={classNames('whitespace-nowrap text-darkgrey  items-center ')}>
+                        {item.icon === 'BiHomeAlt2' && <BiHomeAlt2 className={classNames(base, iconClass)} />}
+                        {item.icon === 'AiOutlineSearch' && <AiOutlineSearch className={classNames(base, iconClass)} />}
+                        {item.icon === 'AiOutlinePlusCircle' && <AiOutlinePlusCircle className={classNames(base, iconClass)} />}
+                        {item.icon === 'BsPerson' && <BsPerson className={classNames(base, iconClass)} />}
+                        {item.icon === 'BsChatDots' && <BsChatDots className={classNames(base, iconClass)} />}
+                        <div className={classNames('w-full text-center h-[1.5rem] mt-[.2rem] text-xs', iconClass)}>{item.title}</div>
                     </li>
                 </Link>
             );
@@ -58,7 +58,7 @@ function Navbar() {
     };
     return (
         <div className="fixed bottom-0 z-30">
-            <ul className="grid grid-cols-5 gap-4 absolute bottom-0 h-[3.7rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey">{MenuDataNods()}</ul>
+            <ul className="grid grid-cols-5 gap-4 absolute bottom-0 h-[3.7rem] w-[100vw] justify-between items-center text-center px-[5vw] bg-white border-t border-solid">{MenuDataNods()}</ul>
         </div>
     );
 }

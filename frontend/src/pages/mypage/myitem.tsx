@@ -19,6 +19,7 @@ function Rent() {
         endDate?: string;
         isSafe?: boolean;
         isCart?: boolean;
+        productId: number;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
@@ -41,7 +42,7 @@ function Rent() {
         <Container>
             <Header title="내 아이템"></Header>
             <Body>
-                <Menu onSelectMenu={SelectMenu} title1={'대여중'} title2={'예약중'} title3={'숨김'} />
+                <Menu onSelectMenu={SelectMenu} title1={'전체'} title2={'대여중'} title3={'숨김'} />
                 {itemList.map((item, index) => (
                     <Link key={index} href={''}>
                         <Card
@@ -52,8 +53,8 @@ function Rent() {
                             startDate={item.startDate}
                             endDate={item.endDate}
                             isSafe={item.isSafe}
-                            isCart={item.isCart}
                             menuState={menuState}
+                            productId={item.productId}
                         />
                     </Link>
                 ))}
