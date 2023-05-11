@@ -34,5 +34,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM Reservation r Where r.product.ownerId = :ownerId AND r.product.isHide = true")
     List<Reservation> findAllByOwnerIdIsHidden(@Param("ownerId") Long ownerId);
 
+    @Query
     void deleteAllByProductId(Long productId);
+
+    @Query("SELECT r FROM Reservation r " +
+            "WHERE (r.lenderId = :ownerId OR r.product.ownerId = :ownerId) " +
+            "AND r.product.id = :productId " +
+            "ORDER BY r.startDate DESC")
+    List<Reservation> findReservationId(@Param("productId") Long productId,@Param("ownerId") Long userId);
 }
