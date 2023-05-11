@@ -27,7 +27,7 @@ export default function index() {
                 </div>
             </div>
             <div className={styles.main_body}>
-                <div className={classNames(styles.box, styles.point)}>
+                <div className={classNames(styles.box, styles.none)}>
                     <FirstPage />
                 </div>
                 <div className={classNames(styles.box, styles.point)}>
