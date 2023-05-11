@@ -16,19 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class MannerCommentServiceImpl implements MannerCommentService {
 
     private final UserRepository userRepository;
+
     private final MannerCommentRepository mannerCommentRepository;
+
     @Override
     @Transactional
     public void rateUser(Long raterId, MannerCommentRequestDto requestDto, Long userId) {
-        User user = getUser(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
         MannerComment mannerComment = MannerComment.of(raterId, requestDto, user);
 
         mannerCommentRepository.save(mannerComment);
-    }
-    private User getUser(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
     }
 
 }
