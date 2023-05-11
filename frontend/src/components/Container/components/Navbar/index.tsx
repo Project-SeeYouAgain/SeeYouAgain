@@ -32,7 +32,7 @@ function Navbar() {
         });
     };
     return (
-        <div className="fixed bottom-0">
+        <div className="fixed bottom-0 z-30">
             <ul className="flex absolute bottom-0 h-[4.5rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey"> {MenuDataNods()} </ul>
         </div>
     );
