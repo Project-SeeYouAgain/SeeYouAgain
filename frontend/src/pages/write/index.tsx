@@ -189,7 +189,7 @@ function Write() {
                                 </>
                             )}
                             {currentStep == 2 && (
-                                <div className="fixed bottom-5 w-full flex">
+                                <div className="fixed bottom-0 w-full flex py-4 z-30 bg-white">
                                     <div className="flex m-auto">
                                         <button className=" text-white text-[2rem] bg-[#d2d2d2] w-[3.2rem] h-[3rem] rounded-l-[.4rem]" onClick={handlePrevious}>
                                             <MdKeyboardArrowLeft className="m-auto" />
