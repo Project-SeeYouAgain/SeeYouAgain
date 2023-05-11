@@ -125,7 +125,7 @@ public class ReservationServiceImpl implements ReservationService {
     public void deleteReservation(Long userId, Long productId) {
         Reservation reservation = reservationRepository.findReservationId(productId, userId).get(0);
         // 본인이 대여자가 아니거나, 본인이 주인이 아니라면 에러
-        if (!reservation.getLenderId().equals(userId) || reservation.getProduct().getOwnerId().equals(userId))
+        if (!reservation.getLenderId().equals(userId) || !reservation.getProduct().getOwnerId().equals(userId))
             throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
 
         reservationRepository.delete(reservation);
