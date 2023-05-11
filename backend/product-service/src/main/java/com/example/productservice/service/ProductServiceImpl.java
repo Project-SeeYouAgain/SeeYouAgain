@@ -61,7 +61,8 @@ public class ProductServiceImpl implements ProductService {
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
-        double totalScore = getReviewScoreAvg(reviewList);
+        double totalScore = 0;
+        if (reviewList.size() > 0) totalScore = getReviewScoreAvg(reviewList);
 
         UserClientResponseDto userInfo = userServiceClient.getUserInfo(product.getOwnerId()).getData();
 
@@ -184,7 +185,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public List<ProductListResponseDto> getProductListByKeyword(Long userId,
-                                                                ProductListRequestDto requestDto, String keyword) {
+                                                                ProductListRequestDto requestDto,
+                                                                String keyword) {
         List<Product> productList = new ArrayList<>();
         if (requestDto.getSort().equals(0)) {
             productList = productRepository.findAllByTitleOrderByDate(keyword);
@@ -198,7 +200,10 @@ public class ProductServiceImpl implements ProductService {
 
     private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {
         return productList.stream().map(p -> {
-            double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
+            List<Review> reviewList = reviewRepository.findAllByProductId(p.getId());
+            double productScoreAverage = 0;
+            if (reviewList.size() > 0) productScoreAverage = getReviewScoreAvg(reviewList);
+
             ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
 
             Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, p.getId());
@@ -241,10 +246,7 @@ public class ProductServiceImpl implements ProductService {
             totalScore += review.getReviewScore();
         }
 
-        if (reviewList.size() > 0) {
-            return (double) totalScore / reviewList.size();
-        }
-        return 0;
+        return (double) totalScore / reviewList.size();
     }
 
 }

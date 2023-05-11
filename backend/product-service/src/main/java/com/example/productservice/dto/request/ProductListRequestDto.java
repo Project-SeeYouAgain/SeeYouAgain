@@ -12,4 +12,6 @@ public class ProductListRequestDto {
 
     // 최신순 : 0  가격순 : 1 별점순 : 2
     private Integer sort;
+
+    private Long productId;
 }
