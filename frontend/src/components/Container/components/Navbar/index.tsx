@@ -57,13 +57,8 @@ function Navbar() {
         });
     };
     return (
-<<<<<<< HEAD
         <div className="fixed bottom-0 z-30">
             <ul className="grid grid-cols-5 gap-4 absolute bottom-0 h-[3.7rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey">{MenuDataNods()}</ul>
-=======
-        <div className={`fixed bottom-0 z-30 ${!isVisible ? '' : 'hidden'}`}>
-            <ul className="flex absolute bottom-0 h-[4.5rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey">{MenuDataNods()}</ul>
->>>>>>> 0f64539b4e010209e183787f021e5ea0a55f224a
         </div>
     );
 }
