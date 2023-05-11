@@ -43,7 +43,7 @@ function Carousel({ imgUrl }: CarouselProps) {
         }
     };
     return (
-        <div className="relative w-[100vw]" onWheel={handleWheel}>
+        <div className="relative w-[100vw] h-[45vh]" onWheel={handleWheel}>
             <Slider {...settings} className={`absolute w-[100vw] ${styles.sliderContainer}`}>
                 {imgUrl.map((item, index) => (
                     <div key={index} className="relative w-[100vw]">
