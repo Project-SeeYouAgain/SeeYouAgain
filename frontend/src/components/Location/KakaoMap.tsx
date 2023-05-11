@@ -5,8 +5,8 @@ import styles from './KakaoMap.module.scss';
 interface KakaoMapProps {
     lat: number;
     lng: number;
-    userLocation?: { lat: number; lng: number };
-    otherUserLocation?: { lat: number; lng: number };
+    userLocation: { lat: number; lng: number } | null;
+    otherUserLocation: { lat: number; lng: number } | null;
 }
 
 declare const kakao: any;
