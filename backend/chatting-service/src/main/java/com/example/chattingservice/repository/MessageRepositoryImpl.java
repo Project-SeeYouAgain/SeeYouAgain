@@ -42,8 +42,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 message.updatedAt
         ))
                 .from(message)
-                .join(message.channel, channel)
-                .where(channel.identifier.eq(identifier).and(ltMessageId(firstMessageId)))
+                .where(message.channel.identifier.eq(identifier).and(ltMessageId(firstMessageId)))
                 .orderBy(message.id.desc())
                 .limit(30)
                 .fetch();

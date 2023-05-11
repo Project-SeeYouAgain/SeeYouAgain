@@ -55,7 +55,6 @@ function Channel() {
 
     const connect = () => {
         const socket = new SockJS('https://k8c101.p.ssafy.io/chatting-service/ws');
-        // const socket = new SockJS('http://localhost:8000/chatting-service/ws');
 
         client.current = new Client({
             webSocketFactory: () => socket,
@@ -243,6 +242,7 @@ function Channel() {
                         </div>
 
                         <input
+                            ref={inputRef}
                             type={'text'}
                             name={'chatInput'}
                             onChange={handleChange}
