@@ -27,4 +27,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT distinct p FROM Review r JOIN r.product p WHERE p.title like %:keyword% GROUP BY p.id ORDER BY Avg(r.reviewScore) DESC")
     List<Product> findAllByTitleOrderByScore(@Param("keyword") String keyword);
+
 }
