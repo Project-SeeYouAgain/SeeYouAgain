@@ -23,17 +23,20 @@ public class Location extends TimeStamped {
 
     private Float lat;
     private Float lng;
+    private Boolean moving;
 
-    public static Location of(User user, Float lat, Float lng) {
+    public static Location of(User user, Float lat, Float lng, Boolean moving) {
         return Location.builder()
                 .user(user)
                 .lat(lat)
                 .lng(lng)
+                .moving(moving)
                 .build();
     }
 
-    public void updateLatLng(Float lat, Float lng) {
+    public void updateLatLngMoving(Float lat, Float lng, Boolean moving) {
         this.lat = lat;
         this.lng = lng;
+        this.moving = moving;
     }
 }
