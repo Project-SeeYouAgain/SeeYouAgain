@@ -11,21 +11,23 @@ interface CarouselProps {
 
 function Carousel({ imgUrl }: CarouselProps) {
     const settings = {
-        customPaging: function (i: number) {
-            return (
-                <a>
-                    <img src={imgUrl[i]} />
-                </a>
-            );
-        },
+        // 도트 썸네일
+        // customPaging: function (i: number) {
+        //     return (
+        //         <a>
+        //             <img src={imgUrl[i]} />
+        //         </a>
+        //     );
+        // },
         dots: true,
         infinite: true,
         variableWidth: true,
         swipeToSlide: true,
-        dotsClass: 'slick-dots slick-thumb',
+        dotsClass: 'slick-dots',
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
+        arrows: false, // 화살표 제거
     };
     return (
         <div className="relative w-[100vw]">
@@ -38,7 +40,7 @@ function Carousel({ imgUrl }: CarouselProps) {
                     </div>
                 ))}
             </Slider>
-            <div className={`${styles.backgroundBlack} w-[100vw]`}></div>
+            {/* <div className={`${styles.backgroundBlack} w-[100vw]`}></div> */}
         </div>
     );
 }
