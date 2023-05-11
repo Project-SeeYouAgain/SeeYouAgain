@@ -3,8 +3,9 @@ import axios, { AxiosInstance } from 'axios';
 export const interceptors = (instance: AxiosInstance, token: string | null) => {
     instance.interceptors.request.use(
         config => {
+            const tokens = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzNzczMzUyLCJleHAiOjE2ODM4NTk3NTJ9.HXi26jn9LlivHHT0UBaawJH6LTbHG59R1o7LmRknEDk';
             // config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjgzNjk5MjUyLCJleHAiOjE2ODM3ODU2NTJ9.aiY1m_CK2LO-3rakI-4RUUMIsjAtf5AB2g-izNY02QQ`;
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${tokens}`;
             return config;
         },
         error => Promise.reject(error.response),
