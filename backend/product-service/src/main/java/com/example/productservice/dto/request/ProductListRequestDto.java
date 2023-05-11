@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ProductListRequestDto {
-    private String location;
+    private Boolean location;
+
+    private String myLocation;
 
     private String category;
 
