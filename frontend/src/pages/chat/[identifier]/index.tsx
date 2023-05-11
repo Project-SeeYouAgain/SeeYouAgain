@@ -117,6 +117,10 @@ function Channel() {
         } else {
             setChat('');
         }
+
+        if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+        }
     };
 
     const getMessage = () => {
@@ -158,7 +162,7 @@ function Channel() {
     useEffect(() => {
         if (!router.isReady) return;
 
-        setUserId(Number(cookie.get("userId")));
+        setUserId(Number(cookie.get('userId')));
         saveReadMessageSize();
         getChannelInfo();
         getMessage();
@@ -202,14 +206,14 @@ function Channel() {
                             </p>
                         </div>
                     </div>
-                    <div className="grid gird-cols-3">
-                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToBook}>
+                    <div className="grid grid-cols-3 gap-3 px-2">
+                        <button className="border border-blue text-blue rounded-lg" onClick={goToBook}>
                             예약하기
                         </button>
-                        <button className="border border-blue px-3 my-1 text-blue rounded-lg" onClick={goToUserLocation}>
+                        <button className="border border-blue text-blue rounded-lg" onClick={goToUserLocation}>
                             실시간 위치
                         </button>
-                        <span></span>
+                        <div />
                     </div>
                 </div>
             </div>
