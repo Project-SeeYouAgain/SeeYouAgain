@@ -17,9 +17,10 @@ interface dataProps {
     isSafe?: boolean;
     isCart?: boolean;
     menuState?: number;
+    onRefresh?: () => void;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, onRefresh }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
 
@@ -51,7 +52,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                         {menuState !== undefined ? (
                             <>
                                 <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
-                                <ItemCardOption productId={productId} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                                <ItemCardOption productId={productId} onRefresh={onRefresh} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
                             </>
                         ) : null}
                     </span>
