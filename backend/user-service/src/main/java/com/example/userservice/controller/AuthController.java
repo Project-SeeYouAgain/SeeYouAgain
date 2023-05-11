@@ -52,7 +52,7 @@ public class AuthController {
      */
     @PatchMapping("/profile")
     public ResponseEntity<BaseResponseDto<ProfileResponseDto>> updateProfile(HttpServletRequest request,
-                                                                             @ModelAttribute ProfileUpdateRequestDto requestDto) {
+                                                                             @RequestPart(required = false) ProfileUpdateRequestDto requestDto) {
         ProfileResponseDto responseDto = authService.updateProfile(getUserId(request), requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(200, "success", responseDto));
     }
