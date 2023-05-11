@@ -5,6 +5,7 @@ import { BsArrowLeft } from 'react-icons/bs';
 import { AiOutlineSearch } from 'react-icons/ai';
 import classNames from 'classnames';
 import styles from './index.module.scss';
+import Navbar from '@/components/Container/components/Navbar';
 
 interface KeyInterface {
     id: number;
@@ -76,7 +77,7 @@ function Search() {
     }, [keywords]);
 
     return (
-        <Container>
+        <Container className="flex flex-col h-screen">
             <div className="flex p-4 pt-5 px-[1.88rem] items-center">
                 <BsArrowLeft size={30} />
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
@@ -91,7 +92,7 @@ function Search() {
                     <AiOutlineSearch className="dark:text-black" size={30} onClick={handleAddKeyword} />
                 </div>
             </div>
-            <Body>
+            <div className="px-[1.88rem] flex-grow">
                 <div className="flex justify-between">
                     <p className="mt-2 text-xl font-bold text-blue">최근 검색어</p>
                     <button onClick={handleClearKeywords} className="text-red font-bold">
@@ -119,7 +120,8 @@ function Search() {
                     <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
                     {clickSearch && <p className="dark:text-black">검색어 - {searchText}</p>}
                 </div>
-            </Body>
+            </div>
+            <Navbar />
         </Container>
     );
 }
