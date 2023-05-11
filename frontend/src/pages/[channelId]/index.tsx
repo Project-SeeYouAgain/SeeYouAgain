@@ -19,6 +19,9 @@ import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import ReviewList from '../../components/Card/ReviewList';
 
+import { AiOutlineLeft } from 'react-icons/ai';
+import DetailHeader from '@/components/Container/components/DetailHeader';
+
 interface ProductData {
     title: string;
     price: number;
@@ -121,7 +124,11 @@ function Detail() {
     if (data !== undefined) {
         return (
             <Container>
+                <DetailHeader />
                 <Carousel imgUrl={data.productImgList}></Carousel>
+                {/* <div className="absolute top-[1rem] left-2 z-30">
+                    <AiOutlineLeft className="text-white" size="28" />
+                </div> */}
                 <Body>
                     <div className="mt-[35px]">
                         <div className="font-bold flex text-[1.3rem]">
@@ -133,7 +140,7 @@ function Detail() {
                             <BsDot size={24} />
                             <span className="mr-[1rem]">{data.nickname}</span>
                             <MannerScore score={data.mannerScore} />
-                            <DeclareButton bgColor="red" textColor="white" innerValue="신고" className="ml-[0.5rem]" />
+                            {/* <DeclareButton bgColor="red" textColor="white" innerValue="신고" className="ml-[0.5rem]" /> */}
                         </div>
                         <div className="mb-[0.5rem]">
                             <span className="font-bold text-[1.3rem] dark:text-black">{data.price.toLocaleString('ko-KR')}원</span>
@@ -156,7 +163,7 @@ function Detail() {
                                 <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
                             </div>
                         ) : menuState === 2 ? (
-                            <div className="flex justify-center w-[100%] aspect-[4/3] relative">
+                            <div className="flex  justify-center w-[100%] aspect-[4/3] relative">
                                 <div className="absolute w-[100%] aspect-[4/3] z-0">
                                     <KakaoMapMini lat={data.lat} lng={data.lng} />
                                 </div>
@@ -168,10 +175,10 @@ function Detail() {
                         )}
                     </div>
                 </Body>
-                <footer className="fixed bottom-0 border-t-2 w-[100vw] h-[3rem] flex items-center justify-evenly bg-white">
+                <footer className="fixed bottom-0 border-t-2 w-[100vw] h-[4rem] flex items-center justify-evenly bg-white">
                     {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
-                    <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[2rem] py-[0.3rem] rounded-[0.5rem]" onClick={GoBook} />
-                    <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[1rem] py-[0.3rem] rounded-[0.5rem] border-[#5669FF] border-2" onClick={GoChatRoom} />
+                    <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[3rem] py-[1.3rem] rounded-[0.5rem]" onClick={GoBook} />
+                    <Square bgColor="white" textColor="blue" innerValue="채팅하기" className="text-[1.3rem] px-[2rem] py-[1.3rem] rounded-[0.5rem] border-[#5669FF] border-2" onClick={GoChatRoom} />
                 </footer>
             </Container>
         );

@@ -1,12 +1,13 @@
 package com.example.userservice.service;
 
+import com.example.userservice.client.ChattingClientService;
+import com.example.userservice.dto.request.chatting.ProfileImgRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
 import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
 import com.example.userservice.dto.response.user.ProfileResponseDto;
 import com.example.userservice.entity.User;
 import com.example.userservice.exception.ApiException;
 import com.example.userservice.exception.ExceptionEnum;
-import com.example.userservice.repository.MannerCommentRepository;
 import com.example.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final AmazonS3Service amazonS3Service;
 
+    private final ChattingClientService chattingClientService;
+
     @Override
     @Transactional(readOnly = true)
     public ProfileResponseDto getProfile(Long userId) {
@@ -33,21 +36,22 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public ProfileResponseDto updateProfile(Long userId, ProfileUpdateRequestDto requestDto) {
+    public ProfileResponseDto updateProfile(Long userId, ProfileUpdateRequestDto requestDto, MultipartFile profileImg) {
         User user = getUser(userId);
 
-        MultipartFile profileImg = requestDto.getProfileImg();
         String location = requestDto.getLocation();
         String description = requestDto.getDescription();
 
         deleteS3Img(user);
 
-        if (requestDto.getProfileImg().isEmpty()) {
+        if (profileImg.isEmpty()) {
             user.updateProfile(null, null, location, description);
+            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(null));
         } else {
             String profileImgKey = saveS3Img(profileImg);
             String profileImgUrl = amazonS3Service.getFileUrl(profileImgKey);
             user.updateProfile(profileImgKey, profileImgUrl, location, description);
+            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(profileImgUrl));
         }
 
         return ProfileResponseDto.from(user);
