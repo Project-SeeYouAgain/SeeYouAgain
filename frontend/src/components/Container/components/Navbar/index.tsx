@@ -11,6 +11,31 @@ import { useRouter } from 'next/router';
 function Navbar() {
     const router = useRouter();
     const currentUrl = router.asPath;
+
+    const [isVisible, setIsVisible] = useState(false);
+    const [lastScrollPosition, setLastScrollPosition] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScrollPosition < lastScrollPosition) {
+                // 페이지를 올릴 때 Navbar 숨기기
+                setIsVisible(false);
+            } else {
+                // 페이지를 내릴 때 Navbar 보이기
+                setIsVisible(true);
+            }
+
+            // 현재 스크롤 위치 저장
+            setLastScrollPosition(currentScrollPosition);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [lastScrollPosition]);
     const MenuDataNods = () => {
         return MenuData.map((item, index: number) => {
             const isActive = currentUrl === item.url; // 현재 선택된 아이템인지 확인
@@ -32,8 +57,8 @@ function Navbar() {
         });
     };
     return (
-        <div className="fixed bottom-0">
-            <ul className="flex absolute bottom-0 h-[4.5rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey"> {MenuDataNods()} </ul>
+        <div className={`fixed bottom-0 z-30 ${!isVisible ? '' : 'hidden'}`}>
+            <ul className="flex absolute bottom-0 h-[4.5rem] w-[100vw] justify-between items-center text-center pl-[5vw] pr-[5vw] bg-lightgrey">{MenuDataNods()}</ul>
         </div>
     );
 }

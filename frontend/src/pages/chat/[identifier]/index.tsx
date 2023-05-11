@@ -242,7 +242,7 @@ function Channel() {
                         <div className="me-2">
                             <AiOutlinePlusCircle className="text-3xl" />
                         </div>
-<<<<<<< HEAD
+
                         <input
                             type={'text'}
                             name={'chatInput'}
@@ -251,9 +251,7 @@ function Channel() {
                             placeholder="메세지를 입력하세요."
                             className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full dark:text-black"
                         />
-=======
-                        <input ref={inputRef} type={'text'} name={'chatInput'} onChange={handleChange} value={chat} placeholder="메세지를 입력하세요." className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full" />
->>>>>>> d87a8b1be86e2393076e040edaeb5d1f1f3c236b
+
                         <button className="absolute right-3 flex justify-center items-center rounded-full p-1.5" style={{ background: '#5669ff' }}>
                             <IoMdSend className="text-white text-lg -rotate-90" />
                         </button>
