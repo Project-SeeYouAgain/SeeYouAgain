@@ -18,6 +18,7 @@ const UserLocation: React.FC = () => {
         setIsMobile(mobile);
     };
     const router = useRouter();
+    const productId = router.query.productId;
     const { identifier } = router.query;
     const [myCheck, setMyCheck] = useState(true);
     const clickPosition = () => {
@@ -36,7 +37,7 @@ const UserLocation: React.FC = () => {
                 if (result.isConfirmed) {
                     // 확인 버튼 클릭 시 처리할 로직
                     localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book`);
+                    router.push(`/chat/${identifier}/book/${productId}`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }
@@ -54,7 +55,7 @@ const UserLocation: React.FC = () => {
             }).then(result => {
                 if (result.isConfirmed) {
                     localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book`);
+                    router.push(`/chat/${identifier}/book/${productId}`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }
@@ -72,7 +73,7 @@ const UserLocation: React.FC = () => {
             }).then(result => {
                 if (result.isConfirmed) {
                     localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book`);
+                    router.push(`/chat/${identifier}/book/${productId}`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }
@@ -90,7 +91,7 @@ const UserLocation: React.FC = () => {
             }).then(result => {
                 if (result.isConfirmed) {
                     localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book`);
+                    router.push(`/chat/${identifier}/book/${productId}`);
                 } else if (result.isDenied) {
                     // 취소 버튼 클릭 시 처리할 로직
                 }

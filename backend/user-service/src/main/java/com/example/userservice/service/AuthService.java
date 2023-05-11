@@ -9,7 +9,7 @@ public interface AuthService {
 
     ProfileResponseDto getProfile(Long userId);
 
-    ProfileResponseDto updateProfile(Long userId, ProfileUpdateRequestDto requestDto);
+    ProfileResponseDto updateProfile(Long userId, ProfileUpdateRequestDto requestDto, MultipartFile profileImg);
 
     void deleteUser(Long userId);
 

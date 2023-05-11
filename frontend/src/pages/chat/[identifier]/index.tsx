@@ -48,7 +48,6 @@ function Channel() {
     const [channelInfo, setChannelInfo] = useState<ChannelInfo>();
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [userId, setUserId] = useState<number>(0);
-
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -178,7 +177,7 @@ function Channel() {
         scrollToBottom();
     }, [chatList]);
 
-    const goToBook = () => [router.push(`/chat/${identifier}/book`)];
+    const goToBook = () => [router.push(`/chat/${identifier}/book/${channelInfo?.productId}`)];
     const goToUserLocation = () => {
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
@@ -242,6 +241,7 @@ function Channel() {
                         <div className="me-2">
                             <AiOutlinePlusCircle className="text-3xl" />
                         </div>
+
                         <input
                             type={'text'}
                             name={'chatInput'}
@@ -250,6 +250,7 @@ function Channel() {
                             placeholder="메세지를 입력하세요."
                             className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full dark:text-black"
                         />
+
                         <button className="absolute right-3 flex justify-center items-center rounded-full p-1.5" style={{ background: '#5669ff' }}>
                             <IoMdSend className="text-white text-lg -rotate-90" />
                         </button>

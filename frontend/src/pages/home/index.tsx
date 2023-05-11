@@ -8,6 +8,9 @@ import MainHeader from '@/components/Container/components/MainHeader';
 import ItemCard from '@/components/Card/ItemCard';
 import Navbar from '@/components/Container/components/Navbar';
 import { useRouter } from 'next/router';
+import question from '../../images/question.png';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface dataProps {
     thumbnailUrl: string;
@@ -70,7 +73,15 @@ function Home() {
             <MainHeader title1="우리 동네에서" title2="찾고 나눠요" />
             <Body>
                 {/* 이용자 안내 페이지 */}
-                <div className="w-[100%] h-[4.5rem] bg-blue rounded-[.7rem]"></div>
+                <Link href="/tutorial">
+                    <div className="relative flex justify-between w-[100%] h-[5rem] bg-blue rounded-[.7rem] items-center px-2 ">
+                        <div className="ml-[2vw]">
+                            <p className="text-white font-semibold text-[1.5rem]">씨유어게인,</p>
+                            <p className="text-white">사용법이 궁금하세요?</p>
+                        </div>
+                        <Image src={question} alt="qmark" className="w-[5rem]" />
+                    </div>
+                </Link>
                 {/* <div>{user.nickname}</div> */}
                 {/* 정렬 */}
                 <div>
@@ -82,7 +93,7 @@ function Home() {
                     <div></div>
                 </div>
                 {/* 제품 목록 */}
-                <div className="mt-[3rem]">
+                <div className="mt-[3rem] ">
                     <div>
                         {listdata &&
                             listdata.map((item, index) => (

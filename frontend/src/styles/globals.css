@@ -11,12 +11,19 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --foreground-rgb: 0, 0, 0;
-        --background-start-rgb: 0, 0, 0;
-        --background-end-rgb: 0, 0, 0;
+        --background-start-rgb: 214, 219, 220;
+        --background-end-rgb: 255, 255, 255;
     }
 }
 
 body {
     color: rgb(var(--foreground-rgb));
     background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+#__next-build-watcher {
+    display: none;
+}
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
 }

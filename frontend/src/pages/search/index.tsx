@@ -5,6 +5,8 @@ import { BsArrowLeft } from 'react-icons/bs';
 import { AiOutlineSearch } from 'react-icons/ai';
 import classNames from 'classnames';
 import styles from './index.module.scss';
+import Navbar from '@/components/Container/components/Navbar';
+import { useRouter } from 'next/router';
 
 interface KeyInterface {
     id: number;
@@ -74,11 +76,17 @@ function Search() {
             localStorage.setItem('keywords', JSON.stringify(keywords));
         }
     }, [keywords]);
+    const router = useRouter();
 
     return (
-        <Container>
+        <Container className="flex flex-col h-screen">
             <div className="flex p-4 pt-5 px-[1.88rem] items-center">
-                <BsArrowLeft size={30} />
+                <BsArrowLeft
+                    size={30}
+                    onClick={() => {
+                        router.back();
+                    }}
+                />
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
                     <input
                         type="text"
@@ -88,10 +96,10 @@ function Search() {
                         placeholder="무엇을 빌리고 싶으세요?"
                         maxLength={20}
                     />
-                    <AiOutlineSearch className="dark:text-black" size={30} onClick={handleAddKeyword} />
+                    <AiOutlineSearch size={30} onClick={handleAddKeyword} />
                 </div>
             </div>
-            <Body>
+            <div className="px-[1.88rem] flex-grow">
                 <div className="flex justify-between">
                     <p className="mt-2 text-xl font-bold text-blue">최근 검색어</p>
                     <button onClick={handleClearKeywords} className="text-red font-bold">
@@ -102,7 +110,6 @@ function Search() {
                     {keywords.map(keyword => (
                         <li key={keyword.id} className="flex">
                             <p
-                                className="dark:text-black"
                                 onClick={() => {
                                     setText(keyword.text);
                                 }}
@@ -117,9 +124,10 @@ function Search() {
                 </ul>
                 <div>
                     <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
-                    {clickSearch && <p className="dark:text-black">검색어 - {searchText}</p>}
+                    {clickSearch && <p className="">검색어 - {searchText}</p>}
                 </div>
-            </Body>
+            </div>
+            <Navbar />
         </Container>
     );
 }

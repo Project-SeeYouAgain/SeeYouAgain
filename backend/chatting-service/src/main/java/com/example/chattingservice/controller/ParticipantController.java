@@ -1,14 +1,12 @@
 package com.example.chattingservice.controller;
 
 import com.example.chattingservice.dto.BaseResponseDto;
+import com.example.chattingservice.dto.request.ProfileImgRequestDto;
 import com.example.chattingservice.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,6 +32,15 @@ public class ParticipantController {
                                                           @PathVariable("lastReadMessageId") Long lastReadMessageId) {
 
         participantService.outChatRoom(getUserId(request), identifier, lastReadMessageId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<BaseResponseDto<?>> updateProfileImg(@PathVariable("userId") Long userId,
+                                                               @RequestBody ProfileImgRequestDto requestDto) {
+
+        participantService.updateProfileImg(userId, requestDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
     }
