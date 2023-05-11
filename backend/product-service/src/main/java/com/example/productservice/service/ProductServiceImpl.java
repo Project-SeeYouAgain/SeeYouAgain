@@ -171,14 +171,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public List<ProductListResponseDto> getProductList(Long userId, ProductListRequestDto requestDto) {
-        List<Product> productList = new ArrayList<>();
-        if (requestDto.getSort().equals(0)) {
-            productList = productRepository.findAllOrderByDate();
-        } else if (requestDto.getSort().equals(1)) {
-            productList = productRepository.findAllOrderByPrice();
-        } else if (requestDto.getSort().equals(2)) {
-            productList = productRepository.findAllOrderByScore();
-        }
+        List<Product> productList = productRepository
+                .getProductList(
+                        requestDto.getSort(),
+                        requestDto.getProductId(),
+                        requestDto.getCategory(),
+                        requestDto.getLocation(),
+                        requestDto.getMyLocation()
+                );
+//        List<Product> productList = new ArrayList<>();
+//        if (requestDto.getSort().equals(0)) {
+//            productList = productRepository.findAllOrderByDate();
+//        } else if (requestDto.getSort().equals(1)) {
+//            productList = productRepository.findAllOrderByPrice();
+//        } else if (requestDto.getSort().equals(2)) {
+//            productList = productRepository.findAllOrderByScore();
+//        }
         return getProductResponse(productList, userId);
     }
 
