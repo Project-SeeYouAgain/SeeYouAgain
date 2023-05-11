@@ -37,17 +37,36 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     function GoDetail() {
         router.push(`/${productId}`);
     }
+    const [containerWidth, setContainerWidth] = useState(0);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const windowWidth = window.innerWidth;
+            console.log(windowWidth);
+            const containerWidth = windowWidth - 156.14;
+            setContainerWidth(containerWidth);
+        };
+
+        // 초기 로드 및 윈도우 크기 변경 이벤트에 대한 이벤트 핸들러 등록
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     return (
         <div className="w-full flex mt-[0.4rem] relative border-t-2 border-solid pt-4" onClick={GoDetail}>
-            <div className="w-[82.28px] h-[82.28px] relative">
-                <Image src={productImg} alt="제품 사진" className="aspect-square rounded-lg" fill />
+            <div className="w-[95px] h-[95px] relative">
+                <Image src={productImg} alt="제품 사진" fill className="aspect-square rounded-lg w-full h-full" />
                 {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute left-1 top-1 w-4" /> : null}
                 {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute right-1 bottom-1" /> : null}
             </div>
-            <div className="items-center w-3/4 p-2">
+            <div className="items-center p-1" style={{ width: containerWidth }}>
                 <span className="font-semibold w-full flex items-center justify-between relative">
-                    <p className=" truncate dark:text-black text-lg">{title}</p>
+                    <p className=" truncate dark:text-black font-bolder">{title}</p>
                     {menuState !== undefined ? (
                         <>
                             <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
@@ -57,21 +76,20 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                         <span className="h-[1.5rem] px-[0.4rem] w-[1.5rem]"></span>
                     )}
                 </span>
-                <div className="flex justify-between items-center">
-                    <span className="text-[#8E8E93] text-sm">{location}</span>
-                    {price >= 100000 && (
-                        <span>
-                            <span className="font-bold dark:text-black">{(price / 10000).toLocaleString('ko-KR')}</span>
-                            <span className="text-[#8E8E93] text-sm">만원 /일</span>
-                        </span>
-                    )}
-                    {price < 100000 && (
-                        <span>
-                            <span className="font-bold dark:text-black">{price.toLocaleString('ko-KR')}</span>
-                            <span className="text-[#8E8E93] text-sm whitespace-nowrap">원 /일</span>
-                        </span>
-                    )}
-                </div>
+
+                {price >= 100000 && (
+                    <span>
+                        <span className="font-bold dark:text-black">{(price / 10000).toLocaleString('ko-KR')}</span>
+                        <span className="text-[#8E8E93] text-sm">만원 /일</span>
+                    </span>
+                )}
+                {price < 100000 && (
+                    <span>
+                        <span className="font-bold dark:text-black">{price.toLocaleString('ko-KR')}</span>
+                        <span className="text-[#8E8E93] text-sm whitespace-nowrap">원 /일</span>
+                    </span>
+                )}
+                <p className="text-[#8E8E93] text-sm">{location}</p>
                 {startDate !== undefined && endDate !== undefined ? (
                     <div className="grid grid-cols-2 gap-2 text-center">
                         <div className="flex text-darkgrey text-sm">
