@@ -43,7 +43,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         const handleResize = () => {
             const windowWidth = window.innerWidth;
             console.log(windowWidth);
-            const containerWidth = windowWidth - 156.14;
+            const containerWidth = windowWidth - 127;
             setContainerWidth(containerWidth);
         };
 
@@ -58,13 +58,12 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }, []);
 
     return (
-        <div className="w-full flex mt-[0.4rem] relative border-t-2 border-solid pt-4" onClick={GoDetail}>
+        <div className="w-full flex mt-[0.4rem] relative border-t-2 border-solid py-4" onClick={GoDetail}>
             <div className="w-[95px] h-[95px] relative">
                 <Image src={productImg} alt="제품 사진" fill className="aspect-square rounded-lg w-full h-full" />
-                {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute left-1 top-1 w-4" /> : null}
-                {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute right-1 bottom-1" /> : null}
+                {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute left-1 bottom-1" /> : null}
             </div>
-            <div className="items-center p-1" style={{ width: containerWidth }}>
+            <div className="items-center p-1 pl-4" style={{ width: containerWidth }}>
                 <span className="font-semibold w-full flex items-center justify-between relative">
                     <p className=" truncate dark:text-black font-bolder">{title}</p>
                     {menuState !== undefined ? (
@@ -89,7 +88,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                         <span className="text-[#8E8E93] text-sm whitespace-nowrap">원 /일</span>
                     </span>
                 )}
-                <p className="text-[#8E8E93] text-sm">{location}</p>
+                <span className="flex items-center">
+                    <p className="text-[#8E8E93] text-sm mr-2">{location}</p> {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" /> : null}
+                </span>
                 {startDate !== undefined && endDate !== undefined ? (
                     <div className="grid grid-cols-2 gap-2 text-center">
                         <div className="flex text-darkgrey text-sm">
