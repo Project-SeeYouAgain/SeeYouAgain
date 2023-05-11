@@ -52,6 +52,7 @@ function Channel() {
     const { identifier } = router.query;
     const client = useRef<Client | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const connect = () => {
         const socket = new SockJS('https://k8c101.p.ssafy.io/chatting-service/ws');
@@ -118,9 +119,7 @@ function Channel() {
             setChat('');
         }
 
-        if (document.activeElement instanceof HTMLElement) {
-            document.activeElement.blur();
-        }
+        setTimeout(() => inputRef.current?.focus(), 0);
     };
 
     const getMessage = () => {
