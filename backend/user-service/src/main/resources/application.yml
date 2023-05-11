@@ -61,7 +61,7 @@ gateway:
 #  ip: 172.20.10.2
 
 product-service:
-  ip: 172.18.0.6/16
+  ip: 172.18.0.11/16
 
 chatting-service:
   ip: 172.18.0.9/16
