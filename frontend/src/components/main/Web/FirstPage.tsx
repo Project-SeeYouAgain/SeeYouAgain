@@ -3,7 +3,7 @@ import Image from 'next/image';
 import classNames from 'classnames';
 import { SlArrowDown } from 'react-icons/sl';
 import useInView from '../Web/useInView';
-import web_main from '@/images/web_main.gif';
+import web_main from '@/images/web.jpg';
 import styles from './Web.module.scss';
 
 function FirstPage() {

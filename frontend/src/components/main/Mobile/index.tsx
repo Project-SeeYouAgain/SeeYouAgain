@@ -26,7 +26,7 @@ export default function index() {
                 <Image src={logo} alt="logo" width={300} className="m-auto mt-4" />
             </div>
             <div className={styles.main_body}>
-                <div className={classNames(styles.box, styles.point)}>
+                <div className={classNames(styles.box, styles.none)}>
                     <FirstPage />
                 </div>
                 <div className={classNames(styles.box, styles.point)}>

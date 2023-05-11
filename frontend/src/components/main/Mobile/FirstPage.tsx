@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import web_main from '@/images/mobile_main.gif';
+import web_main from '@/images/mobile.jpg';
 import styles from './Mobile.module.scss';
 import useInView from '../Mobile/useInView';
 import classNames from 'classnames';
