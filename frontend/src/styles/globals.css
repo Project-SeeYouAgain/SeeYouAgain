@@ -27,3 +27,34 @@ a,
 button {
     -webkit-tap-highlight-color: transparent;
 }
+
+.slick-dots{
+    display: absolute;
+    top: 90%;
+    z-index: 10 !important;
+
+
+}
+.slick-dots li button:before{
+    font-family: 'slick';
+    font-size: 6px;
+    line-height: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    content: '•';
+    text-align: center;
+    opacity: .6 !important;
+    color: darkgrey !important;
+
+}
+.slick-dots li.slick-active button:before
+{
+    opacity: 1;
+    color: white !important;
+
+}
+
+    
