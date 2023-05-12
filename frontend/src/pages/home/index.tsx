@@ -51,9 +51,17 @@ function Home() {
     });
     // 카테고리 모달
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
     function handleCategory() {
         setIsModalOpen(true);
     }
+
+    const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
+
+    const handleCategorySelect = (categoryName: string) => {
+        setSelectedCategoryName(categoryName);
+        getCategory(categoryName);
+    };
 
     const [productId, setProductId] = useState<number>();
     const [hasMore, setHasMore] = useState<boolean>(true);
@@ -61,30 +69,36 @@ function Home() {
     const userset = useRecoilValue(userState);
     useEffect(() => {
         setUser(userset);
-        axAuth(token)({
-            method: 'post',
-            url: '/product-service/auth/productlist',
-            data: {
-                sort: 0,
-                productId: null,
-                location: false,
-                category: '전체',
-                myLocation: '장덕동',
-            },
-        })
-            .then(res => {
-                const productList = res.data.data;
-                setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
-                setProductId(productList[productList.length - 1]?.productId);
+        if (selectedCategoryName) {
+            getCategory(selectedCategoryName);
+        } else {
+            getProduct();
+        }
+    }, [userset, selectedCategoryName]);
+    // axAuth(token)({
+    //     method: 'post',
+    //     url: '/product-service/auth/productlist',
+    //     data: {
+    //         sort: 0,
+    //         productId: null,
+    //         location: false,
+    //         category: '전체',
+    //         myLocation: '장덕동',
+    //     },
+    // })
+    //     .then(res => {
+    //         const productList = res.data.data;
+    //         setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
+    //         setProductId(productList[productList.length - 1]?.productId);
 
-                if (productList.length < 20) {
-                    setHasMore(false);
-                } else {
-                    setHasMore(true);
-                }
-            })
-            .catch(err => console.log(err));
-    }, [userset]);
+    //         if (productList.length < 20) {
+    //             setHasMore(false);
+    //         } else {
+    //             setHasMore(true);
+    //         }
+    //     })
+
+    //     .catch(err => console.log(err));
 
     const getProduct = () => {
         axAuth(token)({
@@ -109,6 +123,36 @@ function Home() {
             }
         });
     };
+    // 카테고리 불러오기
+    const getCategory = (categoryName: string) => {
+        axAuth(token)({
+            method: 'post',
+            url: '/product-service/auth/productlist',
+            data: {
+                sort: 0,
+                productId: null, // 수정된 부분: null로 변경
+                location: false,
+                category: categoryName,
+            },
+        })
+            .then(res => {
+                console.log(res.data.data);
+                const productList = res.data.data;
+                setListData(productList);
+                // setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
+                setProductId(productList[productList.length - 1]?.productId);
+
+                if (productList.length < 20) {
+                    setHasMore(false);
+                } else {
+                    setHasMore(true);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                console.log('카테고리네임은 잘들어가나:', categoryName);
+            });
+    };
 
     const onClick = (id: number) => {
         router.push(`/${id}`);
@@ -119,7 +163,6 @@ function Home() {
     useEffect(() => {
         const handleResize = () => {
             const windowHeight = window.innerHeight;
-            console.log('tq');
             console.log(windowHeight);
             const containerHeight = windowHeight - 247.2;
             setContainerHeight(containerHeight);
@@ -137,7 +180,7 @@ function Home() {
 
     return (
         <Container>
-            <CategoryModal isModalOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <CategoryModal isModalOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onCategorySelect={handleCategorySelect} />
             <div className="h-screen overflow-auto mb-[3.7rem]">
                 <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
                     <MainHeader title1="우리 동네에서" title2="찾고 나눠요" />

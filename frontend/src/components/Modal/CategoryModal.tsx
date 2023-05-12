@@ -8,7 +8,20 @@ interface CategoryProps {
     name: string;
     key: number;
 }
-function CategoryModal({ isModalOpen, onClose }: { isModalOpen: boolean; onClose: () => void }) {
+
+interface CategoryModalProps {
+    isModalOpen: boolean;
+    onClose: () => void;
+    onCategorySelect: (categoryName: string) => void;
+}
+
+function CategoryModal({ isModalOpen, onClose, onCategorySelect }: CategoryModalProps) {
+    const handleCategorySelect = (categoryName: string) => {
+        onCategorySelect(categoryName);
+        onClose();
+        console.log('클릭했다', categoryName);
+    };
+
     if (!isModalOpen) return null;
 
     return (
@@ -20,7 +33,7 @@ function CategoryModal({ isModalOpen, onClose }: { isModalOpen: boolean; onClose
                 </div>
                 <div className="grid grid-cols-3">
                     {categoryData.map((item: CategoryProps) => (
-                        <Category catekey={item.key} innerValue={item.name}></Category>
+                        <Category catekey={item.key} innerValue={item.name} onClick={() => handleCategorySelect(item.name)}></Category>
                     ))}
                 </div>
             </div>
