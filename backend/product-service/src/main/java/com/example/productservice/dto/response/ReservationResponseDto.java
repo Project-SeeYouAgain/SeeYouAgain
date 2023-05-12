@@ -39,6 +39,8 @@ public class ReservationResponseDto {
 
     private Boolean isCart;
 
+    private Boolean isHide;
+
     private Long ownerId;
 
     private Long reservationId;
@@ -61,6 +63,7 @@ public class ReservationResponseDto {
                 .productImg(productImg.getProductImg())
                 .isSafe(product.getIsSafe())
                 .isCart(isCart)
+                .isHide(product.getIsHide())
                 .ownerId(product.getOwnerId())
                 .reservationId(reservation.getId())
                 .build();
@@ -82,6 +85,7 @@ public class ReservationResponseDto {
                 .productImg(productImg.getProductImg())
                 .isSafe(product.getIsSafe())
                 .isCart(isCart)
+                .isHide(product.getIsHide())
                 .ownerId(product.getOwnerId())
                 .reservationId(null)
                 .build();
