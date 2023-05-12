@@ -12,6 +12,7 @@ import question from '../../images/question.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import InfiniteScroll from 'react-infinite-scroller';
+import CategoryModal from '@/components/Modal/CategoryModal';
 
 interface dataProps {
     thumbnailUrl: string;
@@ -48,6 +49,12 @@ function Home() {
         location: '',
         mannerScore: '',
     });
+    // 카테고리 모달
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    function handleCategory() {
+        setIsModalOpen(true);
+    }
+
     const [productId, setProductId] = useState<number>();
     const [hasMore, setHasMore] = useState<boolean>(true);
     const router = useRouter();
@@ -130,6 +137,7 @@ function Home() {
 
     return (
         <Container>
+            <CategoryModal isModalOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             <div className="h-screen overflow-auto mb-[3.7rem]">
                 <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
                     <MainHeader title1="우리 동네에서" title2="찾고 나눠요" />
@@ -150,11 +158,13 @@ function Home() {
                             <div className="flex justify-end my-4">
                                 {/* 카테고리 */}
 
-                                <button className="rounded-full p-2 px-3 mx-1 border-2 border-solid">카테고리 선택</button>
+                                <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey" onClick={handleCategory}>
+                                    카테고리 선택
+                                </button>
                                 {/* 동네 */}
-                                <button className="rounded-full p-2 px-3 mx-1 border-2 border-solid">동네 선택</button>
+                                <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey">동네 선택</button>
                                 {/* 정렬 */}
-                                <button className="rounded-full p-2 px-3 mx-1 border-2 border-solid">정렬</button>
+                                <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ">정렬</button>
                             </div>
                             {/* 제품 목록 */}
                             {listdata &&

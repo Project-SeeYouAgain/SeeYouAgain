@@ -41,6 +41,8 @@ public class ReservationResponseDto {
 
     private Long ownerId;
 
+    private Long reservationId;
+
     public static ReservationResponseDto of(Reservation reservation,
                                             Product product,
                                             double reviewScore,
@@ -60,6 +62,28 @@ public class ReservationResponseDto {
                 .isSafe(product.getIsSafe())
                 .isCart(isCart)
                 .ownerId(product.getOwnerId())
+                .reservationId(reservation.getId())
+                .build();
+    }
+    public static ReservationResponseDto of(Product product,
+                                            double reviewScore,
+                                            ProductImg productImg,
+                                            Boolean isCart) {
+        return ReservationResponseDto.builder()
+                .startDate(null)
+                .endDate(null)
+                .productId(product.getId())
+                .title(product.getTitle())
+                .price(product.getPrice())
+                .lng(null)
+                .lat(null)
+                .location(product.getLocation())
+                .score(reviewScore)
+                .productImg(productImg.getProductImg())
+                .isSafe(product.getIsSafe())
+                .isCart(isCart)
+                .ownerId(product.getOwnerId())
+                .reservationId(null)
                 .build();
     }
 }
