@@ -60,7 +60,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     return (
         <div className="w-full flex relative border-t-2 border-solid py-4" onClick={GoDetail}>
             <div className="w-[95px] h-[95px] relative">
-                <Image src={productImg} alt="제품 사진" fill className="aspect-square rounded-lg w-full h-full" />
+                <Image src={productImg} alt="제품 사진" fill className="aspect-square object-cover rounded-lg w-full h-full" />
                 {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute left-1 bottom-1" /> : null}
             </div>
             <div className="items-center pl-4 pr-1" style={{ width: containerWidth }}>
