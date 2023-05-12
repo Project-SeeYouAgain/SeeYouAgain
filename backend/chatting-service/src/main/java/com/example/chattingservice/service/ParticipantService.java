@@ -6,6 +6,4 @@ public interface ParticipantService {
     void enterChatRoom(Long userId, String identifier);
 
     void outChatRoom(Long userId, String identifier, Long lastReadMessageId);
-
-    void updateProfileImg(Long userId, ProfileImgRequestDto requestDto);
 }
