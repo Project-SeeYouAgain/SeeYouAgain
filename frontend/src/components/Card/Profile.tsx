@@ -1,7 +1,10 @@
 import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import MannerScore from './MannerScore';
+<<<<<<< HEAD
+=======
 import DefaultProfileImg from '../../images/default_user.png';
+>>>>>>> 62611389c3c0bcad167e11ad016673d3a4a52728
 import Image from 'next/image';
 
 interface propdata {
