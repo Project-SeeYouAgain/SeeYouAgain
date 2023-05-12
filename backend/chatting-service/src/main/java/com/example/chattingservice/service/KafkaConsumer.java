@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class KafkaConsumer {
     private final ParticipantRepository participantRepository;
 
     @KafkaListener(topics = "example-participant-topic")
+    @Transactional
     public void updateProfileImg(String kafkaMessage) {
         log.info("Kafka Message ->" + kafkaMessage);
 
