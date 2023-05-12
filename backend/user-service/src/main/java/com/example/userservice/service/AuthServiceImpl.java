@@ -27,6 +27,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final ChattingClientService chattingClientService;
 
+    private final KafkaProducer kafkaProducer;
+
     @Override
     @Transactional(readOnly = true)
     public ProfileResponseDto getProfile(Long userId) {
@@ -46,12 +48,14 @@ public class AuthServiceImpl implements AuthService {
 
         if (profileImg.isEmpty()) {
             user.updateProfile(null, null, location, description);
-            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(null));
+//            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(null));
+            kafkaProducer.send("example-participant-topic", new ProfileImgRequestDto(userId, null));
         } else {
             String profileImgKey = saveS3Img(profileImg);
             String profileImgUrl = amazonS3Service.getFileUrl(profileImgKey);
             user.updateProfile(profileImgKey, profileImgUrl, location, description);
-            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(profileImgUrl));
+//            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(profileImgUrl));
+            kafkaProducer.send("example-participant-topic", new ProfileImgRequestDto(userId, profileImgUrl));
         }
 
         return ProfileResponseDto.from(user);
