@@ -24,6 +24,7 @@ function Rent() {
         isCart: boolean;
         menuState: number;
         productId: number;
+        ownerId: number;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
@@ -68,6 +69,7 @@ function Rent() {
                                 menuState={menuState}
                                 productId={item.productId}
                                 onRefresh={handleRefresh}
+                                ownerId={item.ownerId}
                             />
                         </Link>
                     ))
