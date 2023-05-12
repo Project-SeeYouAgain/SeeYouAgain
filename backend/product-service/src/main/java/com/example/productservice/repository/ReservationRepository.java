@@ -26,9 +26,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT r FROM Reservation r Where r.product.ownerId = :ownerId AND r.startDate <= CURRENT_DATE AND r.endDate >= CURRENT_DATE")
     List<Reservation> findAllByOwnerIdNow(@Param("ownerId") Long ownerId);
 
-    // 앞으로 빌려줄 예정인 내 품목 리스트
-    @Query("SELECT r FROM Reservation r Where r.product.ownerId = :ownerId AND r.startDate > CURRENT_DATE")
-    List<Reservation> findAllByOwnerIdWaiting(@Param("ownerId") Long ownerId);
+    // 앞으로 내가 올린 품목 리스트
+    @Query("SELECT r FROM Reservation r Where r.product.ownerId = :ownerId")
+    List<Reservation> findAllByOwnerId(@Param("ownerId") Long ownerId);
 
     // 숨긴 내 품목 리스트
     @Query("SELECT r FROM Reservation r Where r.product.ownerId = :ownerId AND r.product.isHide = true")
