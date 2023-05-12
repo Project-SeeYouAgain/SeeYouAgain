@@ -21,14 +21,12 @@ function MyPage() {
         mannerScore: number;
     }
     const cookie = new Cookies();
+    const allCookies = cookie.getAll();
     const Router = useRouter();
     const logout = () => {
-        cookie.remove('nickname');
-        cookie.remove('userId');
-        cookie.remove('location');
-        cookie.remove('accessToken');
-        cookie.remove('refreshToken');
-        cookie.remove('mannerScore');
+        for (const name in allCookies) {
+            cookie.remove(name);
+        }
         sessionStorage.removeItem('recoil-persist');
 
         Router.push('/');
