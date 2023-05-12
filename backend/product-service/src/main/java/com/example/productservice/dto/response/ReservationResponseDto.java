@@ -39,6 +39,8 @@ public class ReservationResponseDto {
 
     private Boolean isCart;
 
+    private Long ownerId;
+
     public static ReservationResponseDto of(Reservation reservation,
                                             Product product,
                                             double reviewScore,
@@ -57,6 +59,7 @@ public class ReservationResponseDto {
                 .productImg(productImg.getProductImg())
                 .isSafe(product.getIsSafe())
                 .isCart(isCart)
+                .ownerId(product.getOwnerId())
                 .build();
     }
 }

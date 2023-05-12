@@ -31,6 +31,8 @@ public class ProductListResponseDto {
 
     private Boolean state;
 
+    private Boolean isHide;
+
     public static ProductListResponseDto of(Product product,
                                             double score,
                                             String productImg,
@@ -45,6 +47,7 @@ public class ProductListResponseDto {
                 .thumbnailUrl(productImg)
                 .score(score)
                 .state(product.getProductState())
+                .isHide(product.getIsHide())
                 .build();
     }
 }
