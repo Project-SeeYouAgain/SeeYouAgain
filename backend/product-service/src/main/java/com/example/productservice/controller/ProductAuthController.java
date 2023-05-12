@@ -83,6 +83,16 @@ public class ProductAuthController {
                         productService.getProductListByKeyword(getUserId(request), requestDto, keyword)));
     }
 
+    // 물품 숨김
+    @PatchMapping("/hide/{productId}")
+    public ResponseEntity<BaseResponseDto<?>> addHide(HttpServletRequest request,
+                                                      @PathVariable("productId") Long productId) {
+
+        productService.updateHide(getUserId(request), productId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(201, "success"));
+    }
+
     public Long getUserId(HttpServletRequest request) {
         return Long.parseLong(request.getHeader("userId"));
     }
