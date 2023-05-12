@@ -51,6 +51,9 @@ dependencies {
 
 	// Feign Client
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.1'
+
+	// kafka
+	implementation 'org.springframework.kafka:spring-kafka'
 }
 
 dependencyManagement {
