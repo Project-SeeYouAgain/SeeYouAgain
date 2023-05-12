@@ -124,21 +124,18 @@ function Detail() {
     if (data !== undefined) {
         return (
             <Container>
-                <DetailHeader />
+                <DetailHeader title={data.title} />
                 <Carousel imgUrl={data.productImgList}></Carousel>
-                {/* <div className="absolute top-[1rem] left-2 z-30">
-                    <AiOutlineLeft className="text-white" size="28" />
-                </div> */}
                 <Body>
                     <div className="mt-[35px]">
-                        <div className="font-bold flex text-[1.3rem]">
+                        <div className="font-semibold flex text-[1.2rem]">
                             {data.isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-[2rem] mr-[0.7rem]" /> : null}
                             {data.title}
                         </div>
-                        <div className="flex items-center my-[0.5rem] text-[grey]">
-                            <span>{data.location}</span>
+                        <div className="flex items-center my-[0.5rem]  text-[grey]">
+                            <span className="text-[.9rem]">{data.location}</span>
                             <BsDot size={24} />
-                            <span className="mr-[1rem]">{data.nickname}</span>
+                            <span className="mr-[1rem] text-[.9rem]">{data.nickname}</span>
                             <MannerScore score={data.mannerScore} />
                         </div>
                         <div className="mb-[0.5rem]">

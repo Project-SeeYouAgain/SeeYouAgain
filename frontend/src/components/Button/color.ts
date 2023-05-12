@@ -1,5 +1,5 @@
 export const backgroundColor = {
-    red: 'bg-[#FF6262]',
+    red: 'text-red',
     black: 'bg-black',
     blue: 'bg-[#5669FF]',
     white: 'bg-white',

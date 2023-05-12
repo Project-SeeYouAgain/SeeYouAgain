@@ -55,7 +55,6 @@ function Channel() {
 
     const connect = () => {
         const socket = new SockJS('https://k8c101.p.ssafy.io/chatting-service/ws');
-        // const socket = new SockJS('http://localhost:8000/chatting-service/ws');
 
         client.current = new Client({
             webSocketFactory: () => socket,
@@ -220,7 +219,7 @@ function Channel() {
                 <InfiniteScroll
                     initialLoad={false}
                     loadMore={getMessage}
-                    hasMore={hasMore} // 원하는 조건에 따라서 변경하세요. 더 이상 로드할 데이터가 없으면 false로 변경하세요.
+                    hasMore={hasMore}
                     isReverse={true}
                     useWindow={false}
                     threshold={50}
@@ -243,6 +242,7 @@ function Channel() {
                         </div>
 
                         <input
+                            ref={inputRef}
                             type={'text'}
                             name={'chatInput'}
                             onChange={handleChange}

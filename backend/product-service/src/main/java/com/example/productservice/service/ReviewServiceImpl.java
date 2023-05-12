@@ -73,8 +73,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void updateProductReview(Long userId, Long reviewId, ReviewRequestDto requestDto,
-                                    MultipartFile reviewImg) {
+    public void updateProductReview(Long userId, Long reviewId, ReviewRequestDto requestDto, MultipartFile reviewImg) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.REVIEW_NOT_EXIST_EXCEPTION));
 
@@ -105,7 +104,7 @@ public class ReviewServiceImpl implements ReviewService{
 
         deleteS3Img(review);
 
-        reviewRepository.deleteById(review.getId());
+        reviewRepository.delete(review);
     }
 
     private void deleteS3Img(Review review) {

@@ -61,7 +61,8 @@ public class ProductServiceImpl implements ProductService {
 
         List<Review> reviewList = reviewRepository.findAllByProductId(productId);
 
-        double totalScore = getReviewScoreAvg(reviewList);
+        double totalScore = 0;
+        if (reviewList.size() > 0) totalScore = getReviewScoreAvg(reviewList);
 
         UserClientResponseDto userInfo = userServiceClient.getUserInfo(product.getOwnerId()).getData();
 
@@ -170,29 +171,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public List<ProductListResponseDto> getProductList(Long userId, ProductListRequestDto requestDto) {
-        List<Product> productList = new ArrayList<>();
-        if (requestDto.getSort().equals(0)) {
-            productList = productRepository.findAllOrderByDate();
-        } else if (requestDto.getSort().equals(1)) {
-            productList = productRepository.findAllOrderByPrice();
-        } else if (requestDto.getSort().equals(2)) {
-            productList = productRepository.findAllOrderByScore();
-        }
+        List<Product> productList = productRepository
+                .getProductList(
+                        requestDto.getSort(),
+                        requestDto.getProductId(),
+                        requestDto.getCategory(),
+                        requestDto.getLocation(),
+                        requestDto.getMyLocation()
+                );
+
         return getProductResponse(productList, userId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ProductListResponseDto> getProductListByKeyword(Long userId,
-                                                                ProductListRequestDto requestDto, String keyword) {
-        List<Product> productList = new ArrayList<>();
-        if (requestDto.getSort().equals(0)) {
-            productList = productRepository.findAllByTitleOrderByDate(keyword);
-        } else if (requestDto.getSort().equals(1)) {
-            productList = productRepository.findAllByTitleOrderByPrice(keyword);
-        } else if (requestDto.getSort().equals(2)) {
-            productList = productRepository.findAllByTitleOrderByScore(keyword);
-        }
+                                                                ProductListRequestDto requestDto,
+                                                                String keyword) {
+        List<Product> productList = productRepository.getProductListByKeyword(requestDto.getProductId(), keyword);
         return getProductResponse(productList, userId);
     }
 
@@ -210,7 +206,10 @@ public class ProductServiceImpl implements ProductService {
 
     private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {
         return productList.stream().map(p -> {
-            double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
+            List<Review> reviewList = reviewRepository.findAllByProductId(p.getId());
+            double productScoreAverage = 0;
+            if (reviewList.size() > 0) productScoreAverage = getReviewScoreAvg(reviewList);
+
             ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
 
             Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, p.getId());
@@ -253,10 +252,7 @@ public class ProductServiceImpl implements ProductService {
             totalScore += review.getReviewScore();
         }
 
-        if (reviewList.size() > 0) {
-            return (double) totalScore / reviewList.size();
-        }
-        return 0;
+        return (double) totalScore / reviewList.size();
     }
 
 }
