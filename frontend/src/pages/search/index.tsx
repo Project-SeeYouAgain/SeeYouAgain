@@ -1,5 +1,4 @@
 import Container from '@/components/Container';
-import Body from '@/components/Container/components/Body';
 import React, { useState, useEffect } from 'react';
 import { BsArrowLeft } from 'react-icons/bs';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -11,10 +10,13 @@ import { axAuth } from '@/apis/axiosinstance';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import ItemCard from '@/components/Card/ItemCard';
+import InfiniteScroll from 'react-infinite-scroller';
+
 interface KeyInterface {
     id: number;
     text: string;
 }
+
 interface dataProps {
     thumbnailUrl: string;
     title: string;
@@ -30,14 +32,18 @@ interface dataProps {
 
 function Search() {
     const [clickSearch, setClickSearch] = useState(false);
-    const [listdata, setListData] = useState<dataProps[]>();
+    const [listdata, setListData] = useState<dataProps[]>([]);
     const [text, setText] = useState('');
+    const [saveText, setSaveText] = useState('');
     const [searchText, setSearchText] = useState('');
     const handleTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
     };
     const [keywords, setKeywords] = useState<KeyInterface[]>([]);
     const token = useRecoilValue(userState).accessToken;
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [productId, setProductId] = useState<number>();
+
     // 페이지 로드 시 로컬스토리지에서 기존 검색어 불러오기
     useEffect(() => {
         const storedKeywords = localStorage.getItem('keywords');
@@ -50,16 +56,26 @@ function Search() {
     const handleAddKeyword = () => {
         if (!text) return; // 검색어가 입력되어 있지 않으면 추가하지 않음
 
+        setSaveText(text);
+
         axAuth(token)({
             method: 'post',
             url: `/product-service/auth/search/${text}`,
             data: {
                 sort: 0,
+                productId: productId,
             },
         })
             .then(res => {
-                console.log(res.data.data);
-                setListData(res.data.data);
+                const productList = res.data.data;
+                setListData((_list_data: dataProps[]) => [...productList]);
+                setProductId(productList[productList.length - 1]?.productId);
+
+                if (productList.length < 20) {
+                    setHasMore(false);
+                } else {
+                    setHasMore(true);
+                }
             }) // 잘 들어갔는지 확인
             .catch(err => console.log(err)); // 어떤 오류인지 확인
 
@@ -80,6 +96,29 @@ function Search() {
         setSearchText(text);
         setKeywords(prevKeywords => [newKeyword, ...prevKeywords]);
         setText(''); // 검색어 입력 필드 비우기
+    };
+
+    const getProduct = () => {
+        axAuth(token)({
+            method: 'post',
+            url: `/product-service/auth/search/${saveText}`,
+            data: {
+                sort: 0,
+                productId: productId,
+            },
+        })
+            .then(res => {
+                const productList = res.data.data;
+                setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
+                setProductId(productList[productList.length - 1]?.productId);
+
+                if (productList.length < 20) {
+                    setHasMore(false);
+                } else {
+                    setHasMore(true);
+                }
+            }) // 잘 들어갔는지 확인
+            .catch(err => console.log(err)); // 어떤 오류인지 확인
     };
 
     const onClick = (id: number) => {
@@ -157,13 +196,15 @@ function Search() {
                 </ul>
                 <div>
                     <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
-                    <div>
-                        {listdata &&
-                            listdata.map((item, index) => (
-                                <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
-                                    <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
-                                </div>
-                            ))}
+                    <div style={{ height: 400, overflow: 'auto' }}>
+                        <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
+                            {listdata &&
+                                listdata.map((item, index) => (
+                                    <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
+                                        <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                    </div>
+                                ))}
+                        </InfiniteScroll>
                     </div>
                 </div>
             </div>
