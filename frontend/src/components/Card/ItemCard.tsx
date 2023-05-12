@@ -18,9 +18,11 @@ interface dataProps {
     isCart?: boolean;
     menuState?: number;
     onRefresh?: () => void;
+    ownerId?: number;
+    isBooked?: boolean;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, onRefresh }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, onRefresh }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
 
@@ -69,7 +71,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                     {menuState !== undefined ? (
                         <>
                             <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
-                            <ItemCardOption productId={productId} onRefresh={onRefresh} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                            <ItemCardOption productId={productId} onRefresh={onRefresh} ownerId={ownerId} isBooked={isBooked} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
                         </>
                     ) : (
                         <span className="h-[1.5rem] px-[0.4rem] w-[1.5rem]"></span>
@@ -91,7 +93,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                 <span className="flex items-center">
                     <p className="text-[#8E8E93] text-sm mr-2">{location}</p> {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" /> : null}
                 </span>
-                {startDate !== undefined && endDate !== undefined ? (
+                {startDate !== null ? (
                     <div className="grid grid-cols-2 gap-2 text-center">
                         <div className="flex text-darkgrey text-sm">
                             <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
