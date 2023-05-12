@@ -18,4 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     @Query("SELECT distinct p FROM Review r JOIN r.product p WHERE p.title like %:keyword% GROUP BY p.id ORDER BY Avg(r.reviewScore) DESC")
     List<Product> findAllByTitleOrderByScore(@Param("keyword") String keyword);
 
+    @Query("SELECT p FROM Product p WHERE p.ownerId = :ownerId")
+    List<Product> findByOwnerId(@Param("ownerId") Long ownerId);
 }
