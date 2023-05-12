@@ -196,6 +196,18 @@ public class ProductServiceImpl implements ProductService {
         return getProductResponse(productList, userId);
     }
 
+    // hide 체크
+    @Override
+    @Transactional
+    public void updateHide(Long userId, Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+
+        if (!product.getOwnerId().equals(userId))
+            throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
+        product.updateProductHide();
+    }
+
     private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {
         return productList.stream().map(p -> {
             double productScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
