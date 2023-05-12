@@ -9,14 +9,12 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.example.chattingservice.entity.QChannel.channel;
 import static com.example.chattingservice.entity.QMessage.message;
 
 @RequiredArgsConstructor
 public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
 
     @Override
     public List<Message> findNotReadMessageList(String identifier, Long userId, Long lastMessageId) {
