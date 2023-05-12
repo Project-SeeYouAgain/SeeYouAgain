@@ -1,7 +1,6 @@
 package com.example.chattingservice.controller;
 
 import com.example.chattingservice.dto.BaseResponseDto;
-import com.example.chattingservice.dto.request.ProfileImgRequestDto;
 import com.example.chattingservice.service.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,15 +31,6 @@ public class ParticipantController {
                                                           @PathVariable("lastReadMessageId") Long lastReadMessageId) {
 
         participantService.outChatRoom(getUserId(request), identifier, lastReadMessageId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
-    }
-
-    @PutMapping("/{userId}")
-    public ResponseEntity<BaseResponseDto<?>> updateProfileImg(@PathVariable("userId") Long userId,
-                                                               @RequestBody ProfileImgRequestDto requestDto) {
-
-        participantService.updateProfileImg(userId, requestDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
     }

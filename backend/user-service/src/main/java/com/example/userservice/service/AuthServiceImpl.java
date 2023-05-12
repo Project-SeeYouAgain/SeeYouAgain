@@ -1,6 +1,5 @@
 package com.example.userservice.service;
 
-import com.example.userservice.client.ChattingClientService;
 import com.example.userservice.dto.request.chatting.ProfileImgRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
 import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
@@ -25,8 +24,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final AmazonS3Service amazonS3Service;
 
-    private final ChattingClientService chattingClientService;
-
     private final KafkaProducer kafkaProducer;
 
     @Override
@@ -48,13 +45,11 @@ public class AuthServiceImpl implements AuthService {
 
         if (profileImg.isEmpty()) {
             user.updateProfile(null, null, location, description);
-//            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(null));
             kafkaProducer.send("example-participant-topic", new ProfileImgRequestDto(userId, null));
         } else {
             String profileImgKey = saveS3Img(profileImg);
             String profileImgUrl = amazonS3Service.getFileUrl(profileImgKey);
             user.updateProfile(profileImgKey, profileImgUrl, location, description);
-//            chattingClientService.updateProfileImg(userId, new ProfileImgRequestDto(profileImgUrl));
             kafkaProducer.send("example-participant-topic", new ProfileImgRequestDto(userId, profileImgUrl));
         }
 
