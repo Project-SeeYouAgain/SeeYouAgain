@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import MannerScore from './MannerScore';
+import Image from 'next/image';
 
 interface propdata {
     profileImg: string;
@@ -14,7 +15,10 @@ function Profile(data: propdata) {
     return (
         <div>
             <div className="flex">
-                {data.profileImg ? <img src={data.profileImg} alt="이미지" className="rounded-full w-[80px] h-[80px]" /> : <FaUserCircle size="80" className="mr-[1rem]" />}
+                <div className="bg-black rounded-full w-[60px] h-[60px] mr-[1rem]">
+                    {data.profileImg && <Image src={data.profileImg} alt="이미지" className="w-Full h-Full" />}
+                    {!data.profileImg && <FaUserCircle className="w-full h-full" />}
+                </div>
                 <div className="flex flex-col justify-center">
                     <div className="flex">
                         <span className="mr-[0.3rem] text-[16px] font-bold">{data.nickname}</span>
