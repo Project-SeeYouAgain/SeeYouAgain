@@ -62,13 +62,13 @@ function Home() {
                 productId: null,
                 location: false,
                 category: '전체',
-                myLocation: user.location,
+                myLocation: '장덕동',
             },
         })
             .then(res => {
                 const productList = res.data.data;
-                setListData((_list_data: dataProps[]) => [...productList]);
-                setProductId(productList[productList.length - 1].productId);
+                setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
+                setProductId(productList[productList.length - 1]?.productId);
 
                 if (productList.length < 20) {
                     setHasMore(false);
@@ -88,12 +88,12 @@ function Home() {
                 productId: productId,
                 location: false,
                 category: '전체',
-                myLocation: user.location,
+                myLocation: '장덕동',
             },
         }).then(res => {
             const productList = res.data.data;
             setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
-            setProductId(productList[productList.length - 1].productId);
+            setProductId(productList[productList.length - 1]?.productId);
 
             if (productList.length < 20) {
                 setHasMore(false);
@@ -134,7 +134,7 @@ function Home() {
                             <div></div>
                         </div>
                         {/* 제품 목록 */}
-                        <div className="mt-[3rem] pb-16">
+                        <div className="mt-[3rem]">
                             {listdata &&
                                 listdata.map((item, index) => (
                                     <div onClick={() => onClick(item.productId)} key={index}>

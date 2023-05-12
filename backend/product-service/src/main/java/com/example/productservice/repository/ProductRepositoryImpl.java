@@ -16,12 +16,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Product> getProductList(int sort, Long productId, String category, boolean location, String myLocation) {
+    public List<Product> getProductList(int sort, Long productId, String category, Boolean location, String myLocation) {
         JPAQuery<Product> query = queryFactory
                 .selectFrom(product)
-                .where(ltProductId(productId)
-                        .and(isLocation(location, myLocation))
-                        .and(likeCategory(category)))
+                .where(ltProductId(productId), isLocation(location, myLocation), likeCategory(category))
                 .limit(20);
 
         if (sort == 0) {
@@ -37,11 +35,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return productId != null ? product.id.lt(productId) : null;
     }
 
-    private BooleanExpression isLocation(boolean location, String myLocation) {
+    private BooleanExpression isLocation(Boolean location, String myLocation) {
         return location ? product.location.contains(myLocation) : null;
     }
 
     private BooleanExpression likeCategory(String category) {
-        return category.equals("전체") ? product.category.eq(category) : null;
+        return !category.equals("전체") ? product.category.eq(category) : null;
     }
 }
