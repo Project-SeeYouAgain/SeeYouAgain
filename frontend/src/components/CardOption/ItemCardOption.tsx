@@ -43,16 +43,20 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
     function OpenCalender(event: React.MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
-        setModalNum(2);
         const url = `/product-service/auth/reservation/list/${productId}`;
-        axBase(token)({ url: url }).then(res => {
-            console.log(res.data.data);
-            setBookData(res.data.data);
-        });
-        // const url = `/product-service/auth/reservation/${productId}`;
-        // axAuth(token)({ method: 'delete', url: url })
-        //     .then(() => console.log('예약 취소 완료'))
-        //     .catch(err => console.log(err));
+        axBase(token)({ url: url })
+            .then(res => {
+                console.log(res.data.data);
+                setBookData(res.data.data);
+                setModalNum(2);
+            })
+            .catch(err => console.log(err));
+    }
+
+    function OpenReviewModal(event: React.MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
+        setModalNum(3);
     }
 
     if (dropdownVisible) {
@@ -62,26 +66,36 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                     {isRent ? (
                         menuState === 1 ? (
                             <>
-                                <div className="block px-4 py-2">대여일정</div>
+                                <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
+                                    대여일정
+                                </div>
                                 <div className="block px-4 py-2">반납하기</div>
                             </>
                         ) : menuState === 2 ? (
                             <>
-                                <div className="block px-4 py-2">대여일정</div>
+                                <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
+                                    대여일정
+                                </div>
                                 <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenConfirmBookCancel(event)}>
                                     예약취소
                                 </div>
                             </>
                         ) : (
-                            <div className="block px-4 py-2">리뷰작성</div>
+                            <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenReviewModal(event)}>
+                                리뷰작성
+                            </div>
                         )
                     ) : menuState === 1 ? (
                         <>
-                            <div className="block px-4 py-2">대여일정</div>
+                            <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
+                                대여일정
+                            </div>
                         </>
                     ) : menuState === 2 ? (
                         <>
-                            <div className="block px-4 py-2">대여일정</div>
+                            <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
+                                대여일정
+                            </div>
                             <div className="block px-4 py-2">숨김</div>
                         </>
                     ) : (
@@ -104,6 +118,11 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                                     <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={CancelBook} />
                                     <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
                                 </div>
+                            </div>
+                        ) : modalNum === 2 ? (
+                            <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 flex flex-col items-center">
+                                <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} />
+                                <Square bgColor="blue" textColor="white" innerValue="확인" className="w-[100%] bg-[#FF6262]" onClick={() => setModalNum(0)} />
                             </div>
                         ) : null}
                     </div>
