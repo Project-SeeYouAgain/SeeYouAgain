@@ -153,22 +153,24 @@ function Detail() {
                                 </span>
                             ))}
                         </div>
-                        <Menu onSelectMenu={SelectMenu} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
-                        {menuState === 1 ? (
-                            <div className="flex justify-center">
-                                <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
-                            </div>
-                        ) : menuState === 2 ? (
-                            <div className="flex  justify-center w-[100%] aspect-[4/3] relative">
-                                <div className="absolute w-[100%] aspect-[4/3] z-0">
-                                    <KakaoMapMini lat={data.lat} lng={data.lng} />
+                        <div className="w-full mb-[5rem]">
+                            <Menu onSelectMenu={SelectMenu} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
+                            {menuState === 1 ? (
+                                <div className="flex justify-center">
+                                    <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
                                 </div>
-                            </div>
-                        ) : (
-                            <div>
-                                <ReviewList productId={product} reviewListSize={data.reviewListSize} />
-                            </div>
-                        )}
+                            ) : menuState === 2 ? (
+                                <div className="flex  justify-center w-[100%] aspect-[4/3] relative">
+                                    <div className="absolute w-[100%] aspect-[4/3] z-0">
+                                        <KakaoMapMini lat={data.lat} lng={data.lng} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <ReviewList productId={product} reviewListSize={data.reviewListSize} />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </Body>
                 <footer className="fixed bottom-0 border-t border-solid w-[100vw] h-[5rem] flex items-center justify-evenly bg-white">
