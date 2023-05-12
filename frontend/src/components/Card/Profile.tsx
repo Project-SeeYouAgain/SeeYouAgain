@@ -15,7 +15,11 @@ function Profile(data: propdata) {
     return (
         <div>
             <div className="flex">
-                {data.profileImg ? <img src={data.profileImg} alt="이미지" className="rounded-full w-[80px] h-[80px]" /> : <img src={DefaultProfileImg} className="rounded-full w-[80px] h-[80px]" />}
+                {data.profileImg ? (
+                    <img src={data.profileImg} alt="이미지" className="rounded-full w-[80px] h-[80px]" />
+                ) : (
+                    <img src="../../images/profile.png" className="rounded-full w-[80px] h-[80px]" />
+                )}
                 <div className="flex flex-col justify-center">
                     <div className="flex">
                         <span className="mr-[0.3rem] text-[16px] font-bold">{data.nickname}</span>
