@@ -31,6 +31,16 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return query.fetch();
     }
 
+    @Override
+    public List<Product> getProductListByKeyword(Long productId, String keyword) {
+        return queryFactory
+                .selectFrom(product)
+                .where(product.title.contains(keyword).and(ltProductId(productId)))
+                .orderBy(product.refreshedAt.desc())
+                .limit(20)
+                .fetch();
+    }
+
     private BooleanExpression ltProductId(Long productId) {
         return productId != null ? product.id.lt(productId) : null;
     }
