@@ -60,7 +60,7 @@ function SignUp() {
                     onKeyUp={handleKeyPress}
                 />
             </div>
-            <button className="absolute text-xl bottom-1 w-full rounded-b-xl bg-blue text-white h-16 mt-6" onClick={sendNickName}>
+            <button className="absolute text-xl bottom-0 w-full bg-blue text-white h-16 mt-6" onClick={sendNickName}>
                 다음
             </button>
         </div>
