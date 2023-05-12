@@ -40,7 +40,7 @@ function Category({ onClick, innerValue, catekey }: CategoryButtonProps) {
         14: cate14,
     };
     return (
-        <div className="mb-5">
+        <div className="mb-5" onClick={onClick}>
             <div className="flex flex-col items-center text-center">
                 {/* 원형 */}
                 <div className="w-[4rem] h-[4rem] rounded-full bg-lightgrey flex items-center justify-center">
