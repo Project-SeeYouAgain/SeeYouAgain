@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import question from '../../images/question.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface dataProps {
     thumbnailUrl: string;
@@ -48,6 +49,7 @@ function Home() {
         mannerScore: '',
     });
     const [productId, setProductId] = useState<number>();
+    const [hasMore, setHasMore] = useState<boolean>(true);
     const router = useRouter();
     const userset = useRecoilValue(userState);
     useEffect(() => {
@@ -57,14 +59,22 @@ function Home() {
             url: '/product-service/auth/productlist',
             data: {
                 sort: 0,
-                productId: null
+                productId: null,
+                location: false,
+                category: '전체',
+                myLocation: '장덕동',
             },
         })
             .then(res => {
-                console.log(res.data.data);
                 const productList = res.data.data;
                 setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
-                setProductId(productList[productList.length - 1].productId);
+                setProductId(productList[productList.length - 1]?.productId);
+
+                if (productList.length < 20) {
+                    setHasMore(false);
+                } else {
+                    setHasMore(true);
+                }
             })
             .catch(err => console.log(err));
     }, [userset]);
@@ -75,10 +85,21 @@ function Home() {
             url: '/product-service/auth/productlist',
             data: {
                 sort: 0,
-                productId: productId
+                productId: productId,
+                location: false,
+                category: '전체',
+                myLocation: '장덕동',
             },
         }).then(res => {
-            setListData((_list_data: dataProps[]) => [..._list_data, ...res.data.data]);
+            const productList = res.data.data;
+            setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
+            setProductId(productList[productList.length - 1]?.productId);
+
+            if (productList.length < 20) {
+                setHasMore(false);
+            } else {
+                setHasMore(true);
+            }
         });
     };
 
@@ -88,40 +109,43 @@ function Home() {
 
     return (
         <Container>
-            <MainHeader title1="우리 동네에서" title2="찾고 나눠요" />
-            <Body>
-                {/* 이용자 안내 페이지 */}
-                <Link href="/tutorial">
-                    <div className="relative flex justify-between w-[100%] h-[5rem] bg-blue rounded-[.7rem] items-center px-2 ">
-                        <div className="ml-[2vw]">
-                            <p className="text-white font-semibold text-[1.5rem]">씨유어게인,</p>
-                            <p className="text-white">사용법이 궁금하세요?</p>
-                        </div>
-                        <Image src={question} alt="qmark" className="w-[5rem]" />
-                    </div>
-                </Link>
-                {/* <div>{user.nickname}</div> */}
-                {/* 정렬 */}
-                <div>
-                    {/* 카테고리 */}
-                    <div></div>
-                    {/* 동네 */}
-                    <div></div>
-                    {/* 정렬 */}
-                    <div></div>
-                </div>
-                {/* 제품 목록 */}
-                <div className="mt-[3rem] pb-20">
-                    <div>
-                        {listdata &&
-                            listdata.map((item, index) => (
-                                <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
-                                    <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+            <div style={{ height: 630, overflow: 'auto' }}>
+                <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
+                    <MainHeader title1="우리 동네에서" title2="찾고 나눠요" />
+                    <div className="px-5">
+                        {/* 이용자 안내 페이지 */}
+                        <Link href="/tutorial">
+                            <div className="relative flex justify-between w-[100%] h-[5rem] bg-blue rounded-[.7rem] items-center px-2 ">
+                                <div className="ml-[2vw]">
+                                    <p className="text-white font-semibold text-[1.5rem]">씨유어게인,</p>
+                                    <p className="text-white">사용법이 궁금하세요?</p>
                                 </div>
-                            ))}
+                                <Image src={question} alt="qmark" className="w-[5rem]" />
+                            </div>
+                        </Link>
+                        {/* <div>{user.nickname}</div> */}
+                        {/* 정렬 */}
+                        <div>
+                            {/* 카테고리 */}
+                            <div></div>
+                            {/* 동네 */}
+                            <div></div>
+                            {/* 정렬 */}
+                            <div></div>
+                        </div>
+                        {/* 제품 목록 */}
+                        <div className="mt-[3rem]">
+                            {listdata &&
+                                listdata.map((item, index) => (
+                                    <div onClick={() => onClick(item.productId)} key={index}>
+                                        <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                    </div>
+                                ))}
+                        </div>
                     </div>
-                </div>
-            </Body>
+                </InfiniteScroll>
+            </div>
+
             <Navbar />
         </Container>
     );
