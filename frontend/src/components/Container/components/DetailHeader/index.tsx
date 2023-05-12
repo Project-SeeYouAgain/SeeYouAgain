@@ -5,7 +5,14 @@ import { useRouter } from 'next/router';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { RiAlarmWarningLine } from 'react-icons/ri';
 
-function DetailHeader() {
+// 모달
+import ReportModal from '../../../Modal/ReportModal';
+
+interface DetailProps {
+    title: string;
+}
+
+function DetailHeader({ title }: DetailProps) {
     const router = useRouter();
     // 뒤로가기
     const handleBack = () => {
@@ -27,6 +34,14 @@ function DetailHeader() {
         };
     }, []);
 
+    // 신고 모달
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [modalMessage, setModalMessage] = useState<string>('');
+    function handleReport() {
+        setIsModalOpen(true);
+        setModalMessage(title);
+    }
+
     const backgroundColor = scrollY < 200 ? 'rgba(255, 255, 255, 0.5)' : 'white';
     const textColor = scrollY < 200 ? 'white' : 'blue';
 
@@ -34,8 +49,9 @@ function DetailHeader() {
         <div className="fixed top-0 z-30">
             <div className={`flex  h-[4.5rem] w-[100vw] justify-between items-center text-center text-${textColor} pl-[5vw] pr-[5vw] bg-${backgroundColor} transition duration-300 ease-in-out`}>
                 <AiOutlineLeft size={23} onClick={handleBack} />
-                <RiAlarmWarningLine size={23} />
+                <RiAlarmWarningLine size={23} onClick={handleReport} />
             </div>
+            <ReportModal isModalOpen={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />
         </div>
     );
 }

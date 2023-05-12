@@ -29,8 +29,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                     review.reviewImgUrl
                 ))
                 .from(review)
-                .join(review.product, product)
-                .where(product.id.eq(productId).and(ltReviewId(lastReviewId)))
+                .where(review.product.id.eq(productId).and(ltReviewId(lastReviewId)))
                 .orderBy(review.id.desc())
                 .limit(3)
                 .fetch();

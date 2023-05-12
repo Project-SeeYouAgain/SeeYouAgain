@@ -17,9 +17,10 @@ interface dataProps {
     isSafe?: boolean;
     isCart?: boolean;
     menuState?: number;
+    onRefresh?: () => void;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, onRefresh }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
 
@@ -36,45 +37,72 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     function GoDetail() {
         router.push(`/${productId}`);
     }
+    const [containerWidth, setContainerWidth] = useState(0);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const windowWidth = window.innerWidth;
+            console.log(windowWidth);
+            const containerWidth = windowWidth - 135;
+            setContainerWidth(containerWidth);
+        };
+
+        // 초기 로드 및 윈도우 크기 변경 이벤트에 대한 이벤트 핸들러 등록
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     return (
-        <div className="w-[100%]" onClick={GoDetail}>
-            <div className="flex mt-[0.4rem] relative">
-                <div className="w-[8rem] h-[7.4rem] relative mr-[0.8rem]">
-                    <Image src={productImg} alt="제품 사진" className="aspect-square rounded-[0.6rem]" layout="fill" objectFit="cover" />
-                    {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute left-1 top-1 w-[1.5rem]" /> : null}
-                    {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute right-0 top-1" /> : null}
-                </div>
-                <div className="flex flex-col w-[70%]">
-                    <span className="font-semibold w-[100%] flex items-center justify-between relative">
-                        <span className="truncate w-[11.87rem] text-[1.2rem] dark:text-black">{title}</span>
-                        {menuState !== undefined ? (
-                            <>
-                                <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
-                                <ItemCardOption productId={productId} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
-                            </>
-                        ) : null}
+        <div className="w-full flex relative border-b border-solid py-4" onClick={GoDetail}>
+            <div className="w-[95px] h-[95px] relative">
+                <Image src={productImg} alt="제품 사진" fill className="aspect-square object-cover rounded-lg w-full h-full" />
+                {isCart !== undefined ? <Button.Heart isActive={isCart} productId={productId} className="absolute left-1 bottom-1" /> : null}
+            </div>
+            <div className="items-center pl-4 pr-1" style={{ width: containerWidth }}>
+                <span className="font-semibold w-full flex items-center justify-between relative">
+                    <p className=" truncate dark:text-black font-bolder">{title}</p>
+                    {menuState !== undefined ? (
+                        <>
+                            <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
+                            <ItemCardOption productId={productId} onRefresh={onRefresh} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                        </>
+                    ) : (
+                        <span className="h-[1.5rem] px-[0.4rem] w-[1.5rem]"></span>
+                    )}
+                </span>
+
+                {price >= 100000 && (
+                    <span>
+                        <span className="font-bold dark:text-black">{(price / 10000).toLocaleString('ko-KR')}</span>
+                        <span className="text-[#8E8E93] text-sm">만원 /일</span>
                     </span>
-                    <div className="flex items-center mt-[.5rem]">
-                        <span className="text-[#8E8E93] mr-[1.5rem]">{location}</span>
-                        <div>
-                            <span className="font-bold text-[1.3rem] dark:text-black">{price.toLocaleString('ko-KR')}</span>
-                            <span className="text-[#8E8E93]">원 /일</span>
+                )}
+                {price < 100000 && (
+                    <span>
+                        <span className="font-bold dark:text-black">{price.toLocaleString('ko-KR')}</span>
+                        <span className="text-[#8E8E93] text-sm whitespace-nowrap">원 /일</span>
+                    </span>
+                )}
+                <span className="flex items-center">
+                    <p className="text-[#8E8E93] text-sm mr-2">{location}</p> {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" /> : null}
+                </span>
+                {startDate !== undefined && endDate !== undefined ? (
+                    <div className="grid grid-cols-2 gap-2 text-center">
+                        <div className="flex text-darkgrey text-sm">
+                            <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
+                            <p className="whitespace-nowrap">{startDate}</p>
+                        </div>
+                        <div className="flex text-darkgrey text-sm justify-end">
+                            <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
+                            <p className="whitespace-nowrap">{endDate}</p>
                         </div>
                     </div>
-                    {startDate !== undefined && endDate !== undefined ? (
-                        <div className="flex flex-col justify-between absolute bottom-0">
-                            <div className="text-darkgrey text-[0.87rem]">
-                                <span className="font-bold mr-[1rem]">대여일</span>
-                                <span>{startDate}</span>
-                            </div>
-                            <div className="text-darkgrey text-[0.87rem]">
-                                <span className="font-bold mr-[1rem]">반납일</span>
-                                <span>{endDate}</span>
-                            </div>
-                        </div>
-                    ) : null}
-                </div>
+                ) : null}
             </div>
         </div>
     );

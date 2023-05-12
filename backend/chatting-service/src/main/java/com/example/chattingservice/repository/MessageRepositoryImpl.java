@@ -9,14 +9,12 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.example.chattingservice.entity.QChannel.channel;
 import static com.example.chattingservice.entity.QMessage.message;
 
 @RequiredArgsConstructor
 public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
 
     @Override
     public List<Message> findNotReadMessageList(String identifier, Long userId, Long lastMessageId) {
@@ -42,8 +40,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 message.updatedAt
         ))
                 .from(message)
-                .join(message.channel, channel)
-                .where(channel.identifier.eq(identifier).and(ltMessageId(firstMessageId)))
+                .where(message.channel.identifier.eq(identifier).and(ltMessageId(firstMessageId)))
                 .orderBy(message.id.desc())
                 .limit(30)
                 .fetch();
