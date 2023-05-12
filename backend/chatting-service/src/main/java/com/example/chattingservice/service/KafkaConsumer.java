@@ -32,6 +32,12 @@ public class KafkaConsumer {
             ex.printStackTrace();
         }
 
-        participantRepository.updateProfileImg((Long)map.get("userId"), (String)map.get("profileImg"));
+        Object userIdObj = map.get("userId");
+        if (userIdObj instanceof Integer) {
+            Integer userIdInt = (Integer) userIdObj;
+            Long userId = Long.valueOf(userIdInt);
+            participantRepository.updateProfileImg(Long.parseLong(map.get("userId").toString()), (String)map.get("profileImg"));
+        }
+
     }
 }
