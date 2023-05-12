@@ -12,6 +12,8 @@ import { userState } from 'recoil/user/atoms';
 import Navbar from '@/components/Container/components/Navbar';
 import { useRouter } from 'next/router';
 import { Cookies } from 'react-cookie';
+import { MdLogout } from 'react-icons/md';
+
 function MyPage() {
     interface profile {
         profileImg: string;
@@ -21,14 +23,12 @@ function MyPage() {
         mannerScore: number;
     }
     const cookie = new Cookies();
+    const allCookies = cookie.getAll();
     const Router = useRouter();
     const logout = () => {
-        cookie.remove('nickname');
-        cookie.remove('userId');
-        cookie.remove('location');
-        cookie.remove('accessToken');
-        cookie.remove('refreshToken');
-        cookie.remove('mannerScore');
+        for (const name in allCookies) {
+            cookie.remove(name);
+        }
         sessionStorage.removeItem('recoil-persist');
 
         Router.push('/');
@@ -49,7 +49,7 @@ function MyPage() {
         <Container>
             <div>
                 <Header title="마이페이지" />
-                <Body className="mt-[3rem]">
+                <Body className="mt-[1rem]">
                     {profileData ? (
                         <Profile
                             profileImg={profileData.profileImg}
@@ -59,24 +59,33 @@ function MyPage() {
                             mannerScore={profileData.mannerScore}
                         />
                     ) : null}
-                    <div className="mt-[2.3rem]">
-                        <div className="flex flex-col">
+                    <div className="flex flex-col py-4 pt-8">
+                        <div className="grid grid-rows-3 gap-2 mt-2">
                             <span className="font-bold dark:text-black text-[20px]">나의 거래</span>
                             {MenuData1.map((item, index) => (
-                                <span className={`text-[16px] dark:text-black ${index === 0 ? 'mt-[1rem]' : 'mt-[0.5rem]'}`} key={index}>
-                                    <Link href={item.url}>{item.title}</Link>
+                                <span className={`text-[18px] dark:text-black`} key={index}>
+                                    <Link href={item.url} className="flex items-center">
+                                        <item.icon className="mr-2" size="20" />
+                                        {item.title}
+                                    </Link>
                                 </span>
                             ))}
                         </div>
-                        <div className="flex flex-col mt-[2.3rem]">
+                    </div>
+                    <div className="flex flex-col border-t-2 border-solid py-4">
+                        <div className="grid grid-rows-3 gap-2 mt-2">
                             <span className="font-bold text-[20px] dark:text-black ">기타</span>
                             {MenuData2.map((item, index) => (
-                                <span className={`text-[16px]  dark:text-black ${index === 0 ? 'mt-[1rem]' : 'mt-[0.5rem]'}`} key={index}>
-                                    <Link href={item.url}>{item.title}</Link>
+                                <span className={`text-[18px]  dark:text-black`} key={index}>
+                                    <Link href={item.url} className="flex items-center">
+                                        <item.icon className="mr-2" size="20" />
+                                        {item.title}
+                                    </Link>
                                 </span>
                             ))}
-                            <span onClick={logout} className={`text-[16px] mt-[0.5rem] dark:text-black`}>
-                                로그아웃
+                            <span onClick={logout} className={`text-[18px]  dark:text-black flex items-center`}>
+                                <MdLogout className="mr-2" size="20" />
+                                <span>로그아웃</span>
                             </span>
                         </div>
                     </div>

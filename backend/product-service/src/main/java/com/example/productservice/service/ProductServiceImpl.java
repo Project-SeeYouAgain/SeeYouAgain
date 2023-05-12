@@ -179,14 +179,7 @@ public class ProductServiceImpl implements ProductService {
                         requestDto.getLocation(),
                         requestDto.getMyLocation()
                 );
-//        List<Product> productList = new ArrayList<>();
-//        if (requestDto.getSort().equals(0)) {
-//            productList = productRepository.findAllOrderByDate();
-//        } else if (requestDto.getSort().equals(1)) {
-//            productList = productRepository.findAllOrderByPrice();
-//        } else if (requestDto.getSort().equals(2)) {
-//            productList = productRepository.findAllOrderByScore();
-//        }
+
         return getProductResponse(productList, userId);
     }
 
@@ -195,15 +188,20 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductListResponseDto> getProductListByKeyword(Long userId,
                                                                 ProductListRequestDto requestDto,
                                                                 String keyword) {
-        List<Product> productList = new ArrayList<>();
-        if (requestDto.getSort().equals(0)) {
-            productList = productRepository.findAllByTitleOrderByDate(keyword);
-        } else if (requestDto.getSort().equals(1)) {
-            productList = productRepository.findAllByTitleOrderByPrice(keyword);
-        } else if (requestDto.getSort().equals(2)) {
-            productList = productRepository.findAllByTitleOrderByScore(keyword);
-        }
+        List<Product> productList = productRepository.getProductListByKeyword(requestDto.getProductId(), keyword);
         return getProductResponse(productList, userId);
+    }
+
+    // hide 체크
+    @Override
+    @Transactional
+    public void updateHide(Long userId, Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+
+        if (!product.getOwnerId().equals(userId))
+            throw new ApiException(ExceptionEnum.OWNER_NOT_MATCH_EXCEPTION);
+        product.updateProductHide();
     }
 
     private List<ProductListResponseDto> getProductResponse(List<Product> productList, Long userId) {

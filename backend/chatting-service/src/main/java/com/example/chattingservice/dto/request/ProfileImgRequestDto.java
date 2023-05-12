@@ -11,5 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProfileImgRequestDto {
 
+    private Long userId;
+
     private String profileImg;
 }
