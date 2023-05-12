@@ -4,6 +4,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Calender from '../../components/Card/Calender';
 import Square from '../Button/Square';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface ItemCardOptionProps {
     isRent: boolean;
@@ -11,14 +13,16 @@ interface ItemCardOptionProps {
     dropdownVisible: boolean;
     productId: number;
     onRefresh?: () => void;
+    ownerId?: number;
+    isBooked?: boolean;
 }
 
-const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, onRefresh }) => {
+const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked, onRefresh }) => {
     interface bookdatatype {
         startDate: string;
         endDate: string;
     }
-
+    const router = useRouter();
     const token = useRecoilValue(userState).accessToken;
     const [modalNum, setModalNum] = useState<number>(0);
     const [bookData, setBookData] = useState<bookdatatype[]>([]);
@@ -53,10 +57,49 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
             .catch(err => console.log(err));
     }
 
-    function OpenReviewModal(event: React.MouseEvent) {
+    function GoReview() {
+        const url = `/chatting-service/auth/channel`;
+        const myData = {
+            productId: productId,
+            ownerId: ownerId,
+        };
+        axBase(token)({ method: 'post', url: url, data: myData })
+            .then(res => {
+                router.push(`/chat/${res.data.data}/rating`);
+            })
+            .catch(err => console.log(err));
+    }
+
+    function GoChat() {
+        const url = `/chatting-service/auth/channel`;
+        const myData = {
+            productId: productId,
+            ownerId: ownerId,
+        };
+        axBase(token)({ method: 'post', url: url, data: myData })
+            .then(res => {
+                router.push(`/chat/${res.data.data}`);
+            })
+            .catch(err => console.log(err));
+    }
+
+    function openHideConfirm(event: React.MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
         setModalNum(3);
+    }
+
+    function HideItem() {
+        const url = `/product-service/auth/hide/${productId}`;
+        axAuth(token)({ method: 'patch', url: url })
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+    }
+
+    function openUnhideConfirm(event: React.MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
+        setModalNum(4);
     }
 
     if (dropdownVisible) {
@@ -69,7 +112,9 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                                 <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
                                     대여일정
                                 </div>
-                                <div className="block px-4 py-2">반납하기</div>
+                                <div className="block px-4 py-2" onClick={GoChat}>
+                                    채팅
+                                </div>
                             </>
                         ) : menuState === 2 ? (
                             <>
@@ -81,25 +126,33 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                                 </div>
                             </>
                         ) : (
-                            <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenReviewModal(event)}>
-                                리뷰작성
-                            </div>
+                            <Link href={`/chat//rating`}>
+                                <div className="block px-4 py-2" onClick={GoReview}>
+                                    리뷰작성
+                                </div>
+                            </Link>
                         )
                     ) : menuState === 1 ? (
                         <>
                             <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
                                 대여일정
                             </div>
+                            {isBooked ? null : (
+                                <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openHideConfirm(event)}>
+                                    숨김
+                                </div>
+                            )}
                         </>
                     ) : menuState === 2 ? (
                         <>
                             <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
                                 대여일정
                             </div>
-                            <div className="block px-4 py-2">숨김</div>
                         </>
                     ) : (
-                        <div className="block px-4 py-2">재등록</div>
+                        <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openUnhideConfirm(event)}>
+                            재등록
+                        </div>
                     )}
                 </div>
                 {modalNum !== 0 ? (
@@ -112,7 +165,7 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                     >
                         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
                         {modalNum === 1 ? (
-                            <div className="bg-white p-8 rounded-lg shadow-md absolute w-[70%]">
+                            <div className="bg-white p-8 rounded-lg shadow-md absolute w-[70%] text-center">
                                 <span>예약을 취소하시겠습니까?</span>
                                 <div className="w-[100%] flex justify-around">
                                     <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={CancelBook} />
@@ -123,6 +176,23 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 flex flex-col items-center">
                                 <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} />
                                 <Square bgColor="blue" textColor="white" innerValue="확인" className="w-[100%] bg-[#FF6262]" onClick={() => setModalNum(0)} />
+                            </div>
+                        ) : modalNum === 3 ? (
+                            <div className="bg-white p-6 rounded-lg shadow-md absolute w-[80%] text-center">
+                                <span>해당 아이템을 숨기시겠습니까?</span>
+                                <div className="text-[0.8rem] text-[#8E8E93] mb-[1rem]">(더 이상 다른 사람들에게 노출되지 않습니다.)</div>
+                                <div className="w-[100%] flex justify-around">
+                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={HideItem} />
+                                    <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
+                                </div>
+                            </div>
+                        ) : modalNum === 4 ? (
+                            <div className="bg-white p-6 rounded-lg shadow-md absolute w-[80%] text-center">
+                                <span>해당 아이템을 등록하시겠습니까?</span>
+                                <div className="w-[100%] flex justify-around">
+                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={HideItem} />
+                                    <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
+                                </div>
                             </div>
                         ) : null}
                     </div>
