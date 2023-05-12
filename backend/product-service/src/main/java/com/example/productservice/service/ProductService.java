@@ -24,4 +24,6 @@ public interface ProductService {
     List<ProductListResponseDto> getProductList(Long userId, ProductListRequestDto requestDto);
 
     List<ProductListResponseDto> getProductListByKeyword(Long userId, ProductListRequestDto requestDto, String keyword);
+
+    void updateHide(Long userId, Long productId);
 }

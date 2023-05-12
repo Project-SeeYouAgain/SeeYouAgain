@@ -183,11 +183,11 @@ public class ReservationServiceImpl implements ReservationService {
     public List<ReservationResponseDto> myProductList(Long userId, Integer state) {
 
         if (state.equals(1)) {
-            List<Reservation> reservationList = reservationRepository.findAllByOwnerIdNow(userId);
+            List<Reservation> reservationList = reservationRepository.findAllByOwnerId(userId);
             return getReservationResponse(reservationList, userId);
 
         } else if (state.equals(2)) {
-            List<Reservation> reservationList = reservationRepository.findAllByOwnerIdWaiting(userId);
+            List<Reservation> reservationList = reservationRepository.findAllByOwnerIdNow(userId);
             return getReservationResponse(reservationList, userId);
 
         } else if (state.equals(3)) {

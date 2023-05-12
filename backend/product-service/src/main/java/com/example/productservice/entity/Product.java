@@ -113,5 +113,7 @@ public class Product extends TimeStamped {
     public void updateProductState(Boolean state) {
         this.productState = state;
     }
+
+    public void updateProductHide() {this.isHide = !this.isHide;}
 }
 
