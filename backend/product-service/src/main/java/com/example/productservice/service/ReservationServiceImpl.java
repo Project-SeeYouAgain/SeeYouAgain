@@ -183,8 +183,26 @@ public class ReservationServiceImpl implements ReservationService {
     public List<ReservationResponseDto> myProductList(Long userId, Integer state) {
 
         if (state.equals(1)) {
-            List<Reservation> reservationList = reservationRepository.findAllByOwnerId(userId);
-            return getReservationResponse(reservationList, userId);
+            List<ReservationResponseDto> responseList = new ArrayList<>();
+            List<Product> productList = productRepository.findByOwnerId(userId);
+
+            productList.forEach((p) -> {
+                double ReviewScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
+                ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
+                Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, p.getId());
+
+                Boolean isCart = cart.isPresent();
+
+                List<Reservation> reservationList = reservationRepository.findAllByProductId(p.getId());
+                if (reservationList.isEmpty()) {
+                    responseList.add(ReservationResponseDto.of(p, ReviewScoreAverage, productImg, isCart));
+                } else {
+                    for (Reservation reservation : reservationList) {
+                        responseList.add(ReservationResponseDto.of(reservation, p, ReviewScoreAverage, productImg, isCart));
+                    }
+                }
+            });
+            return responseList;
 
         } else if (state.equals(2)) {
             List<Reservation> reservationList = reservationRepository.findAllByOwnerIdNow(userId);
