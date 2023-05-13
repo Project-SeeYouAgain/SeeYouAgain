@@ -53,7 +53,7 @@ function Rent() {
         <Container>
             <Header title="대여 받은 내역"></Header>
             <Body>
-                <Menu onSelectMenu={SelectMenu} title1={'대여중'} title2={'예약중'} title3={'반납완료'} />
+                <Menu onSelectMenu={SelectMenu} dragMenu={1} title1={'대여중'} title2={'예약중'} title3={'반납완료'} />
                 {itemList.length !== 0 ? (
                     itemList.map((item, index) => (
                         <Link key={index} href={''}>
