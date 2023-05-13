@@ -122,12 +122,12 @@ function Detail() {
     }
     const [dragStart, setDragStart] = useState(0);
 
-    const handleDragStart = e => {
+    const handleDragStart = (e: any) => {
         const touch = e.touches ? e.touches[0] : e;
         setDragStart(touch.clientX);
     };
 
-    const handleDragEnd = e => {
+    const handleDragEnd = (e: any) => {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
         const delta = touch.clientX - dragStart;
 
