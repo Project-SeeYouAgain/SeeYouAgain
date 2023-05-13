@@ -120,70 +120,87 @@ function Detail() {
     function SelectMenu(state: number) {
         setMenuState(state);
     }
+    const [dragStart, setDragStart] = useState(0);
+
+    const handleDragStart = e => {
+        const touch = e.touches ? e.touches[0] : e;
+        setDragStart(touch.clientX);
+    };
+
+    const handleDragEnd = e => {
+        const touch = e.changedTouches ? e.changedTouches[0] : e;
+        const delta = touch.clientX - dragStart;
+
+        if (delta > 100) {
+            setMenuState(prev => (prev === 1 ? 3 : prev - 1));
+        } else if (delta < -100) {
+            setMenuState(prev => (prev === 3 ? 1 : prev + 1));
+        }
+    };
 
     if (data !== undefined) {
         return (
             <Container>
                 <DetailHeader title={data.title} />
                 <Carousel imgUrl={data.productImgList}></Carousel>
-                <Body>
-                    <div className="mt-[35px]">
-                        <div className="font-semibold flex text-[1.2rem]">
-                            {data.isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-[2rem] mr-[0.7rem]" /> : null}
-                            {data.title}
-                        </div>
-                        <div className="flex items-center my-[0.5rem]  text-[grey]">
-                            <span className="text-[.9rem]">{data.location}</span>
-                            <BsDot size={24} />
-                            <span className="mr-[1rem] text-[.9rem]">{data.nickname}</span>
-                            <MannerScore score={data.mannerScore} />
-                        </div>
-                        <div className="mb-[0.5rem]">
-                            <span className="font-bold text-[1.3rem] dark:text-black">{data.price.toLocaleString('ko-KR')}원</span>
-                            <span>/일</span>
-                        </div>
-                        <div className="mb-[1.5rem]">
-                            <RoundButton bgColor="lightgrey" textColor="black" innerValue={data.category} />
-                        </div>
-                        <div className="mb-[1.5rem] dark:text-black">{data.description}</div>
-                        <div className="mb-[2rem]">
-                            {data.tag.map((value, index) => (
-                                <span key={index} className="text-[#BDBDBD]">
-                                    #{value}{' '}
-                                </span>
-                            ))}
-                        </div>
-                        <div className="w-full mb-[5rem]">
-                            <Menu onSelectMenu={SelectMenu} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
-                            {menuState === 1 ? (
-                                <div className="flex justify-center">
-                                    <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
-                                </div>
-                            ) : menuState === 2 ? (
-                                <div className="flex  justify-center w-[100%] aspect-[4/3] relative">
-                                    <div className="absolute w-[100%] aspect-[4/3] z-0">
-                                        <KakaoMapMini lat={data.lat} lng={data.lng} />
-                                    </div>
-                                </div>
-                            ) : (
-                                <div>
-                                    <ReviewList productId={product} reviewListSize={data.reviewListSize} />
-                                </div>
-                            )}
-                        </div>
+                <div className="px-[1.88rem] mt-8">
+                    <div className="font-semibold flex text-[1.2rem]">
+                        {data.isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-[2rem] mr-[0.7rem]" /> : null}
+                        {data.title}
                     </div>
-                </Body>
-                <footer className="fixed bottom-0 border-t border-solid w-[100vw] h-[5rem] flex items-center justify-evenly bg-white">
-                    {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
-                    <Square bgColor="blue" textColor="white" innerValue="예약하기" className="text-[1.3rem] px-[3.2rem] py-[1.3rem] rounded-[0.5rem]" onClick={GoBook} />
-                    <Square
-                        bgColor="white"
-                        textColor="blue"
-                        innerValue="채팅하기"
-                        className="text-[1.3rem] px-[3rem] py-[1.3rem] rounded-[0.5rem] border-[#5669FF] border-[.1rem]"
-                        onClick={GoChatRoom}
-                    />
-                </footer>
+                    <div className="flex items-center my-[0.5rem]  text-[grey]">
+                        <span className="text-[.9rem]">{data.location}</span>
+                        <BsDot size={24} />
+                        <span className="mr-[1rem] text-[.9rem]">{data.nickname}</span>
+                        <MannerScore score={data.mannerScore} />
+                    </div>
+                    <div className="mb-[0.5rem]">
+                        <span className="font-bold text-[1.3rem] dark:text-black">{data.price.toLocaleString('ko-KR')}원</span>
+                        <span>/일</span>
+                    </div>
+                    <div className="mb-[1.5rem]">
+                        <RoundButton bgColor="lightgrey" textColor="black" innerValue={data.category} />
+                    </div>
+                    <div className="mb-[1.5rem] dark:text-black">{data.description}</div>
+                    <div className="mb-[1.5rem]">
+                        {data.tag.map((value, index) => (
+                            <span key={index} className="text-[#BDBDBD]">
+                                #{value}{' '}
+                            </span>
+                        ))}
+                    </div>
+                    <div className="w-full pb-8 " onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                        <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
+                        {menuState === 1 ? (
+                            <div className="flex justify-center h-[273.78px]">
+                                <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
+                            </div>
+                        ) : menuState === 2 ? (
+                            <div className="flex  justify-center w-[100%] aspect-[4/3] relative h-[273.78px]">
+                                <div className="absolute w-[100%] aspect-[4/3] z-0">
+                                    <KakaoMapMini lat={data.lat} lng={data.lng} />
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="min-h-[273.78px]">
+                                <ReviewList productId={product} reviewListSize={data.reviewListSize} />
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className="sticky bottom-0 border-t border-solid w-full h-[4rem] flex px-7 items-center bg-white">
+                    <div className="w-[40px] flex items-center justify-center">
+                        {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
+                    </div>
+                    <div className="flex-grow pl-1 grid grid-cols-2 gap-2">
+                        <button className="bg-blue text-white rounded-[0.5rem] w-full h-[2.5rem]" onClick={GoBook}>
+                            예약하기
+                        </button>
+                        <button className="bg-white text-blue  rounded-[0.5rem] w-full border-[#5669FF] border-[.1rem]" onClick={GoChatRoom}>
+                            채팅하기
+                        </button>
+                    </div>
+                </div>
             </Container>
         );
     } else {
