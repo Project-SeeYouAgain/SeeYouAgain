@@ -180,27 +180,9 @@ function Channel() {
     const goToUserLocation = () => {
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
-    const [windowHeight, setWindowHeight] = useState<number>(typeof window !== 'undefined' ? window.innerHeight : 0);
 
-    useEffect(() => {
-        if (typeof window === 'undefined') return; // SSR 환경에서는 이벤트를 추가하지 않습니다.
-
-        const handleResize = () => {
-            setWindowHeight(window.innerHeight);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    const containerStyle: React.CSSProperties = {
-        height: `${windowHeight}px`,
-    };
     return (
-        <div className="relative pt-48" style={containerStyle}>
+        <div className="relative pt-48">
             <div className="fixed inset-x-0 top-0 bg-white z-50">
                 {channelInfo && (
                     <div className="p-5 text-center border-b border-gray flex justify-center items-center">
