@@ -215,7 +215,7 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-16" style={{ height: 500, overflow: 'auto' }}>
+            <div className="chat-list mx-5 pb-16 h-fit" style={{ overflow: 'auto' }}>
                 <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
                     {chatList
                         .slice()
