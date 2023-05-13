@@ -216,14 +216,7 @@ function Channel() {
             </div>
 
             <div className="chat-list mx-5 pb-16" style={{ height: 500, overflow: 'auto' }}>
-                <InfiniteScroll
-                    initialLoad={false}
-                    loadMore={getMessage}
-                    hasMore={hasMore}
-                    isReverse={true}
-                    useWindow={false}
-                    threshold={50}
-                >
+                <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
                     {chatList
                         .slice()
                         .reverse()
@@ -246,6 +239,7 @@ function Channel() {
                             type={'text'}
                             name={'chatInput'}
                             onChange={handleChange}
+                            onFocus={scrollToBottom} // 이 부분 추가
                             value={chat}
                             placeholder="메세지를 입력하세요."
                             className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full dark:text-black"
