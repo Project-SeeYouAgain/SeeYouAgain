@@ -180,6 +180,29 @@ function Channel() {
     const goToUserLocation = () => {
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
+    const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
+
+    const initialWindowHeight = useRef(typeof window !== 'undefined' ? window.innerHeight : 0);
+
+    const handleResize = () => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        setIsKeyboardVisible(initialWindowHeight.current > window.innerHeight);
+    };
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     return (
         <div className="relative pt-48">
@@ -214,7 +237,6 @@ function Channel() {
                     </div>
                 </div>
             </div>
-
             <div className="chat-list mx-5 pb-16 h-fit" style={{ overflow: 'auto' }}>
                 <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
                     {chatList
@@ -226,31 +248,58 @@ function Channel() {
                     <div ref={messagesEndRef} />
                 </InfiniteScroll>
             </div>
+            {!isKeyboardVisible && (
+                <div className="fixed inset-x-0 bottom-0 bg-white">
+                    <form onSubmit={event => handleSubmit(event, chat)}>
+                        <div className="flex items-center p-2 relative">
+                            <div className="me-2">
+                                <AiOutlinePlusCircle className="text-3xl" />
+                            </div>
 
-            <div className="fixed inset-x-0 bottom-0 bg-white">
-                <form onSubmit={event => handleSubmit(event, chat)}>
-                    <div className="flex items-center p-2 relative">
-                        <div className="me-2">
-                            <AiOutlinePlusCircle className="text-3xl" />
+                            <input
+                                ref={inputRef}
+                                type={'text'}
+                                name={'chatInput'}
+                                onChange={handleChange}
+                                onFocus={scrollToBottom} // 이 부분 추가
+                                value={chat}
+                                placeholder="메세지를 입력하세요."
+                                className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full dark:text-black"
+                            />
+
+                            <button className="absolute right-3 flex justify-center items-center rounded-full p-1.5" style={{ background: '#5669ff' }}>
+                                <IoMdSend className="text-white text-lg -rotate-90" />
+                            </button>
                         </div>
+                    </form>
+                </div>
+            )}
+            {isKeyboardVisible && (
+                <div className=" bg-white">
+                    <form onSubmit={event => handleSubmit(event, chat)}>
+                        <div className="flex items-center p-2 relative">
+                            <div className="me-2">
+                                <AiOutlinePlusCircle className="text-3xl" />
+                            </div>
 
-                        <input
-                            ref={inputRef}
-                            type={'text'}
-                            name={'chatInput'}
-                            onChange={handleChange}
-                            onFocus={scrollToBottom} // 이 부분 추가
-                            value={chat}
-                            placeholder="메세지를 입력하세요."
-                            className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full dark:text-black"
-                        />
+                            <input
+                                ref={inputRef}
+                                type={'text'}
+                                name={'chatInput'}
+                                onChange={handleChange}
+                                onFocus={scrollToBottom} // 이 부분 추가
+                                value={chat}
+                                placeholder="메세지를 입력하세요."
+                                className="w-11/12 bg-gray-200 py-2 ps-3 pe-10 rounded-full dark:text-black"
+                            />
 
-                        <button className="absolute right-3 flex justify-center items-center rounded-full p-1.5" style={{ background: '#5669ff' }}>
-                            <IoMdSend className="text-white text-lg -rotate-90" />
-                        </button>
-                    </div>
-                </form>
-            </div>
+                            <button className="absolute right-3 flex justify-center items-center rounded-full p-1.5" style={{ background: '#5669ff' }}>
+                                <IoMdSend className="text-white text-lg -rotate-90" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
         </div>
     );
 }
