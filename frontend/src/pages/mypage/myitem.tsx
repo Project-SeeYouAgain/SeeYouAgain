@@ -53,7 +53,7 @@ function Rent() {
         <Container>
             <Header title="내 아이템"></Header>
             <Body>
-                <Menu onSelectMenu={SelectMenu} title1={'대기 목록'} title2={'대여중'} title3={'숨김'} />
+                <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'대기 목록'} title2={'대여중'} title3={'숨김'} />
                 {menuState === 1 ? (
                     <div>
                         <h2>예약중</h2>
