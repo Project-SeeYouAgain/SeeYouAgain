@@ -53,9 +53,8 @@ function Write() {
         };
 
         // stepTwoData의 데이터가 기본값인지 아닌지 확인
-        console.log(data.type);
+        console.log('세이프존', data.isSafe);
         const hasEnteredData = Object.values(stepTwoData);
-
         // 데이터가 모두 입력되지 않은 경우 제출을 막음
         if (
             hasEnteredData[0].length === 0 || // 상품 이미지
@@ -95,6 +94,7 @@ function Write() {
             if (hasEnteredData[7].lat === 0) {
                 setIsModalOpen(true);
                 setModalMessage('거래 장소');
+                console.log(hasEnteredData[7].lat);
             }
             // alert('필수 데이터를 모두 입력해주세요!');
             return;
@@ -123,10 +123,6 @@ function Write() {
                 formData.append('productImg', data.productImg[i]);
             }
         }
-
-        // 사진 삭제
-        // delete data.productImg;
-        // console.log(data); // 사진이 잘 지워졌는지 확인
 
         // requestDto object를 json으로 변환한 후 blob객체에 담기
         const blob = new Blob([JSON.stringify(submitData)], {
