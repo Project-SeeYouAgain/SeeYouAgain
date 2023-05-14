@@ -30,6 +30,9 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void addCart(Long userId, Long productId) {
 
+        cartRepository.findByUserIdAndProductId(userId, productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.CART_EXIST_EXCEPTION));
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
 
