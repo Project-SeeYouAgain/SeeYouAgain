@@ -268,6 +268,7 @@ const pickLocation = ({
                                     setLng(lng);
                                     setScore(score);
                                 }}
+                                click={true}
                             />
                         )}
                         <div className="absolute bottom-10 z-10 w-full">
