@@ -136,7 +136,6 @@ function Home() {
             },
         })
             .then(res => {
-                console.log(res.data.data);
                 const productList = res.data.data;
                 setListData(productList);
                 // setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
@@ -163,7 +162,6 @@ function Home() {
     useEffect(() => {
         const handleResize = () => {
             const windowHeight = window.innerHeight;
-            console.log(windowHeight);
             const containerHeight = windowHeight - 247.2;
             setContainerHeight(containerHeight);
         };

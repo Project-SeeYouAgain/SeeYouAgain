@@ -6,6 +6,7 @@ import { axAuth } from '@/apis/axiosinstance';
 import Image from 'next/image';
 import ChatBox from '@/components/ChatBox';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { AiOutlineLeft } from 'react-icons/ai';
 import { IoMdSend } from 'react-icons/io';
 import Button from '@/components/Button';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -53,6 +54,11 @@ function Channel() {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
 
+    // 뒤로가기
+    const handleBack = () => {
+        router.back();
+    };
+
     const connect = () => {
         const socket = new SockJS('https://k8c101.p.ssafy.io/chatting-service/ws');
 
@@ -99,9 +105,9 @@ function Channel() {
         axAuth(token)({
             url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
             method: 'patch',
+        }).then(() => {
+            client.current?.deactivate();
         });
-
-        client.current?.deactivate();
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +123,7 @@ function Channel() {
             setChat('');
         }
 
-        setTimeout(() => inputRef.current?.focus(), 0);
+        inputRef.current?.focus();
     };
 
     const getMessage = () => {
@@ -185,9 +191,15 @@ function Channel() {
         <div className="relative pt-48">
             <div className="fixed inset-x-0 top-0 bg-white z-50">
                 {channelInfo && (
-                    <div className="p-5 text-center border-b border-gray flex justify-center items-center">
-                        <p className="me-1 font-bold dark:text-black">{channelInfo?.nickname}</p>
-                        <Button.MannerPoint innerValue={`${channelInfo?.mannerScore}`} />
+                    <div className="p-5 text-center border-b border-gray flex justify-between items-center">
+                        <div>
+                            <AiOutlineLeft color="#5669FF" size="24" onClick={handleBack} />
+                        </div>
+                        <div className='flex items-center'>
+                            <p className="me-1 font-bold dark:text-black">{channelInfo?.nickname}</p>
+                            <Button.MannerPoint innerValue={`${channelInfo?.mannerScore}`} />
+                        </div>
+                        <div></div>
                     </div>
                 )}
                 <div className="pt-4 px-4 pb-2 border-b border-gray">
