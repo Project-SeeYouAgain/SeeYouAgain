@@ -9,6 +9,7 @@ import com.example.productservice.exception.ApiException;
 import com.example.productservice.exception.ExceptionEnum;
 import com.example.productservice.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReviewRepository reviewRepository;
 
     private final CartRepository cartRepository;
+    private Logger log;
 
     /**
      * explain : 제품 예약 생성
@@ -122,12 +124,18 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     @Transactional
-    public void deleteReservation(Long userId, Long productId) {
-        Reservation reservation = reservationRepository.findReservationId(productId, userId).get(0);
-        // 본인이 대여자가 아니거나, 본인이 주인이 아니라면 에러
-        if (!reservation.getLenderId().equals(userId) || !reservation.getProduct().getOwnerId().equals(userId))
-            throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
-
+    public void deleteReservation(Long userId, Integer state, Long productId) {
+        Reservation reservation = null;
+        if (state.equals(0)) {
+            reservation = reservationRepository.findReservationOwnerId(productId, userId).get(0);
+            if (!reservation.getProduct().getOwnerId().equals(userId))
+                throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
+        } else {
+            reservation = reservationRepository.findReservationLenderId(productId, userId).get(0);
+            // 본인이 대여자가 아니거나, 본인이 주인이 아니라면 에러
+            if (!reservation.getLenderId().equals(userId))
+                throw new ApiException(ExceptionEnum.LENDER_NOT_MATCH_EXCEPTION);
+        }
         reservationRepository.delete(reservation);
     }
 
@@ -239,9 +247,7 @@ public class ReservationServiceImpl implements ReservationService {
 
             Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, product.getId());
 
-            Boolean isCart = false;
-
-            if (cart.isPresent()) isCart = true;
+            Boolean isCart = cart.isPresent();
             return ReservationResponseDto.of(r, product, ReviewScoreAverage, productImg, isCart);
         }).collect(toList());
     }
