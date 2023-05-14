@@ -127,9 +127,15 @@ function Detail() {
         setDragStart(touch.clientX);
     };
 
+    const dragThreshold = 20;
+
     const handleDragEnd = (e: any) => {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
         const delta = touch.clientX - dragStart;
+
+        if (Math.abs(delta) < dragThreshold) {
+            return;
+        }
 
         if (delta > -90) {
             setMenuState(prev => (prev === 1 ? 3 : prev - 1));
