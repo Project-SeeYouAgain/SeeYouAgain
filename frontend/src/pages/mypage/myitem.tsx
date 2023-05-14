@@ -60,9 +60,9 @@ function Rent() {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
         const delta = touch.clientX - dragStart;
 
-        if (delta > -40) {
+        if (delta > -60) {
             setMenuState(prev => (prev === 1 ? 3 : prev - 1));
-        } else if (delta < 40) {
+        } else if (delta < 60) {
             setMenuState(prev => (prev === 3 ? 1 : prev + 1));
         }
     };
