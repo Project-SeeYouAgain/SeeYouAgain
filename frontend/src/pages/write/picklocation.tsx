@@ -89,8 +89,6 @@ const pickLocation = ({
                                 setLat(lat);
                                 setLng(lng);
                             }}
-                            lat={userLocation.lat}
-                            lng={userLocation.lng}
                         />
                         <div className="absolute bottom-10 w-[100%] px-[1.88rem] z-10" onClick={clickPosition}>
                             {myCheck && <p className=" h-12 rounded-xl text-center text-white font-semibold text-xl m-auto bg-blue pt-2.5">장소 확정</p>}
