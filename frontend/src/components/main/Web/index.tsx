@@ -20,7 +20,7 @@ export default function index() {
     return (
         <div>
             <div className={classNames('fixed top-0 h-16 w-full p-4 pl-12 pr-12', styles.header)}>
-                <Image src={logo} alt="logo" width={100} />
+                <Image src={logo} alt="logo" width={70} height={70} />
                 {/* <div onClick={handleKakaoLogin} className={classNames(styles.btn, 'rounded-xl')}> */}
                 <div className={classNames(styles.btn, 'rounded-xl')}>
                     <Image src={kakao} alt="kakaologin" className="p-0 m-0 rounded-xl" />
