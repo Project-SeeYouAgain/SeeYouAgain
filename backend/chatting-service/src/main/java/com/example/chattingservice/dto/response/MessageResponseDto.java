@@ -19,6 +19,7 @@ public class MessageResponseDto {
     private String profileImg;
     private String chat;
     private Boolean isRead;
+    private Boolean isImage;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -29,6 +30,7 @@ public class MessageResponseDto {
                 .profileImg(message.getParticipant().getProfileImg())
                 .chat(message.getChat())
                 .isRead(message.getIsRead())
+                .isImage(message.getIsImage())
                 .createdAt(message.getCreatedAt())
                 .updatedAt(message.getUpdatedAt())
                 .build();
