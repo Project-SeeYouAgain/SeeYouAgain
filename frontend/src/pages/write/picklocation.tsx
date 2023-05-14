@@ -263,8 +263,6 @@ const pickLocation = ({
                     <div id="map" className="w-full h-[85vh] relative">
                         {userLocation && (
                             <KakaoMap
-                                lat={userLocation.lat}
-                                lng={userLocation.lng}
                                 onCenter={(lat, lng, score) => {
                                     setLat(lat);
                                     setLng(lng);
