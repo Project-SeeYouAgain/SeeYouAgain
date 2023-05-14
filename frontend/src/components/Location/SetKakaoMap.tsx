@@ -23,14 +23,12 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter }) => {
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({ lat: 35.149409, lng: 126.914957 });
     const router = useRouter();
     const getLocation = () => {
-        let watchId: number | null = null;
-
         if (navigator.geolocation) {
             const options = {
                 maximumAge: 0,
             };
 
-            watchId = navigator.geolocation.watchPosition(
+            navigator.geolocation.getCurrentPosition(
                 position => {
                     setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
                     const container = document.getElementById('map');
@@ -52,12 +50,6 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter }) => {
         } else {
             console.error('Geolocation is not supported by this browser.');
         }
-
-        return () => {
-            if (watchId !== null) {
-                navigator.geolocation.clearWatch(watchId);
-            }
-        };
     };
     useEffect(() => {
         getLocation();
