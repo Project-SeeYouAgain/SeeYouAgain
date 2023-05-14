@@ -29,6 +29,8 @@ public class ChannelResponseDto implements Comparable<ChannelResponseDto> {
 
     private LocalDateTime lastMessageDate;
 
+    private Boolean isImage;
+
     private Integer notReadMessageSize;
 
     public static ChannelResponseDto of(Channel channel, UserClientResponseDto responseDto, Message message, Integer notReadMessageSize) {
@@ -40,6 +42,7 @@ public class ChannelResponseDto implements Comparable<ChannelResponseDto> {
                 .productImg(channel.getProductImg())
                 .lastMessage(message.getChat())
                 .lastMessageDate(message.getCreatedAt())
+                .isImage(message.getIsImage())
                 .notReadMessageSize(notReadMessageSize)
                 .build();
     }
