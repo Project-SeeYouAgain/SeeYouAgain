@@ -54,7 +54,7 @@ function Channel() {
     const client = useRef<Client | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [image, setImage] = useState<File>();
+    const [image, setImage] = useState<File | null>();
 
     // 뒤로가기
     const handleBack = () => {
@@ -188,6 +188,7 @@ function Channel() {
         })
             .then(res => {
                 publish(res.data.data, true);
+                setImage(null);
             })
             .catch(err => console.log(err));
     }, [image]);

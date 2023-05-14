@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: chatting-service
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
   h2:
     console:
       enabled: true
