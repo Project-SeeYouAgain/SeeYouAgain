@@ -6,6 +6,11 @@ module.exports = {
         extend: {
             fontFamily: {
                 sans: ['Pretendard'],
+                NanumNeo: ['NanumNeo'],
+                NanumNeoLt: ['NanumNeoLt'],
+                PreB: ['Pretendard-Bold'],
+                PreR: ['Pretendard-Regular'],
+                PreS: ['Pretendard-SemiBold'],
             },
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
