@@ -204,7 +204,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
         return () => {
             if (map) {
                 kakao.maps.event.removeListener(map, 'dragstart', handleBoundsChanged);
-                kakao.maps.event.removeListener(map, 'dragend', handleBoundsChanged);
+                kakao.maps.event.removeListener(map, 'dragend', handleDragEnd);
                 kakao.maps.event.removeListener(map, 'bounds_changed', handleBoundsChanged);
             }
         };
