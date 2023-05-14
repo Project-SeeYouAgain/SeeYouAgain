@@ -35,7 +35,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
         };
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
-    }, [lat, lng]);
+    }, []);
 
     const safetyScoreToColor = (score: number) => {
         if (score >= 7.5) {
