@@ -131,9 +131,9 @@ function Detail() {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
         const delta = touch.clientX - dragStart;
 
-        if (delta > -60) {
+        if (delta > -90) {
             setMenuState(prev => (prev === 1 ? 3 : prev - 1));
-        } else if (delta < 60) {
+        } else if (delta < 90) {
             setMenuState(prev => (prev === 3 ? 1 : prev + 1));
         }
     };
