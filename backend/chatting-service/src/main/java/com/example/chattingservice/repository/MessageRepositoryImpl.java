@@ -36,6 +36,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 message.participant.profileImg,
                 message.chat,
                 message.isRead,
+                message.isImage,
                 message.createdAt,
                 message.updatedAt
         ))
