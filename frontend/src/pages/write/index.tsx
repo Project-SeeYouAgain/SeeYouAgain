@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import StepOneForm from './components/StepOneForm';
 import StepTwoForm from './components/StepTwoFrom';
+import WebWrite from './components/WebWrite';
 import { useMediaQuery } from 'react-responsive';
 import Modal from './components/Modal';
 
@@ -168,7 +169,11 @@ function Write() {
     const [modalMessage, setModalMessage] = useState<string>('');
     return (
         <div>
-            {isDesktop && <div>데스크탑화면</div>}
+            {isDesktop && (
+                <div>
+                    <WebWrite handleSubmit={handleSubmit} />
+                </div>
+            )}
             {isMobile && view && (
                 <div>
                     {currentStep === 1 && <StepOneForm onSubmit={handleStepOneSubmit} />}
