@@ -29,6 +29,7 @@ function Rent() {
     const token = useRecoilValue(userState).accessToken;
     const [len, setLen] = useState<number>(0);
     const [bookList, setBookList] = useState<RentalItem[]>([]);
+    const dragThreshold = 20;
 
     function SelectMenu(data: number) {
         setMenuState(data);
@@ -59,6 +60,10 @@ function Rent() {
     const handleDragEnd = (e: any) => {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
         const delta = touch.clientX - dragStart;
+
+        if (Math.abs(delta) < dragThreshold) {
+            return;
+        }
 
         if (delta > -90) {
             setMenuState(prev => (prev === 1 ? 3 : prev - 1));
