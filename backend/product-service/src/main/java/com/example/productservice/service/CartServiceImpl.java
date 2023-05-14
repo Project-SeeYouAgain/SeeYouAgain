@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -30,8 +31,8 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void addCart(Long userId, Long productId) {
 
-        cartRepository.findByUserIdAndProductId(userId, productId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.CART_EXIST_EXCEPTION));
+        Optional<Cart> findCart = cartRepository.findByUserIdAndProductId(userId, productId);
+        if (findCart.isPresent()) return;
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
