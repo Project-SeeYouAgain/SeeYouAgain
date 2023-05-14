@@ -14,10 +14,12 @@ interface DetailProps {
 
 function DetailHeader({ title }: DetailProps) {
     const router = useRouter();
+    
     // 뒤로가기
     const handleBack = () => {
         router.back();
     };
+
     // 스크롤 위치 저장
     const [scrollY, setScrollY] = useState(0);
 

@@ -44,7 +44,6 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     useEffect(() => {
         const handleResize = () => {
             const windowWidth = window.innerWidth;
-            console.log(windowWidth);
             const containerWidth = windowWidth - 135;
             setContainerWidth(containerWidth);
         };
