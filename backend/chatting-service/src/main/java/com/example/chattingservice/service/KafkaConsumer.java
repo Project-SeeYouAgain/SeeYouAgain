@@ -38,7 +38,7 @@ public class KafkaConsumer {
         if (userIdObj instanceof Integer) {
             Integer userIdInt = (Integer) userIdObj;
             Long userId = Long.valueOf(userIdInt);
-            participantRepository.updateProfileImg(Long.parseLong(map.get("userId").toString()), (String)map.get("profileImg"));
+            participantRepository.updateProfileImg(userId, (String)map.get("profileImg"));
         }
 
     }

@@ -16,7 +16,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng }) => {
             const options = {
                 center: new kakao.maps.LatLng(lat, lng),
                 zoomControl: true,
-                // draggable: false,
+                draggable: false,
                 scrollwheel: false,
                 keyboardShortcuts: false,
                 disableDoubleClick: true,

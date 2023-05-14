@@ -49,11 +49,48 @@ function Rent() {
             .catch(err => console.log(err));
     }, [menuState]);
 
+    const [dragStart, setDragStart] = useState(0);
+
+    const handleDragStart = (e: any) => {
+        const touch = e.touches ? e.touches[0] : e;
+        setDragStart(touch.clientX);
+    };
+
+    const handleDragEnd = (e: any) => {
+        const touch = e.changedTouches ? e.changedTouches[0] : e;
+        const delta = touch.clientX - dragStart;
+
+        if (delta > -90) {
+            setMenuState(prev => (prev === 1 ? 3 : prev - 1));
+        } else if (delta < 90) {
+            setMenuState(prev => (prev === 3 ? 1 : prev + 1));
+        }
+    };
+    const [containerHeight, setContainerHeight] = useState<number>(0);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const windowHeight = window.innerHeight;
+            console.log(windowHeight);
+            const containerHeight = windowHeight - 56;
+            setContainerHeight(containerHeight);
+        };
+
+        // 초기 로드 및 윈도우 크기 변경 이벤트에 대한 이벤트 핸들러 등록
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <Container>
             <Header title="내 아이템"></Header>
-            <Body>
-                <Menu onSelectMenu={SelectMenu} title1={'대기 목록'} title2={'대여중'} title3={'숨김'} />
+            <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'대기 목록'} title2={'대여중'} title3={'숨김'} />
                 {menuState === 1 ? (
                     <div>
                         <h2>예약중</h2>
@@ -120,7 +157,7 @@ function Rent() {
                         </Link>
                     ))
                 )}
-            </Body>
+            </div>
         </Container>
     );
 }
