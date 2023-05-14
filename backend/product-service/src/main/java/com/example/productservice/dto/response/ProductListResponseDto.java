@@ -33,6 +33,8 @@ public class ProductListResponseDto {
 
     private Boolean isHide;
 
+    private Boolean isSafe;
+
     public static ProductListResponseDto of(Product product,
                                             double score,
                                             String productImg,
@@ -48,6 +50,7 @@ public class ProductListResponseDto {
                 .score(score)
                 .state(product.getProductState())
                 .isHide(product.getIsHide())
+                .isSafe(product.getIsSafe())
                 .build();
     }
 }

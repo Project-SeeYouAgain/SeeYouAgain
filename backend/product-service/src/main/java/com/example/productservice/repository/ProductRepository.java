@@ -1,6 +1,7 @@
 package com.example.productservice.repository;
 
 import com.example.productservice.entity.Product;
+import com.example.productservice.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
 
     @Query("SELECT p FROM Product p WHERE p.ownerId = :ownerId")
     List<Product> findByOwnerId(@Param("ownerId") Long ownerId);
+
+    @Query("SELECT p FROM Product p Where p.ownerId = :ownerId AND p.isHide = true")
+    List<Product> findAllByOwnerIdIsHidden(@Param("ownerId") Long ownerId);
 }

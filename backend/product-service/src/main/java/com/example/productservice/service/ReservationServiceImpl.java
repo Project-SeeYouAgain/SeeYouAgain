@@ -209,8 +209,14 @@ public class ReservationServiceImpl implements ReservationService {
             return getReservationResponse(reservationList, userId);
 
         } else if (state.equals(3)) {
-            List<Reservation> reservationList = reservationRepository.findAllByOwnerIdIsHidden(userId);
-            return getReservationResponse(reservationList, userId);
+            List<Product> productList = productRepository.findAllByOwnerIdIsHidden(userId);
+            return productList.stream().map((p) -> {
+                double ReviewScoreAverage = getReviewScoreAvg(reviewRepository.findAllByProductId(p.getId()));
+                ProductImg productImg = productImgRepository.findAllByProductId(p.getId()).get(0);
+                Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, p.getId());
+                Boolean isCart = cart.isPresent();
+                return ReservationResponseDto.of(p, ReviewScoreAverage, productImg, isCart);
+            }).collect(toList());
 
         }
         return null;
