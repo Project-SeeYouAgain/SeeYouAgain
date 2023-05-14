@@ -44,9 +44,27 @@ function chat() {
         setSelectedTab(type);
     };
 
+    const [dragStart, setDragStart] = useState(0);
+
+    const handleDragStart = (e: any) => {
+        const touch = e.touches ? e.touches[0] : e;
+        setDragStart(touch.clientX);
+    };
+
+    const handleDragEnd = (e: any) => {
+        const touch = e.changedTouches ? e.changedTouches[0] : e;
+        const delta = touch.clientX - dragStart;
+
+        if (delta > -40) {
+            setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
+        } else if (delta < 40) {
+            setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
+        }
+    };
+
     return (
         <div>
-            <div className="p-4">
+            <div className="p-4 min-h-screen pb-[3.7rem]" onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
                 <div className="flex justify-between mb-5 items-center border-b-1">
                     <p className="text-lg font-bold dark:text-black">채팅</p>
                     <VscBell className="text-2xl" />
