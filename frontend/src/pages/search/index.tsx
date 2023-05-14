@@ -54,6 +54,7 @@ function Search() {
 
     // 검색 버튼 클릭 시, 검색어 추가하기
     const handleAddKeyword = () => {
+        console.log(text);
         if (!text) return; // 검색어가 입력되어 있지 않으면 추가하지 않음
 
         setSaveText(text);
@@ -63,7 +64,7 @@ function Search() {
             url: `/product-service/auth/search/${text}`,
             data: {
                 sort: 0,
-                productId: productId,
+                productId: null,
             },
         })
             .then(res => {
