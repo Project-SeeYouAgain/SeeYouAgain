@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 const UserLocation: React.FC = () => {
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
-    const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({ lat: 35.149409, lng: 126.914957 });
+    // const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({ lat: 35.149409, lng: 126.914957 });
     const [lng, setLng] = useState<number>(0);
     const [lat, setLat] = useState<number>(0);
     const [score, setScore] = useState<number>(0);
@@ -99,38 +99,6 @@ const UserLocation: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        const getLocation = () => {
-            let watchId: number | null = null;
-
-            if (navigator.geolocation) {
-                const options = {
-                    maximumAge: 0,
-                };
-
-                watchId = navigator.geolocation.watchPosition(
-                    position => {
-                        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-                    },
-                    error => {
-                        console.error('Error getting position:', error);
-                    },
-                    options,
-                );
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-            }
-
-            return () => {
-                if (watchId !== null) {
-                    navigator.geolocation.clearWatch(watchId);
-                }
-            };
-        };
-
-        getLocation();
-    }, []);
-
     const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
 
     const [dots, setDots] = useState('');
@@ -153,34 +121,28 @@ const UserLocation: React.FC = () => {
             {isMobile && (
                 <>
                     {/* 나머지 페이지 내용 */}
-                    {userLocation && (
-                        <div className="p-4 font-bold h-[15vh] flex items-center justify-center ">
-                            <div className="w-screen">
-                                <div className="flex justify-between h-fit text-xl">
-                                    <div>
-                                        <p>이웃과 만나서</p>
-                                        <p>거래할 장소를 확인해주세요</p>
-                                    </div>
-                                    <div className="h-[35%]">
-                                        <Image src={pin} alt="pin" />
-                                    </div>
+                    <div className="p-4 font-bold h-[15vh] flex items-center justify-center ">
+                        <div className="w-screen">
+                            <div className="flex justify-between h-fit text-xl">
+                                <div>
+                                    <p>이웃과 만나서</p>
+                                    <p>거래할 장소를 확인해주세요</p>
                                 </div>
-                                <p className="text-blue">안전한 세이프존에서 거래하는 것을 추천해요.</p>
+                                <div className="h-[35%]">
+                                    <Image src={pin} alt="pin" />
+                                </div>
                             </div>
+                            <p className="text-blue">안전한 세이프존에서 거래하는 것을 추천해요.</p>
                         </div>
-                    )}
+                    </div>
                     <div id="map" className="w-full h-[85vh] relative">
-                        {userLocation && (
-                            <KakaoMap
-                                lat={userLocation.lat}
-                                lng={userLocation.lng}
-                                onCenter={(lat, lng, score) => {
-                                    setLat(lat);
-                                    setLng(lng);
-                                    setScore(score);
-                                }}
-                            />
-                        )}
+                        <KakaoMap
+                            onCenter={(lat, lng, score) => {
+                                setLat(lat);
+                                setLng(lng);
+                                setScore(score);
+                            }}
+                        />
                         <div className="absolute bottom-10 z-10 w-full">
                             <button className="w-2/3 h-12 m-auto block rounded-xl text-center text-white text-xl  bg-blue" onClick={clickPosition}>
                                 장소 확정
