@@ -21,7 +21,7 @@ public interface ReservationService {
 
     void updateReservation(Long userId, Long reservationId, ReservationReturnRequestDto requestDto);
 
-    void deleteReservation(Long userId, Long productId);
+    void deleteReservation(Long userId, Integer state, Long productId);
 
     List<ReservationListResponseDto> getReservation(Long productId);
 }
