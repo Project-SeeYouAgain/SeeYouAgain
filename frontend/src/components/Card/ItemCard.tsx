@@ -44,7 +44,6 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     useEffect(() => {
         const handleResize = () => {
             const windowWidth = window.innerWidth;
-            console.log(windowWidth);
             const containerWidth = windowWidth - 135;
             setContainerWidth(containerWidth);
         };
@@ -93,7 +92,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                 <span className="flex items-center">
                     <p className="text-[#8E8E93] text-sm mr-2">{location}</p> {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" /> : null}
                 </span>
-                {startDate !== null ? (
+                {startDate !== null && startDate !== undefined ? (
                     <div className="grid grid-cols-2 gap-2 text-center">
                         <div className="flex text-darkgrey text-sm">
                             <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
