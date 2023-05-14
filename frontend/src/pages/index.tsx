@@ -8,3 +8,4 @@ export default function index() {
     const isMobile = width && width <= 768;
     return <div>{isMobile ? <Mobile /> : <Web />}</div>;
 }
+// test
