@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import default_user from '@/images/default_user.png';
+import { BsDot } from 'react-icons/bs';
 
 type ChatRoomProps = {
     profileImg: string;
@@ -53,7 +54,12 @@ function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMes
                     <div className="flex items-end">
                         <p className="font-medium me-2">{nickname}</p>
                         <p className="text-gray-500 me-1 font-light">{location}</p>
-                        <p className="text-gray-500 font-light">{timeAgo(latestMessageDate)}</p>
+                        <p className="text-gray-500 font-light">
+                            <span className="flex">
+                                <BsDot className="mr-1" />
+                                {timeAgo(latestMessageDate)}
+                            </span>
+                        </p>
                     </div>
                     <p className="truncate">{latestMessage}</p>
                 </div>
