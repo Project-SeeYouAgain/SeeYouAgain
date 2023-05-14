@@ -24,10 +24,6 @@ function formatDate(date: any) {
 function book() {
     const token = useRecoilValue(userState).accessToken;
 
-    const close = () => {
-        console.log('dd');
-    };
-
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     useEffect(() => {
@@ -44,6 +40,9 @@ function book() {
     const [lat, setLat] = useState<string | null>(null);
     const [lng, setLng] = useState<string | null>(null);
     const [dong, setDong] = useState<string | null>(null);
+    const close = () => {
+        router.push(`/${productId}`);
+    };
     useEffect(() => {
         const geocoder = new kakao.maps.services.Geocoder();
         const location = localStorage.getItem('location');
@@ -102,9 +101,9 @@ function book() {
     };
 
     return (
-        <Container className="relative">
+        <Container className="relative h-screen">
             <CloseHeader title="예약하기" onClose={close} />
-            <Body>
+            <div className="px-[1.88rem]">
                 <p className="my-4 font-bold text-xl">대여기간</p>
                 <DatePicker
                     locale={ko}
@@ -141,7 +140,7 @@ function book() {
                         <Image src={location} alt="location" className="w-16 h-16" />
                     </div>
                 </div>
-            </Body>
+            </div>
             <button className="absolute bottom-0 w-full h-16 bg-blue text-white text-xl font-bold" onClick={reservation}>
                 예약확정
             </button>
