@@ -23,79 +23,93 @@ const UserLocation: React.FC = () => {
     const [myCheck, setMyCheck] = useState(true);
     const clickPosition = () => {
         console.log(lat, lng, score);
-        if (score >= 7.5) {
+        if (lat == 0 && lng == 0) {
             Swal.fire({
-                title: '안전지수 3단계',
-                text: '주변에 CCTV,가로등,경찰서이 \n 모두 있습니다.',
-                icon: 'success', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
-                confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: '취소',
-            }).then(result => {
-                if (result.isConfirmed) {
-                    // 확인 버튼 클릭 시 처리할 로직
-                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book/${productId}`);
-                } else if (result.isDenied) {
-                    // 취소 버튼 클릭 시 처리할 로직
-                }
-            });
-        } else if (score >= 5) {
-            Swal.fire({
-                title: '안전지수 2단계',
-                text: '주변에 CCTV,가로등, 경찰서이 \n여러개 있습니다.\n3개다 있진 않을수도 있습니다.',
-                icon: 'success', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
-                confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: '취소',
-            }).then(result => {
-                if (result.isConfirmed) {
-                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book/${productId}`);
-                } else if (result.isDenied) {
-                    // 취소 버튼 클릭 시 처리할 로직
-                }
-            });
-        } else if (score >= 2.5) {
-            Swal.fire({
-                title: '안전지수 1단계',
-                text: '주변에 CCTV 또는 가로등이 \n1개 있습니다. 경찰서는 없습니다.',
-                icon: 'success', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
-                confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: '취소',
-            }).then(result => {
-                if (result.isConfirmed) {
-                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book/${productId}`);
-                } else if (result.isDenied) {
-                    // 취소 버튼 클릭 시 처리할 로직
-                }
+                title: '죄송합니다.',
+                text: '위치를 찾지 못했습니다.',
+                icon: 'warning',
+                confirmButtonText: '확인',
+                timer: 2000, // 3초 뒤에 자동으로 닫히게 설정합니다.
+                timerProgressBar: true, // 타이머 진행바를 표시합니다.
+                willClose: () => {
+                    Swal.showLoading();
+                },
             });
         } else {
-            Swal.fire({
-                title: '안전지대 밖입니다.',
-                text: '주변에 경찰서,CCTV,가로등이 없어요\n계속진행하실건가요?',
-                icon: 'warning', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
-                confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: '취소',
-            }).then(result => {
-                if (result.isConfirmed) {
-                    localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
-                    router.push(`/chat/${identifier}/book/${productId}`);
-                } else if (result.isDenied) {
-                    // 취소 버튼 클릭 시 처리할 로직
-                }
-            });
+            if (score >= 7.5) {
+                Swal.fire({
+                    title: '안전지수 3단계',
+                    text: '주변에 CCTV,가로등,경찰서이 \n 모두 있습니다.',
+                    icon: 'success', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
+                    confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: '취소',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        // 확인 버튼 클릭 시 처리할 로직
+                        localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                        router.push(`/chat/${identifier}/book/${productId}`);
+                    } else if (result.isDenied) {
+                        // 취소 버튼 클릭 시 처리할 로직
+                    }
+                });
+            } else if (score >= 5) {
+                Swal.fire({
+                    title: '안전지수 2단계',
+                    text: '주변에 CCTV,가로등, 경찰서이 \n여러개 있습니다.\n3개다 있진 않을수도 있습니다.',
+                    icon: 'success', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
+                    confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: '취소',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                        router.push(`/chat/${identifier}/book/${productId}`);
+                    } else if (result.isDenied) {
+                        // 취소 버튼 클릭 시 처리할 로직
+                    }
+                });
+            } else if (score >= 2.5) {
+                Swal.fire({
+                    title: '안전지수 1단계',
+                    text: '주변에 CCTV 또는 가로등이 \n1개 있습니다. 경찰서는 없습니다.',
+                    icon: 'success', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
+                    confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: '취소',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                        router.push(`/chat/${identifier}/book/${productId}`);
+                    } else if (result.isDenied) {
+                        // 취소 버튼 클릭 시 처리할 로직
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: '안전지대 밖입니다.',
+                    text: '주변에 경찰서,CCTV,가로등이 없어요\n계속진행하실건가요?',
+                    icon: 'warning', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
+                    confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: '취소',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        localStorage.setItem('location', JSON.stringify({ lat: lat, lng: lng }));
+                        router.push(`/chat/${identifier}/book/${productId}`);
+                    } else if (result.isDenied) {
+                        // 취소 버튼 클릭 시 처리할 로직
+                    }
+                });
+            }
         }
     };
 
@@ -142,6 +156,7 @@ const UserLocation: React.FC = () => {
                                 setLng(lng);
                                 setScore(score);
                             }}
+                            click={true}
                         />
                         <div className="absolute bottom-10 z-10 w-full">
                             <button className="w-2/3 h-12 m-auto block rounded-xl text-center text-white text-xl  bg-blue" onClick={clickPosition}>

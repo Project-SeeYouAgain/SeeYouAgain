@@ -250,6 +250,7 @@ function settings() {
                                         setLng(lng);
                                         setScore(score);
                                     }}
+                                    click={false}
                                 />
                                 <div className="absolute bottom-10 z-10 w-full">
                                     <button className="w-2/3 h-12 m-auto block rounded-xl text-center text-white text-xl  bg-blue" onClick={clickPosition}>
