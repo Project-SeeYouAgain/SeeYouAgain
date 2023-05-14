@@ -13,7 +13,9 @@ import com.example.chattingservice.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,6 +27,8 @@ public class MessageServiceImpl implements MessageService{
     private final ChannelRepository channelRepository;
 
     private final ParticipantRepository participantRepository;
+
+    private final AmazonS3Service amazonS3Service;
 
     @Override
     @Transactional
@@ -58,5 +62,20 @@ public class MessageServiceImpl implements MessageService{
     @Transactional(readOnly = true)
     public List<MessageResponseDto> getMessageByChannelId(String identifier, Long firstMessageId) {
         return messageRepository.findLatestMessageList(identifier, firstMessageId);
+    }
+
+    @Override
+    @Transactional
+    public String saveChatImage(MultipartFile chatImage) {
+        String chatImageKey = saveS3Img(chatImage);
+        return amazonS3Service.getFileUrl(chatImageKey);
+    }
+
+    private String saveS3Img(MultipartFile profileImg) {
+        try {
+            return amazonS3Service.upload(profileImg, "chatting");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

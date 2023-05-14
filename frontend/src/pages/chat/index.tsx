@@ -16,6 +16,7 @@ interface ChatRoomData {
     lastMessageDate: string;
     identifier: string;
     notReadMessageSize: number;
+    isImage: boolean;
 }
 
 function chat() {
@@ -91,7 +92,7 @@ function chat() {
                                 nickname={chatRoomData.nickname}
                                 location={chatRoomData.location}
                                 latestMessageDate={chatRoomData.lastMessageDate}
-                                latestMessage={chatRoomData.lastMessage}
+                                latestMessage={chatRoomData.isImage ? "사진" : chatRoomData.lastMessage}
                                 profileImg={chatRoomData.profileImg}
                                 identifier={chatRoomData.identifier}
                                 notReadMessageSize={chatRoomData.notReadMessageSize}
