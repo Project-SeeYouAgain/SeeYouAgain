@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { BiCurrentLocation } from 'react-icons/bi';
 
 interface KakaoMapProps {
+    click: boolean;
     onCenterChanged?: (lat: number, lng: number) => void;
     onCenter?: (lat: number, lng: number, score: number) => void;
 }
@@ -15,7 +16,7 @@ interface SafetyGrid {
     score: number;
 }
 
-const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter }) => {
+const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = true }) => {
     const [map, setMap] = useState<any>(null);
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
     const [visitedAreas, setVisitedAreas] = useState<string[]>([]);
@@ -263,9 +264,11 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter }) => {
                     <span className="whitespace-nowrap w-1/2">3단계</span>
                 </div>
             </div>
-            <button className="rounded-full absolute bottom-[15vh] right-4 z-10 h-[12vw] w-[12vw] bg-white drop-shadow-lg ">
-                <BiCurrentLocation className="w-full h-full p-1" onClick={reload} />
-            </button>
+            {click && (
+                <button className="rounded-full absolute bottom-[15vh] right-4 z-10 h-[12vw] w-[12vw] bg-white drop-shadow-lg ">
+                    <BiCurrentLocation className="w-full h-full p-1" onClick={reload} />
+                </button>
+            )}
             <Image src={pin} alt="pins" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full z-10" />
         </div>
     );
