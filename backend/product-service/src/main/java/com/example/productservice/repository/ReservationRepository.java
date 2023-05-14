@@ -37,9 +37,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query
     void deleteAllByProductId(Long productId);
 
+    // 내가 예약한 걸 삭제
     @Query("SELECT r FROM Reservation r " +
-            "WHERE (r.lenderId = :ownerId OR r.product.ownerId = :ownerId) " +
+            "WHERE r.lenderId = :ownerId " +
             "AND r.product.id = :productId " +
             "ORDER BY r.startDate DESC")
-    List<Reservation> findReservationId(@Param("productId") Long productId,@Param("ownerId") Long userId);
+    List<Reservation> findReservationId(@Param("productId") Long productId, @Param("ownerId") Long userId);
 }
