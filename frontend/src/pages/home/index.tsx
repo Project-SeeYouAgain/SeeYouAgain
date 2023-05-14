@@ -51,16 +51,21 @@ function Home() {
     });
     // 카테고리 모달
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isMyLocation, setIsMyLocation] = useState<boolean>(false);
 
     function handleCategory() {
         setIsModalOpen(true);
     }
 
-    const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
+    const [selectedCategoryName, setSelectedCategoryName] = useState<string>('전체');
 
     const handleCategorySelect = (categoryName: string) => {
         setSelectedCategoryName(categoryName);
-        getCategory(categoryName);
+        // getCategory(categoryName);
+    };
+
+    const handleIsMyLocation = () => {
+        setIsMyLocation(!isMyLocation);
     };
 
     const [productId, setProductId] = useState<number>();
@@ -69,47 +74,41 @@ function Home() {
     const userset = useRecoilValue(userState);
     useEffect(() => {
         setUser(userset);
-        if (selectedCategoryName) {
-            getCategory(selectedCategoryName);
-        } else {
-            getProduct();
-        }
-    }, [userset, selectedCategoryName]);
-    // axAuth(token)({
-    //     method: 'post',
-    //     url: '/product-service/auth/productlist',
-    //     data: {
-    //         sort: 0,
-    //         productId: null,
-    //         location: false,
-    //         category: '전체',
-    //         myLocation: '장덕동',
-    //     },
-    // })
-    //     .then(res => {
-    //         const productList = res.data.data;
-    //         setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
-    //         setProductId(productList[productList.length - 1]?.productId);
+        axAuth(token)({
+            method: 'post',
+            url: '/product-service/auth/productlist',
+            data: {
+                sort: 0,
+                productId: null,
+                location: isMyLocation,
+                category: selectedCategoryName,
+                myLocation: user.location,
+            },
+        }).then(res => {
+            const productList = res.data.data;
+            setListData((_list_data: dataProps[]) => [...productList]);
+            setProductId(productList[productList.length - 1]?.productId);
 
-    //         if (productList.length < 20) {
-    //             setHasMore(false);
-    //         } else {
-    //             setHasMore(true);
-    //         }
-    //     })
-
-    //     .catch(err => console.log(err));
+            if (productList.length < 20) {
+                setHasMore(false);
+            } else {
+                setHasMore(true);
+            }
+        });
+    }, [userset, selectedCategoryName, isMyLocation]);
 
     const getProduct = () => {
+        console.log(selectedCategoryName);
+        console.log(isMyLocation);
         axAuth(token)({
             method: 'post',
             url: '/product-service/auth/productlist',
             data: {
                 sort: 0,
                 productId: productId,
-                location: false,
-                category: '전체',
-                myLocation: '장덕동',
+                location: isMyLocation,
+                category: selectedCategoryName,
+                myLocation: user.location,
             },
         }).then(res => {
             const productList = res.data.data;
@@ -131,8 +130,9 @@ function Home() {
             data: {
                 sort: 0,
                 productId: null, // 수정된 부분: null로 변경
-                location: false,
+                location: isMyLocation,
                 category: categoryName,
+                myLocation: user.location,
             },
         })
             .then(res => {
@@ -203,7 +203,12 @@ function Home() {
                                     카테고리 선택
                                 </button>
                                 {/* 동네 */}
-                                <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey">동네 선택</button>
+                                <button
+                                    className={`rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ${isMyLocation ? 'bg-blue text-white' : 'bg-white'}`}
+                                    onClick={handleIsMyLocation}
+                                >
+                                    내 동네만 보기
+                                </button>
                                 {/* 정렬 */}
                                 <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ">정렬</button>
                             </div>
