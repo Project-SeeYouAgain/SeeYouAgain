@@ -129,11 +129,6 @@ const UserLocation: React.FC = () => {
         };
 
         getLocation();
-        const intervalId = setInterval(getLocation, 10000); // 10 seconds
-
-        return () => {
-            clearInterval(intervalId);
-        };
     }, []);
 
     const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
