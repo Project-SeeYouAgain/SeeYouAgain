@@ -10,12 +10,18 @@ import ReportModal from '../../../Modal/ReportModal';
 
 interface DetailProps {
     title: string;
+    url?: string;
 }
 
-function DetailHeader({ title }: DetailProps) {
+function DetailHeader({ title, url = undefined }: DetailProps) {
     const router = useRouter();
-    
+
     // 뒤로가기
+    const goToHome = () => {
+        if (url) {
+            router.push(url);
+        }
+    };
     const handleBack = () => {
         router.back();
     };
@@ -50,7 +56,8 @@ function DetailHeader({ title }: DetailProps) {
     return (
         <div className="fixed top-0 z-30">
             <div className={`flex  h-[4.5rem] w-[100vw] justify-between items-center text-center text-${textColor} pl-[5vw] pr-[5vw] bg-${backgroundColor} transition duration-300 ease-in-out`}>
-                <AiOutlineLeft size={23} onClick={handleBack} />
+                {url && <AiOutlineLeft size={23} onClick={goToHome} />}
+                {!url && <AiOutlineLeft size={23} onClick={handleBack} />}
                 <RiAlarmWarningLine size={23} onClick={handleReport} />
             </div>
             <ReportModal isModalOpen={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />

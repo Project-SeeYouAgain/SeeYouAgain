@@ -50,24 +50,29 @@ function Rent() {
             .catch(err => console.log(err));
     }, [menuState]);
 
-    const [dragStart, setDragStart] = useState(0);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
     const handleDragStart = (e: any) => {
         const touch = e.touches ? e.touches[0] : e;
-        setDragStart(touch.clientX);
+        setDragStart({ x: touch.clientX, y: touch.clientY });
     };
 
     const handleDragEnd = (e: any) => {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const delta = touch.clientX - dragStart;
+        const deltaX = touch.clientX - dragStart.x;
+        const deltaY = touch.clientY - dragStart.y;
 
-        if (Math.abs(delta) < dragThreshold) {
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+            // Ignore vertical drag
+            return;
+        }
+        if (Math.abs(deltaX) < dragThreshold) {
             return;
         }
 
-        if (delta > -90) {
+        if (deltaX > -90) {
             setMenuState(prev => (prev === 1 ? 3 : prev - 1));
-        } else if (delta < 90) {
+        } else if (deltaX < 90) {
             setMenuState(prev => (prev === 3 ? 1 : prev + 1));
         }
     };
