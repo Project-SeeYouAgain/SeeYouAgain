@@ -55,9 +55,9 @@ function chat() {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
         const delta = touch.clientX - dragStart;
 
-        if (delta > -40) {
+        if (delta > -60) {
             setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
-        } else if (delta < 40) {
+        } else if (delta < 60) {
             setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
         }
     };
