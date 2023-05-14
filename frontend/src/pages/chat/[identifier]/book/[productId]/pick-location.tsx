@@ -121,7 +121,7 @@ const UserLocation: React.FC = () => {
             {isMobile && (
                 <>
                     {/* 나머지 페이지 내용 */}
-                    <div className="p-4 font-bold h-[15vh] flex items-center justify-center ">
+                    <div className="p-4 px-[1.88rem] font-bold h-[15vh] flex items-center justify-center ">
                         <div className="w-screen">
                             <div className="flex justify-between h-fit text-xl">
                                 <div>
