@@ -46,12 +46,15 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
                 <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 대여일정 </p>
             </div>
             <div>
-                <button className="flex items-center justify-center px-4 py-2 text-[1rem] font-NanumNeo font-bold text-blue bg-lightgrey  focus:outline-none" onClick={toggleDropdown}>
+                <button
+                    className="flex items-center justify-center px-4 py-2 text-[1rem] font-NanumNeo font-bold text-blue bg-lightgrey  focus:outline-none hover:bg-blue hover:text-white"
+                    onClick={toggleDropdown}
+                >
                     {startDate && endDate ? ` ${format(startDate, 'yyyy-MM-dd')}  ~  ${format(endDate, 'yyyy-MM-dd')}` : '날짜 선택'}
                 </button>
 
                 {isOpen && (
-                    <div className="absolute  right-0 p-2 -top-3 bg-white shadow rounded-[1rem]">
+                    <div className="absolute  right-0 p-2 -top-3 bg-white rounded-[1rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)', opacity: 1 }}>
                         <div className="flex w-[30vw] justify-between">
                             <div className="w-2/3 pr-1">
                                 <label className="block mb-1 text-sm font-semibold text-gray-700">시작일</label>
