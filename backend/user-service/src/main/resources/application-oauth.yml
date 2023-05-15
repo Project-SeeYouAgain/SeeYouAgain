@@ -4,8 +4,8 @@ spring:
       client:
         registration:
           kakao:
-            client-id: 9d1f2abed3ce46931ff7abf4b7f8a31a
-            client-secret: iMWiBMuZMA4uakDWL7wVrVFE5xjmh18C
+            client-id: 5c2af632e5eb943eadbf20d0c4006bdb
+            client-secret: x7TGPwsREQ44ndn3YoVQOberBwoPFbRE
             client-name: Kakao
             scope:
               - profile_nickname
