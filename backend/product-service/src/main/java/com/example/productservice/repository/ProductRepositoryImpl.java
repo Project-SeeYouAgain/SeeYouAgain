@@ -16,19 +16,36 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Product> getProductList(int sort, Long productId, String category, Boolean location, String myLocation) {
-        JPAQuery<Product> query = queryFactory
-                .selectFrom(product)
-                .where(ltProductId(productId), isLocation(location, myLocation), likeCategory(category))
-                .limit(20);
+    public List<Product> getProductList(int sort, Long productId, String category, Boolean location, String myLocation, Integer price) {
 
         if (sort == 0) {
-            query.orderBy(product.refreshedAt.desc());
+            return queryFactory
+                    .selectFrom(product)
+                    .where(ltProductId(productId), isLocation(location, myLocation), likeCategory(category))
+                    .limit(20)
+                    .orderBy(product.id.desc())
+                    .fetch();
         } else {
-            query.orderBy(product.price.desc());
+            return queryFactory
+                    .selectFrom(product)
+                    .where(ltPrice(price), isLocation(location, myLocation), likeCategory(category))
+                    .limit(20)
+                    .orderBy(product.price.desc())
+                    .fetch();
         }
 
-        return query.fetch();
+//        JPAQuery<Product> query = queryFactory
+//                .selectFrom(product)
+//                .where(ltProductId(productId), isLocation(location, myLocation), likeCategory(category))
+//                .limit(20);
+//
+//        if (sort == 0) {
+//            query.orderBy(product.refreshedAt.desc());
+//        } else {
+//            query.orderBy(product.price.desc());
+//        }
+//
+//        return query.fetch();
     }
 
     @Override
@@ -43,6 +60,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private BooleanExpression ltProductId(Long productId) {
         return productId != null ? product.id.lt(productId) : null;
+    }
+
+    private BooleanExpression ltPrice(Integer price) {
+        return price != null ? product.price.lt(price) : null;
     }
 
     private BooleanExpression isLocation(Boolean location, String myLocation) {
