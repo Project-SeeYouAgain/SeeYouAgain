@@ -69,6 +69,7 @@ function Home() {
     };
 
     const [productId, setProductId] = useState<number>();
+    const [price, setPrice] = useState<number>();
     const [hasMore, setHasMore] = useState<boolean>(true);
     const router = useRouter();
     const userset = useRecoilValue(userState);
@@ -92,11 +93,13 @@ function Home() {
                 location: isMyLocation,
                 category: selectedCategoryName,
                 myLocation: user.location,
+                price: null,
             },
         }).then(res => {
             const productList = res.data.data;
             setListData((_list_data: dataProps[]) => [...productList]);
             setProductId(productList[productList.length - 1]?.productId);
+            setPrice(productList[productList.length - 1]?.price);
 
             if (productList.length < 20) {
                 setHasMore(false);
@@ -118,11 +121,13 @@ function Home() {
                 location: isMyLocation,
                 category: selectedCategoryName,
                 myLocation: user.location,
+                price: price,
             },
         }).then(res => {
             const productList = res.data.data;
             setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
             setProductId(productList[productList.length - 1]?.productId);
+            setPrice(productList[productList.length - 1]?.price);
 
             if (productList.length < 20) {
                 setHasMore(false);
@@ -194,7 +199,9 @@ function Home() {
                                 {/* 정렬 */}
                                 <select
                                     name="sort"
-                                    className={`rounded-full p-2 px-3 mx-1 text-center border border-solid text-sm text-darkgrey ${styles.sort} ${sortText === '정렬' ? 'bg-white' : 'bg-blue text-white'}`}
+                                    className={`rounded-full p-2 px-3 mx-1 text-center border border-solid text-sm text-darkgrey ${styles.sort} ${
+                                        sortText === '정렬' ? 'bg-white' : 'bg-blue text-white'
+                                    }`}
                                     onChange={event => handleSort(Number(event.target.value), event.target.options[event.target.selectedIndex].text)}
                                 >
                                     <option value="" disabled selected>
