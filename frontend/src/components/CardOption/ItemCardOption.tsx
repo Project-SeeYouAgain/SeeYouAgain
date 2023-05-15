@@ -194,14 +194,6 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                                     <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
                                 </div>
                             </div>
-                        ) : modalNum === 4 ? (
-                            <div className="bg-white p-6 rounded-lg shadow-md absolute w-[80%] text-center">
-                                <span>해당 아이템을 등록하시겠습니까?</span>
-                                <div className="w-[100%] flex justify-around">
-                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={HideItem} />
-                                    <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
-                                </div>
-                            </div>
                         ) : null}
                     </div>
                 ) : null}
