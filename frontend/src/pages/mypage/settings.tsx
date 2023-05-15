@@ -9,7 +9,7 @@ import pen from '@/images/pen.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Swal from 'sweetalert2';
 import ResponsiveChecker from '@/components/ResponsiveChecker';
@@ -23,6 +23,8 @@ function settings() {
     const [image, setImage] = useState<File | undefined>();
     const [index, setIndex] = useState<boolean>(false);
     const router = useRouter();
+    const [user, setUser] = useRecoilState(userState);
+
     const [lng, setLng] = useState<number>(0);
     const [lat, setLat] = useState<number>(0);
     const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -77,6 +79,15 @@ function settings() {
             data: formData,
         })
             .then((res: any) => {
+                setUser({
+                    ...user,
+                    location: res.data.data.location,
+                    mannerScore: res.data.data.mannerScore,
+                    nickname: res.data.data.nickname,
+                    profileImg: res.data.data.profileImg,
+                });
+                alert('프로필이 수정되었습니다!');
+                router.push('/home');
                 Swal.fire({
                     title: '프로필 수정 완료',
                     icon: 'success',

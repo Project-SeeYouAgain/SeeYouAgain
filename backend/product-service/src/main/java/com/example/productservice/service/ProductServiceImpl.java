@@ -160,7 +160,7 @@ public class ProductServiceImpl implements ProductService {
         reservationRepository.deleteAllByProductId(productId);
         productTagRepository.deleteAllByProductId(productId);
         reviewRepository.deleteAllByProductId(productId);
-
+        cartRepository.deleteAllByProductId(productId);
         List<ProductImg> productImgList = productImgRepository.findAllByProductId(productId);
         deleteProductImg(productImgList);
         productImgRepository.deleteAllByProductId(productId);
