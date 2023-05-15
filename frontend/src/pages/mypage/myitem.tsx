@@ -22,13 +22,12 @@ function Rent() {
         isSafe?: boolean;
         isCart?: boolean;
         productId: number;
-        isHide: boolean;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
     const token = useRecoilValue(userState).accessToken;
-    const [len, setLen] = useState<number>(0);
     const [bookList, setBookList] = useState<RentalItem[]>([]);
+    const [holdList, setHoldList] = useState<RentalItem[]>([]);
     const dragThreshold = 20;
     const refreshKey = useRecoilValue(productState).refreshKey;
 
@@ -45,11 +44,17 @@ function Rent() {
             .then(res => {
                 console.log(res.data.data);
                 setItemList(res.data.data);
-                setLen(res.data.data.filter((item: RentalItem) => !item.startDate && !item.isHide).length);
+                const today = new Date();
                 const BookItems = res.data.data.filter((item: RentalItem) => {
-                    return item.startDate && !item.isHide;
+                    const startDate = new Date(item.startDate);
+                    const endDate = new Date(item.endDate);
+                    return startDate > today;
                 });
                 setBookList(BookItems);
+                const HoldItems = res.data.data.filter((item: RentalItem) => {
+                    return item.startDate === null;
+                });
+                setHoldList(HoldItems);
             })
             .catch(err => console.log(err));
     }, [menuState, refreshKey]);
@@ -127,12 +132,11 @@ function Rent() {
                             ))
                         )}
                     </div>
-                ) : itemList.length === 0 ? (
-                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                ) : menuState === 3 ? (
-                    itemList
-                        .filter(item => !item.startDate)
-                        .map((item, index) => (
+                ) : menuState === 2 ? (
+                    itemList.length === 0 ? (
+                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                    ) : (
+                        itemList.map((item, index) => (
                             <Card
                                 productImg={item.productImg}
                                 title={item.title}
@@ -143,20 +147,24 @@ function Rent() {
                                 productId={item.productId}
                                 isBooked={true}
                                 key={index}
+                                startDate={item.startDate}
+                                endDate={item.endDate}
                             />
                         ))
+                    )
+                ) : holdList.length === 0 ? (
+                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
                 ) : (
-                    itemList.map((item, index) => (
+                    holdList.map((item, index) => (
                         <Card
                             productImg={item.productImg}
                             title={item.title}
                             location={item.location}
                             price={item.price}
-                            startDate={item.startDate}
-                            endDate={item.endDate}
                             isSafe={item.isSafe}
                             menuState={menuState}
                             productId={item.productId}
+                            isBooked={true}
                             key={index}
                         />
                     ))
