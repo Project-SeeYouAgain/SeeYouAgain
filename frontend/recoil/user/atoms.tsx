@@ -18,3 +18,11 @@ export const userState = atom<UserState>({
     },
     effects_UNSTABLE: [persistAtom],
 });
+
+export const productState = atom<ProductState>({
+    key: 'productState',
+    default: {
+        refreshKey: 0,
+    },
+    effects_UNSTABLE: [persistAtom],
+});
