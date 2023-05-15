@@ -14,6 +14,7 @@ import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import { Cookies } from 'react-cookie';
+import imageCompression from 'browser-image-compression';
 
 interface ChatData {
     messageId: number;
@@ -173,24 +174,47 @@ function Channel() {
         }
     };
 
-    useEffect(() => {
-        const formData = new FormData();
+    const resizeImage = async (file: File): Promise<Blob> => {
+        try {
+            const options = {
+                maxSizeMB: 0.7,
+                maxWidthOrHeight: 800,
+                outputType: 'png', // PNG 형식으로 압축
+                quality: 0.8, // 이미지 품질을 0.8로 설정
+            };
 
-        if (image) {
-            formData.append('chatImage', image);
+            const compressedFile = await imageCompression(file, options);
+            return compressedFile;
+        } catch (error) {
+            console.error('Error resizing image:', error);
+            return file;
         }
+    };
 
-        axAuth(token)({
-            method: 'post',
-            url: '/chatting-service/auth/chatImage',
-            headers: { 'Content-Type': 'multipart/form-data' },
-            data: formData,
-        })
-            .then(res => {
-                publish(res.data.data, true);
-                setImage(null);
+    useEffect(() => {
+        const resizeAndUploadImage = async () => {
+            const formData = new FormData();
+
+            if (image) {
+                const resizedImageBlob = await resizeImage(image);
+                const resizedImageFile = new File([resizedImageBlob], image.name, { type: resizedImageBlob.type });
+                formData.append('chatImage', resizedImageFile);
+            }
+
+            axAuth(token)({
+                method: 'post',
+                url: '/chatting-service/auth/chatImage',
+                headers: { 'Content-Type': 'multipart/form-data' },
+                data: formData,
             })
-            .catch(err => console.log(err));
+                .then(res => {
+                    publish(res.data.data, true);
+                    setImage(null);
+                })
+                .catch(err => console.log(err));
+        };
+
+        resizeAndUploadImage();
     }, [image]);
 
     useEffect(() => {
@@ -264,7 +288,15 @@ function Channel() {
                         .slice()
                         .reverse()
                         .map((chatData, index) => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={userId} isRead={chatData.isRead} isImage={chatData.isImage} />
+                            <ChatBox
+                                key={index}
+                                chat={chatData.chat}
+                                profileImg={chatData.profileImg}
+                                writerId={chatData.writerId}
+                                userId={userId}
+                                isRead={chatData.isRead}
+                                isImage={chatData.isImage}
+                            />
                         ))}
                     <div ref={messagesEndRef} />
                 </InfiniteScroll>
