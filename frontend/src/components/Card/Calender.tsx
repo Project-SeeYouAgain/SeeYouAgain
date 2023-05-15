@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import styles from './Calender.module.css';
 import { subDays } from 'date-fns';
 
@@ -23,7 +23,7 @@ function CustomDatePicker({ reservationPeriods, availablePeriod }: CustomDatePic
     const [selectDate, setSelectDate] = useState<Date | null>(null);
 
     const minday = () => {
-        return new Date(availablePeriod.startDate) <= new Date() ? new Date(availablePeriod.startDate) : new Date();
+        return new Date(availablePeriod.startDate) <= new Date() ? new Date() : new Date(availablePeriod.startDate);
     };
 
     const maxday = () => {
@@ -48,6 +48,7 @@ function CustomDatePicker({ reservationPeriods, availablePeriod }: CustomDatePic
             readOnly
             disabled
             inline
+            // excludeDates={}
             dayClassName={date => (date <= subDays(minday(), 1) || date >= maxday() || isReservationDay(date) ? styles.dayDisabled : styles.day)}
         />
     );
