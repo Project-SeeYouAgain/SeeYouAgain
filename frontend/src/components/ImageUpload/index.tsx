@@ -19,10 +19,6 @@ function ImageUpload({ setData, onSubmit, data }: { setData: React.Dispatch<Reac
         if (!imagelist) {
             return;
         }
-        // const imageArray = Array.from(imagelist);
-        // setImages(imageArray);
-        // setData(prevData => ({ ...prevData, productImg: imageArray }));
-        // onSubmit(data);
 
         const filesArray = Array.from(imagelist);
         setImages(filesArray);
