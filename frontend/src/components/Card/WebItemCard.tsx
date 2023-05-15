@@ -72,7 +72,14 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                     {menuState !== undefined ? (
                         <>
                             <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
-                            <ItemCardOption productId={productId} onRefresh={onRefresh} ownerId={ownerId} isBooked={isBooked} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                            <ItemCardOption
+                                productId={productId}
+                                ownerId={ownerId}
+                                isBooked={isBooked}
+                                start={startDate}
+                                end={endDate}
+                                {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }}
+                            />
                         </>
                     ) : (
                         <span className="h-[1.5rem] px-[0.4rem] w-[1.5rem]"></span>
