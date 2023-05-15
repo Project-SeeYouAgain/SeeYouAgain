@@ -13,6 +13,7 @@ const categoryData = [
     { id: '도서', name: '도서', key: 12 },
     { id: '반려동물용품', name: '반려동물용품', key: 13 },
     { id: '기타', name: '기타', key: 14 },
+    { id: '전체', name: '전체', key: 15 },
 ];
 
 export { categoryData };
