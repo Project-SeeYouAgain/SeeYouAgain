@@ -82,7 +82,7 @@ const pickLocation = ({
                     // 취소 버튼 클릭 시 처리할 로직
                 }
             });
-        } else if (score >= 5) {
+        } else if (score >= 5 && score < 7.5) {
             Swal.fire({
                 title: '안전지수 2단계',
                 text: '주변에 CCTV,가로등, 경찰서이 \n여러개 있습니다.\n3개다 있진 않을수도 있습니다.',
@@ -118,7 +118,7 @@ const pickLocation = ({
                     // 취소 버튼 클릭 시 처리할 로직
                 }
             });
-        } else if (score >= 2.5) {
+        } else if (score >= 2.5 && score < 5) {
             Swal.fire({
                 title: '안전지수 1단계',
                 text: '주변에 CCTV 또는 가로등이 \n1개 있습니다. 경찰서는 없습니다.',
