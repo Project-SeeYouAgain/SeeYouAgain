@@ -1,6 +1,7 @@
 package com.example.userservice.service;
 
 import com.example.userservice.dto.request.chatting.ProfileImgRequestDto;
+import com.example.userservice.dto.request.fcm.FCMTokenRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
 import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
 import com.example.userservice.dto.response.user.ProfileResponseDto;
@@ -92,6 +93,16 @@ public class AuthServiceImpl implements AuthService {
 
         user.updateNickname(requestDto.getNickname());
         return user.getNickname();
+    }
+
+    @Override
+    @Transactional
+    public void updateFCMToken(Long userId, FCMTokenRequestDto requestDto) {
+        User user = getUser(userId);
+
+        String firebaseToken = requestDto.getFirebaseToken();
+
+        user.updateFirebaseToken(firebaseToken);
     }
 
     private User getUser(Long userId) {
