@@ -4,6 +4,7 @@ import com.example.productservice.dto.BaseResponseDto;
 import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.request.ReservationReturnRequestDto;
 import com.example.productservice.dto.response.ReservationListResponseDto;
+import com.example.productservice.dto.response.ReservationLocationResponseDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 import com.example.productservice.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,16 @@ public class ReservationAuthController {
         reservationService.checkReservation(getUserId(request), reservationId, state);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
+    }
+
+    // 예약 조회
+    @GetMapping("/reservation/{productId}/{userId}")
+    public ResponseEntity<BaseResponseDto<ReservationLocationResponseDto>> getLocation(HttpServletRequest request,
+                                                                                       @PathVariable("productId") Long productId,
+                                                                                       @PathVariable("userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success",
+                        reservationService.getLocation(getUserId(request), productId, userId)));
     }
 
     // 대여 상태 변경
