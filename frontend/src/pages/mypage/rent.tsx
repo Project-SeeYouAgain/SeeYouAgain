@@ -56,22 +56,21 @@ function Rent() {
                 <Menu onSelectMenu={SelectMenu} dragMenu={1} title1={'대여중'} title2={'예약중'} title3={'반납완료'} />
                 {itemList.length !== 0 ? (
                     itemList.map((item, index) => (
-                        <Link key={index} href={''}>
-                            <Card
-                                productImg={item.productImg}
-                                title={item.title}
-                                location={item.location}
-                                price={item.price}
-                                startDate={item.startDate}
-                                endDate={item.endDate}
-                                isCart={item.isCart}
-                                isSafe={item.isSafe}
-                                menuState={menuState}
-                                productId={item.productId}
-                                onRefresh={handleRefresh}
-                                ownerId={item.ownerId}
-                            />
-                        </Link>
+                        <Card
+                            productImg={item.productImg}
+                            title={item.title}
+                            location={item.location}
+                            price={item.price}
+                            startDate={item.startDate}
+                            endDate={item.endDate}
+                            isCart={item.isCart}
+                            isSafe={item.isSafe}
+                            menuState={menuState}
+                            productId={item.productId}
+                            onRefresh={handleRefresh}
+                            ownerId={item.ownerId}
+                            key={index}
+                        />
                     ))
                 ) : (
                     <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />

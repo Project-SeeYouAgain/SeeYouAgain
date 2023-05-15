@@ -6,3 +6,7 @@ interface UserState {
     location: string | null;
     mannerScore: string | null;
 }
+
+interface ProductState {
+    refreshKey: number | null;
+}
