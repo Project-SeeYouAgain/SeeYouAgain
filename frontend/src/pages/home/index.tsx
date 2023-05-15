@@ -3,7 +3,6 @@ import { useRecoilValue } from 'recoil';
 import { userState } from '../../../recoil/user/atoms';
 import { axAuth } from '@/apis/axiosinstance';
 import Container from '@/components/Container';
-import Body from '@/components/Container/components/Body';
 import MainHeader from '@/components/Container/components/MainHeader';
 import ItemCard from '@/components/Card/ItemCard';
 import Navbar from '@/components/Container/components/Navbar';
@@ -13,6 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import InfiniteScroll from 'react-infinite-scroller';
 import CategoryModal from '@/components/Modal/CategoryModal';
+import styles from './index.module.scss';
 
 interface dataProps {
     thumbnailUrl: string;
@@ -49,67 +49,75 @@ function Home() {
         location: '',
         mannerScore: '',
     });
+
     // 카테고리 모달
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isMyLocation, setIsMyLocation] = useState<boolean>(false);
 
     function handleCategory() {
         setIsModalOpen(true);
     }
 
-    const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
+    const [selectedCategoryName, setSelectedCategoryName] = useState<string>('전체');
 
     const handleCategorySelect = (categoryName: string) => {
         setSelectedCategoryName(categoryName);
-        getCategory(categoryName);
+    };
+
+    const handleIsMyLocation = () => {
+        setIsMyLocation(!isMyLocation);
     };
 
     const [productId, setProductId] = useState<number>();
     const [hasMore, setHasMore] = useState<boolean>(true);
     const router = useRouter();
     const userset = useRecoilValue(userState);
+    const [sortText, setSortText] = useState<string>('정렬');
+    const [sort, setSort] = useState<number>(0);
+
+    const handleSort = (type: number, typeText: string) => {
+        console.log(1);
+        setSort(type);
+        setSortText(typeText);
+    };
+
     useEffect(() => {
         setUser(userset);
-        if (selectedCategoryName) {
-            getCategory(selectedCategoryName);
-        } else {
-            getProduct();
-        }
-    }, [userset, selectedCategoryName]);
-    // axAuth(token)({
-    //     method: 'post',
-    //     url: '/product-service/auth/productlist',
-    //     data: {
-    //         sort: 0,
-    //         productId: null,
-    //         location: false,
-    //         category: '전체',
-    //         myLocation: '장덕동',
-    //     },
-    // })
-    //     .then(res => {
-    //         const productList = res.data.data;
-    //         setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
-    //         setProductId(productList[productList.length - 1]?.productId);
-
-    //         if (productList.length < 20) {
-    //             setHasMore(false);
-    //         } else {
-    //             setHasMore(true);
-    //         }
-    //     })
-
-    //     .catch(err => console.log(err));
-
-    const getProduct = () => {
         axAuth(token)({
             method: 'post',
             url: '/product-service/auth/productlist',
             data: {
-                sort: 0,
+                sort: sort,
+                productId: null,
+                location: isMyLocation,
+                category: selectedCategoryName,
+                myLocation: user.location,
+            },
+        }).then(res => {
+            const productList = res.data.data;
+            setListData((_list_data: dataProps[]) => [...productList]);
+            setProductId(productList[productList.length - 1]?.productId);
+
+            if (productList.length < 20) {
+                setHasMore(false);
+            } else {
+                setHasMore(true);
+            }
+        });
+    }, [userset, selectedCategoryName, isMyLocation, sort]);
+
+    const getProduct = () => {
+        console.log(selectedCategoryName);
+        console.log(isMyLocation);
+        axAuth(token)({
+            method: 'post',
+            url: '/product-service/auth/productlist',
+            data: {
+                sort: sort,
                 productId: productId,
-                location: false,
-                category: '전체',
-                myLocation: '장덕동',
+                location: isMyLocation,
+                category: selectedCategoryName,
+                myLocation: user.location,
             },
         }).then(res => {
             const productList = res.data.data;
@@ -122,35 +130,6 @@ function Home() {
                 setHasMore(true);
             }
         });
-    };
-    // 카테고리 불러오기
-    const getCategory = (categoryName: string) => {
-        axAuth(token)({
-            method: 'post',
-            url: '/product-service/auth/productlist',
-            data: {
-                sort: 0,
-                productId: null, // 수정된 부분: null로 변경
-                location: false,
-                category: categoryName,
-            },
-        })
-            .then(res => {
-                const productList = res.data.data;
-                setListData(productList);
-                // setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
-                setProductId(productList[productList.length - 1]?.productId);
-
-                if (productList.length < 20) {
-                    setHasMore(false);
-                } else {
-                    setHasMore(true);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                console.log('카테고리네임은 잘들어가나:', categoryName);
-            });
     };
 
     const onClick = (id: number) => {
@@ -199,13 +178,31 @@ function Home() {
                             <div className="flex justify-end my-4">
                                 {/* 카테고리 */}
 
-                                <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey" onClick={handleCategory}>
+                                <button
+                                    className={`rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ${selectedCategoryName === '전체' ? 'bg-white' : 'bg-blue text-white'}`}
+                                    onClick={handleCategory}
+                                >
                                     카테고리 선택
                                 </button>
                                 {/* 동네 */}
-                                <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey">동네 선택</button>
+                                <button
+                                    className={`rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ${isMyLocation ? 'bg-blue text-white' : 'bg-white'}`}
+                                    onClick={handleIsMyLocation}
+                                >
+                                    내 동네만 보기
+                                </button>
                                 {/* 정렬 */}
-                                <button className="rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ">정렬</button>
+                                <select
+                                    name="sort"
+                                    className={`rounded-full p-2 px-3 mx-1 text-center border border-solid text-sm text-darkgrey ${styles.sort} ${sortText === '정렬' ? 'bg-white' : 'bg-blue text-white'}`}
+                                    onChange={event => handleSort(Number(event.target.value), event.target.options[event.target.selectedIndex].text)}
+                                >
+                                    <option value="" disabled selected>
+                                        정렬
+                                    </option>
+                                    <option value="0">최신순</option>
+                                    <option value="1">가격순</option>
+                                </select>
                             </div>
                             {/* 제품 목록 */}
                             {listdata &&

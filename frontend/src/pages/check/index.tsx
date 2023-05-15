@@ -43,7 +43,12 @@ function SignUp() {
     };
 
     const getNickName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNickName(event.target.value);
+        const value = event.target.value;
+        if (value.length <= 7) {
+            setNickName(value);
+        } else {
+            alert('닉네임은 7자까지 입력 가능합니다.');
+        }
     };
 
     return (

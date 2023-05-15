@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import camera from '../../../public/icon/3Dcamera.png';
 import close from '../../../public/icon/close.png';
+import imageCompression from 'browser-image-compression';
 
 type ImageUploadProps = {
     onChange: (files: File[]) => void;
@@ -13,17 +14,44 @@ function ImageUpload({ setData, onSubmit, data }: { setData: React.Dispatch<Reac
     const [images, setImages] = useState<File[]>([]);
     const [imgPreview, setImgPreview] = useState<{ img: File; url: string }[]>();
 
-    const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const imagelist = e.target.files;
         if (!imagelist) {
             return;
         }
-        const imageArray = Array.from(imagelist);
-        setImages(imageArray);
-        setData(prevData => ({ ...prevData, productImg: imageArray }));
-        onSubmit(data);
+        // const imageArray = Array.from(imagelist);
+        // setImages(imageArray);
+        // setData(prevData => ({ ...prevData, productImg: imageArray }));
+        // onSubmit(data);
+
+        const filesArray = Array.from(imagelist);
+        setImages(filesArray);
+        // 이미지 리사이징
+        const resizeImage = async (file: File): Promise<Blob> => {
+            try {
+                const options = {
+                    maxSizeMB: 0.7,
+                    maxWidthOrHeight: 800,
+                    outputType: 'png', // PNG 형식으로 압축
+                    quality: 0.8, // 이미지 품질을 0.8로 설정
+                };
+
+                const compressedFile = await imageCompression(file, options);
+                return compressedFile;
+            } catch (error) {
+                console.error('Error resizing image:', error);
+                return file;
+            }
+        };
+
+        const resizedImages = await Promise.all(filesArray.map(file => resizeImage(file)));
+        const resizedData = resizedImages.map(resizedFile => new File([resizedFile], resizedFile.name));
+        setData(prevData => ({ ...prevData, productImg: resizedData }));
+        console.log('리사이징데이터', resizedData);
+        onSubmit({ ...data, productImg: resizedData });
+
         // 이미지 미리보기
-        const imagePreviewArray = imageArray.map(img => {
+        const imagePreviewArray = filesArray.map(img => {
             const url = URL.createObjectURL(img);
             return { img, url };
         });

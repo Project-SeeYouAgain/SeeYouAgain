@@ -5,8 +5,7 @@ import { useRouter } from 'next/router';
 import { BiCurrentLocation } from 'react-icons/bi';
 
 interface KakaoMapProps {
-    lat: number;
-    lng: number;
+    click: boolean;
     onCenterChanged?: (lat: number, lng: number) => void;
     onCenter?: (lat: number, lng: number, score: number) => void;
 }
@@ -17,25 +16,60 @@ interface SafetyGrid {
     score: number;
 }
 
-const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter }) => {
+const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = true }) => {
     const [map, setMap] = useState<any>(null);
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
     const [visitedAreas, setVisitedAreas] = useState<string[]>([]);
     const [data, setData] = useState<Array<{ lat: number; lng: number; score: number }> | []>([]);
+    const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({ lat: 35.149409, lng: 126.914957 });
     const router = useRouter();
-    useEffect(() => {
-        const container = document.getElementById('map');
-        if (!container) return;
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            const options = {
+                maximumAge: 0,
+            };
 
-        const options = {
-            center: new kakao.maps.LatLng(lat, lng),
-            level: 3,
-            minLevel: 3,
-            maxLevel: 4,
-        };
-        const newMap = new kakao.maps.Map(container, options);
-        setMap(newMap);
-    }, [lat, lng]);
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    const container = document.getElementById('map');
+                    if (!container) return;
+                    const options = {
+                        center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                        level: 3,
+                        minLevel: 3,
+                        maxLevel: 4,
+                    };
+                    const newMap = new kakao.maps.Map(container, options);
+                    setMap(newMap);
+                },
+                error => {
+                    console.error('Error getting position:', error);
+                },
+                options,
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
+    };
+    useEffect(() => {
+        getLocation();
+    }, []);
+
+    // useEffect(() => {
+    //     const container = document.getElementById('map');
+    //     if (!container) return;
+    //     if (userLocation) {
+    //         const options = {
+    //             center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+    //             level: 3,
+    //             minLevel: 3,
+    //             maxLevel: 4,
+    //         };
+    //         const newMap = new kakao.maps.Map(container, options);
+    //         setMap(newMap);
+    //     }
+    // }, [userLocation]);
 
     const safetyScoreToColor = (score: number) => {
         if (score >= 7.5) {
@@ -204,7 +238,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
         return () => {
             if (map) {
                 kakao.maps.event.removeListener(map, 'dragstart', handleBoundsChanged);
-                kakao.maps.event.removeListener(map, 'dragend', handleBoundsChanged);
+                kakao.maps.event.removeListener(map, 'dragend', handleDragEnd);
                 kakao.maps.event.removeListener(map, 'bounds_changed', handleBoundsChanged);
             }
         };
@@ -212,6 +246,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
     const reload = () => {
         router.reload();
     };
+
     return (
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative' }}>
             <div className=" absolute top-4 right-4 z-10 text-center px-3 py-2 text-[.9rem] bg-white/80 font-bold rounded">
@@ -229,9 +264,11 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, onCenterChanged, onCenter
                     <span className="whitespace-nowrap w-1/2">3단계</span>
                 </div>
             </div>
-            <button className="rounded-full absolute bottom-[15vh] right-4 z-10 h-[12vw] w-[12vw] bg-white drop-shadow-lg ">
-                <BiCurrentLocation className="w-full h-full p-1" onClick={reload} />
-            </button>
+            {click && (
+                <button className="rounded-full absolute bottom-[15vh] right-4 z-10 h-[12vw] w-[12vw] bg-white drop-shadow-lg ">
+                    <BiCurrentLocation className="w-full h-full p-1" onClick={reload} />
+                </button>
+            )}
             <Image src={pin} alt="pins" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full z-10" />
         </div>
     );

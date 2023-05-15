@@ -57,4 +57,27 @@ button {
 
 }
 
-    
+@font-face{
+    font-family: 'NanumNeo';
+    src: url('../assets/font/NanumSquareNeo-bRg.ttf') format('truetype') ,       local('NanumNeo');
+
+}
+
+@font-face{
+    font-family: 'NanumNeoLt';
+    src: url('../assets/font/NanumSquareNeo-aLt.ttf') format('truetype') ,       local('NanumNeoLt');
+
+}
+
+@font-face {
+    font-family: 'Pretendard-Bold';
+    src: url('/src/assets/font/Pretendard-Bold.ttf')format('truetype') ,       local('Pretendard-Bold')
+}
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('/src/assets/font/Pretendard-Regular.ttf')format('truetype') ,       local('Pretendard-Regular');
+}
+@font-face {
+    font-family: 'Pretendard-SemiBold';
+    src: url('/src/assets/font/Pretendard-SemiBold.ttf')format('truetype') ,       local('Pretendard-SemiBold');
+}

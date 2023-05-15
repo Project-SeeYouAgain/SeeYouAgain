@@ -16,6 +16,7 @@ interface ChatRoomData {
     lastMessageDate: string;
     identifier: string;
     notReadMessageSize: number;
+    isImage: boolean;
 }
 
 function chat() {
@@ -44,20 +45,26 @@ function chat() {
         setSelectedTab(type);
     };
 
-    const [dragStart, setDragStart] = useState(0);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
     const handleDragStart = (e: any) => {
         const touch = e.touches ? e.touches[0] : e;
-        setDragStart(touch.clientX);
+        setDragStart({ x: touch.clientX, y: touch.clientY });
     };
 
     const handleDragEnd = (e: any) => {
         const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const delta = touch.clientX - dragStart;
+        const deltaX = touch.clientX - dragStart.x;
+        const deltaY = touch.clientY - dragStart.y;
 
-        if (delta > -90) {
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+            // Ignore vertical drag
+            return;
+        }
+
+        if (deltaX > -90) {
             setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
-        } else if (delta < 90) {
+        } else if (deltaX < 90) {
             setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
         }
     };
@@ -85,7 +92,7 @@ function chat() {
                                 nickname={chatRoomData.nickname}
                                 location={chatRoomData.location}
                                 latestMessageDate={chatRoomData.lastMessageDate}
-                                latestMessage={chatRoomData.lastMessage}
+                                latestMessage={chatRoomData.isImage ? "사진" : chatRoomData.lastMessage}
                                 profileImg={chatRoomData.profileImg}
                                 identifier={chatRoomData.identifier}
                                 notReadMessageSize={chatRoomData.notReadMessageSize}

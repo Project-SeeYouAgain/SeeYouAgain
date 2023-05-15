@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Body from '@/components/Container/components/Body';
 import DatePicker from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
-import { format } from 'date-fns';
+import { eachDayOfInterval, format, isWithinInterval, max } from 'date-fns';
 import Image from 'next/image';
 import location from '@/assets/icons/3Dloca.png';
 import { useRouter } from 'next/router';
@@ -13,6 +13,13 @@ import Swal from 'sweetalert2';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+
+function getDatesBetween(start: Date, end: Date): Date[] {
+    return eachDayOfInterval({
+        start: start,
+        end: end,
+    });
+}
 
 function formatDate(date: any) {
     const year = date.getFullYear();
@@ -24,26 +31,50 @@ function formatDate(date: any) {
 function book() {
     const token = useRecoilValue(userState).accessToken;
 
-    const close = () => {
-        console.log('dd');
-    };
-
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
-    useEffect(() => {
-        if (startDate && endDate) {
-            localStorage.setItem('date', JSON.stringify({ startDate: startDate, endDate: endDate }));
-        }
-    }, [startDate, endDate]);
+    const [pickStartDate, setPickStartDate] = useState<Date | null>(null);
+    const [pickEndDate, setPickEndDate] = useState<Date | null>(null);
     const router = useRouter();
+
     const { identifier } = router.query;
     const productId = router.query.productId;
+    const [unavailableDateRange, setUnavailableDateRange] = useState<Date[]>([]);
+    useEffect(() => {
+        if (productId) {
+            axAuth(token)({ method: 'get', url: `/product-service/auth/reservation/list/${productId}` }).then((res: any) => {
+                console.log(res.data.data[0]);
+                setStartDate(new Date(res.data.data[0].startDate));
+                setEndDate(new Date(res.data.data[0].endDate));
+
+                const reservations = res.data.data;
+                const unavailableDates = reservations.slice(1).map((reservation: any) => ({
+                    startDate: new Date(reservation.startDate),
+                    endDate: new Date(reservation.endDate),
+                }));
+
+                const disabledDates: Date[] = [];
+                unavailableDates.forEach(({ startDate, endDate }: { startDate: Date; endDate: Date }) => {
+                    const dates = getDatesBetween(startDate, endDate);
+                    disabledDates.push(...dates);
+                });
+
+                setUnavailableDateRange(disabledDates);
+                console.log(disabledDates);
+            });
+        }
+    }, [productId]);
     const goTo = () => {
         router.push(`/chat/${identifier}/book/${productId}/pick-location`);
     };
     const [lat, setLat] = useState<string | null>(null);
     const [lng, setLng] = useState<string | null>(null);
     const [dong, setDong] = useState<string | null>(null);
+    const close = () => {
+        localStorage.removeItem('location');
+        localStorage.removeItem('date');
+        router.push(`/${productId}`);
+    };
     useEffect(() => {
         const geocoder = new kakao.maps.services.Geocoder();
         const location = localStorage.getItem('location');
@@ -60,14 +91,15 @@ function book() {
         const date = localStorage.getItem('date');
         if (date) {
             const useDate = JSON.parse(date);
-            setStartDate(new Date(useDate.startDate));
-            setEndDate(new Date(useDate.endDate));
+            console.log(useDate);
+            setPickStartDate(new Date(useDate.startDate));
+            setPickEndDate(new Date(useDate.endDate));
         }
     }, []);
     const reservation = () => {
         const data = {
-            startDate: formatDate(startDate),
-            endDate: formatDate(endDate),
+            startDate: formatDate(pickStartDate),
+            endDate: formatDate(pickEndDate),
             lng: Number(lng),
             lat: Number(lat),
             location: dong,
@@ -100,31 +132,59 @@ function book() {
             }) // 잘 들어갔는지 확인
             .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
     };
+    const handleDateChange = (update: [Date | null, Date | null]) => {
+        setPickStartDate(update[0]);
+        setPickEndDate(update[1]);
+        const startDate = update[0];
+        const endDate = update[1];
+
+        if (startDate && endDate) {
+            const selectedRangeHasUnavailableDates = unavailableDateRange.some(date => isWithinInterval(date, { start: startDate, end: endDate }));
+            if (selectedRangeHasUnavailableDates) {
+                Swal.fire({
+                    title: '날짜 선택 오류',
+                    text: '선택한 범위 내에 예약할 수 없는 날짜가 포함되어 있습니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인',
+                    timer: 2000, // 3초 뒤에 자동으로 닫히게 설정합니다.
+                    timerProgressBar: true, // 타이머 진행바를 표시합니다.
+                    willClose: () => {
+                        Swal.showLoading();
+                    },
+                });
+                setPickStartDate(null);
+                setPickEndDate(null);
+            } else {
+                localStorage.setItem('date', JSON.stringify({ startDate, endDate }));
+            }
+        }
+    };
+    const minDate = startDate ? max([new Date(), startDate]) : new Date();
 
     return (
-        <Container className="relative">
+        <Container className="relative h-screen">
             <CloseHeader title="예약하기" onClose={close} />
-            <Body>
+            <div className="px-[1.88rem]">
                 <p className="my-4 font-bold text-xl">대여기간</p>
                 <DatePicker
                     locale={ko}
                     inline={true}
-                    startDate={startDate}
-                    endDate={endDate}
+                    minDate={minDate}
+                    maxDate={endDate}
+                    startDate={pickStartDate}
+                    endDate={pickEndDate}
+                    excludeDates={unavailableDateRange}
                     selectsRange
-                    onChange={update => {
-                        setStartDate(update[0]);
-                        setEndDate(update[1]);
-                    }}
+                    onChange={handleDateChange}
                 />
                 <div className="mb-4 px-2">
-                    {startDate && endDate ? (
+                    {pickStartDate && pickEndDate ? (
                         <div className="grid grid-cols-2 text-left">
                             <div className="text-blue font-bold flex">
-                                <span className="whitespace-nowrap">시작일</span> <span className="text-black font-bold w-full text-center">{format(startDate, 'yy.MM.dd', { locale: ko })}</span>
+                                <span className="whitespace-nowrap">시작일</span> <span className="text-black font-bold w-full text-center">{format(pickStartDate, 'yy.MM.dd', { locale: ko })}</span>
                             </div>
                             <div className="text-blue font-bold flex">
-                                <span className="whitespace-nowrap">종료일</span> <span className="text-black font-bold w-full text-center">{format(endDate, 'yy.MM.dd', { locale: ko })}</span>
+                                <span className="whitespace-nowrap">종료일</span> <span className="text-black font-bold w-full text-center">{format(pickEndDate, 'yy.MM.dd', { locale: ko })}</span>
                             </div>
                         </div>
                     ) : (
@@ -141,7 +201,7 @@ function book() {
                         <Image src={location} alt="location" className="w-16 h-16" />
                     </div>
                 </div>
-            </Body>
+            </div>
             <button className="absolute bottom-0 w-full h-16 bg-blue text-white text-xl font-bold" onClick={reservation}>
                 예약확정
             </button>
