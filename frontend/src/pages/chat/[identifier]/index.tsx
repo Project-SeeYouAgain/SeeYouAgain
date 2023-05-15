@@ -239,6 +239,11 @@ function Channel() {
 
     const goToBook = () => [router.push(`/chat/${identifier}/book/${channelInfo?.productId}`)];
     const goToUserLocation = () => {
+        axAuth(token)({
+            url: `product-service/auth/reservation/${channelInfo?.productId}/${channelInfo?.userId}`,
+        }).then(res => {
+            console.log(res.data.data);
+        });
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
 
