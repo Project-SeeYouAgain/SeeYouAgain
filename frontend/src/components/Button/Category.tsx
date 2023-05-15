@@ -13,6 +13,7 @@ import cate11 from '../../../public/icon/sports.png';
 import cate12 from '../../../public/icon/book.png';
 import cate13 from '../../../public/icon/pets.png';
 import cate14 from '../../../public/icon/others.png';
+import cate15 from '../../../public/icon/all.png';
 import Image from 'next/image';
 
 interface CategoryButtonProps {
@@ -38,6 +39,7 @@ function Category({ onClick, innerValue, catekey }: CategoryButtonProps) {
         12: cate12,
         13: cate13,
         14: cate14,
+        15: cate15,
     };
     return (
         <div className="mb-5" onClick={onClick}>
