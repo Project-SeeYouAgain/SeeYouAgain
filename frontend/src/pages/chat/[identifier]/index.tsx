@@ -21,6 +21,7 @@ interface ChatData {
     profileImg: string;
     chat: string;
     isRead: boolean;
+    isImage: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -53,6 +54,7 @@ function Channel() {
     const client = useRef<Client | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const [image, setImage] = useState<File | null>();
 
     // 뒤로가기
     const handleBack = () => {
@@ -61,6 +63,7 @@ function Channel() {
 
     const connect = () => {
         const socket = new SockJS('https://k8c101.p.ssafy.io/chatting-service/ws');
+        // const socket = new SockJS('http://localhost:8000/chatting-service/ws');
 
         client.current = new Client({
             webSocketFactory: () => socket,
@@ -78,11 +81,12 @@ function Channel() {
     const subscribe = () => {
         client.current?.subscribe('/sub/chat/' + identifier, body => {
             const json_body: ChatData = JSON.parse(body.body);
+            console.log(json_body);
             setChatList((_chat_list: ChatData[]) => [json_body, ..._chat_list]);
         });
     };
 
-    const publish = (chat: string) => {
+    const publish = (chat: string, isImage: boolean) => {
         if (!client.current?.connected) return;
 
         client.current.publish({
@@ -91,6 +95,7 @@ function Channel() {
                 identifier: identifier,
                 writerId: userId,
                 chat: chat,
+                isImage: isImage,
             }),
         });
 
@@ -118,7 +123,7 @@ function Channel() {
         event.preventDefault();
 
         if (chat.trim()) {
-            publish(chat);
+            publish(chat, false);
         } else {
             setChat('');
         }
@@ -162,6 +167,32 @@ function Channel() {
         });
     };
 
+    const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setImage(e.target.files[0]);
+        }
+    };
+
+    useEffect(() => {
+        const formData = new FormData();
+
+        if (image) {
+            formData.append('chatImage', image);
+        }
+
+        axAuth(token)({
+            method: 'post',
+            url: '/chatting-service/auth/chatImage',
+            headers: { 'Content-Type': 'multipart/form-data' },
+            data: formData,
+        })
+            .then(res => {
+                publish(res.data.data, true);
+                setImage(null);
+            })
+            .catch(err => console.log(err));
+    }, [image]);
+
     useEffect(() => {
         if (!router.isReady) return;
 
@@ -195,7 +226,7 @@ function Channel() {
                         <div>
                             <AiOutlineLeft color="#5669FF" size="24" onClick={handleBack} />
                         </div>
-                        <div className='flex items-center'>
+                        <div className="flex items-center">
                             <p className="me-1 font-bold dark:text-black">{channelInfo?.nickname}</p>
                             <Button.MannerPoint innerValue={`${channelInfo?.mannerScore}`} />
                         </div>
@@ -233,7 +264,7 @@ function Channel() {
                         .slice()
                         .reverse()
                         .map((chatData, index) => (
-                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={userId} isRead={chatData.isRead} />
+                            <ChatBox key={index} chat={chatData.chat} profileImg={chatData.profileImg} writerId={chatData.writerId} userId={userId} isRead={chatData.isRead} isImage={chatData.isImage} />
                         ))}
                     <div ref={messagesEndRef} />
                 </InfiniteScroll>
@@ -243,7 +274,10 @@ function Channel() {
                 <form onSubmit={event => handleSubmit(event, chat)}>
                     <div className="flex items-center p-2 relative">
                         <div className="me-2">
-                            <AiOutlinePlusCircle className="text-3xl" />
+                            <input accept="image/*" name="file" className="hidden" id="file-upload" type="file" onChange={onChangeFile} />
+                            <label htmlFor="file-upload">
+                                <AiOutlinePlusCircle className="text-3xl" />
+                            </label>
                         </div>
 
                         <input

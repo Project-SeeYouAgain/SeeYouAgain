@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import web_main from '@/images/mobile.jpg';
+import web_main from '@/images/mobile.png';
+import textlogo from '@/images/sya.png';
 import styles from './Mobile.module.scss';
 import useInView from '../Mobile/useInView';
 import classNames from 'classnames';
@@ -19,20 +20,24 @@ function FirstPage() {
     return (
         <div className={styles.parent}>
             <div className={classNames(styles.textContainer)} ref={ref}>
-                <div className={classNames(styles.first, styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
-                    <p>물건 대여 서비스</p>
-                    <p>
-                        <span className={styles.pointColor}>S</span>ee<span className={styles.pointColor}>Y</span>ou<span className={styles.pointColor}>A</span>gain
+                <div className={classNames(styles.first, styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp, '-mt-[35vh]')}>
+                    <p className={classNames(styles.title, 'font-NanumNeo font-bold text-[2rem] ')}>SEE YOU AGAIN</p>
+                    <p className={classNames(styles.title, 'font-NanumNeoLt text-[1.1em] ')}>안전한 우리 동네 대여서비스</p>
+                    {/* <p className={classNames(styles.title, 'font-NanumNeo text-[1.4rem]')}>동네 대여 서비스에서 찾아보세요!</p> */}
+                    <p className={classNames(styles.logo, 'tracking-wider')}>
+                        {/* <span className={styles.pointColor}>S</span>ee<span className={styles.pointColor}>Y</span>ou<span className={styles.pointColor}>A</span>gain */}
                     </p>
                 </div>
             </div>
-            <div className={classNames(styles.arrowContainer, 'text-white font-bold w-full text-2xl', { visible: typeof window !== 'undefined' && scrollPos !== window.scrollY })}>
+            <div className={classNames(styles.arrowContainer, 'text-white font-NanumNeo font-bold w-full text-xl', { visible: typeof window !== 'undefined' && scrollPos !== window.scrollY })}>
                 <div>
                     <p>Scroll Down</p>
                     <SlArrowDown className="m-auto" />
                 </div>
             </div>
-            <Image src={web_main} alt="main image" className="w-full h-screen" />
+            <div className="h-[100vh]">
+                <Image src={web_main} alt="main image" className="w-full h-full object-cover" />
+            </div>
         </div>
     );
 }

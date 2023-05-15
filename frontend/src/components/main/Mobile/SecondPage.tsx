@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import hammer from '@/images/hammer.png';
+import shop from '@/images/shop.png';
 import styles from './Mobile.module.scss';
 import classNames from 'classnames';
 import useInView from '../Mobile/useInView';
@@ -13,9 +14,9 @@ function SecondPage() {
     return (
         <div className={classNames(styles.boxContainer)} ref={ref}>
             <div className={classNames(styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
-                <Image src={hammer} alt="hammer" className="m-auto w-4/5" />
+                <Image src={shop} alt="shop" className="m-auto w-4/5" />
                 <div className={classNames(styles.textBox)}>
-                    <p className="text-s text-center font-bold">Borrow what you need</p>
+                    <p className="text-s font-NanumNeo font-bold mb-1">Borrow what you need</p>
                     <p className="text-2xl font-bold">한번 쓰려고 </p>
                     <p className="text-2xl font-bold">사기에는 아까운 물건</p>
                     <p className="text-2xl font-bold">이웃에게 빌려보세요</p>

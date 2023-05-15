@@ -1,6 +1,6 @@
 .fifthPage_box {
     background: #ffffff;
-    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     margin-top: 30px;
     padding: 20px;
@@ -17,10 +17,21 @@
     transform: translate(-50%, -50%);
     .first {
         color: white;
-        font-size: xx-large;
+        // font-size: xx-large;
         text-align: center;
+        // font-weight: bolder;
+        width: 100vw;
+        
+   
+        .title{
+        text-shadow: 0px 0px 10px black;
+
+    }
+    .logo{
         font-weight: bolder;
-        width: max-content;
+        font-size: xx-large;
+
+    }
     }
 }
 .boxContainer {
@@ -48,7 +59,7 @@
     }
 }
 .pointColor {
-    color: #ff8655;
+    color: #1279ff;
 }
 .text {
     font-size: x-large;

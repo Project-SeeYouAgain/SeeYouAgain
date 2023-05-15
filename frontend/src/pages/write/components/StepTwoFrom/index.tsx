@@ -50,7 +50,15 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
         setData(prevData => ({ ...prevData, startDate, endDate }));
         onSubmit(data);
     };
-
+    const handleSafeChange = () => {
+        const updatedIsSafe = !isSafe;
+        setIsSafe(updatedIsSafe);
+        setData(prevData => ({ ...prevData, isSafe: updatedIsSafe }));
+        onSubmit({ ...data, isSafe: updatedIsSafe });
+    };
+    const handleLocationChange = () => {
+        setIsLocationOn(true);
+    };
     // 거래장소 선택 모달용
     const [isLocationOn, setIsLocationOn] = useState(false);
 
@@ -93,7 +101,7 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
                         </div>
                     </div>
                 )}
-                <div className="relative" onClick={() => setIsLocationOn(true)}>
+                <div className="relative" onClick={handleLocationChange}>
                     <div className="m-auto w-[100%] h-[5rem] rounded-[.625rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)', opacity: 0.5 }}></div>
                     <div>
                         <Image src={locationImg} alt="camera" className="w-[4rem] absolute top-2 right-[1.5rem]"></Image>
@@ -101,15 +109,10 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
                     </div>
                 </div>
                 {/* 세이프존 거래 */}
-                <div
-                    className="flex mt-[1rem] items-center "
-                    onClick={() => {
-                        setIsSafe(!isSafe);
-                        setData(prevData => ({ ...prevData, isSafe: isSafe }));
-                        onSubmit(data);
-                    }}
-                >
-                    <span>{isSafe ? <BsFillCheckSquareFill className="text-blue w-[1.4rem] h-[1.4rem]" /> : <BsSquare className="text-darkgrey w-[1.4rem] h-[1.4rem]" />}</span>
+                <div className="flex mt-[1rem] items-center " onClick={handleSafeChange}>
+                    <div>
+                        <span>{isSafe ? <BsFillCheckSquareFill className="text-blue w-[1.4rem] h-[1.4rem]" /> : <BsSquare className="text-darkgrey w-[1.4rem] h-[1.4rem]" />}</span>
+                    </div>
                     <span className="ml-[.5rem]">
                         <span className="font-bold text-[1.2rem] text-blue">SAFEZONE</span>
                         <span className="font-bold text-[1.2rem] text-darkgrey"> 에서 거래 할게요.</span>

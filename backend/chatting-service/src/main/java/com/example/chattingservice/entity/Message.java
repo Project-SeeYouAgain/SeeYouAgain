@@ -22,6 +22,8 @@ public class Message extends TimeStamped {
 
     private Boolean isRead;
 
+    private Boolean isImage;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
     private Participant participant;
@@ -34,6 +36,7 @@ public class Message extends TimeStamped {
         return Message.builder()
                 .chat(requestDto.getChat())
                 .isRead(isRead)
+                .isImage(requestDto.getIsImage())
                 .participant(participant)
                 .channel(channel)
                 .build();
