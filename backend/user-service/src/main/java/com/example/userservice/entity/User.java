@@ -45,6 +45,8 @@ public class User extends TimeStamped {
 
     private int mannerCnt;
 
+    private String firebaseToken;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Role> roleSet = new HashSet<>();
@@ -53,9 +55,8 @@ public class User extends TimeStamped {
         this.nickname = nickname;
     }
 
-    public void updateProfile(String profileImgKey, String profileImgUrl) {
-        this.profileImgKey = profileImgKey;
-        this.profileImgUrl = profileImgUrl;
+    public void updateFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
     }
 
     public void updateProfile(String profileImgKey, String profileImgUrl, String location, String description) {
@@ -63,11 +64,6 @@ public class User extends TimeStamped {
         this.profileImgUrl = profileImgUrl;
         this.location = location;
         this.description = description;
-    }
-
-    public void update(String nickname, String profileImgUrl) {
-        this.nickname = nickname;
-        this.profileImgUrl = profileImgUrl;
     }
 
     public void addUserRole(Role role) {
