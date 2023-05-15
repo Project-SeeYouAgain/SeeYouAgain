@@ -85,12 +85,12 @@ public class AuthController {
     }
 
     /**
-     * 닉네임을 변경하는 API입니다.
+     * firebase token을 변경하는 API입니다.
      *
      * @param request
      * @param requestDto
      */
-    @PatchMapping("/nickname")
+    @PatchMapping("/firebase-token")
     public ResponseEntity<BaseResponseDto<?>> updateFCMToken(HttpServletRequest request,
                                                              @RequestBody FCMTokenRequestDto requestDto) {
 
