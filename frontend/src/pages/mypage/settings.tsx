@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import ResponsiveChecker from '@/components/ResponsiveChecker';
 import KakaoMap from '@/components/Location/SetKakaoMap';
 import pin from '@/images/location-pin.png';
+import imageCompression from 'browser-image-compression';
 
 function settings() {
     const [firstValue, setFirstValue] = useState<string>('');
@@ -53,8 +54,25 @@ function settings() {
         }
     }, [profileImg]);
 
+    const resizeImage = async (file: File): Promise<Blob> => {
+        try {
+            const options = {
+                maxSizeMB: 0.7,
+                maxWidthOrHeight: 800,
+                outputType: 'png', // PNG 형식으로 압축
+                quality: 0.8, // 이미지 품질을 0.8로 설정
+            };
+
+            const compressedFile = await imageCompression(file, options);
+            return compressedFile;
+        } catch (error) {
+            console.error('Error resizing image:', error);
+            return file;
+        }
+    };
+
     const token = useRecoilValue(userState).accessToken;
-    const setting = () => {
+    const setting = async () => {
         const submitData = {
             location: firstValue,
             description: secondValue,
@@ -69,7 +87,9 @@ function settings() {
         formData.append('requestDto', blob);
 
         if (image) {
-            formData.append('profileImg', image);
+            const resizedImageBlob = await resizeImage(image);
+            const resizedImageFile = new File([resizedImageBlob], image.name, { type: resizedImageBlob.type });
+            formData.append('profileImg', resizedImageFile);
         }
 
         axAuth(token)({
