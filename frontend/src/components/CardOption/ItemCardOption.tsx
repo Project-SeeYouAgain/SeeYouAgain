@@ -29,7 +29,13 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
 
     function CancelBook() {
         setModalNum(0);
-        const url = `/product-service/auth/reservation/${productId}`;
+        let type;
+        if (isRent) {
+            type = 1;
+        } else {
+            type = 0;
+        }
+        const url = `/product-service/auth/reservation/${type}/${productId}`;
         axAuth(token)({ method: 'delete', url: url })
             .then(() => {
                 console.log('예약 취소 완료');
@@ -83,17 +89,22 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
             .catch(err => console.log(err));
     }
 
-    function openHideConfirm(event: React.MouseEvent) {
+    function openDeleteConfirm(event: React.MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
         setModalNum(3);
     }
 
-    function HideItem() {
-        const url = `/product-service/auth/hide/${productId}`;
-        axAuth(token)({ method: 'patch', url: url })
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
+    function DeleteItem() {
+        const url = `/product-service/auth/${productId}`;
+        axAuth(token)({ method: 'delete', url: url })
+            .then(() => {
+                setModalNum(0);
+                onRefresh?.();
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     function openUnhideConfirm(event: React.MouseEvent) {
@@ -137,11 +148,9 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
                                 대여일정
                             </div>
-                            {isBooked ? null : (
-                                <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openHideConfirm(event)}>
-                                    숨김
-                                </div>
-                            )}
+                            <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenConfirmBookCancel(event)}>
+                                예약취소
+                            </div>
                         </>
                     ) : menuState === 2 ? (
                         <>
@@ -150,8 +159,8 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             </div>
                         </>
                     ) : (
-                        <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openUnhideConfirm(event)}>
-                            재등록
+                        <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openDeleteConfirm(event)}>
+                            삭제
                         </div>
                     )}
                 </div>
@@ -179,10 +188,9 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             </div>
                         ) : modalNum === 3 ? (
                             <div className="bg-white p-6 rounded-lg shadow-md absolute w-[80%] text-center">
-                                <span>해당 아이템을 숨기시겠습니까?</span>
-                                <div className="text-[0.8rem] text-[#8E8E93] mb-[1rem]">(더 이상 다른 사람들에게 노출되지 않습니다.)</div>
+                                <span>해당 아이템을 삭제하시겠습니까?</span>
                                 <div className="w-[100%] flex justify-around">
-                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={HideItem} />
+                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={DeleteItem} />
                                     <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
                                 </div>
                             </div>
