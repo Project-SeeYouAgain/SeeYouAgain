@@ -10,7 +10,7 @@ import pen from '@/images/pen.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 
 function settings() {
@@ -19,6 +19,7 @@ function settings() {
     const [profileImg, setProfileImg] = useState<string>('');
     const [image, setImage] = useState<File | undefined>();
     const router = useRouter();
+    const [user, setUser] = useRecoilState(userState);
 
     const changeFirstValue = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFirstValue(event.target.value);
@@ -58,6 +59,14 @@ function settings() {
             data: formData,
         })
             .then((res: any) => {
+                console.log(res.data.data);
+                setUser({
+                    ...user,
+                    location: res.data.data.location,
+                    mannerScore: res.data.data.mannerScore,
+                    nickname: res.data.data.nickname,
+                    profileImg: res.data.data.profileImg,
+                });
                 alert('프로필이 수정되었습니다!');
                 router.push('/home');
             })
