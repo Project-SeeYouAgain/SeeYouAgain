@@ -161,6 +161,7 @@ function index({ handleSubmit }: Props) {
                     </div>
                 </div>
             </div>
+            <div className="border-b-2 mx-5 border-black mb-10"></div>
             {/* 나머지 */}
             <div className="px-[1.88rem]">
                 <div className="mt-[1rem] ">
@@ -184,37 +185,44 @@ function index({ handleSubmit }: Props) {
                     <Calender onChange={handleDateChange} />
                 </div>
                 {/* 거래장소 */}
-                <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
-                {isLocationOn && (
-                    <div className="fixed top-0 left-0 right-0 bottom-0 z-50">
-                        <div className="absolute top-0 left-0 right-0 bottom-0 bg-white"></div>
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <PickLocation data={data} onSubmit={handleStepTwoSubmit} setData={setData} setIsLocationOn={setIsLocationOn} />
+                <div className="grid grid-cols-[1fr,3fr] mt-[6rem] ">
+                    <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
+                    {isLocationOn && (
+                        <div className="fixed top-0 left-0 right-0 bottom-0 z-50">
+                            <div className="absolute top-0 left-0 right-0 bottom-0 bg-white"></div>
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <PickLocation data={data} onSubmit={handleStepTwoSubmit} setData={setData} setIsLocationOn={setIsLocationOn} />
+                            </div>
                         </div>
-                    </div>
-                )}
-                <div className="relative" onClick={handleLocationChange}>
-                    <div className="m-auto w-[100%] h-[5rem] rounded-[.625rem]" style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)', opacity: 0.5 }}></div>
-                    <div>
-                        <Image src={locationImg} alt="camera" className="w-[4rem] absolute top-2 right-[1.5rem]"></Image>
-                        <span className="font-bold absolute top-[40%] left-[8%] text-darkgrey ">{data.location.RegionCode ? '거래장소 : ' + data.location.RegionCode : '거래장소 선택하러 가기'}</span>
+                    )}
+                    <div className="relative" onClick={handleLocationChange}>
+                        <div className="m-auto w-[100%] h-[5rem] border border-darkgrey"></div>
+                        <div>
+                            <Image src={locationImg} alt="camera" className="w-[4rem] absolute top-2 right-[1.5rem]"></Image>
+                            <span className="font-bold text-lg absolute top-[35%] left-[1vw] text-darkgrey ">
+                                {data.location.RegionCode ? '거래장소 : ' + data.location.RegionCode : '거래장소 선택하러 가기'}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 {/* 세이프존 거래 */}
-                <div className="flex mt-[1rem] items-center " onClick={handleSafeChange}>
-                    <div>
-                        <span>{isSafe ? <BsFillCheckSquareFill className="text-blue w-[1.4rem] h-[1.4rem]" /> : <BsSquare className="text-darkgrey w-[1.4rem] h-[1.4rem]" />}</span>
+                <div className="grid grid-cols-[1fr,3fr] ">
+                    <p></p>
+                    <div className="flex mt-[1rem] items-center " onClick={handleSafeChange}>
+                        <div>
+                            <span>{isSafe ? <BsFillCheckSquareFill className="text-blue w-[1.4rem] h-[1.4rem]" /> : <BsSquare className="text-darkgrey w-[1.4rem] h-[1.4rem]" />}</span>
+                        </div>
+                        <span className="ml-[.5rem]">
+                            <span className="font-bold text-[1.2rem] text-blue">SAFEZONE</span>
+                            <span className="font-bold text-[1.2rem] text-darkgrey"> 에서 거래 할게요.</span>
+                        </span>
                     </div>
-                    <span className="ml-[.5rem]">
-                        <span className="font-bold text-[1.2rem] text-blue">SAFEZONE</span>
-                        <span className="font-bold text-[1.2rem] text-darkgrey"> 에서 거래 할게요.</span>
-                    </span>
                 </div>
-                <p className=" text-darkgrey mb-20"> 안전한 세이프존을 거래장소로 이용해보세요!</p>
             </div>
             <button onClick={handleSubmitClick} className="fixed top-[20vh] w-20 right-10 text-black text-[1rem] border border-darkgrey h-[3rem] hover:bg-black hover:text-white  ">
                 등록하기
             </button>
+            <div className="mt-20"></div>
             <Modal isModalOpen={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />
         </div>
     );
