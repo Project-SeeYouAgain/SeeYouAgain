@@ -60,14 +60,15 @@ function CustomDatePicker({ reservationPeriods, availablePeriod, startDate, endD
 
     return (
         <DatePicker
-            onChange={setSelectDate}
+            onChange={date => setSelectDate(date)}
             minDate={new Date(minday())}
             maxDate={new Date(maxday())}
+            selected={selectDate}
             readOnly
             disabled
             inline
             excludeDates={reservationDays}
-            dayClassName={date => (isMyReservationDay(date) ? styles.myReservationDay : null)}
+            dayClassName={date => (isMyReservationDay(date) ? styles.myReservationDay : date.getDate() === selectDate?.getDate() ? styles.nochange : null)}
         />
     );
 }

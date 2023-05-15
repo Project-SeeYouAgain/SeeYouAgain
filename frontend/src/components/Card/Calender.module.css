@@ -3,3 +3,7 @@
     color: #5669ff !important;
     cursor: default !important;
 }
+.nochange {
+    background-color: rgb(255, 255, 255) !important;
+    color: black !important;
+}
