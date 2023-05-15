@@ -67,7 +67,6 @@ function Rent() {
                             isSafe={item.isSafe}
                             menuState={menuState}
                             productId={item.productId}
-                            onRefresh={handleRefresh}
                             ownerId={item.ownerId}
                             key={index}
                         />
