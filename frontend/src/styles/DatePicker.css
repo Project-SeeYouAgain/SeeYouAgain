@@ -2,6 +2,7 @@
 
 .react-datepicker {
     width: 100% !important;
+    height: 100% !important;
     border-radius: 30px;
 }
 
@@ -11,9 +12,9 @@
 .react-datepicker__day-name,
 .react-datepicker__day,
 .react-datepicker__time-name {
-    width: 10vw;
-    line-height: 8vw;
-    border-radius: 8px ;
+    width: 10%;
+    line-height: 38px;
+    border-radius: 8px;
 }
 .react-datepicker__navigation--next {
     top: 8px;
