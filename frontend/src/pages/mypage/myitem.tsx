@@ -7,7 +7,7 @@ import { axBase, axAuth } from '../../apis/axiosinstance';
 import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
+import { userState, productState } from 'recoil/user/atoms';
 import noresult from '@/images/no-results.png';
 import Image from 'next/image';
 
@@ -30,6 +30,7 @@ function Rent() {
     const [len, setLen] = useState<number>(0);
     const [bookList, setBookList] = useState<RentalItem[]>([]);
     const dragThreshold = 20;
+    const refreshKey = useRecoilValue(productState).refreshKey;
 
     function SelectMenu(data: number) {
         setMenuState(data);
@@ -51,7 +52,7 @@ function Rent() {
                 setBookList(BookItems);
             })
             .catch(err => console.log(err));
-    }, [menuState]);
+    }, [menuState, refreshKey]);
 
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
@@ -126,6 +127,8 @@ function Rent() {
                             ))
                         )}
                     </div>
+                ) : itemList.length === 0 ? (
+                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
                 ) : menuState === 3 ? (
                     itemList
                         .filter(item => !item.startDate)
@@ -142,8 +145,6 @@ function Rent() {
                                 key={index}
                             />
                         ))
-                ) : itemList.length === 0 ? (
-                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
                 ) : (
                     itemList.map((item, index) => (
                         <Card

@@ -30,17 +30,12 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();
     const token = useRecoilValue(userState).accessToken;
-    const [isHide, setIsHide] = useState<boolean>(false);
 
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     function Dropdown(event: React.MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
         setDropdownVisible(!dropdownVisible);
-    }
-
-    function onHide() {
-        setIsHide(true);
     }
 
     useEffect(() => {
@@ -90,64 +85,60 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         }
     };
 
-    if (isHide === false) {
-        return (
-            <div className="w-full flex relative border-b border-solid py-4" onClick={GoDetail}>
-                <div className="w-[95px] h-[95px] relative">
-                    <Image src={productImg} alt="제품 사진" fill className="aspect-square object-cover rounded-lg w-full h-full" />
-                    {isActive === true ? (
-                        <AiFillHeart className="w-6 h-6 absolute left-1 bottom-1" color={'#5669FF'} onClick={ClickHeart} />
-                    ) : isActive === false ? (
-                        <AiOutlineHeart className="w-6 h-6 absolute left-1 bottom-1" color={'#5669FF'} onClick={ClickHeart} />
-                    ) : null}
-                </div>
-                <div className="items-center pl-4 pr-1" style={{ width: containerWidth }}>
-                    <span className="font-semibold w-full flex items-center justify-between relative">
-                        <p className=" truncate dark:text-black font-bolder">{title}</p>
-                        {menuState !== undefined ? (
-                            <>
-                                <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
-                                <ItemCardOption productId={productId} onRefresh={onHide} ownerId={ownerId} isBooked={isBooked} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
-                            </>
-                        ) : (
-                            <span className="h-[1.5rem] px-[0.4rem] w-[1.5rem]"></span>
-                        )}
-                    </span>
-
-                    {price >= 100000 && (
-                        <span>
-                            <span className="font-bold dark:text-black">{(price / 10000).toLocaleString('ko-KR')}</span>
-                            <span className="text-[#8E8E93] text-sm">만원 /일</span>
-                        </span>
-                    )}
-                    {price < 100000 && (
-                        <span>
-                            <span className="font-bold dark:text-black">{price.toLocaleString('ko-KR')}</span>
-                            <span className="text-[#8E8E93] text-sm whitespace-nowrap">원 /일</span>
-                        </span>
-                    )}
-                    <span className="flex items-center">
-                        <p className="text-[#8E8E93] text-sm mr-2">{location}</p>{' '}
-                        {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" width={300} height={400} /> : null}
-                    </span>
-                    {startDate !== null && startDate !== undefined ? (
-                        <div className="grid grid-cols-2 gap-2 text-center">
-                            <div className="flex text-darkgrey text-sm">
-                                <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
-                                <p className="whitespace-nowrap">{startDate}</p>
-                            </div>
-                            <div className="flex text-darkgrey text-sm justify-end">
-                                <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
-                                <p className="whitespace-nowrap">{endDate}</p>
-                            </div>
-                        </div>
-                    ) : null}
-                </div>
+    return (
+        <div className="w-full flex relative border-b border-solid py-4" onClick={GoDetail}>
+            <div className="w-[95px] h-[95px] relative">
+                <Image src={productImg} alt="제품 사진" fill className="aspect-square object-cover rounded-lg w-full h-full" />
+                {isActive === true ? (
+                    <AiFillHeart className="w-6 h-6 absolute left-1 bottom-1" color={'#5669FF'} onClick={ClickHeart} />
+                ) : isActive === false ? (
+                    <AiOutlineHeart className="w-6 h-6 absolute left-1 bottom-1" color={'#5669FF'} onClick={ClickHeart} />
+                ) : null}
             </div>
-        );
-    } else {
-        return null;
-    }
+            <div className="items-center pl-4 pr-1" style={{ width: containerWidth }}>
+                <span className="font-semibold w-full flex items-center justify-between relative">
+                    <p className=" truncate dark:text-black font-bolder">{title}</p>
+                    {menuState !== undefined ? (
+                        <>
+                            <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
+                            <ItemCardOption productId={productId} ownerId={ownerId} isBooked={isBooked} {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }} />
+                        </>
+                    ) : (
+                        <span className="h-[1.5rem] px-[0.4rem] w-[1.5rem]"></span>
+                    )}
+                </span>
+
+                {price >= 100000 && (
+                    <span>
+                        <span className="font-bold dark:text-black">{(price / 10000).toLocaleString('ko-KR')}</span>
+                        <span className="text-[#8E8E93] text-sm">만원 /일</span>
+                    </span>
+                )}
+                {price < 100000 && (
+                    <span>
+                        <span className="font-bold dark:text-black">{price.toLocaleString('ko-KR')}</span>
+                        <span className="text-[#8E8E93] text-sm whitespace-nowrap">원 /일</span>
+                    </span>
+                )}
+                <span className="flex items-center">
+                    <p className="text-[#8E8E93] text-sm mr-2">{location}</p>{' '}
+                    {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" width={300} height={400} /> : null}
+                </span>
+                {startDate !== null && startDate !== undefined ? (
+                    <div className="grid grid-cols-2 gap-2 text-center">
+                        <div className="flex text-darkgrey text-sm">
+                            <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
+                            <p className="whitespace-nowrap">{startDate}</p>
+                        </div>
+                        <div className="flex text-darkgrey text-sm justify-end">
+                            <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
+                            <p className="whitespace-nowrap">{endDate}</p>
+                        </div>
+                    </div>
+                ) : null}
+            </div>
+        </div>
+    );
 }
 
 export default ItemCard;
