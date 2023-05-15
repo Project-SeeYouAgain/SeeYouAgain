@@ -8,5 +8,5 @@ interface UserState {
 }
 
 interface ProductState {
-    refreshKey: number | null;
+    refreshKey: number;
 }

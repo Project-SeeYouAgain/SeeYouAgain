@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { axAuth, axBase } from '@/apis/axiosinstance';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
+import { userState, productState } from 'recoil/user/atoms';
 import Calender from '../../components/Card/Calender';
 import Square from '../Button/Square';
 import Link from 'next/link';
@@ -12,12 +12,11 @@ interface ItemCardOptionProps {
     menuState: number;
     dropdownVisible: boolean;
     productId: number;
-    onRefresh?: () => void;
     ownerId?: number;
     isBooked?: boolean;
 }
 
-const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked, onRefresh }) => {
+const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked }) => {
     interface bookdatatype {
         startDate: string;
         endDate: string;
@@ -26,6 +25,7 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
     const token = useRecoilValue(userState).accessToken;
     const [modalNum, setModalNum] = useState<number>(0);
     const [bookData, setBookData] = useState<bookdatatype[]>([]);
+    const [productStateData, setProductStateData] = useRecoilState(productState);
 
     function CancelBook() {
         setModalNum(0);
@@ -39,7 +39,10 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
         axAuth(token)({ method: 'delete', url: url })
             .then(() => {
                 console.log('예약 취소 완료');
-                onRefresh?.();
+                setProductStateData({
+                    ...productStateData,
+                    refreshKey: productStateData.refreshKey + 1,
+                });
             })
             .catch(err => console.log(err));
     }
@@ -100,17 +103,14 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
         axAuth(token)({ method: 'delete', url: url })
             .then(() => {
                 setModalNum(0);
-                onRefresh?.();
+                setProductStateData({
+                    ...productStateData,
+                    refreshKey: productStateData.refreshKey + 1,
+                });
             })
             .catch(err => {
                 console.log(err);
             });
-    }
-
-    function openUnhideConfirm(event: React.MouseEvent) {
-        event.stopPropagation();
-        event.preventDefault();
-        setModalNum(4);
     }
 
     if (dropdownVisible) {
