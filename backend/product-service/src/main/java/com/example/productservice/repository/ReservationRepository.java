@@ -49,4 +49,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "AND r.product.id = :productId " +
             "ORDER BY r.startDate DESC")
     List<Reservation> findReservationLenderId(@Param("productId") Long productId, @Param("lenderId") Long userId);
+
+    @Query("SELECT r FROM Reservation r " +
+            "WHERE (r.lenderId = :lenderId AND r.product.ownerId = :ownerId)" +
+            "AND r.product.id = :productId " +
+            "ORDER BY r.startDate DESC")
+    List<Reservation> findAllByProductIdAndLenderId(@Param("productId") Long productId,
+                                                    @Param("lenderId") Long userId,
+                                                    @Param("ownerId") Long ownerId);
 }
