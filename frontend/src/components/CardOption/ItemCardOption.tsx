@@ -14,9 +14,11 @@ interface ItemCardOptionProps {
     productId: number;
     ownerId?: number;
     isBooked?: boolean;
+    start?: string;
+    end?: string;
 }
 
-const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked }) => {
+const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked, start, end }) => {
     interface bookdatatype {
         startDate: string;
         endDate: string;
@@ -59,7 +61,6 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
         const url = `/product-service/auth/reservation/list/${productId}`;
         axBase(token)({ url: url })
             .then(res => {
-                console.log(res.data.data);
                 setBookData(res.data.data);
                 setModalNum(2);
             })
@@ -183,7 +184,12 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             </div>
                         ) : modalNum === 2 ? (
                             <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 flex flex-col items-center">
-                                <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} />
+                                {start && end ? (
+                                    <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} startDate={start} endDate={end} />
+                                ) : (
+                                    <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} />
+                                )}
+
                                 <Square bgColor="blue" textColor="white" innerValue="확인" className="w-[100%] bg-[#FF6262]" onClick={() => setModalNum(0)} />
                             </div>
                         ) : modalNum === 3 ? (
