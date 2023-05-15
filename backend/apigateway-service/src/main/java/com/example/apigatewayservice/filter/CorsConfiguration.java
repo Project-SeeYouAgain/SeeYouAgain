@@ -36,7 +36,7 @@ public class CorsConfiguration {
                         || origin.startsWith("https://k8c101.p.ssafy.io")
                         || origin.startsWith("http://k8c101.p.ssafy.io:3000")
                         || origin.startsWith("https://k8c101.p.ssafy.io:3000")) {
-                    if (!request.getPath().toString().equals("/chatting-service/ws/info")) {
+                    if (!request.getPath().toString().equals("/chatting-service/ws")) {
                         headers.add("Access-Control-Allow-Origin", origin);
                         headers.setAccessControlAllowCredentials(true);
                     }
