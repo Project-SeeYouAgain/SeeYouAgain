@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.dto.request.fcm.FCMTokenRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
 import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
 import com.example.userservice.dto.response.user.ProfileResponseDto;
@@ -15,4 +16,5 @@ public interface AuthService {
 
     String updateNickname(Long userId, NicknameRequestDto requestDto);
 
+    void updateFCMToken(Long userId, FCMTokenRequestDto requestDto);
 }
