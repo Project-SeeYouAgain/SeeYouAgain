@@ -32,7 +32,7 @@ function WebTextInput({ setData, onSubmit, data }: { setData: React.Dispatch<Rea
         <div>
             <div className="grid grid-cols-[1fr,3fr] items-center mb-8">
                 <span className="font-bold text-[1.2rem] mb-[0.43rem]">제목</span>
-                <input type="text" className="px-[1rem] h-[2.5rem] border border-darkgrey focus:outline-none" onKeyPress={handleKeyPress} onChange={handleTitleChange} />
+                <input type="text" className="px-[1rem] h-[2.5rem] border border-darkgrey rounded-md focus:outline-none" onKeyPress={handleKeyPress} onChange={handleTitleChange} />
             </div>
             {/* AI로 시세 가격 추천이 가능할까?  */}
             <div className="grid grid-cols-[1fr,3fr] items-center mb-8">
