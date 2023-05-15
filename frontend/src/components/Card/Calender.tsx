@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import styles from './Calender.module.css';
 import { subDays } from 'date-fns';
 
@@ -17,38 +17,58 @@ interface AvailablePeriod {
 interface CustomDatePickerProps {
     reservationPeriods: ReservationPeriod[];
     availablePeriod: AvailablePeriod;
+    startDate?: string;
+    endDate?: string;
 }
 
-function CustomDatePicker({ reservationPeriods, availablePeriod }: CustomDatePickerProps) {
+function CustomDatePicker({ reservationPeriods, availablePeriod, startDate, endDate }: CustomDatePickerProps) {
     const [selectDate, setSelectDate] = useState<Date | null>(null);
 
     const minday = () => {
-        return new Date(availablePeriod.startDate) <= new Date() ? new Date(availablePeriod.startDate) : new Date();
+        return new Date(availablePeriod.startDate) <= new Date() ? new Date() : new Date(availablePeriod.startDate);
     };
 
     const maxday = () => {
         return new Date(availablePeriod.endDate);
     };
 
-    const reservationdays = reservationPeriods.map(period => ({
-        start: new Date(period.startDate),
-        end: new Date(period.endDate),
-    }));
+    const reservationDays = reservationPeriods.flatMap(period => {
+        const start = new Date(period.startDate);
+        const end = new Date(period.endDate);
+        const days = [];
 
-    const isReservationDay = (date: Date) => {
-        return reservationdays.some(period => date >= subDays(new Date(period.start), 1) && date <= period.end);
+        for (let day = start; day <= end; day.setDate(day.getDate() + 1)) {
+            days.push(new Date(day));
+        }
+
+        return days;
+    });
+
+    const isMyReservationDay = (date: Date) => {
+        if (startDate && endDate) {
+            const start = subDays(new Date(startDate), 1);
+            const end = new Date(endDate);
+            if (start <= date && end >= date) {
+                return true;
+            } else {
+                false;
+            }
+        } else {
+            false;
+        }
     };
 
     return (
         <DatePicker
-            onChange={day => setSelectDate(day)}
-            selected={selectDate}
+            onChange={date => setSelectDate(date)}
             minDate={new Date(minday())}
             maxDate={new Date(maxday())}
+            selected={selectDate}
             readOnly
             disabled
             inline
-            dayClassName={date => (date <= subDays(minday(), 1) || date >= maxday() || isReservationDay(date) ? styles.dayDisabled : styles.day)}
+            excludeDates={reservationDays}
+            dayClassName={date => (isMyReservationDay(date) ? styles.myReservationDay : date.getDate() === selectDate?.getDate() ? styles.nochange : null)}
         />
     );
 }

@@ -58,6 +58,8 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
     };
     const handleLocationChange = () => {
         setIsLocationOn(true);
+        const updatedData = { ...data }; // data의 복사본 생성
+        onSubmit(updatedData);
     };
     // 거래장소 선택 모달용
     const [isLocationOn, setIsLocationOn] = useState(false);

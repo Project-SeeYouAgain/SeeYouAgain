@@ -51,6 +51,7 @@ function Detail() {
     const [data, setData] = useState<ProductData>();
     const [isHeartFill, setIsHeartFill] = useState<boolean>(false);
     const token = useRecoilValue(userState).accessToken;
+    const myUserId = Number(useRecoilValue(userState).id);
     const [menuState, setMenuState] = useState<number>(1);
     const [product, setProduct] = useState<number>(1);
 

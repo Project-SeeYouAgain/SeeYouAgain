@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { axAuth, axBase } from '@/apis/axiosinstance';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
+import { userState, productState } from 'recoil/user/atoms';
 import Calender from '../../components/Card/Calender';
 import Square from '../Button/Square';
 import Link from 'next/link';
@@ -12,12 +12,13 @@ interface ItemCardOptionProps {
     menuState: number;
     dropdownVisible: boolean;
     productId: number;
-    onRefresh?: () => void;
     ownerId?: number;
     isBooked?: boolean;
+    start?: string;
+    end?: string;
 }
 
-const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked, onRefresh }) => {
+const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked, start, end }) => {
     interface bookdatatype {
         startDate: string;
         endDate: string;
@@ -26,14 +27,24 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
     const token = useRecoilValue(userState).accessToken;
     const [modalNum, setModalNum] = useState<number>(0);
     const [bookData, setBookData] = useState<bookdatatype[]>([]);
+    const [productStateData, setProductStateData] = useRecoilState(productState);
 
     function CancelBook() {
         setModalNum(0);
-        const url = `/product-service/auth/reservation/${productId}`;
+        let type;
+        if (isRent) {
+            type = 1;
+        } else {
+            type = 0;
+        }
+        const url = `/product-service/auth/reservation/${type}/${productId}`;
         axAuth(token)({ method: 'delete', url: url })
             .then(() => {
                 console.log('예약 취소 완료');
-                onRefresh?.();
+                setProductStateData({
+                    ...productStateData,
+                    refreshKey: productStateData.refreshKey + 1,
+                });
             })
             .catch(err => console.log(err));
     }
@@ -50,7 +61,6 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
         const url = `/product-service/auth/reservation/list/${productId}`;
         axBase(token)({ url: url })
             .then(res => {
-                console.log(res.data.data);
                 setBookData(res.data.data);
                 setModalNum(2);
             })
@@ -83,23 +93,25 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
             .catch(err => console.log(err));
     }
 
-    function openHideConfirm(event: React.MouseEvent) {
+    function openDeleteConfirm(event: React.MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
         setModalNum(3);
     }
 
-    function HideItem() {
-        const url = `/product-service/auth/hide/${productId}`;
-        axAuth(token)({ method: 'patch', url: url })
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
-    }
-
-    function openUnhideConfirm(event: React.MouseEvent) {
-        event.stopPropagation();
-        event.preventDefault();
-        setModalNum(4);
+    function DeleteItem() {
+        const url = `/product-service/auth/${productId}`;
+        axAuth(token)({ method: 'delete', url: url })
+            .then(() => {
+                setModalNum(0);
+                setProductStateData({
+                    ...productStateData,
+                    refreshKey: productStateData.refreshKey + 1,
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     if (dropdownVisible) {
@@ -137,11 +149,9 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenCalender(event)}>
                                 대여일정
                             </div>
-                            {isBooked ? null : (
-                                <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openHideConfirm(event)}>
-                                    숨김
-                                </div>
-                            )}
+                            <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => OpenConfirmBookCancel(event)}>
+                                예약취소
+                            </div>
                         </>
                     ) : menuState === 2 ? (
                         <>
@@ -150,8 +160,8 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             </div>
                         </>
                     ) : (
-                        <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openUnhideConfirm(event)}>
-                            재등록
+                        <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => openDeleteConfirm(event)}>
+                            삭제
                         </div>
                     )}
                 </div>
@@ -174,23 +184,19 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                             </div>
                         ) : modalNum === 2 ? (
                             <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 flex flex-col items-center">
-                                <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} />
+                                {start && end ? (
+                                    <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} startDate={start} endDate={end} />
+                                ) : (
+                                    <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} />
+                                )}
+
                                 <Square bgColor="blue" textColor="white" innerValue="확인" className="w-[100%] bg-[#FF6262]" onClick={() => setModalNum(0)} />
                             </div>
                         ) : modalNum === 3 ? (
                             <div className="bg-white p-6 rounded-lg shadow-md absolute w-[80%] text-center">
-                                <span>해당 아이템을 숨기시겠습니까?</span>
-                                <div className="text-[0.8rem] text-[#8E8E93] mb-[1rem]">(더 이상 다른 사람들에게 노출되지 않습니다.)</div>
+                                <span>해당 아이템을 삭제하시겠습니까?</span>
                                 <div className="w-[100%] flex justify-around">
-                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={HideItem} />
-                                    <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
-                                </div>
-                            </div>
-                        ) : modalNum === 4 ? (
-                            <div className="bg-white p-6 rounded-lg shadow-md absolute w-[80%] text-center">
-                                <span>해당 아이템을 등록하시겠습니까?</span>
-                                <div className="w-[100%] flex justify-around">
-                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={HideItem} />
+                                    <Square bgColor="blue" textColor="white" innerValue="예" className="w-[5rem]" onClick={DeleteItem} />
                                     <Square textColor="white" innerValue="아니오" className="w-[5rem] bg-[#FF6262]" onClick={() => setModalNum(0)} />
                                 </div>
                             </div>

@@ -3,11 +3,11 @@ import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
 import Header from '@/components/Container/components/Header';
 import Menu from '@/components/Card/Menu';
-import { axBase } from '../../apis/axiosinstance';
+import { axBase, axAuth } from '../../apis/axiosinstance';
 import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
+import { userState, productState } from 'recoil/user/atoms';
 import noresult from '@/images/no-results.png';
 import Image from 'next/image';
 
@@ -22,33 +22,42 @@ function Rent() {
         isSafe?: boolean;
         isCart?: boolean;
         productId: number;
-        isHide: boolean;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
     const token = useRecoilValue(userState).accessToken;
-    const [len, setLen] = useState<number>(0);
     const [bookList, setBookList] = useState<RentalItem[]>([]);
+    const [holdList, setHoldList] = useState<RentalItem[]>([]);
     const dragThreshold = 20;
+    const refreshKey = useRecoilValue(productState).refreshKey;
 
     function SelectMenu(data: number) {
         setMenuState(data);
     }
 
     useEffect(() => {
-        const url = `/product-service/auth/myproduct/${menuState}`;
-        axBase(token)({ url })
+        let url = `/product-service/auth/myproduct/${menuState}`;
+        if (menuState === 3) {
+            url = '/product-service/auth/myproduct/1';
+        }
+        axAuth(token)({ url })
             .then(res => {
                 console.log(res.data.data);
                 setItemList(res.data.data);
-                setLen(res.data.data.filter((item: RentalItem) => !item.startDate && !item.isHide).length);
+                const today = new Date();
                 const BookItems = res.data.data.filter((item: RentalItem) => {
-                    return item.startDate && !item.isHide;
+                    const startDate = new Date(item.startDate);
+                    const endDate = new Date(item.endDate);
+                    return startDate > today;
                 });
                 setBookList(BookItems);
+                const HoldItems = res.data.data.filter((item: RentalItem) => {
+                    return item.startDate === null;
+                });
+                setHoldList(HoldItems);
             })
             .catch(err => console.log(err));
-    }, [menuState]);
+    }, [menuState, refreshKey]);
 
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
@@ -100,71 +109,64 @@ function Rent() {
         <Container>
             <Header title="내 아이템"></Header>
             <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
-                <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'대기 목록'} title2={'대여중'} title3={'숨김'} />
+                <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
                 {menuState === 1 ? (
                     <div>
-                        <h2>예약중</h2>
                         {bookList.length === 0 ? (
                             <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
                         ) : (
                             bookList.map((item, index) => (
-                                <Link key={index} href={''}>
-                                    <Card
-                                        productImg={item.productImg}
-                                        title={item.title}
-                                        location={item.location}
-                                        price={item.price}
-                                        startDate={item.startDate}
-                                        endDate={item.endDate}
-                                        isSafe={item.isSafe}
-                                        menuState={menuState}
-                                        productId={item.productId}
-                                        isBooked={true}
-                                    />
-                                </Link>
+                                <Card
+                                    productImg={item.productImg}
+                                    title={item.title}
+                                    location={item.location}
+                                    price={item.price}
+                                    startDate={item.startDate}
+                                    endDate={item.endDate}
+                                    isSafe={item.isSafe}
+                                    menuState={menuState}
+                                    productId={item.productId}
+                                    isBooked={true}
+                                    key={index}
+                                />
                             ))
                         )}
-                        <h2>대기중</h2>
-                        {itemList.length === 0 || len === 0 ? (
-                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                        ) : (
-                            itemList
-                                .filter(item => !item.startDate)
-                                .map((item, index) => (
-                                    <Link key={index} href={''}>
-                                        <Card
-                                            productImg={item.productImg}
-                                            title={item.title}
-                                            location={item.location}
-                                            price={item.price}
-                                            startDate={item.startDate}
-                                            endDate={item.endDate}
-                                            isSafe={item.isSafe}
-                                            menuState={menuState}
-                                            productId={item.productId}
-                                            isBooked={false}
-                                        />
-                                    </Link>
-                                ))
-                        )}
                     </div>
-                ) : itemList.length === 0 ? (
-                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                ) : (
-                    itemList.map((item, index) => (
-                        <Link key={index} href={''}>
+                ) : menuState === 2 ? (
+                    itemList.length === 0 ? (
+                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                    ) : (
+                        itemList.map((item, index) => (
                             <Card
                                 productImg={item.productImg}
                                 title={item.title}
                                 location={item.location}
                                 price={item.price}
-                                startDate={item.startDate}
-                                endDate={item.endDate}
                                 isSafe={item.isSafe}
                                 menuState={menuState}
                                 productId={item.productId}
+                                isBooked={true}
+                                key={index}
+                                startDate={item.startDate}
+                                endDate={item.endDate}
                             />
-                        </Link>
+                        ))
+                    )
+                ) : holdList.length === 0 ? (
+                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                ) : (
+                    holdList.map((item, index) => (
+                        <Card
+                            productImg={item.productImg}
+                            title={item.title}
+                            location={item.location}
+                            price={item.price}
+                            isSafe={item.isSafe}
+                            menuState={menuState}
+                            productId={item.productId}
+                            isBooked={true}
+                            key={index}
+                        />
                     ))
                 )}
             </div>

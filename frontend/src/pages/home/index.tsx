@@ -17,6 +17,8 @@ import CategoryModal from '@/components/Modal/CategoryModal';
 import styles from './index.module.scss';
 import { useMediaQuery } from 'react-responsive';
 import WebNavbar from '@/components/Container/components/WebNavbar';
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 interface dataProps {
     thumbnailUrl: string;
@@ -73,6 +75,7 @@ function Home() {
     };
 
     const [productId, setProductId] = useState<number>();
+    const [price, setPrice] = useState<number>();
     const [hasMore, setHasMore] = useState<boolean>(true);
     const router = useRouter();
     const userset = useRecoilValue(userState);
@@ -96,11 +99,13 @@ function Home() {
                 location: isMyLocation,
                 category: selectedCategoryName,
                 myLocation: user.location,
+                price: null,
             },
         }).then(res => {
             const productList = res.data.data;
             setListData((_list_data: dataProps[]) => [...productList]);
             setProductId(productList[productList.length - 1]?.productId);
+            setPrice(productList[productList.length - 1]?.price);
 
             if (productList.length < 20) {
                 setHasMore(false);
@@ -122,11 +127,13 @@ function Home() {
                 location: isMyLocation,
                 category: selectedCategoryName,
                 myLocation: user.location,
+                price: price,
             },
         }).then(res => {
             const productList = res.data.data;
             setListData((_list_data: dataProps[]) => [..._list_data, ...productList]);
             setProductId(productList[productList.length - 1]?.productId);
+            setPrice(productList[productList.length - 1]?.price);
 
             if (productList.length < 20) {
                 setHasMore(false);
@@ -144,6 +151,68 @@ function Home() {
     const [webContainerHeight, setWebContainerHeight] = useState<number>(0);
 
     useEffect(() => {
+        const firebaseConfig = {
+            apiKey: 'AIzaSyDwEsV86gH2v-5Qkm68DzJbqhByzvYuZng',
+            authDomain: 'seeyouagain-d505e.firebaseapp.com',
+            projectId: 'seeyouagain-d505e',
+            storageBucket: 'seeyouagain-d505e.appspot.com',
+            messagingSenderId: '299695008110',
+            appId: '1:299695008110:web:d6f1d174384198993cb97f',
+            measurementId: 'G-5JE202YV21',
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        if (Notification.permission !== 'granted') {
+            // Chrome - 유저에게 푸시 알림을 허용하겠냐고 물어보고, 허용하지 않으면 return!
+            try {
+                Notification.requestPermission().then(permission => {
+                    // eslint-disable-next-line no-useless-return
+                    if (permission !== 'granted') return;
+                });
+            } catch (error) {
+                // Safari - 유저에게 푸시 알림을 허용하겠냐고 물어보고, 허용하지 않으면 return!
+                if (error instanceof TypeError) {
+                    Notification.requestPermission().then(permission => {
+                        // eslint-disable-next-line no-useless-return
+                        if (permission !== 'granted') return;
+                    });
+                } else {
+                    console.error(error);
+                }
+            }
+        }
+
+        console.log('권한 요청 중...');
+
+        Notification.requestPermission().then(permission => {
+            if (permission === 'denied') {
+                console.log('알림 권한 허용 안됨');
+                return;
+            }
+            // 권한이 'granted'인 경우의 처리
+        });
+
+        console.log('알림 권한이 허용됨');
+
+        const fcmToken = getToken(messaging, {
+            vapidKey: 'BOxHR5SEepMdoj1-Zuy-qJC-S5SABE3eIZ_-e66-GDXjspEDsguTUG69NMz--8wDrTlZk3qiPzlfAhzs8viWEIo',
+        }).then(res => {
+            axAuth(token)({
+                method: 'patch',
+                url: '/user-service/auth/firebase-token',
+                data: {
+                    firebaseToken: res,
+                },
+            });
+        });
+
+        onMessage(messaging, payload => {
+            console.log('메시지가 도착했습니다.', payload);
+            // ...
+        });
+
         const handleResize = () => {
             const windowHeight = window.innerHeight;
             const containerHeight = windowHeight - 247.2;

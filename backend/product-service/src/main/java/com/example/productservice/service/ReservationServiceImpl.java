@@ -3,6 +3,7 @@ package com.example.productservice.service;
 import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.request.ReservationReturnRequestDto;
 import com.example.productservice.dto.response.ReservationListResponseDto;
+import com.example.productservice.dto.response.ReservationLocationResponseDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 import com.example.productservice.entity.*;
 import com.example.productservice.exception.ApiException;
@@ -159,6 +160,20 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         return returnList;
+    }
+
+    // 예약 조회
+    @Override
+    public ReservationLocationResponseDto getLocation(Long myId, Long productId, Long userId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+        Reservation reservation = null;
+        if (product.getOwnerId().equals(myId)) {
+            reservation = reservationRepository.findAllByProductIdAndLenderId(productId, userId, myId).get(0);
+        } else {
+            reservation = reservationRepository.findAllByProductIdAndLenderId(productId, myId, userId).get(0);
+        }
+        return ReservationLocationResponseDto.from(reservation);
     }
 
     /**

@@ -8,7 +8,7 @@ import Card from '../../components/Card/ItemCard';
 import Link from 'next/link';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
+import { userState, productState } from 'recoil/user/atoms';
 import noresult from '@/images/no-results.png';
 import Image from 'next/image';
 
@@ -29,11 +29,7 @@ function Rent() {
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
     const token = useRecoilValue(userState).accessToken;
-    const [refreshKey, setRefreshKey] = useState(0);
-
-    const handleRefresh = () => {
-        setRefreshKey(refreshKey + 1);
-    };
+    const refreshKey = useRecoilValue(productState).refreshKey;
 
     function SelectMenu(data: number) {
         setMenuState(data);
@@ -56,22 +52,20 @@ function Rent() {
                 <Menu onSelectMenu={SelectMenu} dragMenu={1} title1={'대여중'} title2={'예약중'} title3={'반납완료'} />
                 {itemList.length !== 0 ? (
                     itemList.map((item, index) => (
-                        <Link key={index} href={''}>
-                            <Card
-                                productImg={item.productImg}
-                                title={item.title}
-                                location={item.location}
-                                price={item.price}
-                                startDate={item.startDate}
-                                endDate={item.endDate}
-                                isCart={item.isCart}
-                                isSafe={item.isSafe}
-                                menuState={menuState}
-                                productId={item.productId}
-                                onRefresh={handleRefresh}
-                                ownerId={item.ownerId}
-                            />
-                        </Link>
+                        <Card
+                            productImg={item.productImg}
+                            title={item.title}
+                            location={item.location}
+                            price={item.price}
+                            startDate={item.startDate}
+                            endDate={item.endDate}
+                            isCart={item.isCart}
+                            isSafe={item.isSafe}
+                            menuState={menuState}
+                            productId={item.productId}
+                            ownerId={item.ownerId}
+                            key={index}
+                        />
                     ))
                 ) : (
                     <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
