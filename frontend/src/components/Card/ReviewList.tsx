@@ -77,7 +77,7 @@ function ReviewList(propdata: dataprop) {
             ) : (
                 <div>
                     <div>
-                        <Image src={write} alt="리뷰작성" className=" w-[8rem] ml-[25vw]" />
+                        <Image src={write} alt="리뷰작성" className=" w-[8rem] m-auto" />
                         <p className="text-center text-darkgrey mt-[1rem]">아직 작성된 리뷰가 없어요.</p>
                     </div>
                 </div>
