@@ -3,6 +3,7 @@ package com.example.productservice.service;
 import com.example.productservice.dto.request.ReservationRequestDto;
 import com.example.productservice.dto.request.ReservationReturnRequestDto;
 import com.example.productservice.dto.response.ReservationListResponseDto;
+import com.example.productservice.dto.response.ReservationLocationResponseDto;
 import com.example.productservice.dto.response.ReservationResponseDto;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface ReservationService {
     void deleteReservation(Long userId, Integer state, Long productId);
 
     List<ReservationListResponseDto> getReservation(Long productId);
+
+    ReservationLocationResponseDto getLocation(Long myId, Long productId, Long userId);
 }
