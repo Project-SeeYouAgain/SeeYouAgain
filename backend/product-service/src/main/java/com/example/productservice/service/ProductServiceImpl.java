@@ -177,7 +177,8 @@ public class ProductServiceImpl implements ProductService {
                         requestDto.getProductId(),
                         requestDto.getCategory(),
                         requestDto.getLocation(),
-                        requestDto.getMyLocation()
+                        requestDto.getMyLocation(),
+                        requestDto.getPrice()
                 );
 
         return getProductResponse(productList, userId);
