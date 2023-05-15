@@ -70,6 +70,8 @@ const pickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -104,6 +106,8 @@ const pickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -138,6 +142,8 @@ const pickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -172,6 +178,8 @@ const pickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우

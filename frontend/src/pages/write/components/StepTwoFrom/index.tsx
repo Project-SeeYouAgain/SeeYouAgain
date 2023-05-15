@@ -58,7 +58,6 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
     };
     const handleLocationChange = () => {
         setIsLocationOn(true);
-        setData(prevData => ({ ...prevData, isLocationOn: true }));
         onSubmit(data);
     };
     // 거래장소 선택 모달용
