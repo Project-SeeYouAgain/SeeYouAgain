@@ -30,6 +30,7 @@ function Write() {
 
     const handleStepTwoSubmit = (data: StepTwoData) => {
         setStepTwoData(data);
+        console.log('스텝투데이터:', data); // 데이터 확인용
     };
     // 날짜 변환 함수
     function formatDate(dateStr: any) {
