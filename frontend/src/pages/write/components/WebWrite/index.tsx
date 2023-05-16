@@ -202,8 +202,7 @@ function index({ handleSubmit }: Props) {
                         <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
                         {isLocationOn && (
                             <div className="fixed top-0 left-0 right-0 bottom-0 z-50">
-                                <div className="absolute top-0 left-0 right-0 bottom-0 bg-white"></div>
-                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <div className="absolute w-full bg-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                     <PickLocation data={data} onSubmit={handleStepTwoSubmit} setData={setData} setIsLocationOn={setIsLocationOn} />
                                 </div>
                             </div>
