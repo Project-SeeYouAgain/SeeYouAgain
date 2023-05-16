@@ -42,6 +42,7 @@ interface ChannelInfo {
 function Channel() {
     const cookie = new Cookies();
     const token = useRecoilValue(userState).accessToken;
+    const myNickname = useRecoilValue(userState).nickname;
 
     const router = useRouter();
     const [chatList, setChatList] = useState<ChatData[]>([]);
@@ -98,6 +99,16 @@ function Channel() {
                 chat: chat,
                 isImage: isImage,
             }),
+        });
+
+        axAuth(token)({
+            url: '/user-service/auth/notification',
+            method: 'post',
+            data: {
+                targetUserId: channelInfo?.userId,
+                title: myNickname,
+                body: chat,
+            },
         });
 
         setChat('');

@@ -15,7 +15,6 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
         setEndDate(update[1]);
         if (onChange) {
             onChange(update[0], update[1]);
-            setIsCheck(true);
         }
     }
     useEffect(() => {
