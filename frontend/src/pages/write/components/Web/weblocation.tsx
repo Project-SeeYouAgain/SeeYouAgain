@@ -236,42 +236,30 @@ const webpickLocation = ({
     }, [dots]);
 
     return (
-        <div className="w-full h-screen">
-            <>
-                {/* 나머지 페이지 내용 */}
-                {userLocation && (
-                    <div className="p-4 font-bold h-[15vh] flex items-center justify-center ">
-                        <div className="w-screen">
-                            <div className="flex justify-center text-center h-fit ">
-                                <div>
-                                    <p className="font-PreB text-[1.5rem]">이웃과 만나서 거래할 장소를 선택해 주세요.</p>
-                                    <p className="font-PreS text-[1.2rem]">좌측 상단 위치 권한을 허용해야 거래 장소를 선택할 수 있습니다.</p>
-                                    <div className="bg-blue h-7 mt-2">
-                                        <p className="text-white text-[1.1rem] font-PreS">안전한 세이프존에서 거래하는 것을 추천해요.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                <div id="map" className="w-full h-[85vh] relative">
-                    {userLocation && (
-                        <KakaoMap
-                            onCenter={(lat, lng, score) => {
-                                setLat(lat);
-                                setLng(lng);
-                                setScore(score);
-                            }}
-                            click={true}
-                        />
-                    )}
-                    <div className="absolute bottom-10 z-10 w-full">
-                        <button className="w-2/3 h-20 m-auto block rounded-xl text-center text-white text-xl  bg-blue" onClick={clickPosition}>
-                            장소 확정
-                        </button>
-                    </div>
+        <div className="w-full h-screen relative">
+            {userLocation && (
+                <div className="p-4 px-8 w-1/2 text-center m-auto absolute bottom-5 z-40 left-1/2 transform -translate-x-1/2 bg-white/70 rounded-lg">
+                    <p className="font-PreB text-3xl w-full font-bold">이웃과 만나서 거래할 장소를 선택해 주세요.</p>
+                    <p className=" text-3xl font-bold font-PreS">
+                        <span className="text-blue font-PreB">안전한 세이프존</span>에서 거래하는 것을 추천해요.
+                    </p>
+                    <p className="font-PreS text-gray-500 text-xl">위치 권한을 허용해야 거래 장소를 선택할 수 있습니다.</p>
+                    <button className="w-full mt-2 h-[60px] m-auto block rounded-xl text-center text-white text-3xl  bg-blue" onClick={clickPosition}>
+                        장소 확정
+                    </button>
                 </div>
-            </>
+            )}
+            {userLocation && (
+                <KakaoMap
+                    onCenter={(lat, lng, score) => {
+                        setLat(lat);
+                        setLng(lng);
+                        setScore(score);
+                    }}
+                    click={false}
+                />
+            )}
+            <div className="absolute bottom-10 z-10 w-full"></div>
         </div>
     );
 };
