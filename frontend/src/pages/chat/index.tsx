@@ -26,7 +26,14 @@ function chat() {
     const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
-        getChannelList(selectedTab);
+        const intervalId = setInterval(() => {
+            getChannelList(selectedTab);
+        }, 2000);
+
+        // cleanup function
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [selectedTab]);
 
     const getChannelList = (type: string) => {
@@ -92,7 +99,7 @@ function chat() {
                                 nickname={chatRoomData.nickname}
                                 location={chatRoomData.location}
                                 latestMessageDate={chatRoomData.lastMessageDate}
-                                latestMessage={chatRoomData.isImage ? "사진" : chatRoomData.lastMessage}
+                                latestMessage={chatRoomData.isImage ? '사진' : chatRoomData.lastMessage}
                                 profileImg={chatRoomData.profileImg}
                                 identifier={chatRoomData.identifier}
                                 notReadMessageSize={chatRoomData.notReadMessageSize}
