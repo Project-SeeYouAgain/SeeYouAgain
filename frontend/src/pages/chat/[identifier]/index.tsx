@@ -100,6 +100,16 @@ function Channel() {
             }),
         });
 
+        axAuth(token)({
+            url: '/user-service/auth/notification',
+            method: 'post',
+            data: {
+                targetUserId: channelInfo?.userId,
+                title: channelInfo?.nickname,
+                body: chat,
+            },
+        });
+
         setChat('');
     };
 
