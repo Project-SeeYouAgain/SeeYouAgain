@@ -27,12 +27,12 @@ public class ReviewController {
                 .body(new BaseResponseDto<>(200, "success", reviewService.getProductReview(productId, lastReviewId)));
     }
 
-    @PostMapping("/{productId}")
-    public ResponseEntity<BaseResponseDto<?>> createProductReview(HttpServletRequest request,
-                                                                  @PathVariable("productId") Long productId,
-                                                                  @RequestPart ReviewRequestDto requestDto,
-                                                                  @RequestPart(required = false) MultipartFile reviewImg) {
-        reviewService.createProductReview(getUserId(request), productId, requestDto, reviewImg);
+    @PostMapping("/{reservationId}")
+    public ResponseEntity<BaseResponseDto<?>> createReservationReview(HttpServletRequest request,
+                                                                      @PathVariable("reservationId") Long reservationId,
+                                                                      @RequestPart ReviewRequestDto requestDto,
+                                                                      @RequestPart(required = false) MultipartFile reviewImg) {
+        reviewService.createReservationReview(getUserId(request), reservationId, requestDto, reviewImg);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BaseResponseDto<>(201, "success"));
     }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface ReviewService {
     List<ReviewResponseDto> getProductReview(Long productId, Long lastReviewId);
 
-    void createProductReview(Long userId, Long productId, ReviewRequestDto requestDto, MultipartFile reviewImg);
+    void createReservationReview(Long userId, Long reservationId, ReviewRequestDto requestDto, MultipartFile reviewImg);
 
     void updateProductReview(Long userId, Long reviewId, ReviewRequestDto requestDto, MultipartFile reviewImg);
 
