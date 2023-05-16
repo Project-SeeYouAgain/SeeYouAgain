@@ -50,8 +50,8 @@ function DetailHeader({ title, url = undefined }: DetailProps) {
         setModalMessage(title);
     }
 
-    const backgroundColor = scrollY < 200 ? 'rgba(255, 255, 255, 0.5)' : 'white';
-    const textColor = scrollY < 200 ? 'white' : 'blue';
+    const backgroundColor = scrollY < 150 ? 'rgba(255, 255, 255, 0.5)' : 'white';
+    const textColor = scrollY < 150 ? 'white' : 'blue';
 
     return (
         <div className="fixed top-0 z-30">
