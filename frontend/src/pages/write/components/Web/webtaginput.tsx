@@ -7,7 +7,6 @@ type TagInputProps = {
 };
 
 function WebTagInput({ value = [], onChange }: TagInputProps) {
-    // const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState('');
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,7 +43,7 @@ function WebTagInput({ value = [], onChange }: TagInputProps) {
                     onKeyDown={handleKeyDown}
                     onChange={handleInputChange}
                     placeholder="#상품을 표현할 태그를 작성해주세요."
-                    className="mb-[1rem] px-[1rem] w-[100%] h-[2.5rem] border border-darkgrey focus:outline-none"
+                    className="mb-[1rem] px-[1rem] w-[100%] h-[3rem] rounded-md border border-darkgrey focus:outline-none"
                 />
                 <div className="relative flex">
                     {value.map(tag => (

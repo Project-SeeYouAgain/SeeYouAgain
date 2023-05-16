@@ -15,6 +15,7 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
         setEndDate(update[1]);
         if (onChange) {
             onChange(update[0], update[1]);
+            setIsCheck(true);
         }
     }
     useEffect(() => {
@@ -42,12 +43,10 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
 
     return (
         <div className="relative grid grid-cols-[1fr,3fr] mb-10 ">
-            <div>
-                <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 대여일정 </p>
-            </div>
+            <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 대여일정 </p>
             <div>
                 <button
-                    className="flex items-center justify-center px-4 py-2 text-[1rem] font-NanumNeo font-bold text-blue bg-lightgrey  focus:outline-none hover:bg-blue hover:text-white"
+                    className="flex items-center justify-center px-4 py-2 text-[1rem] font-NanumNeo font-bold text-blue bg-lightgrey rounded-md  focus:outline-none hover:bg-blue hover:text-white"
                     onClick={toggleDropdown}
                 >
                     {startDate && endDate ? ` ${format(startDate, 'yyyy-MM-dd')}  ~  ${format(endDate, 'yyyy-MM-dd')}` : '날짜 선택'}
