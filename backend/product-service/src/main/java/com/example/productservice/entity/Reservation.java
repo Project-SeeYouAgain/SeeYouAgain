@@ -20,7 +20,7 @@ public class Reservation {
     private Long id;
 
     @ManyToOne(targetEntity = Product.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(nullable = false)
@@ -48,6 +48,9 @@ public class Reservation {
     private Boolean isReturnCheck;
 
     @Column(nullable = false)
+    private Boolean hasReview;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ReservationEnum state;
 
@@ -66,6 +69,7 @@ public class Reservation {
                 .location(dto.getLocation())
                 .isCheck(false)
                 .isReturnCheck(false)
+                .hasReview(false)
                 .state(state)
                 .build();
     }
@@ -76,6 +80,10 @@ public class Reservation {
 
     public void checkReturnReservation() {
         this.isReturnCheck = true;
+    }
+
+    public void writeReview() {
+        this.hasReview = true;
     }
 
     public void updateState(ReservationEnum state) {

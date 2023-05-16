@@ -5,13 +5,14 @@ import com.example.productservice.dto.request.ReviewRequestDto;
 import com.example.productservice.dto.response.ReviewResponseDto;
 import com.example.productservice.dto.response.UserClientResponseDto;
 import com.example.productservice.entity.Product;
+import com.example.productservice.entity.Reservation;
 import com.example.productservice.entity.Review;
 import com.example.productservice.exception.ApiException;
 import com.example.productservice.exception.ExceptionEnum;
 import com.example.productservice.repository.ProductRepository;
+import com.example.productservice.repository.ReservationRepository;
 import com.example.productservice.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
-import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,16 +22,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
-
-    private final ProductRepository productRepository;
 
     private final UserServiceClient userServiceClient;
 
     private final AmazonS3Service amazonS3Service;
-    
+    private final ReservationRepository reservationRepository;
+
     @Override
     @Transactional(readOnly = true)
     public List<ReviewResponseDto> getProductReview(Long productId, Long lastReviewId) {
@@ -39,28 +39,33 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void createProductReview(Long userId, Long productId, ReviewRequestDto requestDto,
-                                    MultipartFile reviewImg) {
+    public void createReservationReview(Long userId, Long reservationId, ReviewRequestDto requestDto,
+                                        MultipartFile reviewImg) {
         UserClientResponseDto responseDto = userServiceClient.getUserInfo(userId).getData();
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.PRODUCT_NOT_EXIST_EXCEPTION));
+        if (reviewRepository.existsByReservationId(reservationId))
+            throw new ApiException(ExceptionEnum.REVIEW_EXIST_EXCEPTION);
 
-        Review review = getReview(userId, requestDto, responseDto.getNickname(), product, reviewImg);
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
+
+        reservation.writeReview();
+
+        Review review = getReview(userId, requestDto, responseDto.getNickname(), reservation.getProduct(), reservation, reviewImg);
 
         // 리뷰 저장
         reviewRepository.save(review);
     }
 
-    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname, Product product, MultipartFile reviewImg) {
+    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname, Product product, Reservation reservation, MultipartFile reviewImg) {
 
         if (reviewImg.isEmpty()) {
-            return Review.of(product, userId, nickname, requestDto, null, null);
+            return Review.of(product, reservation, userId, nickname, requestDto, null, null);
         }
 
         String reviewKey = saveS3Img(reviewImg);
         String reviewUrl = amazonS3Service.getFileUrl(reviewKey);
-        return Review.of(product, userId, nickname, requestDto, reviewKey, reviewUrl);
+        return Review.of(product, reservation, userId, nickname, requestDto, reviewKey, reviewUrl);
     }
 
     private String saveS3Img(MultipartFile reviewImg) {
