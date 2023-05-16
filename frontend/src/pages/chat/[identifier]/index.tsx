@@ -254,6 +254,7 @@ function Channel() {
             url: `product-service/auth/reservation/${channelInfo?.productId}/${channelInfo?.userId}`,
         }).then(res => {
             console.log(res.data.data);
+            localStorage.setItem('reservation-location', JSON.stringify({ lat: res.data.data.lat, lng: res.data.data.lng }));
         });
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
