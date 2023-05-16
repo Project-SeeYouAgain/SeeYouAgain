@@ -66,6 +66,11 @@ public class User extends TimeStamped {
         this.description = description;
     }
 
+    public void updateProfile(String location, String description) {
+        this.location = location;
+        this.description = description;
+    }
+
     public void addUserRole(Role role) {
         roleSet.add(role);
     }
