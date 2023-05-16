@@ -26,6 +26,8 @@ function chat() {
     const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
+        getChannelList(selectedTab);
+
         const intervalId = setInterval(() => {
             getChannelList(selectedTab);
         }, 2000);
