@@ -9,17 +9,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import useInView from '../Web/useInView';
 
 function SeventhPage() {
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 4000,
-        autoplay: true,
-        autoplaySpeed: 0,
-        cssEase: 'linear',
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        pauseOnHover: false,
-    };
     const [ref, isInView] = useInView(0.5);
     useEffect(() => {
         console.log('Visibility status:', isInView ? 'Second Visible' : '');
@@ -27,27 +16,9 @@ function SeventhPage() {
 
     return (
         <div className={classNames('text-4xl font-bold text-center', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
-            <p className={classNames(styles.margin, styles.blue)}>같이 만들어가는 좋은 세상</p>
-            <p>행복해집니다.</p>
-            <div className="carousel w-full mt-12" ref={ref}>
-                <Slider {...settings}>
-                    <div>
-                        <Image src={img_step_01} alt="step 1" width={400} height={300} className="rounded-3xl p-2" />
-                    </div>
-                    <div>
-                        <Image src={img_step_01} alt="step 1" width={400} height={300} className="rounded-3xl p-2" />
-                    </div>
-                    <div>
-                        <Image src={img_step_01} alt="step 1" width={400} height={300} className="rounded-3xl p-2" />
-                    </div>
-                    <div>
-                        <Image src={img_step_01} alt="step 1" width={400} height={300} className="rounded-3xl p-2" />
-                    </div>
-                    <div>
-                        <Image src={img_step_01} alt="step 1" width={400} height={300} className="rounded-3xl p-2" />
-                    </div>
-                </Slider>
-            </div>
+            <p className={classNames(styles.margin, styles.blue, 'font-PreB')}>이웃과 함께 나누는 기쁨,</p>
+            <p className="font-PreB -mt-2">동네 대여 서비스에서 찾아보세요!</p>
+            <div className="carousel w-full mt-12" ref={ref}></div>
         </div>
     );
 }
