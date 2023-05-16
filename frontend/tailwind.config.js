@@ -8,6 +8,7 @@ module.exports = {
                 sans: ['Pretendard'],
                 NanumNeo: ['NanumNeo'],
                 NanumNeoLt: ['NanumNeoLt'],
+                NanumNeoEB: ['NanumNeoEB'],
                 PreB: ['Pretendard-Bold'],
                 PreR: ['Pretendard-Regular'],
                 PreS: ['Pretendard-SemiBold'],

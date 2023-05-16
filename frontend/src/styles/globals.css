@@ -68,6 +68,11 @@ button {
     src: url('../assets/font/NanumSquareNeo-aLt.ttf') format('truetype') ,       local('NanumNeoLt');
 
 }
+@font-face{
+    font-family: 'NanumNeoEB';
+    src: url('../assets/font/NanumSquareNeo-dEb.ttf') format('truetype') ,       local('NanumNeoEB');
+
+}
 
 @font-face {
     font-family: 'Pretendard-Bold';
