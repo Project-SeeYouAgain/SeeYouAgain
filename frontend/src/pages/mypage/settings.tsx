@@ -137,6 +137,7 @@ function settings() {
             setProfileImg(res.data.data.profileImg);
         });
     }, []);
+
     useEffect(() => {
         const geocoder = new kakao.maps.services.Geocoder();
         if (location) {
@@ -151,6 +152,7 @@ function settings() {
     const click = () => {
         setIndex(true);
     };
+
     const [containerHeight, setContainerHeight] = useState<number>(0);
 
     useEffect(() => {
@@ -178,6 +180,7 @@ function settings() {
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
+    
     const clickPosition = () => {
         if (lng != 0 && lat != 0) {
             Swal.fire({

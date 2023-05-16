@@ -212,22 +212,8 @@ function Home() {
             console.log('메시지가 도착했습니다.', payload);
             // ...
         });
-
-        const handleResize = () => {
-            const windowHeight = window.innerHeight;
-            const containerHeight = windowHeight - 247.2;
-            setContainerHeight(containerHeight);
-        };
-
-        // 초기 로드 및 윈도우 크기 변경 이벤트에 대한 이벤트 핸들러 등록
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
     }, []);
+    
     useEffect(() => {
         const handleResize = () => {
             const windowHeight = window.innerHeight;
