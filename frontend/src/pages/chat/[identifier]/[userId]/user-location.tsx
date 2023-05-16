@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ResponsiveChecker from '@/components/ResponsiveChecker';
-import KakaoMap from '@/components/Location/KakaoMap';
+import KakaoMapForChat from '@/components/Location/KakaoMapForChat';
 import findMap from '@/images/findmap.gif';
 import Image from 'next/image';
 import styles from '../userLocation.module.scss';
@@ -168,7 +168,7 @@ const UserLocation: React.FC = () => {
                         </div>
                     )}
                     <div id="map" className="w-full flex-grow relative">
-                        {userLocation && <KakaoMap lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={otherUserLocation} />}
+                        {userLocation && <KakaoMapForChat lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={otherUserLocation} />}
                     </div>
                     {userLocation && (
                         <div className="absolute bottom-20 right-5 w-1/3 z-10" onClick={clickPosition}>

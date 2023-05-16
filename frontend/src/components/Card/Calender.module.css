@@ -1,10 +1,9 @@
-.day {
-    background-color: white !important;
-    color: black !important;
+.myReservationDay {
+    background-color: rgb(255, 255, 255) !important;
+    color: #5669ff !important;
     cursor: default !important;
 }
-.dayDisabled {
-    background-color: white !important;
-    color: #ccc !important;
-    cursor: default !important;
+.nochange {
+    background-color: rgb(255, 255, 255) !important;
+    color: black !important;
 }

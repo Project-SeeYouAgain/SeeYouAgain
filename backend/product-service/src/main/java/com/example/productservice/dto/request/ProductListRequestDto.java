@@ -16,4 +16,6 @@ public class ProductListRequestDto {
     private Integer sort;
 
     private Long productId;
+
+    private Integer price;
 }

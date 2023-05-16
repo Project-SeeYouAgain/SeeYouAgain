@@ -1,6 +1,7 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.dto.BaseResponseDto;
+import com.example.userservice.dto.request.fcm.FCMTokenRequestDto;
 import com.example.userservice.dto.request.user.MannerCommentRequestDto;
 import com.example.userservice.dto.request.user.NicknameRequestDto;
 import com.example.userservice.dto.request.user.ProfileUpdateRequestDto;
@@ -81,6 +82,21 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", authService.updateNickname(getUserId(request), requestDto)));
+    }
+
+    /**
+     * firebase token을 변경하는 API입니다.
+     *
+     * @param request
+     * @param requestDto
+     */
+    @PatchMapping("/firebase-token")
+    public ResponseEntity<BaseResponseDto<?>> updateFCMToken(HttpServletRequest request,
+                                                             @RequestBody FCMTokenRequestDto requestDto) {
+
+        authService.updateFCMToken(getUserId(request), requestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDto<>(200, "success"));
     }
 
     private Long getUserId(HttpServletRequest request) {

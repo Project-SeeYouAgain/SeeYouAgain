@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import hammer from '@/images/hammer.png';
+import shop from '@/images/shop.png';
 import styles from './Web.module.scss';
 import classNames from 'classnames';
 import useInView from '../Web/useInView';
@@ -12,8 +12,8 @@ function SecondPage() {
     }, [isInView]);
     return (
         <div className={classNames(styles.boxContainer)} ref={ref}>
-            <div className={classNames(styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp, 'flex')}>
-                <Image src={hammer} alt="hammer" width={300} height={200} className="mr-8" />
+            <div className={classNames(styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp, 'flex items-center')}>
+                <Image src={shop} alt="online" width={300} height={400} className="mr-8" />
                 <div className={classNames('whitespace-nowrap align-middle')}>
                     <p className="text-xl">Borrow what you need</p>
                     <p className="text-3xl font-bold">한번 쓰려고 사기엔 아까운 것들</p>
