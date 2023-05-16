@@ -19,6 +19,7 @@ public enum ExceptionEnum {
     LENDER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "L0001", "대여자가 아닙니다."),
     RESERVATION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "RE0001", "존재하지 않는 예약입니다."),
     REVIEW_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "R0001", "존재하지 않는 리뷰입니다."),
+    REVIEW_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "R0002", "이미 리뷰가 존재합니다."),
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다.");
 
     private final HttpStatus status;
