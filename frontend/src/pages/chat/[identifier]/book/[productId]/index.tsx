@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
+import ResponsiveChecker from '@/components/ResponsiveChecker';
 
 function getDatesBetween(start: Date, end: Date): Date[] {
     return eachDayOfInterval({
@@ -174,51 +175,63 @@ function book() {
         }
     };
     const minDate = startDate ? max([new Date(), startDate]) : new Date();
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
+    const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
+    const handleIsMobileChanged = (mobile: boolean) => {
+        setIsMobile(mobile);
+    };
 
     return (
         <Container className="relative h-screen">
-            <CloseHeader title="예약하기" onClose={close} />
-            <div className="px-[1.88rem]">
-                <p className="my-4 font-bold text-xl">대여기간</p>
-                <DatePicker
-                    locale={ko}
-                    inline={true}
-                    minDate={minDate}
-                    maxDate={endDate}
-                    startDate={pickStartDate}
-                    endDate={pickEndDate}
-                    excludeDates={unavailableDateRange}
-                    selectsRange
-                    onChange={handleDateChange}
-                />
-                <div className="mb-4 px-2">
-                    {pickStartDate && pickEndDate ? (
-                        <div className="grid grid-cols-2 text-left">
-                            <div className="text-blue font-bold flex">
-                                <span className="whitespace-nowrap">시작일</span> <span className="text-black font-bold w-full text-center">{format(pickStartDate, 'yy.MM.dd', { locale: ko })}</span>
-                            </div>
-                            <div className="text-blue font-bold flex">
-                                <span className="whitespace-nowrap">종료일</span> <span className="text-black font-bold w-full text-center">{format(pickEndDate, 'yy.MM.dd', { locale: ko })}</span>
+            <ResponsiveChecker message={message} onIsMobileChanged={handleIsMobileChanged} />
+            {isMobile && (
+                <>
+                    <CloseHeader title="예약하기" onClose={close} />
+                    <div className="px-[1.88rem]">
+                        <p className="my-4 font-bold text-xl">대여기간</p>
+                        <DatePicker
+                            locale={ko}
+                            inline={true}
+                            minDate={minDate}
+                            maxDate={endDate}
+                            startDate={pickStartDate}
+                            endDate={pickEndDate}
+                            excludeDates={unavailableDateRange}
+                            selectsRange
+                            onChange={handleDateChange}
+                        />
+                        <div className="mb-4 px-2">
+                            {pickStartDate && pickEndDate ? (
+                                <div className="grid grid-cols-2 text-left">
+                                    <div className="text-blue font-bold flex">
+                                        <span className="whitespace-nowrap">시작일</span>{' '}
+                                        <span className="text-black font-bold w-full text-center">{format(pickStartDate, 'yy.MM.dd', { locale: ko })}</span>
+                                    </div>
+                                    <div className="text-blue font-bold flex">
+                                        <span className="whitespace-nowrap">종료일</span>{' '}
+                                        <span className="text-black font-bold w-full text-center">{format(pickEndDate, 'yy.MM.dd', { locale: ko })}</span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 text-blue font-bold text-left">
+                                    <p>시작일</p>
+                                    <p>종료일</p>
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            <p className="font-bold text-xl"> 거래장소 </p>
+                            <div className="p-4 mt-4 w-full h-20 rounded-2xl border border-solid border-[#aeaeae] flex justify-between content-center items-center" onClick={goTo}>
+                                <p className="font-bold text-darkgrey ">{dong ? '거래장소 : ' + dong : '거래장소 선택하러 가기'} </p>
+                                <Image src={location} alt="location" className="w-16 h-16" />
                             </div>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-2 text-blue font-bold text-left">
-                            <p>시작일</p>
-                            <p>종료일</p>
-                        </div>
-                    )}
-                </div>
-                <div>
-                    <p className="font-bold text-xl"> 거래장소 </p>
-                    <div className="p-4 mt-4 w-full h-20 rounded-2xl border border-solid border-[#aeaeae] flex justify-between content-center items-center" onClick={goTo}>
-                        <p className="font-bold text-darkgrey ">{dong ? '거래장소 : ' + dong : '거래장소 선택하러 가기'} </p>
-                        <Image src={location} alt="location" className="w-16 h-16" />
                     </div>
-                </div>
-            </div>
-            <button className="absolute bottom-0 w-full h-16 bg-blue text-white text-xl font-bold" onClick={reservation}>
-                예약확정
-            </button>
+                    <button className="absolute bottom-0 w-full h-16 bg-blue text-white text-xl font-bold" onClick={reservation}>
+                        예약확정
+                    </button>
+                </>
+            )}
         </Container>
     );
 }
