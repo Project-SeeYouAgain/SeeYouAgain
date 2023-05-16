@@ -28,7 +28,6 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
         '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:black; font-family:NanumNeo; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;"><p>거래</p></div>';
 
     useEffect(() => {
-        console.log('다른 사람 위치', otherUserLocation);
         const container = document.getElementById('map');
 
         const options = {
