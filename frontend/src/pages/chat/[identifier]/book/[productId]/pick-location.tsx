@@ -2,21 +2,13 @@ import React, { useState, useEffect } from 'react';
 import ResponsiveChecker from '@/components/ResponsiveChecker';
 import KakaoMap from '@/components/Location/SetKakaoMap';
 import pin from '@/images/location-pin.png';
-import Image from 'next/image';
-import styles from './userLocation.module.scss';
-import Swal from 'sweetalert2';
-import { useRouter } from 'next/router';
 
 const UserLocation: React.FC = () => {
-    const [isMobile, setIsMobile] = useState<boolean | null>(null);
     // const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({ lat: 35.149409, lng: 126.914957 });
     const [lng, setLng] = useState<number>(0);
     const [lat, setLat] = useState<number>(0);
     const [score, setScore] = useState<number>(0);
 
-    const handleIsMobileChanged = (mobile: boolean) => {
-        setIsMobile(mobile);
-    };
     const router = useRouter();
     const productId = router.query.productId;
     const { identifier } = router.query;
@@ -113,10 +105,7 @@ const UserLocation: React.FC = () => {
         }
     };
 
-    const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
-
     const [dots, setDots] = useState('');
-    const check = true;
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (dots.length < 3) {
@@ -127,10 +116,15 @@ const UserLocation: React.FC = () => {
         }, 500);
         return () => clearInterval(intervalId);
     }, [dots]);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
+    const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
+    const handleIsMobileChanged = (mobile: boolean) => {
+        setIsMobile(mobile);
+    };
 
     return (
         <div className="w-full h-screen">
-            
+            <ResponsiveChecker message={message} onIsMobileChanged={handleIsMobileChanged} />
             {isMobile && (
                 <>
                     {/* 나머지 페이지 내용 */}
@@ -145,7 +139,7 @@ const UserLocation: React.FC = () => {
                                     <Image src={pin} alt="pin" />
                                 </div>
                             </div>
-                            <p className="text-blue">안전한 세이프존에서 거래하는 것을 추천해요.</p>
+                            <p className="text-blue">세이프존에서 거래하는 것을 추천해요.</p>
                         </div>
                     </div>
                     <div id="map" className="w-full h-[85vh] relative">
