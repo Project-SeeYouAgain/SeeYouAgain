@@ -21,6 +21,10 @@ public class Review extends TimeStamped {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @OneToOne(targetEntity = Reservation.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
+
     private Long lenderId;
 
     private String nickname;
@@ -33,10 +37,11 @@ public class Review extends TimeStamped {
 
     private String reviewImgUrl;
 
-    public static Review of(Product product, Long lenderId, String nickname,
+    public static Review of(Product product, Reservation reservation, Long lenderId, String nickname,
                             ReviewRequestDto requestDto, String reviewImgKey, String reviewImgUrl) {
         return Review.builder()
                 .product(product)
+                .reservation(reservation)
                 .lenderId(lenderId)
                 .nickname(nickname)
                 .content(requestDto.getContent())
