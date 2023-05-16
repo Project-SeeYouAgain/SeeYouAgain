@@ -119,6 +119,20 @@ function book() {
                     confirmButtonColor: '#3085d6',
                 }).then(result => {
                     if (result.isConfirmed) {
+                        axAuth(token)({
+                            url: `product-service/auth/${productId}`,
+                        }).then(res => {
+                            axAuth(token)({
+                                url: `user-service/auth/notification`,
+                                method: 'post',
+                                data: {
+                                    targetUserId: res.data.data.ownerId,
+                                    title: '예약 알림',
+                                    body: '예약 요청이 도착했습니다.',
+                                },
+                            });
+                        });
+
                         localStorage.removeItem('location');
                         localStorage.removeItem('date');
                         router.push(`/chat/${identifier}`);
