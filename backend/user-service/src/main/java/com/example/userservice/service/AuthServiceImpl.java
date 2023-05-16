@@ -42,12 +42,11 @@ public class AuthServiceImpl implements AuthService {
         String location = requestDto.getLocation();
         String description = requestDto.getDescription();
 
-        deleteS3Img(user);
-
-        if (profileImg.isEmpty()) {
-            user.updateProfile(null, null, location, description);
-            kafkaProducer.send("example-participant-topic", new ProfileImgRequestDto(userId, null));
+        if (profileImg == null) {
+            System.out.println(3);
+            user.updateProfile(location, description);
         } else {
+            deleteS3Img(user);
             String profileImgKey = saveS3Img(profileImg);
             String profileImgUrl = amazonS3Service.getFileUrl(profileImgKey);
             user.updateProfile(profileImgKey, profileImgUrl, location, description);
