@@ -36,9 +36,9 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = 
                     if (!container) return;
                     const options = {
                         center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-                        level: 3,
-                        minLevel: 3,
-                        maxLevel: 4,
+                        level: 2,
+                        minLevel: 2,
+                        maxLevel: 3,
                     };
                     const newMap = new kakao.maps.Map(container, options);
                     setMap(newMap);
@@ -246,26 +246,77 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = 
     const reload = () => {
         router.reload();
     };
+    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const desktopQuery = window.matchMedia('(min-width:767px)');
+        const mobileQuery = window.matchMedia('(max-width:767px)');
+
+        const handleDesktopQuery = (event: MediaQueryListEvent) => {
+            setIsDesktop(event.matches);
+        };
+
+        const handleMobileQuery = (event: MediaQueryListEvent) => {
+            setIsMobile(event.matches);
+        };
+
+        desktopQuery.addEventListener('change', handleDesktopQuery);
+        mobileQuery.addEventListener('change', handleMobileQuery);
+
+        // 초기값 설정
+        setIsDesktop(desktopQuery.matches);
+        setIsMobile(mobileQuery.matches);
+
+        return () => {
+            desktopQuery.removeEventListener('change', handleDesktopQuery);
+            mobileQuery.removeEventListener('change', handleMobileQuery);
+        };
+    }, []);
+
+    // 로딩 중이거나 초기 상태일 때 출력할 내용
+    if (isDesktop === null || isMobile === null) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <div className=" absolute top-4 right-4 z-10 text-center px-3 py-2 text-[.9rem] bg-white/80 font-bold rounded">
-                <p className="px-1">안전지수</p>
-                <div className="flex text-xs">
-                    <div className="w-1/2 bg-[#66ff66] mr-1"></div>
-                    <span className="whitespace-nowrap w-1/2">1단계</span>
+            {isMobile && (
+                <div className=" absolute top-4 right-4 z-10 text-center px-3 py-2 text-[.9rem] bg-white/80 font-bold rounded">
+                    <p className="px-1">안전지수</p>
+                    <div className="flex text-xs">
+                        <div className="w-1/2 bg-[#66ff66] mr-1"></div>
+                        <span className="whitespace-nowrap w-1/2">1단계</span>
+                    </div>
+                    <div className="flex text-xs">
+                        <div className="w-1/2 bg-[#00e600] mr-1"></div>
+                        <span className="whitespace-nowrap w-1/2">2단계</span>
+                    </div>
+                    <div className="flex text-xs">
+                        <div className="w-1/2 bg-[#008000] mr-1"></div>
+                        <span className="whitespace-nowrap w-1/2">3단계</span>
+                    </div>
                 </div>
-                <div className="flex text-xs">
-                    <div className="w-1/2 bg-[#00e600] mr-1"></div>
-                    <span className="whitespace-nowrap w-1/2">2단계</span>
+            )}
+            {isDesktop && (
+                <div className=" absolute bottom-[5vh] right-[5vh] z-10 text-center px-5 py-4 text-2xl bg-white/80 font-bold rounded">
+                    <p className="pb-1">안전지수</p>
+                    <div className="flex text-xl">
+                        <div className="w-1/2 bg-[#66ff66] mr-1"></div>
+                        <span className="whitespace-nowrap w-1/2">1단계</span>
+                    </div>
+                    <div className="flex text-xl">
+                        <div className="w-1/2 bg-[#00e600] mr-1"></div>
+                        <span className="whitespace-nowrap w-1/2">2단계</span>
+                    </div>
+                    <div className="flex text-xl">
+                        <div className="w-1/2 bg-[#008000] mr-1"></div>
+                        <span className="whitespace-nowrap w-1/2">3단계</span>
+                    </div>
                 </div>
-                <div className="flex text-xs">
-                    <div className="w-1/2 bg-[#008000] mr-1"></div>
-                    <span className="whitespace-nowrap w-1/2">3단계</span>
-                </div>
-            </div>
+            )}
             {click && (
-                <button className="rounded-full absolute bottom-[15vh] right-4 z-10 h-[12vw] w-[12vw] bg-white drop-shadow-lg ">
+                <button className="rounded-full absolute bottom-[15vh] right-[10vw] z-10 h-[6vh] w-[6vh] bg-white drop-shadow-lg ">
                     <BiCurrentLocation className="w-full h-full p-1" onClick={reload} />
                 </button>
             )}

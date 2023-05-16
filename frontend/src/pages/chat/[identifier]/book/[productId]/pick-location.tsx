@@ -130,8 +130,7 @@ const UserLocation: React.FC = () => {
 
     return (
         <div className="w-full h-screen">
-            <ResponsiveChecker message={message} onIsMobileChanged={handleIsMobileChanged} />
-            <p>{isMobile}</p>
+            
             {isMobile && (
                 <>
                     {/* 나머지 페이지 내용 */}

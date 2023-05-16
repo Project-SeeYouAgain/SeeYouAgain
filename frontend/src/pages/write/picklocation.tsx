@@ -254,7 +254,7 @@ const pickLocation = ({
                     {/* 나머지 페이지 내용 */}
                     {userLocation && (
                         <div className="p-4 font-bold h-[15vh] flex items-center justify-center ">
-                            <div className="w-screen">
+                            <div className="w-full">
                                 <div className="flex justify-between h-fit text-xl">
                                     <div>
                                         <p>이웃과 만나서</p>
@@ -276,7 +276,7 @@ const pickLocation = ({
                                     setLng(lng);
                                     setScore(score);
                                 }}
-                                click={true}
+                                click={false}
                             />
                         )}
                         <div className="absolute bottom-10 z-10 w-full">
