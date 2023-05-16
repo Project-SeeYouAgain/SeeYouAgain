@@ -14,10 +14,10 @@ self.addEventListener('push', function (e) {
     if (!e.data.json()) return;
 
     const resultData = e.data.json();
-    const notificationTitle = resultData.title;
+    const notificationTitle = resultData.notification.title;
     const notificationOptions = {
         body: resultData.notification.body,
-        icon: 'https://firebasestorage.googleapis.com/v0/b/sock-f6e94.appspot.com/o/profile%2Fprofile2.png?alt=media',
+        icon: 'https://seeyouagain-s3-bucket.s3.ap-northeast-2.amazonaws.com/product/seeyouagain.png',
         data: resultData.data,
         ...resultData,
     };

@@ -38,17 +38,17 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
 
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setData(prevData => ({ ...prevData, category: event.target.value }));
-        onSubmit(data);
+        onSubmit({ ...data, category: event.target.value });
     };
 
     const handleTagChange = (newData: Partial<StepTwoData>) => {
         setData(prevData => ({ ...prevData, ...newData }));
-        onSubmit(data);
+        onSubmit({ ...data, ...newData });
     };
 
     const handleDateChange = (startDate: Date | null, endDate: Date | null) => {
         setData(prevData => ({ ...prevData, startDate, endDate }));
-        onSubmit(data);
+        onSubmit({ ...data, startDate, endDate });
     };
     const handleSafeChange = () => {
         const updatedIsSafe = !isSafe;
@@ -97,8 +97,7 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
                 <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
                 {isLocationOn && (
                     <div className="fixed top-0 left-0 right-0 bottom-0 z-50">
-                        <div className="absolute top-0 left-0 right-0 bottom-0 bg-white"></div>
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <div className="absolute w-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white">
                             <PickLocation data={data} onSubmit={onSubmit} setData={setData} setIsLocationOn={setIsLocationOn} />
                         </div>
                     </div>

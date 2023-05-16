@@ -2,7 +2,6 @@ package com.example.productservice.repository;
 
 import com.example.productservice.entity.Product;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -34,18 +33,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     .fetch();
         }
 
-//        JPAQuery<Product> query = queryFactory
-//                .selectFrom(product)
-//                .where(ltProductId(productId), isLocation(location, myLocation), likeCategory(category))
-//                .limit(20);
-//
-//        if (sort == 0) {
-//            query.orderBy(product.refreshedAt.desc());
-//        } else {
-//            query.orderBy(product.price.desc());
-//        }
-//
-//        return query.fetch();
     }
 
     @Override
