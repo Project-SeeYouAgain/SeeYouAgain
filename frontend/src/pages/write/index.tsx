@@ -25,11 +25,11 @@ function Write() {
     const router = useRouter();
 
     const handleStepOneSubmit = (data: StepOneData) => {
-        setStepOneData(data);
+        setStepOneData(prevData => ({ ...prevData, ...data }));
     };
 
     const handleStepTwoSubmit = (data: StepTwoData) => {
-        setStepTwoData(data);
+        setStepTwoData(prevData => ({ ...prevData, ...data }));
         console.log('스텝투데이터:', data); // 데이터 확인용
     };
     // 날짜 변환 함수
@@ -64,10 +64,10 @@ function Write() {
             hasEnteredData[2] === '' || // 카테고리
             hasEnteredData[3] === 0 || // 가격
             hasEnteredData[4] === '' || // 설명
-            hasEnteredData[5] === null || // 날짜
-            hasEnteredData[7].lat === 0 || // 거래장소
-            hasEnteredData[7].lng === 0 ||
-            hasEnteredData[7].RegionCode === ''
+            hasEnteredData[5] === null // 날짜
+            // hasEnteredData[7].lat === 0 || // 거래장소
+            // hasEnteredData[7].lng === 0 ||
+            // hasEnteredData[7].RegionCode === ''
         ) {
             if (hasEnteredData[0].length === 0) {
                 setIsModalOpen(true);
@@ -93,11 +93,7 @@ function Write() {
                 setIsModalOpen(true);
                 setModalMessage('일정 데이터');
             }
-            if (hasEnteredData[7].lat === 0) {
-                setIsModalOpen(true);
-                setModalMessage('거래 장소');
-                console.log(hasEnteredData[7].lat);
-            }
+
             // alert('필수 데이터를 모두 입력해주세요!');
             return;
         }
