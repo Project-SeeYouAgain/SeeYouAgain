@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import hammer from '@/images/hammer.png';
 import shop from '@/images/shop.png';
 import styles from './Mobile.module.scss';
 import classNames from 'classnames';

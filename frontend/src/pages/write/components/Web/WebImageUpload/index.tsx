@@ -74,34 +74,38 @@ function WebImageUpload({ setData, onSubmit, data }: { setData: React.Dispatch<R
     }
 
     return (
-        <div className="flex">
-            <div className="relative flex justify-center">
-                <div>
-                    <input accept="image/*" name="file" className="hidden" id="file-upload" type="file" multiple onChange={onChangeFile} />
-                    {/* 파일 업로드 라벨 */}
-                    <label htmlFor="file-upload" className="cursor-pointer">
-                        <div className="w-[10rem] h-[10rem] bg-[#E2F1F1] rounded-[.9rem] mr-[.6rem]"></div>
-                        <div className="absolute top-[2rem] left-[2.5rem]">
-                            <Image src={camera} alt="camera" placeholder="blur" className="w-[5rem]" />
-                            <p className="text-[#3C8D90] text-center text-[1rem] mt-[-.3rem]">{images.length} / 5</p>
-                        </div>
-                    </label>
-                </div>
-            </div>
-            {/* 이미지 미리보기 */}
-            <div>
-                {(imgPreview && (
-                    <div className="flex ">
-                        {imgPreview.map(({ img, url }, index) => (
-                            <div key={img.name} className="relative">
-                                <img key={index} alt="preview" className="w-[10rem] h-[10rem] bg-[#E2F1F1] rounded-[.9rem] mr-[.6rem] object-cover " src={url} />
-                                <div onClick={() => removeFile(index)}>
-                                    <Image src={close} alt="close" className="w-[2rem] absolute top-0 right-0"></Image>
-                                </div>
+        <div className="grid grid-cols-[1fr,3fr] ">
+            <p className="mb-[1rem] font-bold text-[1.2rem] ">상품 이미지</p>
+
+            <div className="flex">
+                <div className="relative flex justify-center">
+                    <div>
+                        <input accept="image/*" name="file" className="hidden" id="file-upload" type="file" multiple onChange={onChangeFile} />
+                        {/* 파일 업로드 라벨 */}
+                        <label htmlFor="file-upload" className="cursor-pointer">
+                            <div className="w-[10rem] h-[10rem] bg-[#E2F1F1] rounded-[.9rem] mr-[.6rem]"></div>
+                            <div className="absolute top-[2rem] left-[2.5rem]">
+                                <Image src={camera} alt="camera" placeholder="blur" className="w-[5rem]" />
+                                <p className="text-[#3C8D90] text-center text-[1rem] mt-[-.3rem]">{images.length} / 5</p>
                             </div>
-                        ))}
+                        </label>
                     </div>
-                )) || <div> </div>}
+                </div>
+                {/* 이미지 미리보기 */}
+                <div>
+                    {(imgPreview && (
+                        <div className="flex ">
+                            {imgPreview.map(({ img, url }, index) => (
+                                <div key={img.name} className="relative">
+                                    <img key={index} alt="preview" className="w-[10rem] h-[10rem] bg-[#E2F1F1] rounded-[.9rem] mr-[.6rem] object-cover " src={url} />
+                                    <div onClick={() => removeFile(index)}>
+                                        <Image src={close} alt="close" className="w-[2rem] absolute top-0 right-0"></Image>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )) || <div> </div>}
+                </div>
             </div>
         </div>
     );

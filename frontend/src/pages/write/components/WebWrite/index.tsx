@@ -136,93 +136,109 @@ function index({ handleSubmit }: Props) {
         // ...
     }, []);
 
-    return (
-        <div className="px-[10rem]">
-            <WebNavbar />
-            {/* 글 유형 */}
-            <div className="mt-[7rem] ">
-                <div className="flex justify-center">
-                    <div
-                        onClick={() => onHandletypeData(false)}
-                        className={`relative w-[20vw] h-[18vh] rounded-[1rem]  mb-[1rem] ${!isRenter && 'bg-blue'}`}
-                        style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
-                    >
-                        <span className={`font-bold ${isRenter ? 'text-blue' : 'text-white'} text-[2rem] absolute bottom-1 left-[1.2rem]`}> 구해요 </span>
-                        <Image src={want} alt="want" className="w-[40%] h-[90%] absolute bottom-0 right-0" />
-                    </div>
+    // 스크롤 위치 저장
+    const [scrollY, setScrollY] = useState(0);
 
-                    <div
-                        onClick={() => onHandletypeData(true)}
-                        className={`relative  ${isRenter && 'bg-blue'} w-[20vw] h-[18vh] rounded-[1rem]  mb-[1rem] hover: `}
-                        style={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}
-                    >
-                        <span className={`font-bold ${isRenter ? 'text-white' : 'text-blue'} text-[2rem] absolute top-2 left-[1.2rem]`}> 빌려줘요 </span>
-                        <Image src={renter} alt="want" className="w-[55%] h-[90%]  absolute bottom-0 right-0" />
-                    </div>
-                </div>
-            </div>
-            <div className="border-b-2 mx-5 border-black mb-10"></div>
-            {/* 나머지 */}
-            <div className="px-[1.88rem]">
-                <div className="mt-[1rem] ">
-                    <p className="mb-[1rem] font-bold text-[1.2rem] "> 상품 이미지</p>
-                    <WebImageUpload data={data} setData={setData} onSubmit={handleStepTwoSubmit} />
-                </div>
-                {/* 카테고리 */}
-                <div className="mt-[2rem]">
-                    <Category onChange={handleCategoryChange} />
-                </div>
-                {/* 텍스트 */}
-                <div className="mt-[2rem]">
-                    <TextInput data={data} setData={setData} onSubmit={handleStepTwoSubmit} />
-                </div>
-                {/* 태그 */}
-                <div className="mt-[1rem]">
-                    <TagInput value={data.tag} onChange={handleTagChange} />
-                </div>
-                {/* 대여일정 */}
-                <div>
-                    <Calender onChange={handleDateChange} />
-                </div>
-                {/* 거래장소 */}
-                <div className="grid grid-cols-[1fr,3fr] mt-[6rem] ">
-                    <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
-                    {isLocationOn && (
-                        <div className="fixed top-0 left-0 right-0 bottom-0 z-50">
-                            <div className="absolute top-0 left-0 right-0 bottom-0 bg-white"></div>
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                <PickLocation data={data} onSubmit={handleStepTwoSubmit} setData={setData} setIsLocationOn={setIsLocationOn} />
+    // 스크롤 위치에 따른 투명도 변경
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrollY(window.scrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const backgroundColor = scrollY < 500 ? 'lightgrey' : 'transpate';
+    const borderline = scrollY < 500 ? 't' : 'none';
+
+    return (
+        <div>
+            <div className="px-[10rem]">
+                <WebNavbar />
+                {/* 글 유형 */}
+                <div className="mt-[7rem] ml-[2rem] ">
+                    <div className="grid grid-cols-[1fr,3fr] items-center">
+                        <p className=" font-bold text-[1.2rem]"> 글 유형 </p>
+                        <div className="flex">
+                            <div onClick={() => onHandletypeData(false)} className={` w-[6vw] h-[4vh] rounded-full  mb-[1rem] text-center  py-1 ${!isRenter ? 'bg-blue' : 'bg-lightgrey'}`}>
+                                <span className={`font-bold ${isRenter ? 'text-darkgrey' : 'text-white'} text-[1.2rem] `}> 구해요 </span>
+                            </div>
+                            <div className="w-6" />
+
+                            <div onClick={() => onHandletypeData(true)} className={` ${isRenter ? 'bg-blue' : 'bg-lightgrey'}  w-[6vw] h-[4vh] rounded-full  mb-[1rem] text-center  py-1 hover: `}>
+                                <span className={`font-bold ${isRenter ? 'text-white' : 'text-darkgrey'} text-[1.2rem] `}> 빌려줘요 </span>
                             </div>
                         </div>
-                    )}
-                    <div className="relative" onClick={handleLocationChange}>
-                        <div className="m-auto w-[100%] h-[5rem] border border-darkgrey"></div>
-                        <div>
-                            <Image src={locationImg} alt="camera" className="w-[4rem] absolute top-2 right-[1.5rem]"></Image>
-                            <span className="font-bold text-lg absolute top-[35%] left-[1vw] text-darkgrey ">
-                                {data.location.RegionCode ? '거래장소 : ' + data.location.RegionCode : '거래장소 선택하러 가기'}
+                    </div>
+                </div>
+                <div className="border-b-2 mx-5 border-black mb-10"></div>
+                {/* 나머지 */}
+                <div className="px-[1.88rem]">
+                    <div className="mt-[1rem] ">
+                        <WebImageUpload data={data} setData={setData} onSubmit={handleStepTwoSubmit} />
+                    </div>
+                    {/* 카테고리 */}
+                    <div className="mt-[3rem]">
+                        <Category onChange={handleCategoryChange} />
+                    </div>
+                    {/* 텍스트 */}
+                    <div className="mt-[3rem]">
+                        <TextInput data={data} setData={setData} onSubmit={handleStepTwoSubmit} />
+                    </div>
+                    {/* 태그 */}
+                    <div className="mt-[3rem]">
+                        <TagInput value={data.tag} onChange={handleTagChange} />
+                    </div>
+                    {/* 대여일정 */}
+                    <div>
+                        <Calender onChange={handleDateChange} />
+                    </div>
+                    {/* 거래장소 */}
+                    <div className="grid grid-cols-[1fr,3fr] mt-[6rem] ">
+                        <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
+                        {isLocationOn && (
+                            <div className="fixed top-0 left-0 right-0 bottom-0 z-50">
+                                <div className="absolute top-0 left-0 right-0 bottom-0 bg-white"></div>
+                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                    <PickLocation data={data} onSubmit={handleStepTwoSubmit} setData={setData} setIsLocationOn={setIsLocationOn} />
+                                </div>
+                            </div>
+                        )}
+                        <div className="relative" onClick={handleLocationChange}>
+                            <div className="m-auto w-[100%] h-[5rem] border border-darkgrey rounded-md"></div>
+                            <div>
+                                <Image src={locationImg} alt="camera" className="w-[4rem] absolute top-2 right-[1.5rem]"></Image>
+                                <span className="font-bold text-lg absolute top-[35%] left-[1vw] text-darkgrey ">
+                                    {data.location.RegionCode ? '거래장소 : ' + data.location.RegionCode : '거래장소 선택하러 가기'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {/* 세이프존 거래 */}
+                    <div className="grid grid-cols-[1fr,3fr] ">
+                        <p></p>
+                        <div className="flex mt-[1rem] items-center " onClick={handleSafeChange}>
+                            <div>
+                                <span>{isSafe ? <BsFillCheckSquareFill className="text-blue w-[1.4rem] h-[1.4rem]" /> : <BsSquare className="text-darkgrey w-[1.4rem] h-[1.4rem]" />}</span>
+                            </div>
+                            <span className="ml-[.5rem]">
+                                <span className="font-bold text-[1.2rem] text-blue">SAFEZONE</span>
+                                <span className="font-bold text-[1.2rem] text-darkgrey"> 에서 거래 할게요.</span>
                             </span>
                         </div>
                     </div>
                 </div>
-                {/* 세이프존 거래 */}
-                <div className="grid grid-cols-[1fr,3fr] ">
-                    <p></p>
-                    <div className="flex mt-[1rem] items-center " onClick={handleSafeChange}>
-                        <div>
-                            <span>{isSafe ? <BsFillCheckSquareFill className="text-blue w-[1.4rem] h-[1.4rem]" /> : <BsSquare className="text-darkgrey w-[1.4rem] h-[1.4rem]" />}</span>
-                        </div>
-                        <span className="ml-[.5rem]">
-                            <span className="font-bold text-[1.2rem] text-blue">SAFEZONE</span>
-                            <span className="font-bold text-[1.2rem] text-darkgrey"> 에서 거래 할게요.</span>
-                        </span>
-                    </div>
-                </div>
+                <div className="mt-20"></div>
             </div>
-            <button onClick={handleSubmitClick} className="fixed top-[20vh] w-20 right-10 text-black text-[1rem] border border-darkgrey h-[3rem] hover:bg-black hover:text-white  ">
-                등록하기
-            </button>
-            <div className="mt-20"></div>
+            <div className={` fixed bottom-0 w-full px-[11.6rem] py-5 h-[5.8rem] bg-${backgroundColor} border-${borderline} border-darkgrey text-right`}>
+                <button onClick={handleSubmitClick} className="w-[10rem] text-white text-[1.4rem] font-bold  bg-blue h-[3.5rem] hover:bg-black hover:text-white  ">
+                    등록하기
+                </button>
+            </div>
             <Modal isModalOpen={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />
         </div>
     );
