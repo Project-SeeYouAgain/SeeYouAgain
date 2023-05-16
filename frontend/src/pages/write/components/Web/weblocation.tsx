@@ -240,7 +240,7 @@ const webpickLocation = ({
     return (
         <div className="w-full h-screen relative">
             {userLocation && (
-                <div className="p-4 px-8 w-fit text-center m-auto absolute top-5 z-40 left-1/2 transform -translate-x-1/2 bg-white/70 rounded-lg">
+                <div className="p-4 px-8 w-1/2 text-center m-auto absolute bottom-5 z-40 left-1/2 transform -translate-x-1/2 bg-white/70 rounded-lg">
                     <p className="font-PreB text-3xl w-full font-bold">이웃과 만나서 거래할 장소를 선택해 주세요.</p>
                     <p className=" text-3xl font-bold font-PreS">
                         <span className="text-blue font-PreB">안전한 세이프존</span>에서 거래하는 것을 추천해요.

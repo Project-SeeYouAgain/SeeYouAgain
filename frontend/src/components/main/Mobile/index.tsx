@@ -9,7 +9,6 @@ import FirstPage from '../Mobile/FirstPage';
 import styles from '../Mobile/main.module.scss';
 import classNames from 'classnames';
 import Image from 'next/image';
-import logo from '@/images/logo.png';
 import kakao from '@/assets/icons/kakaologo.png';
 
 export default function index() {
@@ -22,9 +21,6 @@ export default function index() {
 
     return (
         <div>
-            <div className={classNames('fixed top-0 h-16 w-full z-30')}>
-                <Image src={logo} alt="logo" width={80} className="m-auto mt-4" />
-            </div>
             <div className={styles.main_body}>
                 <div className={classNames(styles.box, styles.none)}>
                     <FirstPage />

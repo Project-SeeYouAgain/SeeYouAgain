@@ -25,11 +25,11 @@ function Write() {
     const router = useRouter();
 
     const handleStepOneSubmit = (data: StepOneData) => {
-        setStepOneData(data);
+        setStepOneData(prevData => ({ ...prevData, ...data }));
     };
 
     const handleStepTwoSubmit = (data: StepTwoData) => {
-        setStepTwoData(data);
+        setStepTwoData(prevData => ({ ...prevData, ...data }));
         console.log('스텝투데이터:', data); // 데이터 확인용
     };
     // 날짜 변환 함수
@@ -95,9 +95,9 @@ function Write() {
             }
             if (hasEnteredData[7].lat === 0) {
                 setIsModalOpen(true);
-                setModalMessage('거래 장소');
-                console.log(hasEnteredData[7].lat);
+                setModalMessage('거래장소');
             }
+
             // alert('필수 데이터를 모두 입력해주세요!');
             return;
         }

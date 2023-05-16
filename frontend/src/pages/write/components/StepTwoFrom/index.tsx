@@ -38,17 +38,17 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
 
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setData(prevData => ({ ...prevData, category: event.target.value }));
-        onSubmit(data);
+        onSubmit({ ...data, category: event.target.value });
     };
 
     const handleTagChange = (newData: Partial<StepTwoData>) => {
         setData(prevData => ({ ...prevData, ...newData }));
-        onSubmit(data);
+        onSubmit({ ...data, ...newData });
     };
 
     const handleDateChange = (startDate: Date | null, endDate: Date | null) => {
         setData(prevData => ({ ...prevData, startDate, endDate }));
-        onSubmit(data);
+        onSubmit({ ...data, startDate, endDate });
     };
     const handleSafeChange = () => {
         const updatedIsSafe = !isSafe;
