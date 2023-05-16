@@ -7,22 +7,30 @@ interface KakaoMapProps {
     lng: number;
     userLocation: { lat: number; lng: number } | null;
     otherUserLocation: { lat: number; lng: number } | null;
+    reservationLocation: { lat: number; lng: number } | null;
 }
 
 declare const kakao: any;
 
-const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLocation }) => {
+const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLocation, reservationLocation }) => {
     const [map, setMap] = useState<any>(null);
+    const [markers, setMarkers] = useState<any[]>([]);
+    // const [reservationLocation, setReservationLocation] = useState<reservationLocation>();
     const content =
-        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:blue; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;">' +
+        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:blue; font-family:NanumNeo; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;">' +
         '<p>나</p>' +
         '</div>';
 
     const otherContent =
-        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:red; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;"><p>이웃</p></div>';
+        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:red; font-family:NanumNeo; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;"><p>이웃</p></div>';
+
+    const reservationContent =
+        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:black; font-family:NanumNeo; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;"><p>거래</p></div>';
 
     useEffect(() => {
+        console.log('다른 사람 위치', otherUserLocation);
         const container = document.getElementById('map');
+
         const options = {
             center: new kakao.maps.LatLng(lat, lng),
             zoomControl: false,
@@ -32,28 +40,53 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
             disableDoubleClick: true,
             disableDoubleClickZoom: true,
         };
+
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
     }, [lat, lng]);
 
     useEffect(() => {
         if (map) {
-            if (userLocation) {
+            markers.forEach(marker => marker.setMap(null));
+            setMarkers([]);
+
+            const newMarkers = [];
+            if (reservationLocation) {
+                const reservationMarker = new kakao.maps.CustomOverlay({
+                    position: new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng),
+                    content: reservationContent,
+                });
+                reservationMarker.setMap(map);
+                newMarkers.push(reservationMarker);
+            }
+            if (userLocation && reservationLocation) {
                 const marker = new kakao.maps.CustomOverlay({
                     position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
                     content: content,
                 });
                 marker.setMap(map);
+                newMarkers.push(marker);
+                const bounds = new kakao.maps.LatLngBounds();
+                bounds.extend(new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng));
+                bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
+                map.setBounds(bounds);
             }
-            if (otherUserLocation) {
+            if (otherUserLocation && reservationLocation) {
                 const otherMarker = new kakao.maps.CustomOverlay({
                     position: new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng),
                     content: otherContent,
                 });
                 otherMarker.setMap(map);
-            }
-            if (userLocation && otherUserLocation) {
+                newMarkers.push(otherMarker);
                 const bounds = new kakao.maps.LatLngBounds();
+                bounds.extend(new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng));
+                bounds.extend(new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng));
+                map.setBounds(bounds);
+            }
+
+            if (userLocation && otherUserLocation && reservationLocation) {
+                const bounds = new kakao.maps.LatLngBounds();
+                bounds.extend(new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng));
                 bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
                 bounds.extend(new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng));
                 map.setBounds(bounds);
