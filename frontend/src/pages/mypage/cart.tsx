@@ -25,6 +25,11 @@ function Cart() {
     const [itemList, setItemList] = useState<RentalItem[]>([]);
     const token = useRecoilValue(userState).accessToken;
     const isCart = true;
+    const [refreshKey, setRefreshKey] = useState<number>(0);
+
+    function handleRefreshKey() {
+        setRefreshKey(refreshKey + 1);
+    }
 
     useEffect(() => {
         const url = `/product-service/auth/cart`;
@@ -33,7 +38,7 @@ function Cart() {
                 setItemList(res.data.data);
             })
             .catch(err => console.log(err));
-    }, []);
+    }, [refreshKey]);
 
     return (
         <Container>
@@ -45,7 +50,16 @@ function Cart() {
                 ) : (
                     itemList.map((item, index) => (
                         <Link key={index} href={''}>
-                            <Card productImg={item.productImg} title={item.title} location={item.location} price={item.price} isSafe={item.isSafe} productId={item.productId} isCart={isCart} />
+                            <Card
+                                productImg={item.productImg}
+                                title={item.title}
+                                location={item.location}
+                                price={item.price}
+                                isSafe={item.isSafe}
+                                productId={item.productId}
+                                isCart={isCart}
+                                onRefreshKey={handleRefreshKey}
+                            />
                         </Link>
                     ))
                 )}
