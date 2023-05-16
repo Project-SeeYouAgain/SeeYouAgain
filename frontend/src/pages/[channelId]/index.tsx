@@ -309,19 +309,21 @@ function Detail() {
                                 )}
                             </div>
                         </div>
-                        <div className="sticky bottom-0 border-t border-solid w-full h-[4rem] flex px-7 items-center bg-white">
-                            <div className="w-[40px] flex items-center justify-center">
-                                {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
+                        {myUserId !== data.ownerId ? (
+                            <div className="sticky bottom-0 border-t border-solid w-full h-[4rem] flex px-7 items-center bg-white">
+                                <div className="w-[40px] flex items-center justify-center">
+                                    {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
+                                </div>
+                                <div className="flex-grow pl-1 grid grid-cols-2 gap-2">
+                                    <button className="bg-blue text-white rounded-[0.5rem] w-full h-[2.5rem]" onClick={GoBook}>
+                                        예약하기
+                                    </button>
+                                    <button className="bg-white text-blue  rounded-[0.5rem] w-full border-[#5669FF] border-[.1rem]" onClick={GoChatRoom}>
+                                        채팅하기
+                                    </button>
+                                </div>
                             </div>
-                            <div className="flex-grow pl-1 grid grid-cols-2 gap-2">
-                                <button className="bg-blue text-white rounded-[0.5rem] w-full h-[2.5rem]" onClick={GoBook}>
-                                    예약하기
-                                </button>
-                                <button className="bg-white text-blue  rounded-[0.5rem] w-full border-[#5669FF] border-[.1rem]" onClick={GoChatRoom}>
-                                    채팅하기
-                                </button>
-                            </div>
-                        </div>
+                        ) : null}
                     </Container>
                 )}
             </>
