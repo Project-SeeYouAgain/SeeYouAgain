@@ -28,9 +28,9 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
         startDate: null,
         endDate: null,
         location: {
-            lat: 0,
-            lng: 0,
-            RegionCode: '',
+            lat: 35.162251,
+            lng: 126.857506,
+            RegionCode: '치평동',
         },
         isSafe: false,
         tag: [],
@@ -38,17 +38,17 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
 
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setData(prevData => ({ ...prevData, category: event.target.value }));
-        onSubmit(data);
+        onSubmit({ ...data, category: event.target.value });
     };
 
     const handleTagChange = (newData: Partial<StepTwoData>) => {
         setData(prevData => ({ ...prevData, ...newData }));
-        onSubmit(data);
+        onSubmit({ ...data, ...newData });
     };
 
     const handleDateChange = (startDate: Date | null, endDate: Date | null) => {
         setData(prevData => ({ ...prevData, startDate, endDate }));
-        onSubmit(data);
+        onSubmit({ ...data, startDate, endDate });
     };
     const handleSafeChange = () => {
         const updatedIsSafe = !isSafe;
@@ -56,11 +56,11 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
         setData(prevData => ({ ...prevData, isSafe: updatedIsSafe }));
         onSubmit({ ...data, isSafe: updatedIsSafe });
     };
-    const handleLocationChange = () => {
-        setIsLocationOn(true);
-        const updatedData = { ...data }; // data의 복사본 생성
-        onSubmit(updatedData);
-    };
+    // const handleLocationChange = () => {
+    //     setIsLocationOn(true);
+    //     const updatedData = { ...data }; // data의 복사본 생성
+    //     onSubmit(updatedData);
+    // };
     // 거래장소 선택 모달용
     const [isLocationOn, setIsLocationOn] = useState(false);
 
@@ -94,7 +94,7 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
                     <Calender onChange={handleDateChange} />
                 </div>
                 {/* 거래장소 */}
-                <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
+                {/* <p className="mb-[1.2rem] font-bold text-[1.2rem]"> 거래장소 </p>
                 {isLocationOn && (
                     <div className="fixed top-0 left-0 right-0 bottom-0 z-50">
                         <div className="absolute top-0 left-0 right-0 bottom-0 bg-white"></div>
@@ -109,7 +109,7 @@ const StepTwoForm = ({ onSubmit }: StepProps) => {
                         <Image src={locationImg} alt="camera" className="w-[4rem] absolute top-2 right-[1.5rem]"></Image>
                         <span className="font-bold absolute top-[40%] left-[8%] text-darkgrey ">{data.location.RegionCode ? '거래장소 : ' + data.location.RegionCode : '거래장소 선택하러 가기'}</span>
                     </div>
-                </div>
+                </div> */}
                 {/* 세이프존 거래 */}
                 <div className="flex mt-[1rem] items-center " onClick={handleSafeChange}>
                     <div>
