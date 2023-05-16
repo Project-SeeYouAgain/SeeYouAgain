@@ -128,7 +128,7 @@ function book() {
                                 data: {
                                     targetUserId: res.data.data.ownerId,
                                     title: '예약 알림',
-                                    body: `${res.data.data.title} 글의 예약 요청이 도착했습니다.`,
+                                    body: `${res.data.data.title} 예약 요청이 도착했습니다.`,
                                 },
                             });
                         });
