@@ -32,17 +32,7 @@ const webpickLocation = ({
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
-    // const clickPositions = () => {
-    //     myCheck ? setMyCheck(false) : setMyCheck(true);
-    //     // 좌표로 행정동 주소 정보를 요청합니다
-    //     geocoder.coord2RegionCode(lng, lat, (result: any, status: any) => {
-    //         if (status == 'OK') {
-    //             const locationData = { lng, lat, RegionCode: result[0].region_3depth_name };
-    //             setData(prevData => ({ ...prevData, location: locationData }));
-    //             setIsLocationOn(false);
-    //         }
-    //     });
-    // };
+
     const [myCheck, setMyCheck] = useState(true);
     const clickPosition = () => {
         // console.log(lat, lng, score);
@@ -70,6 +60,8 @@ const webpickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -80,7 +72,7 @@ const webpickLocation = ({
                     // 취소 버튼 클릭 시 처리할 로직
                 }
             });
-        } else if (score >= 5) {
+        } else if (score >= 5 && score < 7.5) {
             Swal.fire({
                 title: '안전지수 2단계',
                 text: '주변에 CCTV,가로등, 경찰서이 \n여러개 있습니다.\n3개다 있진 않을수도 있습니다.',
@@ -104,6 +96,8 @@ const webpickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -114,7 +108,7 @@ const webpickLocation = ({
                     // 취소 버튼 클릭 시 처리할 로직
                 }
             });
-        } else if (score >= 2.5) {
+        } else if (score >= 2.5 && score < 5) {
             Swal.fire({
                 title: '안전지수 1단계',
                 text: '주변에 CCTV 또는 가로등이 \n1개 있습니다. 경찰서는 없습니다.',
@@ -138,6 +132,8 @@ const webpickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -172,6 +168,8 @@ const webpickLocation = ({
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
+                            onSubmit({ ...data, location: locationData });
+                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우

@@ -28,6 +28,8 @@ const pickLocation = ({
     const [lng, setLng] = useState<number>(0);
     const [lat, setLat] = useState<number>(0);
     const [score, setScore] = useState<number>(0);
+    // 제출 체크
+    const [isCheck, setIsCheck] = useState(false);
 
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);

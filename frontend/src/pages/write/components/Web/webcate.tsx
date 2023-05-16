@@ -25,14 +25,20 @@ function Webcate({ onChange }: Category2Props) {
         <div className="grid grid-cols-[1fr,3fr] ">
             <p className="mb-[0.43rem] font-bold text-[1.2rem] ">카테고리 </p>
 
-            <select onChange={handleChange} value={category} className="px-4 py-2  h-[2.5rem]  border border-darkgrey ">
-                <option value="">카테고리를 선택해주세요.</option>
-                {categoryData.map((item: CategoryProps) => (
-                    <option key={item.key} value={item.id}>
-                        {item.name}
-                    </option>
-                ))}
-            </select>
+            <div className="relative">
+                <select
+                    onChange={handleChange}
+                    value={category}
+                    className="appearance-none px-4 py-2 h-[3rem] border border-darkgrey bg-white text-gray-700 leading-tight rounded-md focus:outline-none focus:shadow-outline"
+                >
+                    <option value="">카테고리를 선택해주세요.</option>
+                    {categoryData.map((item: CategoryProps) => (
+                        <option key={item.key} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 }

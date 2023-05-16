@@ -32,15 +32,15 @@ function WebTextInput({ setData, onSubmit, data }: { setData: React.Dispatch<Rea
         <div>
             <div className="grid grid-cols-[1fr,3fr] items-center mb-8">
                 <span className="font-bold text-[1.2rem] mb-[0.43rem]">제목</span>
-                <input type="text" className="px-[1rem] h-[2.5rem] border border-darkgrey rounded-md focus:outline-none" onKeyPress={handleKeyPress} onChange={handleTitleChange} />
+                <input type="text" className="px-[1rem] w-[40vw] h-[3rem] border border-darkgrey rounded-md focus:outline-none" onKeyPress={handleKeyPress} onChange={handleTitleChange} />
             </div>
             {/* AI로 시세 가격 추천이 가능할까?  */}
-            <div className="grid grid-cols-[1fr,3fr] items-center mb-8">
+            <div className="grid grid-cols-[1fr,3fr] mt-[3rem] items-center mb-8">
                 <span className="font-bold mt-[1rem] text-[1.2rem] mb-[0.43rem]">대여가격</span>
                 <div className="flex items-center">
                     <input
                         type="number"
-                        className="px-[1rem] h-[2.5rem] border border-darkgrey focus:outline-none placeholder:text-darkgrey placeholder:text-[1.2rem]"
+                        className="px-[1rem] h-[3rem] rounded-md border border-darkgrey focus:outline-none placeholder:text-darkgrey placeholder:text-[1.2rem]"
                         onKeyPress={handleKeyPress}
                         onChange={handlePriceChange}
                     />
@@ -48,7 +48,7 @@ function WebTextInput({ setData, onSubmit, data }: { setData: React.Dispatch<Rea
                 </div>
                 <span className="text-darkgrey">* 하루 당 금액을 입력해주세요.</span>
             </div>
-            <div className="grid grid-cols-[1fr,3fr] ">
+            <div className="grid grid-cols-[1fr,3fr] mt-[3rem] ">
                 <p className="font-bold mt-[1rem] text-[1.2rem] mb-[0.43rem]">설명</p>
                 <div style={{ whiteSpace: 'pre-wrap' }}>
                     <textarea
@@ -62,7 +62,7 @@ function WebTextInput({ setData, onSubmit, data }: { setData: React.Dispatch<Rea
 
 서로 믿고 거래할 수 있도록,
 자세하고 정확한 정보를 기재해주세요.`}
-                        className="px-[1rem] py-[1rem] w-full h-[16rem] border border-darkgrey focus:outline-none placeholder:text-darkgrey placeholder:text-[1rem]"
+                        className="px-[1rem] rounded-md py-[1rem] w-full h-[16rem] border border-darkgrey focus:outline-none placeholder:text-darkgrey placeholder:text-[1rem]"
                         style={{ lineHeight: 1.5 }}
                     />
                 </div>
