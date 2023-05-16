@@ -240,10 +240,11 @@ const webpickLocation = ({
             {userLocation && (
                 <div className="p-4 px-8 w-1/2 text-center m-auto absolute bottom-5 z-40 left-1/2 transform -translate-x-1/2 bg-white/70 rounded-lg">
                     <p className="font-PreB text-3xl w-full font-bold">이웃과 만나서 거래할 장소를 선택해 주세요.</p>
-                    <p className=" text-3xl font-bold font-PreS">
+                    <p className=" text-2xl font-bold font-PreS">
                         <span className="text-blue font-PreB">안전한 세이프존</span>에서 거래하는 것을 추천해요.
                     </p>
                     <p className="font-PreS text-gray-500 text-xl">위치 권한을 허용해야 거래 장소를 선택할 수 있습니다.</p>
+                    <p className="font-PreS text-gray-500 text-xl"> * 현재는 광주 지역에서만 서비스 가능합니다.</p>
                     <button className="w-full mt-2 h-[60px] m-auto block rounded-xl text-center text-white text-3xl  bg-blue" onClick={clickPosition}>
                         장소 확정
                     </button>
