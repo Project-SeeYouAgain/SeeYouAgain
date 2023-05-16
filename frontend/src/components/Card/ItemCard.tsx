@@ -23,9 +23,10 @@ interface dataProps {
     menuState?: number;
     ownerId?: number;
     isBooked?: boolean;
+    onRefreshKey?: () => void;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, onRefreshKey }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();
@@ -74,13 +75,19 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         event.stopPropagation();
         event.preventDefault();
         const url = `/product-service/auth/cart/${productId}`;
-        if (isCart) {
+        if (isActive) {
             axAuth(token)({ method: 'delete', url: url })
-                .then(() => setIsActive(!isCart))
+                .then(() => {
+                    setIsActive(!isActive);
+                    onRefreshKey?.();
+                })
                 .catch(err => console.log(err));
         } else {
             axAuth(token)({ method: 'post', url: url })
-                .then(() => setIsActive(!isCart))
+                .then(() => {
+                    setIsActive(!isActive);
+                    onRefreshKey?.();
+                })
                 .catch(err => console.log(err));
         }
     };
