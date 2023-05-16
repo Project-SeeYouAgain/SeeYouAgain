@@ -17,7 +17,7 @@ function ThirdPage() {
                     <p className={classNames(styles.text, styles.blue)}>불필요한 낭비를 줄여</p>
                     <p className={styles.text}>환경 보호에도 좋습니다.</p>
                 </div>
-                <div className={classNames('rounded-xl', styles.thirdPageBox)}>
+                <div className={classNames('rounded-xl')}>
                     <Image src={img_earth} alt="img_earth" className="w-full" />
                 </div>
             </div>
