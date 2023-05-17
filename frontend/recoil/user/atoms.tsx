@@ -26,3 +26,12 @@ export const productState = atom<ProductState>({
     },
     effects_UNSTABLE: [persistAtom],
 });
+
+export const reservationIdState = atom<ReservationIdState>({
+    key: 'reservationIdState',
+    default: {
+        reservationId: 0,
+        title: '',
+    },
+    effects_UNSTABLE: [persistAtom],
+});

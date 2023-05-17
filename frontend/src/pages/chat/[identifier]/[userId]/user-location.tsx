@@ -22,7 +22,6 @@ const UserLocation: React.FC = () => {
     const [reservationLocation, setReservationLocation] = useState<{ lat: number; lng: number } | null>(null);
 
     useEffect(() => {
-        console.log(router.query);
         setUserId(router.query.userId);
         const reserveLocation = localStorage.getItem('reservation-location');
         if (reserveLocation) {
@@ -34,7 +33,7 @@ const UserLocation: React.FC = () => {
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
-    const [myCheck, setMyCheck] = useState(true);
+    const [myCheck, setMyCheck] = useState(false);
     const clickPosition = () => {
         myCheck ? setMyCheck(false) : setMyCheck(true);
     };
@@ -45,23 +44,18 @@ const UserLocation: React.FC = () => {
         if (!router.isReady) return;
 
         const updateLocation = async () => {
-            console.log(userId);
-
             if (router.query.userId) {
                 try {
                     const profileRes = await axAuth(token)({
                         method: 'get',
                         url: `/user-service/auth/profile/${router.query.userId}`,
                     });
-                    console.log('다른 사람 프로필', profileRes);
                     setUserNickName(profileRes.data.data.nickname);
 
-                    console.log(router.query.userId);
                     const locationRes = await axAuth(token)({
                         method: 'get',
                         url: `/user-service/auth/location/${router.query.userId}`,
                     });
-                    console.log('다른 사람 위치', locationRes);
                     setOtherUserLocation({ lat: locationRes.data.data.lat, lng: locationRes.data.data.lng, moving: locationRes.data.data.moving });
                 } catch (err) {
                     console.log(err);
@@ -79,13 +73,11 @@ const UserLocation: React.FC = () => {
                         if (position) {
                             const data = { lat: position.coords.latitude, lng: position.coords.longitude, moving: myCheck };
                             try {
-                                console.log('1');
                                 const res = await axAuth(token)({
                                     method: 'post',
                                     url: '/user-service/auth/location',
                                     data: data,
                                 });
-                                console.log(res);
                             } catch (err) {
                                 console.log(err);
                             }
@@ -123,13 +115,11 @@ const UserLocation: React.FC = () => {
                     };
 
                     try {
-                        console.log('2');
                         await axAuth(token)({
                             method: 'delete',
                             url: `/user-service/auth/location/${router.query.userId}`,
                             data: data,
                         });
-                        console.log('Deleting location');
                         await axAuth(token)({
                             method: 'delete',
                             url: `/user-service/auth/location/${router.query.userId}`,
@@ -194,8 +184,8 @@ const UserLocation: React.FC = () => {
                     </div>
                     {userLocation && (
                         <div className="absolute bottom-20 right-5 w-1/3 z-10" onClick={clickPosition}>
-                            {myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
-                            {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-gray-400 pt-2.5">이동중</p>}
+                            {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
+                            {myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-gray-400 pt-2.5">이동중</p>}
                         </div>
                     )}
                     {userLocation && <Navbar />}

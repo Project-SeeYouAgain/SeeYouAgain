@@ -10,3 +10,8 @@ interface UserState {
 interface ProductState {
     refreshKey: number;
 }
+
+interface ReservationIdState {
+    reservationId: number;
+    title: string;
+}

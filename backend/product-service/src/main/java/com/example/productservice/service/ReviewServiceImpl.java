@@ -43,23 +43,25 @@ public class ReviewServiceImpl implements ReviewService {
                                         MultipartFile reviewImg) {
         UserClientResponseDto responseDto = userServiceClient.getUserInfo(userId).getData();
 
-        if (reviewRepository.existsByReservationId(reservationId))
+        if (reviewRepository.findByReservationId(reservationId).isEmpty()) {
+            Reservation reservation = reservationRepository.findById(reservationId)
+                    .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
+
+            reservation.writeReview();
+
+            Review review = getReview(userId, requestDto, responseDto.getNickname(), reservation.getProduct(), reservation, reviewImg);
+
+            // 리뷰 저장
+            reviewRepository.save(review);
+        } else {
             throw new ApiException(ExceptionEnum.REVIEW_EXIST_EXCEPTION);
-
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
-
-        reservation.writeReview();
-
-        Review review = getReview(userId, requestDto, responseDto.getNickname(), reservation.getProduct(), reservation, reviewImg);
-
-        // 리뷰 저장
-        reviewRepository.save(review);
+        }
     }
 
-    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname, Product product, Reservation reservation, MultipartFile reviewImg) {
+    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname,
+                             Product product, Reservation reservation, MultipartFile reviewImg) {
 
-        if (reviewImg.isEmpty()) {
+        if (reviewImg == null) {
             return Review.of(product, reservation, userId, nickname, requestDto, null, null);
         }
 
