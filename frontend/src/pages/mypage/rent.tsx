@@ -82,7 +82,6 @@ function Rent() {
 
     return (
         <Container>
-<<<<<<< HEAD
             {isDesktop && (
                 <>
                     <div className="w-full mb-4 text-2xl font-bold pb-4">
@@ -145,34 +144,6 @@ function Rent() {
                     </Body>
                 </>
             )}
-=======
-            <Header title="대여 받은 내역"></Header>
-            <Body>
-                <Menu onSelectMenu={SelectMenu} dragMenu={1} title1={'대여중'} title2={'예약중'} title3={'반납완료'} />
-                {itemList.length !== 0 ? (
-                    itemList.map((item, index) => (
-                        <Card
-                            productImg={item.productImg}
-                            title={item.title}
-                            location={item.location}
-                            price={item.price}
-                            startDate={item.startDate}
-                            endDate={item.endDate}
-                            isCart={item.isCart}
-                            isSafe={item.isSafe}
-                            menuState={menuState}
-                            productId={item.productId}
-                            ownerId={item.ownerId}
-                            key={index}
-                            reservationId={item.reservationId}
-                            hasReview={item.hasReview}
-                        />
-                    ))
-                ) : (
-                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                )}
-            </Body>
->>>>>>> bb3e46a65f991f046f771bcd428c92502e881ca6
         </Container>
     );
 }
