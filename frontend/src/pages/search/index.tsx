@@ -195,9 +195,9 @@ function Search() {
                         </li>
                     ))}
                 </ul>
-                <div>
+                <div className='pb-16'>
                     <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
-                    <div style={{ height: 400, overflow: 'auto' }}>
+                    <div className="h-screen" style={{ overflow: 'auto' }}>
                         <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
                             {listdata &&
                                 listdata.map((item, index) => (
