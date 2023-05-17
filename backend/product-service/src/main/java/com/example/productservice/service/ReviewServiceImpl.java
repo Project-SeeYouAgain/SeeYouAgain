@@ -43,31 +43,25 @@ public class ReviewServiceImpl implements ReviewService {
                                         MultipartFile reviewImg) {
         UserClientResponseDto responseDto = userServiceClient.getUserInfo(userId).getData();
 
-        System.out.println("log 1");
-
         if (reviewRepository.findByReservationId(reservationId).isEmpty()) {
-            System.out.println("log 2");
             Reservation reservation = reservationRepository.findById(reservationId)
                     .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
 
             reservation.writeReview();
-            System.out.println("log 3");
 
             Review review = getReview(userId, requestDto, responseDto.getNickname(), reservation.getProduct(), reservation, reviewImg);
 
             // 리뷰 저장
             reviewRepository.save(review);
         } else {
-            System.out.println("log 4");
             throw new ApiException(ExceptionEnum.REVIEW_EXIST_EXCEPTION);
         }
-        System.out.println("log 5");
-
     }
 
-    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname, Product product, Reservation reservation, MultipartFile reviewImg) {
+    private Review getReview(Long userId, ReviewRequestDto requestDto, String nickname,
+                             Product product, Reservation reservation, MultipartFile reviewImg) {
 
-        if (reviewImg.isEmpty()) {
+        if (reviewImg == null) {
             return Review.of(product, reservation, userId, nickname, requestDto, null, null);
         }
 
