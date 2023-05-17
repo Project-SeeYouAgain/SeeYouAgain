@@ -5,7 +5,7 @@ import { MenuData1, MenuData2 } from '../../data/MenuData';
 import Link from 'next/link';
 import Container from '@/components/Container';
 import Body from '@/components/Container/components/Body';
-import { axBase } from '@/apis/axiosinstance';
+import { axAuth, axBase } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
@@ -25,16 +25,37 @@ function MyPage() {
     const cookie = new Cookies();
     const allCookies = cookie.getAll();
     const Router = useRouter();
+    const token = useRecoilValue(userState).accessToken;
     const logout = () => {
         for (const name in allCookies) {
             cookie.remove(name);
         }
         sessionStorage.removeItem('recoil-persist');
 
+        const url = 'https://kapi.kakao.com/v1/user/logout';
+        axAuth(token)({ url: url, method: 'post' })
+            .then(() => {
+                console.log('성공');
+            })
+            .catch(err => console.log(err));
+
+        // axios
+        //     .post(
+        //         'https://kapi.kakao.com/v1/user/logout',
+        //         {},
+        //         {
+        //             headers: {
+        //                 Authorization: `Bearer ${token}`,
+        //             },
+        //         },
+        //     )
+        //     .then(res => console.log(res.data))
+        //     .catch(err => console.log(err));
+
         Router.push('/');
     };
     const [profileData, setProfileData] = useState<profile | null>(null);
-    const token = useRecoilValue(userState).accessToken;
+
     useEffect(() => {
         const url = `/user-service/auth/profile`;
         axBase(token)({ url })
