@@ -172,6 +172,7 @@ function Write() {
     // 이부분은 필요해서 놔뒀습니다.
     useEffect(() => {
         setView(true);
+        router.reload();
     }, []);
 
     // 모달

@@ -112,7 +112,10 @@ function Rent() {
                                 ))}
                             </div>
                         ) : (
-                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                            <>
+                                <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                <p className="text-center text-2xl font-bold">내역이 없습니다.</p>
+                            </>
                         )}
                     </div>
                 </>
@@ -141,7 +144,10 @@ function Rent() {
                                 />
                             ))
                         ) : (
-                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                            <>
+                                <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                <p className="text-center text-xl font-bold">내역이 없습니다.</p>
+                            </>
                         )}
                     </Body>
                 </>

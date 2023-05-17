@@ -150,7 +150,10 @@ function MyItem() {
                         {menuState === 1 ? (
                             <div>
                                 {bookList.length === 0 ? (
-                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                    <>
+                                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                        <p className="text-center text-2xl font-bold">예약중인 아이템이 없습니다.</p>
+                                    </>
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {bookList.map((item, index) => (
@@ -175,7 +178,10 @@ function MyItem() {
                         ) : menuState === 2 ? (
                             <div>
                                 {itemList.length === 0 ? (
-                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                    <>
+                                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                        <p className="text-center text-2xl font-bold">대여중인 아이템이 없습니다.</p>
+                                    </>
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {itemList.map((item, index) => (
@@ -200,7 +206,10 @@ function MyItem() {
                         ) : (
                             <div>
                                 {holdList.length === 0 ? (
-                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                    <>
+                                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                        <p className="text-center text-2xl font-bold">대기중인 아이템이 없습니다.</p>
+                                    </>
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {holdList.map((item, index) => (
@@ -232,7 +241,10 @@ function MyItem() {
                         {menuState === 1 ? (
                             <div>
                                 {bookList.length === 0 ? (
-                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                    <>
+                                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                        <p className="text-center text-xl font-bold">예약중인 아이템이 없습니다.</p>
+                                    </>
                                 ) : (
                                     bookList.map((item, index) => (
                                         <Card
@@ -253,7 +265,10 @@ function MyItem() {
                             </div>
                         ) : menuState === 2 ? (
                             itemList.length === 0 ? (
-                                <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                <>
+                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                    <p className="text-center text-xl font-bold">대여중인 아이템이 없습니다.</p>
+                                </>
                             ) : (
                                 itemList.map((item, index) => (
                                     <Card
@@ -272,7 +287,10 @@ function MyItem() {
                                 ))
                             )
                         ) : holdList.length === 0 ? (
+                            <>
                             <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                            <p className="text-center text-xl font-bold">대기중인 아이템이 없습니다.</p>
+                            </>
                         ) : (
                             holdList.map((item, index) => (
                                 <Card
