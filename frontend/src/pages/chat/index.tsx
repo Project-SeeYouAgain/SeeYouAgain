@@ -122,11 +122,14 @@ function chat() {
                 onTouchStart={handleDragStart}
                 onTouchEnd={handleDragEnd}
             >
-                <div className="flex justify-between mb-5 items-center border-b-1">
+                {/* <div className="flex justify-between mb-5 items-center border-b-1">
                     <p className="text-lg font-bold dark:text-black">채팅</p>
                     <VscBell className="text-2xl" />
+                </div> */}
+                <div className="relative">
+                    <span className="absolute mt-4 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] font-bold text-[20px] text-[#5669FF]">채팅</span>
                 </div>
-                <div className="flex mb-5">
+                <div className="flex mb-5 pt-[46px]">
                     <div className={`w-1/2 p-3 text-lg dark:text-black border-b ${selectedTab === 'borrow' ? 'border-blue' : ''}`} onClick={event => selectType(event, 'borrow')}>
                         <p className="text-center">빌림</p>
                     </div>
