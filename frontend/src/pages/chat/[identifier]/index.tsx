@@ -97,6 +97,7 @@ function Channel() {
                 writerId: userId,
                 chat: chat,
                 isImage: isImage,
+                youId: channelInfo?.userId,
             }),
         });
 
