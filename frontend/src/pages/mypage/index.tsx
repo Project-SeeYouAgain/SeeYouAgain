@@ -29,6 +29,7 @@ function MyPage() {
         mannerScore: number;
     }
     const cookie = new Cookies();
+    const router = useRouter();
     const allCookies = cookie.getAll();
     const [selectedMenu, setSelectedMenu] = useState('찜 목록');
     const renderContent = () => {
@@ -60,6 +61,9 @@ function MyPage() {
 
     const token = useRecoilValue(userState).accessToken;
     useEffect(() => {
+        if (token === undefined) {
+            router.push('/');
+        }
         const url = `/user-service/auth/profile`;
         axBase(token)({ url })
             .then(res => {

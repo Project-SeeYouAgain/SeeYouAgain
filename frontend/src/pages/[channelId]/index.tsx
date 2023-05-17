@@ -58,6 +58,9 @@ function Detail() {
     useEffect(() => {
         const productId = Number(window.location.pathname.substring(1));
         setProduct(productId);
+        if (token === undefined) {
+            router.push('/');
+        }
         const url = `/product-service/auth/${productId}`;
         axBase(token)({ url })
             .then(res => {
