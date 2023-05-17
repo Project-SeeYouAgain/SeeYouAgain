@@ -40,21 +40,27 @@ public class ParticipantServiceImpl implements ParticipantService {
         notReadMessageList.forEach(Message::updateIsRead);
     }
 
-    private Long findYouId(Long userId, Participant participant) {
-        Channel channel = participant.getChannel();
-        if (channel.getOwnerId().equals(userId)) {
-            return channel.getUserId();
-        }
-        return channel.getOwnerId();
-    }
-
     @Override
     @Transactional
     public void outChatRoom(Long userId, String identifier, Long lastReadMessageId) {
         Participant participant = participantRepository.findByUserIdAndChannelIdentifier(userId, identifier)
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
+        Long youId = findYouId(userId, participant);
+
+        int totalMessageSize = messageRepository
+                .findTotalMessage(youId, identifier).size();
+
         participant.updateIsOut(false);
+        participant.updateReadMessageSize(totalMessageSize);
         participant.updateLastReadMessageId(lastReadMessageId);
+    }
+
+    private Long findYouId(Long userId, Participant participant) {
+        Channel channel = participant.getChannel();
+        if (channel.getOwnerId().equals(userId)) {
+            return channel.getUserId();
+        }
+        return channel.getOwnerId();
     }
 }
