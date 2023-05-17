@@ -22,7 +22,18 @@ const UserLocation: React.FC = () => {
     const [reservationLocation, setReservationLocation] = useState<{ lat: number; lng: number } | null>(null);
 
     useEffect(() => {
+        console.log(router.query.userId);
         setUserId(router.query.userId);
+
+        axAuth(token)({
+            method: 'get',
+            url: `/user-service/auth/profile/${router.query.userId}`,
+        })
+            .then(res => {
+                console.log('다른 사람 프로필', res.data.data);
+                setUserNickName(res.data.data.nickname);
+            })
+            .catch(err => console.log(err));
         const reserveLocation = localStorage.getItem('reservation-location');
         if (reserveLocation) {
             const reservationData = JSON.parse(reserveLocation);
@@ -35,73 +46,64 @@ const UserLocation: React.FC = () => {
     };
     const [myCheck, setMyCheck] = useState(false);
     const clickPosition = () => {
-        myCheck ? setMyCheck(false) : setMyCheck(true);
+        setMyCheck(!myCheck);
+        console.log(myCheck);
+        updateLocation();
     };
+
     useEffect(() => {
         myId;
     });
+
+    useEffect(() => {
+        if (userLocation) {
+            const data = { lat: userLocation.lat, lng: userLocation.lng, moving: myCheck };
+            axAuth(token)({
+                method: 'post',
+                url: '/user-service/auth/location',
+                data: data,
+            })
+                .then(res => {
+                    console.log('성공', res);
+                })
+
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }, [userLocation, myCheck]);
+    const updateLocation = () => {
+        console.log('업데이트 로케이션');
+        if (router.query.userId) {
+            const watchId = navigator.geolocation.watchPosition(
+                position => {
+                    console.log('position부분까지');
+                    setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    if (position) {
+                        console.log('position if 부분');
+                    }
+                },
+                error => {
+                    console.error('Error getting position:', error);
+                },
+            );
+            return () => {
+                if (watchId !== null) {
+                    navigator.geolocation.clearWatch(watchId);
+                }
+            };
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
+    };
+
     useEffect(() => {
         if (!router.isReady) return;
-
-        const updateLocation = async () => {
-            if (router.query.userId) {
-                try {
-                    const profileRes = await axAuth(token)({
-                        method: 'get',
-                        url: `/user-service/auth/profile/${router.query.userId}`,
-                    });
-                    setUserNickName(profileRes.data.data.nickname);
-
-                    const locationRes = await axAuth(token)({
-                        method: 'get',
-                        url: `/user-service/auth/location/${router.query.userId}`,
-                    });
-                    setOtherUserLocation({ lat: locationRes.data.data.lat, lng: locationRes.data.data.lng, moving: locationRes.data.data.moving });
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-
-            if (navigator.geolocation) {
-                const options = {
-                    maximumAge: 0,
-                };
-
-                const watchId = navigator.geolocation.watchPosition(
-                    async position => {
-                        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-                        if (position) {
-                            const data = { lat: position.coords.latitude, lng: position.coords.longitude, moving: myCheck };
-                            try {
-                                const res = await axAuth(token)({
-                                    method: 'post',
-                                    url: '/user-service/auth/location',
-                                    data: data,
-                                });
-                            } catch (err) {
-                                console.log(err);
-                            }
-                        }
-                    },
-                    error => {
-                        console.error('Error getting position:', error);
-                    },
-                    options,
-                );
-
-                return () => {
-                    if (watchId !== null) {
-                        navigator.geolocation.clearWatch(watchId);
-                    }
-                };
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-            }
-        };
-
-        updateLocation();
-        const intervalId = setInterval(updateLocation, 10000); // 10 seconds
-
+        console.log('연속 시작');
+        const intervalId = setInterval(updateLocation, 10000); // 10 second
+        if (myCheck) {
+            intervalId;
+        }
         return () => {
             clearInterval(intervalId);
 
@@ -117,12 +119,7 @@ const UserLocation: React.FC = () => {
                     try {
                         await axAuth(token)({
                             method: 'delete',
-                            url: `/user-service/auth/location/${router.query.userId}`,
-                            data: data,
-                        });
-                        await axAuth(token)({
-                            method: 'delete',
-                            url: `/user-service/auth/location/${router.query.userId}`,
+                            url: `/user-service/auth/location/${myId}`,
                         });
                     } catch (err) {
                         console.log(err);
@@ -130,7 +127,7 @@ const UserLocation: React.FC = () => {
                 }
             })();
         };
-    }, [router.isReady, token, userId]);
+    }, [myCheck]);
 
     const message = '이 페이지는 모바일 기기에서 최적화되어 있습니다. 모바일로 접속해주세요.';
 
