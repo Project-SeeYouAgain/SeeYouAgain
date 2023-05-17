@@ -21,11 +21,6 @@ function SeventhPage() {
         { id: 6, img: s6 },
     ];
 
-    // const [ref, isInView] = useInView(0.5);
-    // useEffect(() => {
-    //     console.log('Visibility status:', isInView ? 'Second Visible' : '');
-    // }, [isInView]);
-
     useEffect(() => {
         let bannerLeft = 0;
         let first = 1;
