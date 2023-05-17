@@ -141,12 +141,12 @@ function Channel() {
         axAuth(token)({
             url: api,
         }).then(res => {
-            if (res.data.data.length < 30) {
+            if (res.data.data.length < 30 && res.data.data.length > 0) {
                 setHasMore(false);
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
                 setFirstMessageId(messageList[messageList.length - 1].messageId);
-            } else {
+            } else if (res.data.data.length > 0) {
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
                 setFirstMessageId(messageList[messageList.length - 1].messageId);

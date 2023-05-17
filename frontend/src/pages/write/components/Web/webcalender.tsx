@@ -9,30 +9,33 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
+    const [tempStartDate, setTempStartDate] = useState<Date | null>(null);
+    const [tempEndDate, setTempEndDate] = useState<Date | null>(null);
 
-    function handleDateChange(update: [Date, Date]) {
-        setStartDate(update[0]);
-        setEndDate(update[1]);
-        if (onChange) {
-            onChange(update[0], update[1]);
-        }
-    }
     useEffect(() => {
         // 오늘 날짜를 시작일로 설정
-        setStartDate(new Date());
+        const today = new Date();
+        setStartDate(today);
+        setTempStartDate(today);
     }, []);
 
     function toggleDropdown() {
         setIsOpen(!isOpen);
     }
 
-    function generateDateOptions() {
+    function confirmSelection() {
+        setStartDate(tempStartDate);
+        setEndDate(tempEndDate);
+        setIsOpen(!isOpen);
+    }
+
+    function generateStartDateOptions() {
         const today = new Date();
         const futureDate = addMonths(today, 3);
         const options = [];
 
         let currentDate = today;
-        while (isAfter(currentDate, futureDate) === false) {
+        while (isAfter(futureDate, currentDate)) {
             options.push(currentDate);
             currentDate = addDays(currentDate, 1);
         }
@@ -40,6 +43,18 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
         return options;
     }
 
+    function generateEndDateOptions(startDate: Date) {
+        const futureDate = addMonths(startDate, 3);
+        const options = [];
+
+        let currentDate = addDays(startDate, 1);
+        while (isAfter(futureDate, currentDate)) {
+            options.push(currentDate);
+            currentDate = addDays(currentDate, 1);
+        }
+
+        return options;
+    }
     return (
         <div className="relative grid grid-cols-[1fr,3fr] mb-10 ">
             <p className="mb-[1.2rem] font-bold text-[1.2rem] "> 대여일정 </p>
@@ -56,9 +71,13 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
                         <div className="flex w-[30vw] justify-between">
                             <div className="w-2/3 pr-1">
                                 <label className="block mb-1 text-sm font-semibold text-gray-700">시작일</label>
-                                <select className="w-full px-2 py-1 border rounded focus:outline-none" onChange={e => setStartDate(new Date(e.target.value))}>
+                                <select
+                                    className="w-full px-2 py-1 border rounded focus:outline-none"
+                                    value={tempStartDate ? format(tempStartDate, 'yyyy-MM-dd') : ''}
+                                    onChange={e => setTempStartDate(new Date(e.target.value))}
+                                >
                                     <option value="">선택</option>
-                                    {generateDateOptions().map(date => (
+                                    {generateStartDateOptions().map(date => (
                                         <option key={date.toString()} value={format(date, 'yyyy-MM-dd')}>
                                             {format(date, 'yyyy-MM-dd')}
                                         </option>
@@ -67,17 +86,22 @@ function Webcalender({ onChange }: DropdownCalendarProps) {
                             </div>
                             <div className="w-2/3 pl-1">
                                 <label className="block mb-1 text-sm font-semibold text-gray-700">종료일</label>
-                                <select className="w-full px-2 py-1 border rounded focus:outline-none" onChange={e => setEndDate(new Date(e.target.value))}>
+                                <select
+                                    className="w-full px-2 py-1 border rounded focus:outline-none"
+                                    value={tempEndDate ? format(tempEndDate, 'yyyy-MM-dd') : ''}
+                                    onChange={e => setTempEndDate(new Date(e.target.value))}
+                                >
                                     <option value="">선택</option>
-                                    {generateDateOptions().map(date => (
-                                        <option key={date.toString()} value={format(date, 'yyyy-MM-dd')}>
-                                            {format(date, 'yyyy-MM-dd')}
-                                        </option>
-                                    ))}
+                                    {tempStartDate &&
+                                        generateEndDateOptions(tempStartDate).map(date => (
+                                            <option key={date.toString()} value={format(date, 'yyyy-MM-dd')}>
+                                                {format(date, 'yyyy-MM-dd')}
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
                         </div>
-                        <button className="block mt-2 px-4  py-2 text-sm text-white bg-blue  hover:bg-blue-dark rounded-[1rem] focus:outline-none" onClick={toggleDropdown}>
+                        <button className="block mt-2 px-4  py-2 text-sm text-white bg-blue  hover:bg-blue-dark rounded-[1rem] focus:outline-none" onClick={confirmSelection}>
                             확인
                         </button>
                     </div>

@@ -5,6 +5,7 @@ import pin from '@/images/location-pin.png';
 import Image from 'next/image';
 import styles from './userLocation.module.scss';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
 
 const webpickLocation = ({
     setData,
