@@ -17,10 +17,9 @@ interface ItemCardOptionProps {
     end?: string;
     isBooked?: boolean;
     reservationId?: number;
-    title?: string;
 }
 
-const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, start, end, reservationId, title }) => {
+const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, start, end, reservationId }) => {
     interface bookdatatype {
         startDate: string;
         endDate: string;
@@ -80,11 +79,10 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
         };
         axBase(token)({ method: 'post', url: url, data: myData })
             .then(res => {
-                if (reservationId && title) {
+                if (reservationId) {
                     setReservationIdStateData({
                         ...reservationIdStateData,
                         reservationId: reservationId,
-                        title: title,
                     });
                 }
                 router.push(`/chat/${res.data.data}/rating`);
