@@ -178,8 +178,10 @@ function MyPage() {
             )}
             {isMobile && (
                 <>
-                    <Header title="마이페이지" />
-                    <Body className="mt-[1rem]">
+                    <div className="relative">
+                        <span className="absolute mt-8 left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] font-bold text-[20px] text-[#5669FF]">마이페이지</span>
+                    </div>
+                    <Body className="pt-[46px]">
                         {profileData ? (
                             <Profile
                                 profileImg={profileData.profileImg}
@@ -189,7 +191,7 @@ function MyPage() {
                                 mannerScore={profileData.mannerScore}
                             />
                         ) : null}
-                        <div className="flex flex-col py-4 pt-8">
+                        <div className="flex flex-col py-4">
                             <div className="grid grid-rows-3 gap-2 mt-2">
                                 <span className="font-bold dark:text-black text-[20px]">나의 거래</span>
                                 {MenuData1.map((item, index) => (
