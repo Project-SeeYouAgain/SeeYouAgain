@@ -11,14 +11,14 @@ import imageCompression from 'browser-image-compression';
 function Rating() {
     const [image, setImage] = useState<File | null>(null);
     const [reviewImg, setreviewImg] = useState<File | null>(null);
-    const [review, setReview] = useState<string>();
+    const [review, setReview] = useState<string>('');
     const [rate, setRate] = useState<number>(0);
-    const title = useRecoilValue(reservationIdState).title;
     const reservationId = useRecoilValue(reservationIdState).reservationId;
     const token = useRecoilValue(userState).accessToken;
     const router = useRouter();
 
     const handleRatingChange = (rating: number) => {
+        console.log(rating);
         setRate(rating);
     };
 
