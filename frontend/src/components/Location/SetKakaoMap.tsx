@@ -21,40 +21,55 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = 
     const [visibleRectangles, setVisibleRectangles] = useState<kakao.maps.Rectangle[]>([]);
     const [visitedAreas, setVisitedAreas] = useState<string[]>([]);
     const [data, setData] = useState<Array<{ lat: number; lng: number; score: number }> | []>([]);
-    const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({ lat: 35.149409, lng: 126.914957 });
+    const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const router = useRouter();
-    const getLocation = () => {
-        if (navigator.geolocation) {
-            const options = {
-                maximumAge: 0,
-            };
-
+    useEffect(() => {
+        if (userLocation === null && navigator.geolocation) {
+            console.log(navigator.geolocation);
             navigator.geolocation.getCurrentPosition(
                 position => {
-                    setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-                    const container = document.getElementById('map');
-                    if (!container) return;
-                    const options = {
-                        center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude),
-                        level: 2,
-                        minLevel: 2,
-                        maxLevel: 3,
-                    };
-                    const newMap = new kakao.maps.Map(container, options);
-                    setMap(newMap);
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
                 },
                 error => {
-                    console.error('Error getting position:', error);
+                    console.log(error);
                 },
-                options,
             );
         } else {
-            console.error('Geolocation is not supported by this browser.');
+            console.log('Geolocation is not supported by this browser.');
         }
-    };
+    }, [userLocation]);
     useEffect(() => {
-        getLocation();
-    }, []);
+        const createMap = () => {
+            const container = document.getElementById('map');
+            if (!container || !userLocation) return;
+
+            const options = {
+                center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+                level: 2,
+                minLevel: 2,
+                maxLevel: 3,
+            };
+            const newMap = new kakao.maps.Map(container, options);
+            setMap(newMap);
+        };
+
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                if (!mutation.target) return;
+                if ((mutation.target as HTMLElement).id === 'map') {
+                    createMap();
+                    observer.disconnect();
+                }
+            });
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        return () => observer.disconnect();
+    }, [userLocation]);
 
     // useEffect(() => {
     //     const container = document.getElementById('map');
