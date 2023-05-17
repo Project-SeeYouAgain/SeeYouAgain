@@ -12,7 +12,7 @@ export default function index() {
     const token = useRecoilValue(userState).accessToken;
     const router = useRouter();
     useEffect(() => {
-        if (token === null || token === undefined) {
+        if (token) {
             router.push('/home');
         }
     }, []);
