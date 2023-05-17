@@ -154,12 +154,15 @@ function Channel() {
         axAuth(token)({
             url: api,
         }).then(res => {
-            if (res.data.data.length > 0) {
+            if (res.data.data.length < 30) {
+                setHasMore(false);
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
                 setFirstMessageId(messageList[messageList.length - 1].messageId);
-            } else if (res.data.data.length < 30) {
-                setHasMore(false);
+            } else {
+                const messageList = res.data.data;
+                setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
+                setFirstMessageId(messageList[messageList.length - 1].messageId);
             }
         });
     };
@@ -246,7 +249,7 @@ function Channel() {
 
     useEffect(() => {
         scrollToBottom();
-    }, [chatList]);
+    }, [chatList[0]]);
 
     const goToBook = () => [router.push(`/chat/${identifier}/book/${channelInfo?.productId}`)];
     const goToUserLocation = () => {
@@ -260,8 +263,8 @@ function Channel() {
     };
 
     return (
-        <div className="relative pt-48">
-            <div className="fixed inset-x-0 top-0 bg-white z-50">
+        <div className="relative">
+            <div className="fixed inset-x-0 top-0 z-50 bg-white">
                 {channelInfo && (
                     <div className="p-5 text-center border-b border-gray flex justify-between items-center">
                         <div>
@@ -299,7 +302,7 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-16 h-fit" style={{ overflow: 'auto' }}>
+            <div className="chat-list mx-5 pt-48 pb-16 h-screen" style={{ overflow: 'auto' }}>
                 <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
                     {chatList
                         .slice()

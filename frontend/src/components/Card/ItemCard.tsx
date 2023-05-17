@@ -24,9 +24,11 @@ interface dataProps {
     ownerId?: number;
     isBooked?: boolean;
     onRefreshKey?: () => void;
+    reservationId?: number;
+    hasReview?: boolean;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, onRefreshKey }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, reservationId, hasReview, onRefreshKey }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();

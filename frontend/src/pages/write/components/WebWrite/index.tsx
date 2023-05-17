@@ -13,6 +13,7 @@ import { BsSquare } from 'react-icons/bs';
 import Modal from '../Modal';
 import locationImg from '../../../../../public/icon/3Dloca.png';
 import WebImageUpload from '@/pages/write/components/Web/WebImageUpload';
+import spinner from '@/images/circle-loader.gif';
 
 interface Props {
     handleSubmit: () => void;
@@ -84,6 +85,9 @@ function index({ handleSubmit }: Props) {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalMessage, setModalMessage] = useState<string>('');
 
+    // 로딩중
+    const [loading, setLoading] = useState(false); // 추가: 로딩 상태
+
     const handleSubmitClick = () => {
         // 데이터 유효성 검사
         if (!data.productImg || data.productImg.length === 0) {
@@ -152,8 +156,8 @@ function index({ handleSubmit }: Props) {
         };
     }, []);
 
-    const backgroundColor = scrollY < 500 ? 'lightgrey' : 'transpate';
-    const borderline = scrollY < 500 ? 't' : 'none';
+    const backgroundColor = scrollY < 600 ? 'lightgrey' : 'transpate';
+    const borderline = scrollY < 600 ? 't' : 'none';
 
     return (
         <div>
@@ -164,13 +168,16 @@ function index({ handleSubmit }: Props) {
                     <div className="grid grid-cols-[1fr,3fr] items-center">
                         <p className=" font-bold text-[1.2rem]"> 글 유형 </p>
                         <div className="flex">
-                            <div onClick={() => onHandletypeData(false)} className={` w-[6vw] h-[4vh] rounded-full  mb-[1rem] text-center  py-1 ${!isRenter ? 'bg-blue' : 'bg-lightgrey'}`}>
-                                <span className={`font-bold ${isRenter ? 'text-darkgrey' : 'text-white'} text-[1.2rem] `}> 구해요 </span>
+                            <div onClick={() => onHandletypeData(false)} className={` w-[6vw] h-[4vh] rounded-full  mb-[1rem] text-center leading-[4vh]   ${!isRenter ? 'bg-blue' : 'bg-lightgrey'}`}>
+                                <span className={`font-bold  ${isRenter ? 'text-darkgrey' : 'text-white'} text-[1rem] `}> 구해요 </span>
                             </div>
                             <div className="w-6" />
 
-                            <div onClick={() => onHandletypeData(true)} className={` ${isRenter ? 'bg-blue' : 'bg-lightgrey'}  w-[6vw] h-[4vh] rounded-full  mb-[1rem] text-center  py-1 hover: `}>
-                                <span className={`font-bold ${isRenter ? 'text-white' : 'text-darkgrey'} text-[1.2rem] `}> 빌려줘요 </span>
+                            <div
+                                onClick={() => onHandletypeData(true)}
+                                className={` ${isRenter ? 'bg-blue' : 'bg-lightgrey'}  w-[6vw] h-[4vh] rounded-full  mb-[1rem] text-center leading-[4vh] hover: `}
+                            >
+                                <span className={`font-bold ${isRenter ? 'text-white' : 'text-darkgrey'} text-[1rem] `}> 빌려줘요 </span>
                             </div>
                         </div>
                     </div>
@@ -233,12 +240,25 @@ function index({ handleSubmit }: Props) {
                 </div>
                 <div className="mt-20"></div>
             </div>
-            <div className={` fixed bottom-0 w-full px-[11.6rem] py-5 h-[5.8rem] bg-${backgroundColor} border-${borderline} border-darkgrey text-right`}>
-                <button onClick={handleSubmitClick} className="w-[10rem] text-white text-[1.4rem] font-bold  bg-blue h-[3.5rem] hover:bg-black hover:text-white  ">
+            <div className={` fixed bottom-0 w-full px-[20rem]  h-[4rem] bg-${backgroundColor} border-${borderline} border-darkgrey text-right`}>
+                <button
+                    onClick={handleSubmitClick}
+                    className="absolute w-[10rem] text-white text-[1.4rem] font-bold top-1/2 -translate-y-1/2 rounded-md   bg-blue h-[2.5rem] hover:bg-black hover:text-white  "
+                >
                     등록하기
                 </button>
             </div>
             <Modal isModalOpen={isModalOpen} message={modalMessage} onClose={() => setIsModalOpen(false)} />
+            {loading ? (
+                <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-[rgba(0,0,0,0.2)] z-30">
+                    <div className=" absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+                        <Image src={spinner} alt="spinner" className="w-40 h-40" />
+                    </div>
+                    <p className="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-NanumNeo text-center text-base bg-black py-1 px-3 rounded-full">
+                        글을 등록하고 있어요.
+                    </p>
+                </div>
+            ) : null}
         </div>
     );
 }
