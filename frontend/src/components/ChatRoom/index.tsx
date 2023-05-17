@@ -54,14 +54,14 @@ function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMes
                     <div className="items-end">
                         <div className="flex justify-between">
                             <p className="font-medium me-2">{nickname}</p>
-                            <p className="text-gray-500 font-light">
-                                <span className="flex">
-                                    <BsDot className="mr-1" />
+                            <p className="text-gray-500 font-light text-xs">
+                                <span className="flex items-center justify-center">
+                                    <BsDot className="mr-[2px]" />
                                     {timeAgo(latestMessageDate)}
                                 </span>
                             </p>
+                            <p className="text-gray-500 me-1 font-light text-xs">{location}</p>
                         </div>
-                        <p className="text-gray-500 me-1 font-light">{location}</p>
                     </div>
                     <p className="truncate">{latestMessage}</p>
                 </div>
