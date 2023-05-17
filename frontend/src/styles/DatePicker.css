@@ -18,11 +18,11 @@
 }
 .react-datepicker__navigation--next {
     top: 8px;
-    right: 17vw;
+    right: 5vw;
 }
 .react-datepicker__navigation--previous {
     top: 8px;
-    left: 17vw;
+    left: 5vw;
 }
 .react-datepicker__header:not(.react-datepicker__header--has-time-select) {
     background-color: transparent;

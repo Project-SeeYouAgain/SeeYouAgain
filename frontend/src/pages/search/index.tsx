@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import ItemCard from '@/components/Card/ItemCard';
 import InfiniteScroll from 'react-infinite-scroller';
+import WebNavbar from './../../components/Container/components/WebNavbar/index';
 
 interface KeyInterface {
     id: number;
@@ -156,9 +157,43 @@ function Search() {
     }, [keywords]);
     const router = useRouter();
 
+    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const desktopQuery = window.matchMedia('(min-width:767px)');
+        const mobileQuery = window.matchMedia('(max-width:767px)');
+
+        const handleDesktopQuery = (event: MediaQueryListEvent) => {
+            setIsDesktop(event.matches);
+        };
+
+        const handleMobileQuery = (event: MediaQueryListEvent) => {
+            setIsMobile(event.matches);
+        };
+
+        desktopQuery.addEventListener('change', handleDesktopQuery);
+        mobileQuery.addEventListener('change', handleMobileQuery);
+
+        // 초기값 설정
+        setIsDesktop(desktopQuery.matches);
+        setIsMobile(mobileQuery.matches);
+
+        return () => {
+            desktopQuery.removeEventListener('change', handleDesktopQuery);
+            mobileQuery.removeEventListener('change', handleMobileQuery);
+        };
+    }, []);
+
+    // 로딩 중이거나 초기 상태일 때 출력할 내용
+    if (isDesktop === null || isMobile === null) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Container className="flex flex-col h-screen">
-            <div className="flex py-5 px-[1.2rem] items-center">
+            {isDesktop && <WebNavbar />}
+            <div className={classNames('flex py-5 px-[1.2rem] items-center', isDesktop ? 'mt-[100px]' : '')}>
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
                     <input
                         type="text"
@@ -196,20 +231,34 @@ function Search() {
                     ))}
                 </ul>
                 <div className="pb-16">
-                    <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
+                    <p className="my-4 mt-8 text-xl font-bold text-blue">검색 결과</p>
                     <div style={{ overflow: 'auto' }}>
                         <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
-                            {listdata &&
-                                listdata.map((item, index) => (
-                                    <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
-                                        <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
-                                    </div>
-                                ))}
+                            {isDesktop && (
+                                <div className="grid grid-cols-2 gap-4">
+                                    {listdata &&
+                                        listdata.map((item, index) => (
+                                            <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
+                                                <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                            </div>
+                                        ))}
+                                </div>
+                            )}
+                            {isMobile && (
+                                <div>
+                                    {listdata &&
+                                        listdata.map((item, index) => (
+                                            <div className="mb-[1rem]" onClick={() => onClick(item.productId)} key={index}>
+                                                <ItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
+                                            </div>
+                                        ))}
+                                </div>
+                            )}
                         </InfiniteScroll>
                     </div>
                 </div>
             </div>
-            <Navbar />
+            {isMobile && <Navbar />}
         </Container>
     );
 }
