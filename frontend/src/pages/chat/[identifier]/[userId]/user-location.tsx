@@ -124,7 +124,7 @@ const UserLocation: React.FC = () => {
         if (!router.isReady) return;
         console.log('연속 시작');
         if (myCheck) {
-            const intervalId = setInterval(updateLocation, 5000); // 10 second
+            const intervalId = setInterval(updateLocation, 3000); // 3 second
             return () => {
                 clearInterval(intervalId);
 
