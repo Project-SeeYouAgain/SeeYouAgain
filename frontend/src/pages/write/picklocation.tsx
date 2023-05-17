@@ -34,17 +34,7 @@ const pickLocation = ({
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
-    // const clickPositions = () => {
-    //     myCheck ? setMyCheck(false) : setMyCheck(true);
-    //     // 좌표로 행정동 주소 정보를 요청합니다
-    //     geocoder.coord2RegionCode(lng, lat, (result: any, status: any) => {
-    //         if (status == 'OK') {
-    //             const locationData = { lng, lat, RegionCode: result[0].region_3depth_name };
-    //             setData(prevData => ({ ...prevData, location: locationData }));
-    //             setIsLocationOn(false);
-    //         }
-    //     });
-    // };
+
     const [myCheck, setMyCheck] = useState(true);
     const clickPosition = () => {
         // console.log(lat, lng, score);
@@ -77,7 +67,6 @@ const pickLocation = ({
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
-                            console.error('행정동 주소 정보를 가져오는 데에 실패했습니다.');
                         }
                     });
                 } else if (result.isDenied) {
