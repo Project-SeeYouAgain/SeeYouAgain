@@ -34,6 +34,19 @@ const UserLocation: React.FC = () => {
                 setUserNickName(res.data.data.nickname);
             })
             .catch(err => console.log(err));
+        axAuth(token)({
+            method: 'get',
+            url: `/user-service/auth/location/${router.query.userId}`,
+        })
+            .then(res => {
+                console.log('다른 사람 프로필', res.data.data);
+                if (res.data.data.moving == true) {
+                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving });
+                }
+            })
+            .catch(err => {
+                setOtherUserLocation(null);
+            });
         const reserveLocation = localStorage.getItem('reservation-location');
         if (reserveLocation) {
             const reservationData = JSON.parse(reserveLocation);
@@ -74,6 +87,18 @@ const UserLocation: React.FC = () => {
     }, [userLocation, myCheck]);
     const updateLocation = () => {
         console.log('업데이트 로케이션');
+        axAuth(token)({
+            method: 'get',
+            url: `/user-service/auth/location/${router.query.userId}`,
+        })
+            .then(res => {
+                console.log('다른 사람 프로필', res.data.data);
+                if (res.data.data.moving == true) {
+                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving });
+                }
+            })
+            .catch(err => console.log(err));
+
         if (router.query.userId) {
             const watchId = navigator.geolocation.watchPosition(
                 position => {
