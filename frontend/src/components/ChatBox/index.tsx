@@ -47,4 +47,4 @@ function ChatBox({ chat, profileImg, writerId, userId, isRead, isImage }: ChatBo
     );
 }
 
-export default ChatBox;
+export default React.memo(ChatBox);
