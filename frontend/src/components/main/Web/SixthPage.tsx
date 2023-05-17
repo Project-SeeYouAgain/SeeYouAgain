@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import greeting from '@/images/greeting.png';
+import handshake from '@/images/handshake.png';
 import styles from './Web.module.scss';
 import classNames from 'classnames';
 import useInView from '../Web/useInView';
@@ -25,7 +25,7 @@ function SixthPage() {
                         <p>줄일 수 있고</p>
                     </div>
                 </div>
-                <Image src={greeting} alt="greeting" className={classNames('w-full mt-4', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)} />
+                <Image src={handshake} alt="greeting" className={classNames('w-[25rem] mx-auto', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)} />
             </div>
         </div>
     );

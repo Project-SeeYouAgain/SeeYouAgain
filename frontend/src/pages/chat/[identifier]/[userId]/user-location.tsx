@@ -117,7 +117,6 @@ const UserLocation: React.FC = () => {
                     };
 
                     try {
-                        console.log('2');
                         await axAuth(token)({
                             method: 'delete',
                             url: `/user-service/auth/location/${myId}`,

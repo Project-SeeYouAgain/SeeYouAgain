@@ -14,7 +14,7 @@ interface propdata {
 
 function Profile(data: propdata) {
     return (
-        <div>
+        <div className="w-full">
             <div className="flex">
                 {data.profileImg ? (
                     <Image src={data.profileImg} alt="이미지" className="rounded-full w-[80px] h-[80px] mr-3" width={300} height={400} />

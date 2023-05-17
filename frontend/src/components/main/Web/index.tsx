@@ -13,8 +13,6 @@ import logo from '@/images/logo.png';
 import kakao from '@/assets/icons/kakao_login_medium_narrow.png';
 
 export default function index() {
-    // useEffect(() => {}, []);
-
     const handleKakaoLogin = () => {
         location.href = 'http://k8c101.p.ssafy.io:8000/user-service/oauth2/authorization/kakao';
     };
@@ -22,8 +20,7 @@ export default function index() {
     return (
         <div>
             <div className={classNames('fixed top-0 h-16 w-full p-4 pl-12 pr-12', styles.header)}>
-                <Image src={logo} alt="logo" width={70} height={70} />
-                {/* <div onClick={handleKakaoLogin} className={classNames(styles.btn, 'rounded-xl')}> */}
+                <Image src={logo} alt="logo" className="w-8" />
                 <div className={classNames(styles.btn, 'rounded-xl')}>
                     <Image onClick={handleKakaoLogin} src={kakao} alt="kakaologin" className="p-0 m-0 rounded-xl" />
                 </div>
