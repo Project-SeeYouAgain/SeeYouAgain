@@ -48,8 +48,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
         if (map) {
             markers.forEach(marker => marker.setMap(null));
             setMarkers([]);
-
             const newMarkers = [];
+
             if (reservationLocation) {
                 const reservationMarker = new kakao.maps.CustomOverlay({
                     position: new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng),
@@ -58,38 +58,38 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                 reservationMarker.setMap(map);
                 newMarkers.push(reservationMarker);
             }
-            if (userLocation && reservationLocation) {
-                const marker = new kakao.maps.CustomOverlay({
+
+            if (userLocation) {
+                const userMarker = new kakao.maps.CustomOverlay({
                     position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
                     content: content,
                 });
-                marker.setMap(map);
-                newMarkers.push(marker);
-                const bounds = new kakao.maps.LatLngBounds();
-                bounds.extend(new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng));
-                bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
-                map.setBounds(bounds);
+                userMarker.setMap(map);
+                newMarkers.push(userMarker);
             }
-            if (otherUserLocation && reservationLocation) {
+
+            if (otherUserLocation) {
                 const otherMarker = new kakao.maps.CustomOverlay({
                     position: new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng),
                     content: otherContent,
                 });
                 otherMarker.setMap(map);
                 newMarkers.push(otherMarker);
-                const bounds = new kakao.maps.LatLngBounds();
-                bounds.extend(new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng));
-                bounds.extend(new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng));
-                map.setBounds(bounds);
             }
 
-            if (userLocation && otherUserLocation && reservationLocation) {
-                const bounds = new kakao.maps.LatLngBounds();
+            setMarkers(newMarkers);
+
+            const bounds = new kakao.maps.LatLngBounds();
+            if (reservationLocation) {
                 bounds.extend(new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng));
-                bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
-                bounds.extend(new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng));
-                map.setBounds(bounds);
             }
+            if (userLocation) {
+                bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
+            }
+            if (otherUserLocation) {
+                bounds.extend(new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng));
+            }
+            map.setBounds(bounds);
         }
     }, [map, userLocation, otherUserLocation]);
 

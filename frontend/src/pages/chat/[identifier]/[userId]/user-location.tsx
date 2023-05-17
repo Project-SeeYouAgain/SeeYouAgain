@@ -68,23 +68,6 @@ const UserLocation: React.FC = () => {
         myId;
     });
 
-    useEffect(() => {
-        if (userLocation) {
-            const data = { lat: userLocation.lat, lng: userLocation.lng, moving: myCheck };
-            axAuth(token)({
-                method: 'post',
-                url: '/user-service/auth/location',
-                data: data,
-            })
-                .then(res => {
-                    console.log('성공', res);
-                })
-
-                .catch(err => {
-                    console.log(err);
-                });
-        }
-    }, [userLocation, myCheck]);
     const updateLocation = () => {
         console.log('업데이트 로케이션');
         axAuth(token)({
@@ -92,7 +75,7 @@ const UserLocation: React.FC = () => {
             url: `/user-service/auth/location/${router.query.userId}`,
         })
             .then(res => {
-                console.log('다른 사람 프로필', res.data.data);
+                console.log('다른 사람 위치', res.data.data);
                 if (res.data.data.moving == true) {
                     setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving });
                 }
@@ -103,9 +86,24 @@ const UserLocation: React.FC = () => {
             const watchId = navigator.geolocation.watchPosition(
                 position => {
                     console.log('position부분까지');
+                    console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
                     setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
                     if (position) {
                         console.log('position if 부분');
+                        const data = { lat: position.coords.latitude, lng: position.coords.longitude, moving: myCheck };
+                        console.log('내 위치 보내기');
+                        axAuth(token)({
+                            method: 'post',
+                            url: '/user-service/auth/location',
+                            data: data,
+                        })
+                            .then(res => {
+                                console.log('성공', res);
+                            })
+
+                            .catch(err => {
+                                console.log(err);
+                            });
                     }
                 },
                 error => {
@@ -125,7 +123,7 @@ const UserLocation: React.FC = () => {
     useEffect(() => {
         if (!router.isReady) return;
         console.log('연속 시작');
-        const intervalId = setInterval(updateLocation, 10000); // 10 second
+        const intervalId = setInterval(updateLocation, 5000); // 10 second
         if (myCheck) {
             intervalId;
         }
