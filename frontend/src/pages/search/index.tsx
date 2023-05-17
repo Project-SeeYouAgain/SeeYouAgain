@@ -153,13 +153,7 @@ function Search() {
 
     return (
         <Container className="flex flex-col h-screen">
-            <div className="flex p-4 pt-5 px-[1.88rem] items-center">
-                <BsArrowLeft
-                    size={30}
-                    onClick={() => {
-                        router.back();
-                    }}
-                />
+            <div className="flex py-5 px-[1.2rem] items-center">
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
                     <input
                         type="text"
@@ -195,9 +189,9 @@ function Search() {
                         </li>
                     ))}
                 </ul>
-                <div className='pb-16'>
+                <div className="pb-16">
                     <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
-                    <div className="h-screen" style={{ overflow: 'auto' }}>
+                    <div style={{ overflow: 'auto' }}>
                         <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
                             {listdata &&
                                 listdata.map((item, index) => (
