@@ -115,9 +115,6 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         setIsDesktop(desktopQuery.matches);
         setIsMobile(mobileQuery.matches);
 
-        console.log(isMobile);
-        console.log(hasReview);
-
         return () => {
             desktopQuery.removeEventListener('change', handleDesktopQuery);
             mobileQuery.removeEventListener('change', handleMobileQuery);
@@ -154,6 +151,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                                         start={startDate}
                                         end={endDate}
                                         {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }}
+                                        reservationId={reservationId}
                                     />
                                 </>
                             ) : (
@@ -215,6 +213,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                                         start={startDate}
                                         end={endDate}
                                         {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }}
+                                        reservationId={reservationId}
                                     />
                                 </>
                             ) : (

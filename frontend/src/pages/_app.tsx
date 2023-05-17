@@ -3,7 +3,6 @@ import { RecoilRoot } from 'recoil';
 import '@/styles/globals.css';
 import '@/styles/fonts/style.css';
 import type { AppProps } from 'next/app';
-
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/styles/DatePicker.css';
 import Router from 'next/router';

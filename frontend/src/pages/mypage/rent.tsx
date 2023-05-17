@@ -107,6 +107,7 @@ function Rent() {
                                             productId={item.productId}
                                             ownerId={item.ownerId}
                                             hasReview={item.hasReview}
+                                            reservationId={item.reservationId}
                                         />
                                     </Link>
                                 ))}
@@ -138,6 +139,7 @@ function Rent() {
                                     ownerId={item.ownerId}
                                     key={index}
                                     hasReview={item.hasReview}
+                                    reservationId={item.reservationId}
                                 />
                             ))
                         ) : (
