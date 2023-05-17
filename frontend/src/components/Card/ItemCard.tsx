@@ -24,9 +24,11 @@ interface dataProps {
     ownerId?: number;
     isBooked?: boolean;
     onRefreshKey?: () => void;
+    reservationId?: number;
+    hasReview?: boolean;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, onRefreshKey }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, reservationId, hasReview, onRefreshKey }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();
@@ -105,7 +107,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
             <div className="items-center pl-4 pr-1" style={{ width: containerWidth }}>
                 <span className="font-semibold w-full flex items-center justify-between relative">
                     <p className=" truncate dark:text-black font-bolder">{title}</p>
-                    {menuState !== undefined ? (
+                    {menuState !== undefined && hasReview !== true ? (
                         <>
                             <SlOptions className="bg-[#F2F2F2] h-[1.5rem] px-[0.4rem] w-[1.5rem] rounded-[0.2rem]" color="gray" onClick={(event: React.MouseEvent) => Dropdown(event)} />
                             <ItemCardOption
@@ -115,6 +117,8 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                                 start={startDate}
                                 end={endDate}
                                 {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }}
+                                reservationId={reservationId}
+                                title={title}
                             />
                         </>
                     ) : (
