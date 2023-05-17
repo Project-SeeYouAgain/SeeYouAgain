@@ -106,6 +106,7 @@ function Rent() {
                                             menuState={menuState}
                                             productId={item.productId}
                                             ownerId={item.ownerId}
+                                            hasReview={item.hasReview}
                                         />
                                     </Link>
                                 ))}
