@@ -58,7 +58,8 @@ function Detail() {
     useEffect(() => {
         const productId = Number(window.location.pathname.substring(1));
         setProduct(productId);
-        if (token === undefined) {
+        if (token === undefined || token === null) {
+            console.log('로그인 풀림');
             router.push('/');
         }
         const url = `/product-service/auth/${productId}`;

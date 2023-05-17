@@ -193,7 +193,8 @@ function Channel() {
 
     useEffect(() => {
         const resizeAndUploadImage = async () => {
-            if (token === undefined) {
+            if (token === undefined || token === null) {
+                console.log('로그인 풀림');
                 router.push('/');
             }
             if (image) {

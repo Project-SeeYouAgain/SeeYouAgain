@@ -61,7 +61,8 @@ function MyPage() {
 
     const token = useRecoilValue(userState).accessToken;
     useEffect(() => {
-        if (token === undefined) {
+        if (token === undefined || token === null) {
+            console.log('로그인 풀림');
             router.push('/');
         }
         const url = `/user-service/auth/profile`;
