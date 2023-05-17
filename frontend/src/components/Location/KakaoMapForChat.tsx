@@ -31,7 +31,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
         const container = document.getElementById('map');
 
         const options = {
-            center: new kakao.maps.LatLng(lat, lng),
+            center: new kakao.maps.LatLng(reservationLocation?.lat, reservationLocation?.lng),
             zoomControl: false,
             draggable: false,
             scrollwheel: false,
@@ -42,22 +42,19 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
 
         const newMap = new kakao.maps.Map(container, options);
         setMap(newMap);
-    }, [lat, lng]);
+    }, [reservationLocation]);
 
     useEffect(() => {
-        if (map) {
-            markers.forEach(marker => marker.setMap(null));
-            setMarkers([]);
+        if (map && reservationLocation) {
             const newMarkers = [];
-
-            if (reservationLocation) {
-                const reservationMarker = new kakao.maps.CustomOverlay({
-                    position: new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng),
-                    content: reservationContent,
-                });
-                reservationMarker.setMap(map);
-                newMarkers.push(reservationMarker);
-            }
+            setMarkers([]);
+            const reservationMarker = new kakao.maps.CustomOverlay({
+                position: new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng),
+                content: reservationContent,
+            });
+            reservationMarker.setMap(map);
+            newMarkers.push(reservationMarker);
+            markers.forEach(marker => marker.setMap(null));
 
             if (userLocation) {
                 const userMarker = new kakao.maps.CustomOverlay({
