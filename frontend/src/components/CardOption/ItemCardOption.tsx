@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { axAuth, axBase } from '@/apis/axiosinstance';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState, productState } from 'recoil/user/atoms';
+import { userState, productState, reservationIdState } from 'recoil/user/atoms';
 import Calender from '../../components/Card/Calender';
 import Square from '../Button/Square';
 import Link from 'next/link';
@@ -13,12 +13,14 @@ interface ItemCardOptionProps {
     dropdownVisible: boolean;
     productId: number;
     ownerId?: number;
-    isBooked?: boolean;
     start?: string;
     end?: string;
+    isBooked?: boolean;
+    reservationId?: number;
+    title?: string;
 }
 
-const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, isBooked, start, end }) => {
+const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, dropdownVisible, productId, ownerId, start, end, reservationId, title }) => {
     interface bookdatatype {
         startDate: string;
         endDate: string;
@@ -28,6 +30,7 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
     const [modalNum, setModalNum] = useState<number>(0);
     const [bookData, setBookData] = useState<bookdatatype[]>([]);
     const [productStateData, setProductStateData] = useRecoilState(productState);
+    const [reservationIdStateData, setReservationIdStateData] = useRecoilState(reservationIdState);
 
     function CancelBook() {
         setModalNum(0);
@@ -67,7 +70,9 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
             .catch(err => console.log(err));
     }
 
-    function GoReview() {
+    function GoReview(event: React.MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
         const url = `/chatting-service/auth/channel`;
         const myData = {
             productId: productId,
@@ -75,6 +80,13 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
         };
         axBase(token)({ method: 'post', url: url, data: myData })
             .then(res => {
+                if (reservationId && title) {
+                    setReservationIdStateData({
+                        ...reservationIdStateData,
+                        reservationId: reservationId,
+                        title: title,
+                    });
+                }
                 router.push(`/chat/${res.data.data}/rating`);
             })
             .catch(err => console.log(err));
@@ -138,11 +150,9 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                                 </div>
                             </>
                         ) : (
-                            <Link href={`/chat//rating`}>
-                                <div className="block px-4 py-2" onClick={GoReview}>
-                                    리뷰작성
-                                </div>
-                            </Link>
+                            <div className="block px-4 py-2" onClick={(event: React.MouseEvent) => GoReview(event)}>
+                                리뷰작성
+                            </div>
                         )
                     ) : menuState === 1 ? (
                         <>

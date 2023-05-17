@@ -25,6 +25,8 @@ function Rent() {
         menuState: number;
         productId: number;
         ownerId: number;
+        reservationId: number;
+        hasReview: boolean;
     }
     const [menuState, setMenuState] = useState<number>(1);
     const [itemList, setItemList] = useState<RentalItem[]>([]);
@@ -65,6 +67,8 @@ function Rent() {
                             productId={item.productId}
                             ownerId={item.ownerId}
                             key={index}
+                            reservationId={item.reservationId}
+                            hasReview={item.hasReview}
                         />
                     ))
                 ) : (
