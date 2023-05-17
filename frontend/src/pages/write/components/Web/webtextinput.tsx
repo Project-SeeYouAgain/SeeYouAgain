@@ -31,8 +31,14 @@ function WebTextInput({ setData, onSubmit, data }: { setData: React.Dispatch<Rea
     return (
         <div>
             <div className="grid grid-cols-[1fr,3fr] items-center mb-8">
-                <span className="font-bold text-[1.2rem] mb-[0.43rem]">제목</span>
-                <input type="text" className="px-[1rem] w-[40vw] h-[3rem] border border-darkgrey rounded-md focus:outline-none" onKeyPress={handleKeyPress} onChange={handleTitleChange} />
+                <span className="font-bold  text-[1.2rem] mb-[0.43rem]">제목</span>
+                <input
+                    type="text"
+                    className="px-[1rem] w-[40vw] h-[3rem] border border-darkgrey rounded-md focus:outline-none"
+                    placeholder="제목을 입력해주세요."
+                    onKeyPress={handleKeyPress}
+                    onChange={handleTitleChange}
+                />
             </div>
             {/* AI로 시세 가격 추천이 가능할까?  */}
             <div className="grid grid-cols-[1fr,3fr] mt-[3rem] items-center mb-8">
@@ -46,7 +52,7 @@ function WebTextInput({ setData, onSubmit, data }: { setData: React.Dispatch<Rea
                     />
                     <span className="font-bold ml-[.5rem] text-[1.2rem]">원</span>
                 </div>
-                <span className="text-darkgrey">* 하루 당 금액을 입력해주세요.</span>
+                <span className="text-darkgrey font-NanumNeo text-[.9rem]">* 하루 당 금액을 입력해주세요.</span>
             </div>
             <div className="grid grid-cols-[1fr,3fr] mt-[3rem] ">
                 <p className="font-bold mt-[1rem] text-[1.2rem] mb-[0.43rem]">설명</p>
