@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import ko from 'date-fns/locale/ko';
-import { format } from 'date-fns';
+import { format, isBefore, isSameDay, isAfter } from 'date-fns';
 type CalenderProps = {
     onChange?: (startDate: Date | null, endDate: Date | null) => void;
 };
@@ -18,9 +18,29 @@ function Calender({ onChange }: CalenderProps) {
         }
     }
 
+    const isBeforeTodayOrSameDay = (date: Date | null) => {
+        const today = new Date();
+        return date ? isBefore(date, today) || isSameDay(date, today) : false;
+    };
+
+    const isAfterToday = (date: Date | null) => {
+        const today = new Date();
+        return date ? isAfter(date, today) : false;
+    };
+
     return (
         <div>
-            <DatePicker locale={ko} inline={true} dateFormat="yyyy-MM-dd" startDate={startDate} endDate={endDate} selectsRange onChange={handleDateChange} />
+            <DatePicker
+                locale={ko}
+                inline={true}
+                dateFormat="yyyy-MM-dd"
+                startDate={startDate}
+                endDate={endDate}
+                selectsRange
+                onChange={handleDateChange}
+                minDate={new Date()}
+                filterDate={date => isBeforeTodayOrSameDay(date) || isAfterToday(date)}
+            />
             <div className="mt-[.5rem] mb-4 px-2 py-1 text-center bg-lightgrey rounded-[.3rem]">
                 {startDate && endDate ? (
                     <div className="grid grid-cols-2 ">
