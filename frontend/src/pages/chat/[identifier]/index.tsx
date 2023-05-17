@@ -260,8 +260,8 @@ function Channel() {
     };
 
     return (
-        <div className="relative pt-48 h-screen">
-            <div className="fixed inset-x-0 top-0 bg-white z-50">
+        <div className="relative h-screen">
+            <div className="fixed inset-x-0 top-0 z-50 bg-white">
                 {channelInfo && (
                     <div className="p-5 text-center border-b border-gray flex justify-between items-center">
                         <div>
@@ -299,7 +299,7 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-16 h-screen" style={{ overflow: 'auto' }}>
+            <div className="chat-list mx-5 pt-48 pb-16 h-screen" style={{ overflow: 'auto' }}>
                 <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
                     {chatList
                         .slice()
