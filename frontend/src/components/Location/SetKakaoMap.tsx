@@ -24,27 +24,30 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = 
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const router = useRouter();
     useEffect(() => {
-        if (userLocation === null && navigator.geolocation) {
-            console.log(navigator.geolocation);
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    setUserLocation({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    });
-                },
-                error => {
-                    console.log(error);
-                },
-            );
+        const getLocation = () => {
+            if (navigator.geolocation) {
+                const options = {
+                    maximumAge: 0,
+                };
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    },
+                    error => {
+                        console.error('Error getting position:', error);
+                    },
+                    options,
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+        };
+
+        if (userLocation === null) {
+            getLocation();
         } else {
-            console.log('Geolocation is not supported by this browser.');
-        }
-    }, [userLocation]);
-    useEffect(() => {
-        const createMap = () => {
             const container = document.getElementById('map');
-            if (!container || !userLocation) return;
+            if (!container) return;
 
             const options = {
                 center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
@@ -54,37 +57,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = 
             };
             const newMap = new kakao.maps.Map(container, options);
             setMap(newMap);
-        };
-
-        const observer = new MutationObserver(mutations => {
-            mutations.forEach(mutation => {
-                if (!mutation.target) return;
-                if ((mutation.target as HTMLElement).id === 'map') {
-                    createMap();
-                    observer.disconnect();
-                }
-            });
-        });
-
-        observer.observe(document.body, { childList: true, subtree: true });
-
-        return () => observer.disconnect();
+        }
     }, [userLocation]);
-
-    // useEffect(() => {
-    //     const container = document.getElementById('map');
-    //     if (!container) return;
-    //     if (userLocation) {
-    //         const options = {
-    //             center: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-    //             level: 3,
-    //             minLevel: 3,
-    //             maxLevel: 4,
-    //         };
-    //         const newMap = new kakao.maps.Map(container, options);
-    //         setMap(newMap);
-    //     }
-    // }, [userLocation]);
 
     const safetyScoreToColor = (score: number) => {
         if (score >= 7.5) {
