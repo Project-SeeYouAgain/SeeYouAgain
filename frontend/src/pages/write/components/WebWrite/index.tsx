@@ -136,17 +136,17 @@ function index({ handleSubmit }: Props) {
         // 데이터가 유효하면 handleSubmit 함수 호출
         handleSubmit();
     };
-    const router = useRouter();
-    useEffect(() => {
-        const reload = localStorage.getItem('reload');
-        if (!reload) {
-            localStorage.setItem('reload', 'true');
-            router.reload();
-        }
-        return () => {
-            localStorage.removeItem('reload');
-        };
-    }, []);
+    // const router = useRouter();
+    // useEffect(() => {
+    //     const reload = localStorage.getItem('reload');
+    //     if (!reload) {
+    //         localStorage.setItem('reload', 'true');
+    //         router.reload();
+    //     }
+    //     return () => {
+    //         localStorage.removeItem('reload');
+    //     };
+    // }, []);
 
     // 스크롤 위치 저장
     const [scrollY, setScrollY] = useState(0);
