@@ -40,30 +40,93 @@ function Cart() {
             .catch(err => console.log(err));
     }, [refreshKey]);
 
+    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const desktopQuery = window.matchMedia('(min-width:767px)');
+        const mobileQuery = window.matchMedia('(max-width:767px)');
+
+        const handleDesktopQuery = (event: MediaQueryListEvent) => {
+            setIsDesktop(event.matches);
+        };
+
+        const handleMobileQuery = (event: MediaQueryListEvent) => {
+            setIsMobile(event.matches);
+        };
+
+        desktopQuery.addEventListener('change', handleDesktopQuery);
+        mobileQuery.addEventListener('change', handleMobileQuery);
+
+        // 초기값 설정
+        setIsDesktop(desktopQuery.matches);
+        setIsMobile(mobileQuery.matches);
+
+        return () => {
+            desktopQuery.removeEventListener('change', handleDesktopQuery);
+            mobileQuery.removeEventListener('change', handleMobileQuery);
+        };
+    }, []);
+
+    // 로딩 중이거나 초기 상태일 때 출력할 내용
+    if (isDesktop === null || isMobile === null) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Container>
-            <Header title="찜 목록"></Header>
-            <Body>
-                <div className="border-b mt-[5rem]"></div>
-                {itemList.length === 0 ? (
-                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                ) : (
-                    itemList.map((item, index) => (
-                        <Link key={index} href={''}>
-                            <Card
-                                productImg={item.productImg}
-                                title={item.title}
-                                location={item.location}
-                                price={item.price}
-                                isSafe={item.isSafe}
-                                productId={item.productId}
-                                isCart={isCart}
-                                onRefreshKey={handleRefreshKey}
-                            />
-                        </Link>
-                    ))
-                )}
-            </Body>
+            {isDesktop && (
+                <>
+                    <div className="w-full mb-4 text-2xl font-bold pb-4 border-b-2 border-solid"><p className='pl-4'>찜 목록</p></div>
+                    {itemList.length === 0 ? (
+                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                    ) : (
+                        <div className="grid grid-cols-2 gap-4">
+                            {itemList.map((item, index) => (
+                                <Link key={index} href={''}>
+                                    <Card
+                                        productImg={item.productImg}
+                                        title={item.title}
+                                        location={item.location}
+                                        price={item.price}
+                                        isSafe={item.isSafe}
+                                        productId={item.productId}
+                                        isCart={isCart}
+                                        onRefreshKey={handleRefreshKey}
+                                    />
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                </>
+            )}
+
+            {isMobile && (
+                <>
+                    <Header title="찜 목록"></Header>
+                    <Body>
+                        <div className="border-b mt-[5rem]"></div>
+                        {itemList.length === 0 ? (
+                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                        ) : (
+                            itemList.map((item, index) => (
+                                <Link key={index} href={''}>
+                                    <Card
+                                        productImg={item.productImg}
+                                        title={item.title}
+                                        location={item.location}
+                                        price={item.price}
+                                        isSafe={item.isSafe}
+                                        productId={item.productId}
+                                        isCart={isCart}
+                                        onRefreshKey={handleRefreshKey}
+                                    />
+                                </Link>
+                            ))
+                        )}
+                    </Body>
+                </>
+            )}
         </Container>
     );
 }
