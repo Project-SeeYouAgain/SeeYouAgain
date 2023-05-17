@@ -15,7 +15,7 @@ export default function index() {
         if (token) {
             router.push('/home');
         }
-    }, []);
+    }, [token]);
     return <div>{isMobile ? <Mobile /> : <Web />}</div>;
 }
 // test

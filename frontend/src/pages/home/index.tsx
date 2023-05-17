@@ -89,6 +89,9 @@ function Home() {
     };
 
     useEffect(() => {
+        if (token === undefined) {
+            router.push('/');
+        }
         setUser(userset);
         axAuth(token)({
             method: 'post',
@@ -213,7 +216,7 @@ function Home() {
             // ...
         });
     }, []);
-    
+
     useEffect(() => {
         const handleResize = () => {
             const windowHeight = window.innerHeight;
