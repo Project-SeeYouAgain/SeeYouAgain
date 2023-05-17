@@ -47,7 +47,8 @@ function Search() {
 
     // 페이지 로드 시 로컬스토리지에서 기존 검색어 불러오기
     useEffect(() => {
-        if (token) {
+        if (token === undefined || token === null) {
+            console.log('로그인 풀림');
             router.push('/');
         }
         const storedKeywords = localStorage.getItem('keywords');

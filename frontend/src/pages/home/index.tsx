@@ -89,7 +89,8 @@ function Home() {
     };
 
     useEffect(() => {
-        if (token === undefined) {
+        if (token === undefined || token === null) {
+            console.log('로그인 풀림');
             router.push('/');
         }
         setUser(userset);
