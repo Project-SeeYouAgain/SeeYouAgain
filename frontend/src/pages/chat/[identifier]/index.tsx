@@ -156,6 +156,9 @@ function Channel() {
         }).then(res => {
             if (res.data.data.length < 30) {
                 setHasMore(false);
+                const messageList = res.data.data;
+                setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
+                setFirstMessageId(messageList[messageList.length - 1].messageId);
             } else {
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
