@@ -310,7 +310,7 @@ function Detail() {
                             </div>
                         </div>
                         {myUserId !== data.ownerId ? (
-                            <div className="sticky bottom-0 border-t border-solid w-full h-[4rem] flex px-7 items-center bg-white">
+                            <div className="sticky z-40 bottom-0 border-t border-solid w-full h-[4rem] flex px-7 items-center bg-white">
                                 <div className="w-[40px] flex items-center justify-center">
                                     {data.isCart === true ? <AiFillHeart color="blue" size={34} onClick={ClickHeart} /> : <AiOutlineHeart color="blue" size={34} onClick={ClickHeart} />}
                                 </div>
