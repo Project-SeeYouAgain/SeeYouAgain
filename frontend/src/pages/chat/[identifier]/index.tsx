@@ -193,6 +193,9 @@ function Channel() {
 
     useEffect(() => {
         const resizeAndUploadImage = async () => {
+            if (token === undefined) {
+                router.push('/');
+            }
             if (image) {
                 const formData = new FormData();
                 const resizedImageBlob = await resizeImage(image);
