@@ -137,6 +137,7 @@ function Rent() {
                                     productId={item.productId}
                                     ownerId={item.ownerId}
                                     key={index}
+                                    hasReview={item.hasReview}
                                 />
                             ))
                         ) : (
