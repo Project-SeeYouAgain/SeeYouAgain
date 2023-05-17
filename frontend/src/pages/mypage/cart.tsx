@@ -77,9 +77,14 @@ function Cart() {
         <Container>
             {isDesktop && (
                 <>
-                    <div className="w-full mb-4 text-2xl font-bold pb-4 border-b-2 border-solid"><p className='pl-4'>찜 목록</p></div>
+                    <div className="w-full mb-4 text-2xl font-bold pb-4 border-b-2 border-solid">
+                        <p className="pl-4">찜 목록</p>
+                    </div>
                     {itemList.length === 0 ? (
-                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                        <>
+                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                            <p className="text-center text-2xl font-bold">찜 목록이 없습니다.</p>
+                        </>
                     ) : (
                         <div className="grid grid-cols-2 gap-4">
                             {itemList.map((item, index) => (
@@ -107,7 +112,10 @@ function Cart() {
                     <Body>
                         <div className="border-b mt-[5rem]"></div>
                         {itemList.length === 0 ? (
-                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                            <>
+                                <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                <p className="text-center text-xl font-bold">찜 목록이 없습니다.</p>
+                            </>
                         ) : (
                             itemList.map((item, index) => (
                                 <Link key={index} href={''}>
