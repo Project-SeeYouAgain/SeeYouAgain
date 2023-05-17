@@ -62,6 +62,10 @@ public class Participant extends TimeStamped {
         this.readMessageSize = readMessageSize;
     }
 
+    public void plusReadMessageSize() {
+        this.readMessageSize += 1;
+    }
+
     public void updateLastReadMessageId(Long lastReadMessageId) {
         this.lastReadMessageId = lastReadMessageId;
     }

@@ -36,6 +36,11 @@ public class MessageServiceImpl implements MessageService{
         Participant participant = participantRepository.findByUserIdAndChannelIdentifier(requestDto.getWriterId(), requestDto.getIdentifier())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
 
+        Participant you = participantRepository.findByUserIdAndChannelIdentifier(requestDto.getYouId(), requestDto.getIdentifier())
+                .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_CHATTING_MEMBER_EXCEPTION));
+
+        if (you.getIsOut()) you.plusReadMessageSize();
+
         Channel channel = channelRepository.findByIdentifier(requestDto.getIdentifier())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NOT_EXIST_CHANNEL_EXCEPTION));
 
