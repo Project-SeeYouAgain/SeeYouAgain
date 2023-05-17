@@ -320,7 +320,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ onCenterChanged, onCenter, click = 
                     <BiCurrentLocation className="w-full h-full p-1" onClick={reload} />
                 </button>
             )}
-            <Image src={pin} alt="pins" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full z-10" />
+            <Image src={pin} alt="pins" className="absolute w-[4rem] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full z-10" />
         </div>
     );
 };
