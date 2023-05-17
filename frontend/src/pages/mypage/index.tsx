@@ -8,7 +8,8 @@ import Body from '@/components/Container/components/Body';
 import { axBase } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
+import { userState, productState, reservationIdState } from 'recoil/user/atoms';
+import { atom, useResetRecoilState } from 'recoil';
 import Navbar from '@/components/Container/components/Navbar';
 import { useRouter } from 'next/router';
 import { Cookies } from 'react-cookie';
@@ -47,13 +48,36 @@ function MyPage() {
                 return <Cart />;
         }
     };
+    const resetUserState = useResetRecoilState(userState);
+    const resetProductState = useResetRecoilState(productState);
+    const resetReservationIdState = useResetRecoilState(reservationIdState);
 
     const Router = useRouter();
     const logout = () => {
         for (const name in allCookies) {
             cookie.remove(name);
         }
+
+        const userState = atom({
+            key: 'userState',
+            default: {},
+        });
+
+        const productState = atom({
+            key: 'productState',
+            default: {},
+        });
+
+        const reservationIdState = atom({
+            key: 'reservationIdState',
+            default: {},
+        });
+
         sessionStorage.removeItem('recoil-persist');
+
+        resetUserState();
+        resetProductState();
+        resetReservationIdState();
 
         Router.push('/');
     };

@@ -11,4 +11,5 @@ public class MessageRequestDto {
     private Long writerId;
     private String chat;
     private Boolean isImage;
+    private Long youId;
 }
