@@ -15,12 +15,15 @@ import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Navbar from '@/components/Container/components/Navbar';
+import Image from 'next/image';
+import spinner from '@/images/circle-loader.gif';
 
 function Write() {
     const [currentStep, setCurrentStep] = useState<number>(1);
     const [stepOneData, setStepOneData] = useState<StepOneData | null>(null);
     const [stepTwoData, setStepTwoData] = useState<StepTwoData | null>(null);
     const token = useRecoilValue(userState).accessToken;
+    const [loading, setLoading] = useState(false); // 추가: 로딩 상태
 
     const router = useRouter();
 
@@ -30,7 +33,6 @@ function Write() {
 
     const handleStepTwoSubmit = (data: StepTwoData) => {
         setStepTwoData(prevData => ({ ...prevData, ...data }));
-        console.log('스텝투데이터:', data); // 데이터 확인용
     };
     // 날짜 변환 함수
     function formatDate(dateStr: any) {
@@ -48,6 +50,8 @@ function Write() {
     // 제출
     const handleSubmit = () => {
         if (!stepOneData || !stepTwoData) return;
+
+        setLoading(true);
 
         const data = {
             ...stepOneData,
@@ -139,18 +143,23 @@ function Write() {
         console.log('폼데이터 입니다.', formData);
         console.log('제출 데이터 입니다.', submitData);
         console.log('난 그냥 데이터', data);
-
-        axAuth(token)({
-            method: 'post',
-            url: '/product-service/auth',
-            headers: { 'Content-Type': 'multipart/form-data' },
-            data: formData,
-        })
-            .then(res => {
-                alert('게시글이 등록되었습니다!');
-                router.push('/home');
-            }) // 잘 들어갔는지 확인
-            .catch(err => console.log(err)); // 어떤 오류인지 확인)
+        try {
+            axAuth(token)({
+                method: 'post',
+                url: '/product-service/auth',
+                headers: { 'Content-Type': 'multipart/form-data' },
+                data: formData,
+            })
+                .then(res => {
+                    alert('게시글이 등록되었습니다!');
+                    router.push('/home');
+                }) // 잘 들어갔는지 확인
+                .catch(err => console.log(err)); // 어떤 오류인지 확인)
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
     };
     // 미디어쿼리
     const isDesktop: boolean = useMediaQuery({
@@ -191,15 +200,29 @@ function Write() {
                                 </>
                             )}
                             {currentStep == 2 && (
-                                <div className="fixed bottom-0 w-full flex py-4 z-30 bg-white">
-                                    <div className="flex m-auto">
-                                        <button className=" text-white text-[2rem] bg-[#d2d2d2] w-[3.2rem] h-[3rem] rounded-l-[.4rem]" onClick={handlePrevious}>
-                                            <MdKeyboardArrowLeft className="m-auto" />
-                                        </button>
-                                        <button onClick={handleSubmit} className="text-white text-[1rem] bg-blue w-[70vw] h-[3rem] rounded-r-[.4rem]">
-                                            등록하기
-                                        </button>
-                                    </div>
+                                <div>
+                                    {loading ? (
+                                        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-[rgba(0,0,0,0.2)] z-30">
+                                            <div className=" absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+                                                <Image src={spinner} alt="spinner" className="w-10 h-10" />
+                                            </div>
+                                            <p className="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-NanumNeo text-center text-base bg-black py-1 px-3 rounded-full">
+                                                글을 등록하고 있어요.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="fixed bottom-0 w-full flex py-4 z-30 bg-white">
+                                            <div className="flex m-auto">
+                                                <button className=" text-white text-[2rem] bg-[#d2d2d2] w-[3.2rem] h-[3rem] rounded-l-[.4rem]" onClick={handlePrevious}>
+                                                    <MdKeyboardArrowLeft className="m-auto" />
+                                                </button>
+
+                                                <button onClick={handleSubmit} className="text-white text-[1rem] bg-blue w-[70vw] h-[3rem] rounded-r-[.4rem]">
+                                                    등록하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </>

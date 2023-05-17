@@ -10,7 +10,6 @@ import { AiOutlineLeft } from 'react-icons/ai';
 import { IoMdSend } from 'react-icons/io';
 import Button from '@/components/Button';
 import InfiniteScroll from 'react-infinite-scroller';
-import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import { Cookies } from 'react-cookie';
@@ -60,7 +59,7 @@ function Channel() {
 
     // 뒤로가기
     const handleBack = () => {
-        router.back();
+        router.push('/chat');
     };
 
     const connect = () => {
@@ -114,19 +113,6 @@ function Channel() {
         setChat('');
     };
 
-    const disconnect = () => {
-        if (chatList.length > 0) {
-            setLastReadMessageId(chatList[0].messageId);
-        }
-
-        axAuth(token)({
-            url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
-            method: 'patch',
-        }).then(() => {
-            client.current?.deactivate();
-        });
-    };
-
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         setChat(event.target.value);
     };
@@ -154,12 +140,15 @@ function Channel() {
         axAuth(token)({
             url: api,
         }).then(res => {
-            if (res.data.data.length > 0) {
+            if (res.data.data.length < 30) {
+                setHasMore(false);
                 const messageList = res.data.data;
                 setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
                 setFirstMessageId(messageList[messageList.length - 1].messageId);
-            } else if (res.data.data.length < 30) {
-                setHasMore(false);
+            } else {
+                const messageList = res.data.data;
+                setChatList((_chat_list: ChatData[]) => [..._chat_list, ...messageList]);
+                setFirstMessageId(messageList[messageList.length - 1].messageId);
             }
         });
     };
@@ -228,6 +217,21 @@ function Channel() {
         resizeAndUploadImage();
     }, [image]);
 
+    const disconnect = () => {
+        console.log(1);
+        if (chatList.length > 0) {
+            setLastReadMessageId(chatList[0].messageId);
+        }
+
+        axAuth(token)({
+            url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
+            method: 'patch',
+        }).then(() => {
+            console.log(2);
+            client.current?.deactivate();
+        });
+    };
+
     useEffect(() => {
         if (!router.isReady) return;
 
@@ -260,8 +264,8 @@ function Channel() {
     };
 
     return (
-        <div className="relative pt-48 h-screen">
-            <div className="fixed inset-x-0 top-0 bg-white z-50">
+        <div className="relative">
+            <div className="fixed inset-x-0 top-0 z-50 bg-white">
                 {channelInfo && (
                     <div className="p-5 text-center border-b border-gray flex justify-between items-center">
                         <div>
@@ -299,7 +303,7 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-16 h-screen" style={{ overflow: 'auto' }}>
+            <div className="chat-list mx-5 pt-48 pb-16 h-screen" style={{ overflow: 'auto' }}>
                 <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
                     {chatList
                         .slice()
