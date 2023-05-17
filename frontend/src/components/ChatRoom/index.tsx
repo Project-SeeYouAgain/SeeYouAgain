@@ -46,20 +46,22 @@ function timeAgo(date: string): string {
 function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMessage, productImg, identifier, notReadMessageSize }: ChatRoomProps) {
     return (
         <Link href={`/chat/${identifier}`} className="border-b-1 flex mb-5 items-center" role="button">
-            <div className="w-9/12 flex">
+            <div className="w-9/12 flex items-center">
                 <div className="w-3/12 me-2 relative" style={{ width: 45, height: 45 }}>
                     <Image src={profileImg ? profileImg : default_user} alt="프로필 이미지" className="rounded-full object-cover" fill />
                 </div>
                 <div className="w-9/12">
-                    <div className="flex items-end">
-                        <p className="font-medium me-2">{nickname}</p>
+                    <div className="items-end">
+                        <div className="flex justify-between">
+                            <p className="font-medium me-2">{nickname}</p>
+                            <p className="text-gray-500 font-light">
+                                <span className="flex">
+                                    <BsDot className="mr-1" />
+                                    {timeAgo(latestMessageDate)}
+                                </span>
+                            </p>
+                        </div>
                         <p className="text-gray-500 me-1 font-light">{location}</p>
-                        <p className="text-gray-500 font-light">
-                            <span className="flex">
-                                <BsDot className="mr-1" />
-                                {timeAgo(latestMessageDate)}
-                            </span>
-                        </p>
                     </div>
                     <p className="truncate">{latestMessage}</p>
                 </div>
