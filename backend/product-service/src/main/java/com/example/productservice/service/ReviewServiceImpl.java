@@ -13,6 +13,7 @@ import com.example.productservice.repository.ProductRepository;
 import com.example.productservice.repository.ReservationRepository;
 import com.example.productservice.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -43,6 +45,7 @@ public class ReviewServiceImpl implements ReviewService {
                                         MultipartFile reviewImg) {
         UserClientResponseDto responseDto = userServiceClient.getUserInfo(userId).getData();
 
+        log.info(String.valueOf(reservationId));
         if (reviewRepository.findByReservationId(reservationId).isEmpty()) {
             Reservation reservation = reservationRepository.findById(reservationId)
                     .orElseThrow(() -> new ApiException(ExceptionEnum.RESERVATION_NOT_EXIST_EXCEPTION));
