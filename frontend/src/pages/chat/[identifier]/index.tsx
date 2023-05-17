@@ -218,7 +218,6 @@ function Channel() {
     }, [image]);
 
     const disconnect = () => {
-        console.log(1);
         if (chatList.length > 0) {
             setLastReadMessageId(chatList[0].messageId);
         }
@@ -227,7 +226,6 @@ function Channel() {
             url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
             method: 'patch',
         }).then(() => {
-            console.log(2);
             client.current?.deactivate();
         });
     };
