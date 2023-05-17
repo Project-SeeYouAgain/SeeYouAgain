@@ -159,7 +159,7 @@ function Tutorial() {
                             <p>검색을 통해 찾아봐요. 대여 일정과 만남 장소를 확인 후 예약해요.</p>
                         </span>
                     </div>
-                    <div className="flex border-b border-[#000000] mb-3 pb-3">
+                    <div className="flex mb-3 pb-3">
                         <div className="w-20  flex items-center justify-center">
                             <Image src={icon8} alt="icon" width={55} />
                         </div>

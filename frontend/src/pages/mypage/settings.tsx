@@ -154,6 +154,28 @@ function settings() {
     };
 
     const [containerHeight, setContainerHeight] = useState<number>(0);
+    const [webContainerHeight, setWebContainerHeight] = useState<number>(0);
+    const [mapHeight, setMapHeight] = useState<number>(0);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const windowHeight = window.innerHeight;
+            const containerHeight = windowHeight - 100 - 32;
+            setWebContainerHeight(containerHeight);
+            const mapWindowHeight = window.innerHeight;
+            const mapHeight = mapWindowHeight - 100 - 32 - 113.04;
+            setMapHeight(mapHeight);
+        };
+
+        // 초기 로드 및 윈도우 크기 변경 이벤트에 대한 이벤트 핸들러 등록
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        // 컴포넌트 언마운트 시 이벤트 핸들러 제거
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -180,7 +202,7 @@ function settings() {
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
-    
+
     const clickPosition = () => {
         if (lng != 0 && lat != 0) {
             Swal.fire({
@@ -231,37 +253,71 @@ function settings() {
         return () => clearInterval(intervalId);
     }, [dots]);
 
+    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const desktopQuery = window.matchMedia('(min-width:767px)');
+        const mobileQuery = window.matchMedia('(max-width:767px)');
+
+        const handleDesktopQuery = (event: MediaQueryListEvent) => {
+            setIsDesktop(event.matches);
+        };
+
+        const handleMobileQuery = (event: MediaQueryListEvent) => {
+            setIsMobile(event.matches);
+        };
+
+        desktopQuery.addEventListener('change', handleDesktopQuery);
+        mobileQuery.addEventListener('change', handleMobileQuery);
+
+        // 초기값 설정
+        setIsDesktop(desktopQuery.matches);
+        setIsMobile(mobileQuery.matches);
+
+        return () => {
+            desktopQuery.removeEventListener('change', handleDesktopQuery);
+            mobileQuery.removeEventListener('change', handleMobileQuery);
+        };
+    }, []);
+
+    // 로딩 중이거나 초기 상태일 때 출력할 내용
+    if (isDesktop === null || isMobile === null) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Container className="relative">
-            {!index && (
+            {isDesktop && (
                 <>
-                    <Header title="프로필 수정"></Header>
-                    <div className="px-[1.88rem] " style={{ height: containerHeight }}>
-                        <ProfileImage defaultImage={defaultUserImage} currentImage={profileImg} onChange={handleImageChange} />
-                        <div className="mt-4">
-                            <p className="m-1 font-bold">동네설정</p>
-                            <div className="flex justify-between items-center bg-gray-200 p-2 rounded-xl" onClick={click}>
-                                <p>{firstValue ? firstValue : '내 동네 설정하기'} </p>
-                            </div>
-                            <p className="text-sm text-gray-400 font-bold w-full text-right">클릭하면 지도로 이동합니다</p>
-                        </div>
-                        <div className="mt-4">
-                            <p className="m-1 font-bol">소개 메세지</p>
-                            <div className="flex bg-gray-200 p-2 rounded-xl">
-                                <textarea className="w-[95%] bg-transparent" value={secondValue} onChange={changeSecondValue} />
-                                <Image src={pen} alt="pen" className="m-1 h-3 w-3" />
-                            </div>
-                        </div>
-                    </div>
-                    <SquareLg divClass="absolute bottom-1 w-full px-[1.88rem]" bgColor="blue" textColor="white" innerValue="수정 완료" onClick={setting} />
-                </>
-            )}
-            {index && (
-                <div className="w-full h-screen">
-                    <ResponsiveChecker message={message} onIsMobileChanged={handleIsMobileChanged} />
-                    <p>{isMobile}</p>
-                    {isMobile && (
+                    {!index && (
                         <>
+                            <div className="px-[1.88rem] relative" style={{ height: webContainerHeight }}>
+                                <div className="w-full mb-4 text-2xl font-bold pb-4">
+                                    <p className="pl-4">프로필 수정</p>
+                                </div>
+                                <ProfileImage defaultImage={defaultUserImage} currentImage={profileImg} onChange={handleImageChange} />
+                                <div className="mt-4">
+                                    <p className="m-1 font-bold">동네설정</p>
+                                    <div className="flex justify-between items-center bg-gray-200 p-2 rounded-xl" onClick={click}>
+                                        <p>{firstValue ? firstValue : '내 동네 설정하기'} </p>
+                                    </div>
+                                    <p className="text-sm text-gray-400 font-bold w-full text-right">클릭하면 지도로 이동합니다</p>
+                                </div>
+                                <div className="mt-4">
+                                    <p className="m-1 font-bol">소개 메세지</p>
+                                    <div className="flex bg-gray-200 p-2 rounded-xl">
+                                        <textarea className="w-[99%] bg-transparent" value={secondValue} onChange={changeSecondValue} />
+                                        <Image src={pen} alt="pen" className="m-1 h-3 w-3" />
+                                    </div>
+                                </div>
+                                <button className="absolute bottom-1 right-3 w-1/3 h-10 rounded-lg  bg-blue text-white m-auto" onClick={setting}>
+                                    수정 완료
+                                </button>
+                            </div>
+                        </>
+                    )}
+                    {index && (
+                        <div className="w-full h-full">
                             {/* 나머지 페이지 내용 */}
                             <div className="p-4 px-[1.88rem] font-bold h-[15vh] flex items-center justify-center ">
                                 <div className="w-screen">
@@ -277,7 +333,7 @@ function settings() {
                                     <p className="text-blue">안전한 세이프존에서 거래하는 것을 추천해요.</p>
                                 </div>
                             </div>
-                            <div id="map" className="w-full h-[85vh] relative">
+                            <div id="map" className="w-full relative" style={{ height: mapHeight }}>
                                 <KakaoMap
                                     onCenter={(lat, lng, score) => {
                                         setLat(lat);
@@ -292,9 +348,76 @@ function settings() {
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    )}
+                </>
+            )}
+            {isMobile && (
+                <>
+                    {!index && (
+                        <>
+                            <Header title="프로필 수정"></Header>
+                            <div className="px-[1.88rem] " style={{ height: containerHeight }}>
+                                <ProfileImage defaultImage={defaultUserImage} currentImage={profileImg} onChange={handleImageChange} />
+                                <div className="mt-4">
+                                    <p className="m-1 font-bold">동네설정</p>
+                                    <div className="flex justify-between items-center bg-gray-200 p-2 rounded-xl" onClick={click}>
+                                        <p>{firstValue ? firstValue : '내 동네 설정하기'} </p>
+                                    </div>
+                                    <p className="text-sm text-gray-400 font-bold w-full text-right">클릭하면 지도로 이동합니다</p>
+                                </div>
+                                <div className="mt-4">
+                                    <p className="m-1 font-bol">소개 메세지</p>
+                                    <div className="flex bg-gray-200 p-2 rounded-xl">
+                                        <textarea className="w-[95%] bg-transparent" value={secondValue} onChange={changeSecondValue} />
+                                        <Image src={pen} alt="pen" className="m-1 h-3 w-3" />
+                                    </div>
+                                </div>
+                            </div>
+                            <SquareLg divClass="absolute bottom-1 w-full px-[1.88rem]" bgColor="blue" textColor="white" innerValue="수정 완료" onClick={setting} />
                         </>
                     )}
-                </div>
+                    {index && (
+                        <div className="w-full h-screen">
+                            <ResponsiveChecker message={message} onIsMobileChanged={handleIsMobileChanged} />
+                            <p>{isMobile}</p>
+                            {isMobile && (
+                                <>
+                                    {/* 나머지 페이지 내용 */}
+                                    <div className="p-4 px-[1.88rem] font-bold h-[15vh] flex items-center justify-center ">
+                                        <div className="w-screen">
+                                            <div className="flex justify-between h-fit text-xl">
+                                                <div>
+                                                    <p>이웃과 만나서</p>
+                                                    <p>거래할 장소를 확인해주세요</p>
+                                                </div>
+                                                <div className="h-[35%]">
+                                                    <Image src={pin} alt="pin" />
+                                                </div>
+                                            </div>
+                                            <p className="text-blue">안전한 세이프존에서 거래하는 것을 추천해요.</p>
+                                        </div>
+                                    </div>
+                                    <div id="map" className="w-full h-[85vh] relative">
+                                        <KakaoMap
+                                            onCenter={(lat, lng, score) => {
+                                                setLat(lat);
+                                                setLng(lng);
+                                                setScore(score);
+                                            }}
+                                            click={false}
+                                        />
+                                        <div className="absolute bottom-10 z-10 w-full">
+                                            <button className="w-2/3 h-12 m-auto block rounded-xl text-center text-white text-xl  bg-blue" onClick={clickPosition}>
+                                                장소 확정
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </>
             )}
         </Container>
     );

@@ -10,7 +10,6 @@ import { AiOutlineLeft } from 'react-icons/ai';
 import { IoMdSend } from 'react-icons/io';
 import Button from '@/components/Button';
 import InfiniteScroll from 'react-infinite-scroller';
-import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import { Cookies } from 'react-cookie';
@@ -60,7 +59,7 @@ function Channel() {
 
     // 뒤로가기
     const handleBack = () => {
-        router.back();
+        router.push('/chat');
     };
 
     const connect = () => {
@@ -112,19 +111,6 @@ function Channel() {
         });
 
         setChat('');
-    };
-
-    const disconnect = () => {
-        if (chatList.length > 0) {
-            setLastReadMessageId(chatList[0].messageId);
-        }
-
-        axAuth(token)({
-            url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
-            method: 'patch',
-        }).then(() => {
-            client.current?.deactivate();
-        });
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -230,6 +216,21 @@ function Channel() {
 
         resizeAndUploadImage();
     }, [image]);
+
+    const disconnect = () => {
+        console.log(1);
+        if (chatList.length > 0) {
+            setLastReadMessageId(chatList[0].messageId);
+        }
+
+        axAuth(token)({
+            url: `/chatting-service/auth/participant/out/${identifier}/${lastReadMessageId}`,
+            method: 'patch',
+        }).then(() => {
+            console.log(2);
+            client.current?.deactivate();
+        });
+    };
 
     useEffect(() => {
         if (!router.isReady) return;

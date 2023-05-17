@@ -29,7 +29,7 @@ self.addEventListener('push', function (e) {
 self.addEventListener('notificationclick', function (event) {
     console.log('notification click');
     console.log('data = ', event.notification.data);
-    const url = '/';
+    const url = '/chat';
     event.notification.close();
     event.waitUntil(clients.openWindow(url));
 });
