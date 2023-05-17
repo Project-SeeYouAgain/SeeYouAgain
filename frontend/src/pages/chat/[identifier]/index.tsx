@@ -193,25 +193,23 @@ function Channel() {
 
     useEffect(() => {
         const resizeAndUploadImage = async () => {
-            const formData = new FormData();
-
             if (image) {
+                const formData = new FormData();
                 const resizedImageBlob = await resizeImage(image);
                 const resizedImageFile = new File([resizedImageBlob], image.name, { type: resizedImageBlob.type });
                 formData.append('chatImage', resizedImageFile);
-            }
-
-            axAuth(token)({
-                method: 'post',
-                url: '/chatting-service/auth/chatImage',
-                headers: { 'Content-Type': 'multipart/form-data' },
-                data: formData,
-            })
-                .then(res => {
-                    publish(res.data.data, true);
-                    setImage(null);
+                axAuth(token)({
+                    method: 'post',
+                    url: '/chatting-service/auth/chatImage',
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                    data: formData,
                 })
-                .catch(err => console.log(err));
+                    .then(res => {
+                        publish(res.data.data, true);
+                        setImage(null);
+                    })
+                    .catch(err => console.log(err));
+            }
         };
 
         resizeAndUploadImage();
