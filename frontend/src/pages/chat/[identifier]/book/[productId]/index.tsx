@@ -37,11 +37,19 @@ function book() {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [pickStartDate, setPickStartDate] = useState<Date | null>(null);
     const [pickEndDate, setPickEndDate] = useState<Date | null>(null);
+    const [isSafe, setIsSafe] = useState<boolean>(false);
     const router = useRouter();
 
     const { identifier } = router.query;
     const productId = router.query.productId;
     const [unavailableDateRange, setUnavailableDateRange] = useState<Date[]>([]);
+    useEffect(() => {
+        if (productId) {
+            axAuth(token)({ method: 'get', url: `/product-service/auth/${productId}` }).then(res => {
+                setIsSafe(res.data.data.isSafe);
+            });
+        }
+    }, [productId]);
     useEffect(() => {
         if (productId) {
             axAuth(token)({ method: 'get', url: `/product-service/auth/reservation/list/${productId}` }).then((res: any) => {
@@ -238,22 +246,37 @@ function book() {
                     }
                 });
             } else {
-                Swal.fire({
-                    title: '안전지대 밖입니다.',
-                    text: '주변에 경찰서,CCTV,가로등이 없어요\n계속진행하실건가요?',
-                    icon: 'warning', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
-                    confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    cancelButtonText: '취소',
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        setIndex(1);
-                    } else if (result.isDenied) {
-                        // 취소 버튼 클릭 시 처리할 로직
-                    }
-                });
+                if (isSafe) {
+                    Swal.fire({
+                        title: '안전지대 밖입니다.',
+                        text: '해당 거래는 세이프존에서만 가능합니다.',
+                        icon: 'warning', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
+                        confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
+                        confirmButtonColor: '#3085d6',
+                        timer: 2000, // 3초 뒤에 자동으로 닫히게 설정합니다.
+                        timerProgressBar: true, // 타이머 진행바를 표시합니다.
+                        willClose: () => {
+                            Swal.showLoading();
+                        },
+                    });
+                } else {
+                    Swal.fire({
+                        title: '안전지대 밖입니다.',
+                        text: '주변에 경찰서,CCTV,가로등이 없어요\n계속진행하실건가요?',
+                        icon: 'warning', // 성공, 에러, 경고 등의 아이콘을 선택할 수 있습니다.
+                        confirmButtonText: '확인', // 버튼 텍스트를 지정할 수 있습니다.
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: '취소',
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            setIndex(1);
+                        } else if (result.isDenied) {
+                            // 취소 버튼 클릭 시 처리할 로직
+                        }
+                    });
+                }
             }
         }
     };
@@ -347,7 +370,7 @@ function book() {
                                         setLng(lng);
                                         setScore(score);
                                     }}
-                                    click={true}
+                                    click={false}
                                 />
                                 <div className="absolute bottom-10 z-10 w-full">
                                     <button className="w-2/3 h-12 m-auto block rounded-xl text-center text-white text-xl  bg-blue" onClick={clickPosition}>
