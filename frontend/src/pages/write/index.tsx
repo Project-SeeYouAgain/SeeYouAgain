@@ -24,15 +24,8 @@ function Write() {
     const [stepTwoData, setStepTwoData] = useState<StepTwoData | null>(null);
     const token = useRecoilValue(userState).accessToken;
     const [loading, setLoading] = useState(false); // 추가: 로딩 상태
-    const [initialLoad, setInitialLoad] = useState(true);
 
     const router = useRouter();
-    useEffect(() => {
-        if (initialLoad) {
-            router.reload();
-            setInitialLoad(false);
-        }
-    }, [initialLoad, router]);
 
     const handleStepOneSubmit = (data: StepOneData) => {
         setStepOneData(prevData => ({ ...prevData, ...data }));
