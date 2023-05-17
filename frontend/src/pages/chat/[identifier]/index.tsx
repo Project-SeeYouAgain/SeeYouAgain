@@ -246,7 +246,7 @@ function Channel() {
 
     useEffect(() => {
         scrollToBottom();
-    }, [chatList]);
+    }, [chatList[0]]);
 
     const goToBook = () => [router.push(`/chat/${identifier}/book/${channelInfo?.productId}`)];
     const goToUserLocation = () => {
@@ -254,12 +254,13 @@ function Channel() {
             url: `product-service/auth/reservation/${channelInfo?.productId}/${channelInfo?.userId}`,
         }).then(res => {
             console.log(res.data.data);
+            localStorage.setItem('reservation-location', JSON.stringify({ lat: res.data.data.lat, lng: res.data.data.lng }));
         });
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
 
     return (
-        <div className="relative pt-48">
+        <div className="relative pt-48 h-screen">
             <div className="fixed inset-x-0 top-0 bg-white z-50">
                 {channelInfo && (
                     <div className="p-5 text-center border-b border-gray flex justify-between items-center">
@@ -298,7 +299,7 @@ function Channel() {
                 </div>
             </div>
 
-            <div className="chat-list mx-5 pb-16 h-fit" style={{ overflow: 'auto' }}>
+            <div className="chat-list mx-5 pb-16 h-screen" style={{ overflow: 'auto' }}>
                 <InfiniteScroll initialLoad={false} loadMore={getMessage} hasMore={hasMore} isReverse={true} useWindow={false} threshold={50}>
                     {chatList
                         .slice()

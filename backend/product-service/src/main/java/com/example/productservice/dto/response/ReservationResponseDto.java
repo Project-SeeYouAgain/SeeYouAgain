@@ -45,6 +45,8 @@ public class ReservationResponseDto {
 
     private Long reservationId;
 
+    private Boolean hasReview;
+
     public static ReservationResponseDto of(Reservation reservation,
                                             Product product,
                                             double reviewScore,
@@ -66,6 +68,7 @@ public class ReservationResponseDto {
                 .isHide(product.getIsHide())
                 .ownerId(product.getOwnerId())
                 .reservationId(reservation.getId())
+                .hasReview(reservation.getHasReview())
                 .build();
     }
     public static ReservationResponseDto of(Product product,

@@ -13,7 +13,7 @@ function FourthPage() {
     return (
         <div className={classNames('flex', styles.boxContainer)} ref={ref}>
             <div className={classNames('flex', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>
-                <Image src={web_map} alt="web_map" width={500} height={400} className="mr-4 rounded-xl" />
+                <Image src={web_map} alt="web_map" width={800} height={400} className="mr-4 rounded-xl" />
                 <div className={classNames('mt-60')}>
                     <p className="whitespace-nowrap h-fit text-2xl font-bold text-blue-700">세이프존에서</p>
                     <p className="whitespace-nowrap h-fit text-2xl font-bold">안전하게 거래하세요.</p>

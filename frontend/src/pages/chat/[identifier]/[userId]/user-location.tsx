@@ -19,16 +19,21 @@ const UserLocation: React.FC = () => {
     const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number; moving: boolean } | null>(null);
     const token = useRecoilValue(userState).accessToken;
     const myId = useRecoilValue(userState).id;
+    const [reservationLocation, setReservationLocation] = useState<{ lat: number; lng: number } | null>(null);
 
     useEffect(() => {
-        console.log(router.query);
         setUserId(router.query.userId);
+        const reserveLocation = localStorage.getItem('reservation-location');
+        if (reserveLocation) {
+            const reservationData = JSON.parse(reserveLocation);
+            setReservationLocation(reservationData);
+        }
     }, []);
 
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
-    const [myCheck, setMyCheck] = useState(true);
+    const [myCheck, setMyCheck] = useState(false);
     const clickPosition = () => {
         myCheck ? setMyCheck(false) : setMyCheck(true);
     };
@@ -39,22 +44,18 @@ const UserLocation: React.FC = () => {
         if (!router.isReady) return;
 
         const updateLocation = async () => {
-            console.log(userId);
-
             if (router.query.userId) {
                 try {
                     const profileRes = await axAuth(token)({
                         method: 'get',
                         url: `/user-service/auth/profile/${router.query.userId}`,
                     });
-                    console.log(profileRes);
                     setUserNickName(profileRes.data.data.nickname);
 
                     const locationRes = await axAuth(token)({
                         method: 'get',
                         url: `/user-service/auth/location/${router.query.userId}`,
                     });
-                    console.log(locationRes);
                     setOtherUserLocation({ lat: locationRes.data.data.lat, lng: locationRes.data.data.lng, moving: locationRes.data.data.moving });
                 } catch (err) {
                     console.log(err);
@@ -77,7 +78,6 @@ const UserLocation: React.FC = () => {
                                     url: '/user-service/auth/location',
                                     data: data,
                                 });
-                                console.log(res);
                             } catch (err) {
                                 console.log(err);
                             }
@@ -116,9 +116,13 @@ const UserLocation: React.FC = () => {
 
                     try {
                         await axAuth(token)({
-                            method: 'post',
-                            url: '/user-service/auth/location',
+                            method: 'delete',
+                            url: `/user-service/auth/location/${router.query.userId}`,
                             data: data,
+                        });
+                        await axAuth(token)({
+                            method: 'delete',
+                            url: `/user-service/auth/location/${router.query.userId}`,
                         });
                     } catch (err) {
                         console.log(err);
@@ -168,12 +172,20 @@ const UserLocation: React.FC = () => {
                         </div>
                     )}
                     <div id="map" className="w-full flex-grow relative">
-                        {userLocation && <KakaoMapForChat lat={userLocation.lat} lng={userLocation.lng} userLocation={userLocation} otherUserLocation={otherUserLocation} />}
+                        {userLocation && (
+                            <KakaoMapForChat
+                                lat={userLocation.lat}
+                                lng={userLocation.lng}
+                                userLocation={userLocation}
+                                otherUserLocation={otherUserLocation}
+                                reservationLocation={reservationLocation}
+                            />
+                        )}
                     </div>
                     {userLocation && (
                         <div className="absolute bottom-20 right-5 w-1/3 z-10" onClick={clickPosition}>
-                            {myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
-                            {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-gray-400 pt-2.5">이동중</p>}
+                            {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
+                            {myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-gray-400 pt-2.5">이동중</p>}
                         </div>
                     )}
                     {userLocation && <Navbar />}
