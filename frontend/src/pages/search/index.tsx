@@ -99,6 +99,11 @@ function Search() {
         setText(''); // 검색어 입력 필드 비우기
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleAddKeyword();
+        }
+    };
     const getProduct = () => {
         axAuth(token)({
             method: 'post',
@@ -161,6 +166,7 @@ function Search() {
                         onChange={handleTextField}
                         className={classNames('bg-transparent w-full rounded-l-full h-full p-4', styles.noHover)}
                         placeholder="무엇을 빌리고 싶으세요?"
+                        onKeyDown={handleKeyDown}
                         maxLength={20}
                     />
                     <AiOutlineSearch size={30} onClick={handleAddKeyword} />
