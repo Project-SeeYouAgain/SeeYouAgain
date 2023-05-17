@@ -184,8 +184,8 @@ const UserLocation: React.FC = () => {
                     </div>
                     {userLocation && (
                         <div className="absolute bottom-20 right-5 w-1/3 z-10" onClick={clickPosition}>
-                            {myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
-                            {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-gray-400 pt-2.5">이동중</p>}
+                            {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
+                            {myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-gray-400 pt-2.5">이동중</p>}
                         </div>
                     )}
                     {userLocation && <Navbar />}
