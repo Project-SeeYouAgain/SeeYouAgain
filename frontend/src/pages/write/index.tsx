@@ -170,13 +170,7 @@ function Write() {
     });
     const [view, setView] = useState<boolean>(false);
     // 이부분은 필요해서 놔뒀습니다.
-    useEffect(() => {
-        if (token) {
-            router.push('/');
-        }
-        setView(true);
-    }, []);
-
+    
     // 모달
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalMessage, setModalMessage] = useState<string>('');
