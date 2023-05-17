@@ -115,6 +115,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         setIsDesktop(desktopQuery.matches);
         setIsMobile(mobileQuery.matches);
 
+        console.log(isMobile);
+        console.log(hasReview);
+
         return () => {
             desktopQuery.removeEventListener('change', handleDesktopQuery);
             mobileQuery.removeEventListener('change', handleMobileQuery);
