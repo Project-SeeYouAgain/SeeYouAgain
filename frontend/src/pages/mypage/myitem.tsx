@@ -11,7 +11,7 @@ import { userState, productState } from 'recoil/user/atoms';
 import noresult from '@/images/no-results.png';
 import Image from 'next/image';
 
-function Rent() {
+function MyItem() {
     interface RentalItem {
         productImg: string;
         title: string;
@@ -105,24 +105,181 @@ function Rent() {
         };
     }, []);
 
+    const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+    const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const desktopQuery = window.matchMedia('(min-width:767px)');
+        const mobileQuery = window.matchMedia('(max-width:767px)');
+
+        const handleDesktopQuery = (event: MediaQueryListEvent) => {
+            setIsDesktop(event.matches);
+        };
+
+        const handleMobileQuery = (event: MediaQueryListEvent) => {
+            setIsMobile(event.matches);
+        };
+
+        desktopQuery.addEventListener('change', handleDesktopQuery);
+        mobileQuery.addEventListener('change', handleMobileQuery);
+
+        // 초기값 설정
+        setIsDesktop(desktopQuery.matches);
+        setIsMobile(mobileQuery.matches);
+
+        return () => {
+            desktopQuery.removeEventListener('change', handleDesktopQuery);
+            mobileQuery.removeEventListener('change', handleMobileQuery);
+        };
+    }, []);
+
+    // 로딩 중이거나 초기 상태일 때 출력할 내용
+    if (isDesktop === null || isMobile === null) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Container>
-            <Header title="내 아이템"></Header>
-            <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
-                <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
-                {menuState === 1 ? (
-                    <div>
-                        {bookList.length === 0 ? (
+            {isDesktop && (
+                <>
+                    <div className="w-full mb-4 text-2xl font-bold pb-4">
+                        <p className="pl-4">내 아이템</p>
+                    </div>
+                    <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                        <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
+                        {menuState === 1 ? (
+                            <div>
+                                {bookList.length === 0 ? (
+                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {bookList.map((item, index) => (
+                                            <Link key={index} href={''}>
+                                                <Card
+                                                    productImg={item.productImg}
+                                                    title={item.title}
+                                                    location={item.location}
+                                                    price={item.price}
+                                                    startDate={item.startDate}
+                                                    endDate={item.endDate}
+                                                    isSafe={item.isSafe}
+                                                    menuState={menuState}
+                                                    productId={item.productId}
+                                                    isBooked={true}
+                                                />
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ) : menuState === 2 ? (
+                            <div>
+                                {itemList.length === 0 ? (
+                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {itemList.map((item, index) => (
+                                            <Link key={index} href={''}>
+                                                <Card
+                                                    productImg={item.productImg}
+                                                    title={item.title}
+                                                    location={item.location}
+                                                    price={item.price}
+                                                    isSafe={item.isSafe}
+                                                    menuState={menuState}
+                                                    productId={item.productId}
+                                                    isBooked={true}
+                                                    startDate={item.startDate}
+                                                    endDate={item.endDate}
+                                                />
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div>
+                                {holdList.length === 0 ? (
+                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-1/3 h-1/3 m-auto" />
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {holdList.map((item, index) => (
+                                            <Link key={index} href={''}>
+                                                <Card
+                                                    productImg={item.productImg}
+                                                    title={item.title}
+                                                    location={item.location}
+                                                    price={item.price}
+                                                    isSafe={item.isSafe}
+                                                    menuState={menuState}
+                                                    productId={item.productId}
+                                                    isBooked={true}
+                                                />
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
+            {isMobile && (
+                <>
+                    <Header title="내 아이템"></Header>
+                    <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                        <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
+                        {menuState === 1 ? (
+                            <div>
+                                {bookList.length === 0 ? (
+                                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                ) : (
+                                    bookList.map((item, index) => (
+                                        <Card
+                                            productImg={item.productImg}
+                                            title={item.title}
+                                            location={item.location}
+                                            price={item.price}
+                                            startDate={item.startDate}
+                                            endDate={item.endDate}
+                                            isSafe={item.isSafe}
+                                            menuState={menuState}
+                                            productId={item.productId}
+                                            isBooked={true}
+                                            key={index}
+                                        />
+                                    ))
+                                )}
+                            </div>
+                        ) : menuState === 2 ? (
+                            itemList.length === 0 ? (
+                                <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                            ) : (
+                                itemList.map((item, index) => (
+                                    <Card
+                                        productImg={item.productImg}
+                                        title={item.title}
+                                        location={item.location}
+                                        price={item.price}
+                                        isSafe={item.isSafe}
+                                        menuState={menuState}
+                                        productId={item.productId}
+                                        isBooked={true}
+                                        key={index}
+                                        startDate={item.startDate}
+                                        endDate={item.endDate}
+                                    />
+                                ))
+                            )
+                        ) : holdList.length === 0 ? (
                             <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
                         ) : (
-                            bookList.map((item, index) => (
+                            holdList.map((item, index) => (
                                 <Card
                                     productImg={item.productImg}
                                     title={item.title}
                                     location={item.location}
                                     price={item.price}
-                                    startDate={item.startDate}
-                                    endDate={item.endDate}
                                     isSafe={item.isSafe}
                                     menuState={menuState}
                                     productId={item.productId}
@@ -132,46 +289,10 @@ function Rent() {
                             ))
                         )}
                     </div>
-                ) : menuState === 2 ? (
-                    itemList.length === 0 ? (
-                        <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                    ) : (
-                        itemList.map((item, index) => (
-                            <Card
-                                productImg={item.productImg}
-                                title={item.title}
-                                location={item.location}
-                                price={item.price}
-                                isSafe={item.isSafe}
-                                menuState={menuState}
-                                productId={item.productId}
-                                isBooked={true}
-                                key={index}
-                                startDate={item.startDate}
-                                endDate={item.endDate}
-                            />
-                        ))
-                    )
-                ) : holdList.length === 0 ? (
-                    <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                ) : (
-                    holdList.map((item, index) => (
-                        <Card
-                            productImg={item.productImg}
-                            title={item.title}
-                            location={item.location}
-                            price={item.price}
-                            isSafe={item.isSafe}
-                            menuState={menuState}
-                            productId={item.productId}
-                            isBooked={true}
-                            key={index}
-                        />
-                    ))
-                )}
-            </div>
+                </>
+            )}
         </Container>
     );
 }
 
-export default Rent;
+export default MyItem;

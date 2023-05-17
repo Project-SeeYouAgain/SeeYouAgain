@@ -24,9 +24,4 @@ export const MenuData2 = [
         url: '/mypage/settings',
         icon: FaUserCog,
     },
-    {
-        title: '자주 묻는 질문',
-        url: '/자주 묻는 질문',
-        icon: FaQuestionCircle,
-    },
 ];
