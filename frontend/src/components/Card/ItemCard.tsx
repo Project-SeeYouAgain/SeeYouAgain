@@ -81,17 +81,15 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         event.preventDefault();
         const url = `/product-service/auth/cart/${productId}`;
         if (isActive) {
-            axAuth(token)({ method: 'delete', url: url })
-                .then(() => {
-                    setIsActive(!isActive);
-                    onRefreshKey?.();
-                })
+            axAuth(token)({ method: 'delete', url: url }).then(() => {
+                setIsActive(!isActive);
+                onRefreshKey?.();
+            });
         } else {
-            axAuth(token)({ method: 'post', url: url })
-                .then(() => {
-                    setIsActive(!isActive);
-                    onRefreshKey?.();
-                })
+            axAuth(token)({ method: 'post', url: url }).then(() => {
+                setIsActive(!isActive);
+                onRefreshKey?.();
+            });
         }
     };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
@@ -177,9 +175,16 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                             {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" width={300} height={400} /> : null}
                         </span>
                         {startDate !== null && startDate !== undefined ? (
-                            <p className="whitespace-nowrap text-sm">
-                                {startDate}부터 {endDate}까지
-                            </p>
+                            <div className="grid grid-cols-2 gap-2 text-center">
+                                <div className="flex text-darkgrey text-sm">
+                                    <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
+                                    <p className="whitespace-nowrap">{startDate}</p>
+                                </div>
+                                <div className="flex text-darkgrey text-sm justify-end">
+                                    <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
+                                    <p className="whitespace-nowrap">{endDate}</p>
+                                </div>
+                            </div>
                         ) : null}
                     </div>
                 </div>
@@ -232,16 +237,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                             {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" width={300} height={400} /> : null}
                         </span>
                         {startDate !== null && startDate !== undefined ? (
-                            <div className="grid grid-cols-2 gap-2 text-center">
-                                <div className="flex text-darkgrey text-sm">
-                                    <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
-                                    <p className="whitespace-nowrap">{startDate}</p>
-                                </div>
-                                <div className="flex text-darkgrey text-sm justify-end">
-                                    <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
-                                    <p className="whitespace-nowrap">{endDate}</p>
-                                </div>
-                            </div>
+                            <p className="whitespace-nowrap text-sm">
+                                {startDate}부터 {endDate}까지
+                            </p>
                         ) : null}
                     </div>
                 </div>
