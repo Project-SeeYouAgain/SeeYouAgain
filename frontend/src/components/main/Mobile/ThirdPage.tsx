@@ -7,9 +7,7 @@ import useInView from '../Mobile/useInView';
 
 function ThirdPage() {
     const [ref, isInView] = useInView(0.5);
-    useEffect(() => {
-        console.log('Visibility status:', isInView ? 'third Visible' : '');
-    }, [isInView]);
+
     return (
         <div className={classNames(styles.boxContainer)} ref={ref}>
             <div className={classNames('text-center', styles.textBox, styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>

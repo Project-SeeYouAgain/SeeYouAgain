@@ -25,11 +25,9 @@ function Heart({ isActive, className, productId }: ButtonProps) {
         if (isCart) {
             axAuth(token)({ method: 'delete', url: url })
                 .then(() => setIsCart(!isCart))
-                .catch(err => console.log(err));
         } else {
             axAuth(token)({ method: 'post', url: url })
                 .then(() => setIsCart(!isCart))
-                .catch(err => console.log(err));
         }
     }
     return (

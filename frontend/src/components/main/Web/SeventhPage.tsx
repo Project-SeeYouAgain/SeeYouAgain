@@ -15,9 +15,6 @@ import useInView from '../Web/useInView';
 
 function SeventhPage() {
     const [ref, isInView] = useInView(0.5);
-    useEffect(() => {
-        console.log('Visibility status:', isInView ? 'Second Visible' : '');
-    }, [isInView]);
 
     const slideArr = [
         { id: 1, img: s1 },

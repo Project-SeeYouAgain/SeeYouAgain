@@ -52,7 +52,7 @@ function book() {
             localStorage.removeItem('reload');
         };
     }, []);
-    
+
     const { identifier } = router.query;
     const productId = router.query.productId;
     const [unavailableDateRange, setUnavailableDateRange] = useState<Date[]>([]);
@@ -66,7 +66,6 @@ function book() {
     useEffect(() => {
         if (productId) {
             axAuth(token)({ method: 'get', url: `/product-service/auth/reservation/list/${productId}` }).then((res: any) => {
-                console.log(res.data.data[0]);
                 setStartDate(new Date(res.data.data[0].startDate));
                 setEndDate(new Date(res.data.data[0].endDate));
 
@@ -83,7 +82,6 @@ function book() {
                 });
 
                 setUnavailableDateRange(disabledDates);
-                console.log(disabledDates);
             });
         }
     }, [productId]);
@@ -114,7 +112,6 @@ function book() {
             lat: Number(lat),
             location: dong,
         };
-        console.log(router.query);
         axAuth(token)({
             method: 'post',
             url: `/product-service/auth/reservation/request/${productId}`,
@@ -152,7 +149,6 @@ function book() {
                     Swal.clickConfirm();
                 }, 3000);
             }) // 잘 들어갔는지 확인
-            .catch((err: any) => console.log(err)); // 어떤 오류인지 확인)
     };
     const handleDateChange = (update: [Date | null, Date | null]) => {
         setPickStartDate(update[0]);
@@ -192,7 +188,6 @@ function book() {
 
     const [myCheck, setMyCheck] = useState(true);
     const clickPosition = () => {
-        console.log(lat, lng, score);
         if (lat == 0 && lng == 0) {
             Swal.fire({
                 title: '죄송합니다.',

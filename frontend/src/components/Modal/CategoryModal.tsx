@@ -19,7 +19,6 @@ function CategoryModal({ isModalOpen, onClose, onCategorySelect }: CategoryModal
     const handleCategorySelect = (categoryName: string) => {
         onCategorySelect(categoryName);
         onClose();
-        console.log('클릭했다', categoryName);
     };
 
     if (!isModalOpen) return null;

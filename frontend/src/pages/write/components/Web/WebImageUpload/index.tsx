@@ -43,7 +43,6 @@ function WebImageUpload({ setData, onSubmit, data }: { setData: React.Dispatch<R
         const resizedImages = await Promise.all(filesArray.map(file => resizeImage(file)));
         const resizedData = resizedImages.map(resizedFile => new File([resizedFile], resizedFile.name));
         setData(prevData => ({ ...prevData, productImg: resizedData }));
-        console.log('리사이징데이터', resizedData);
         onSubmit({ ...data, productImg: resizedData });
 
         // 이미지 미리보기
@@ -53,9 +52,7 @@ function WebImageUpload({ setData, onSubmit, data }: { setData: React.Dispatch<R
         });
         setImgPreview(imagePreviewArray);
     };
-    // useEffect(() => {
-    //     console.log('됨?', images);
-    // }, [images]);
+
 
     function removeFile(index: number) {
         // 이미지 배열 새로 하기

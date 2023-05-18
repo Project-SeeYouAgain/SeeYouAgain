@@ -40,23 +40,20 @@ function MyItem() {
         if (menuState === 3) {
             url = '/product-service/auth/myproduct/1';
         }
-        axAuth(token)({ url })
-            .then(res => {
-                console.log(res.data.data);
-                setItemList(res.data.data);
-                const today = new Date();
-                const BookItems = res.data.data.filter((item: RentalItem) => {
-                    const startDate = new Date(item.startDate);
-                    const endDate = new Date(item.endDate);
-                    return startDate > today;
-                });
-                setBookList(BookItems);
-                const HoldItems = res.data.data.filter((item: RentalItem) => {
-                    return item.startDate === null;
-                });
-                setHoldList(HoldItems);
-            })
-            .catch(err => console.log(err));
+        axAuth(token)({ url }).then(res => {
+            setItemList(res.data.data);
+            const today = new Date();
+            const BookItems = res.data.data.filter((item: RentalItem) => {
+                const startDate = new Date(item.startDate);
+                const endDate = new Date(item.endDate);
+                return startDate > today;
+            });
+            setBookList(BookItems);
+            const HoldItems = res.data.data.filter((item: RentalItem) => {
+                return item.startDate === null;
+            });
+            setHoldList(HoldItems);
+        });
     }, [menuState, refreshKey]);
 
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -90,7 +87,6 @@ function MyItem() {
     useEffect(() => {
         const handleResize = () => {
             const windowHeight = window.innerHeight;
-            console.log(windowHeight);
             const containerHeight = windowHeight - 56;
             setContainerHeight(containerHeight);
         };
@@ -288,8 +284,8 @@ function MyItem() {
                             )
                         ) : holdList.length === 0 ? (
                             <>
-                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                            <p className="text-center text-xl font-bold">대기중인 아이템이 없습니다.</p>
+                                <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                <p className="text-center text-xl font-bold">대기중인 아이템이 없습니다.</p>
                             </>
                         ) : (
                             holdList.map((item, index) => (

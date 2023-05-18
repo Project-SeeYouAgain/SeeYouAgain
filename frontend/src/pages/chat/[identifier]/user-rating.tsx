@@ -16,9 +16,8 @@ import classNames from 'classnames';
 function UserRating() {
     const name = '장성햄최';
 
-    const handleRatingChange = (rating: number) => {
-        console.log(`별점이 변경되었습니다: ${rating}`);
-    };
+    // const handleRatingChange = (rating: number) => {
+    // };
     const [first, setFirst] = useState(false);
     const [second, setSecond] = useState(false);
     const [third, setThird] = useState(false);
@@ -30,7 +29,7 @@ function UserRating() {
                     <p>{name}과의 거래, 어떠셨나요?</p>
                     <p className="text-gray-400">다른 이용자를 위해 평가해주세요!</p>
                 </div>
-                <StarRating maxRating={5} onChange={handleRatingChange} />
+                <StarRating maxRating={5} />
                 <div className="flex justify-between my-12 text-center text-blue font-bold text-sm whitespace-nowrap">
                     <div
                         className="w-[28%]"

@@ -55,7 +55,6 @@ function Search() {
 
     // 검색 버튼 클릭 시, 검색어 추가하기
     const handleAddKeyword = () => {
-        console.log(text);
         if (!text) return; // 검색어가 입력되어 있지 않으면 추가하지 않음
 
         setSaveText(text);
@@ -79,7 +78,6 @@ function Search() {
                     setHasMore(true);
                 }
             }) // 잘 들어갔는지 확인
-            .catch(err => console.log(err)); // 어떤 오류인지 확인
 
         // 키워드가 일치하는 기존 검색어를 찾는다
         const existingKeyword = keywords.find(keyword => keyword.text === text);
@@ -125,7 +123,6 @@ function Search() {
                     setHasMore(true);
                 }
             }) // 잘 들어갔는지 확인
-            .catch(err => console.log(err)); // 어떤 오류인지 확인
     };
 
     const onClick = (id: number) => {
