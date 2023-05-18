@@ -22,7 +22,6 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
     const deal = 'https://seeyouagain-s3-bucket.s3.ap-northeast-2.amazonaws.com/UserProfile/money-bag.png';
 
     // 이미지 마커에 사용될 이미지 URL을 여기에 넣으세요.
-    const imageUrl = '이미지_URL';
 
     useEffect(() => {
         const container = document.getElementById('map');
