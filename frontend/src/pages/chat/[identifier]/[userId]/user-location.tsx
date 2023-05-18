@@ -191,7 +191,7 @@ const UserLocation: React.FC = () => {
                             </div>
                         </div>
                     )}
-                    {/* <div id="map" className="w-full flex-grow relative">
+                    <div id="map" className="w-full flex-grow relative">
                         {userLocation && (
                             <KakaoMapForChat
                                 lat={userLocation.lat}
@@ -201,7 +201,7 @@ const UserLocation: React.FC = () => {
                                 reservationLocation={reservationLocation}
                             />
                         )}
-                    </div> */}
+                    </div>
                     {userLocation && (
                         <div className="absolute bottom-20 right-5 w-1/3 z-10" onClick={clickPosition}>
                             {!myCheck && <p className="w-full h-12 rounded-xl text-center text-white text-xl bg-blue pt-2.5">출발</p>}
