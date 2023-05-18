@@ -76,13 +76,13 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     userMarker.setMap(map);
                     newMarkers.push(userMarker);
                 }
-                var content = '<div class ="label"><span class="left"></span><span class="center">나</span><span class="right"></span></div>';
+                const content = '<div class ="label"><span class="left"></span><span class="center">나</span><span class="right"></span></div>';
 
                 // 커스텀 오버레이가 표시될 위치입니다
-                var position = new kakao.maps.LatLng(userLocation.lat, userLocation.lng);
+                const position = new kakao.maps.LatLng(userLocation.lat, userLocation.lng);
 
                 // 커스텀 오버레이를 생성합니다
-                var customOverlay = new kakao.maps.CustomOverlay({
+                const customOverlay = new kakao.maps.CustomOverlay({
                     position: position,
                     content: content,
                 });
@@ -111,13 +111,13 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     otherMarker.setMap(map);
                     newMarkers.push(otherMarker);
                 }
-                var content = '<div class ="label"><span class="left"></span><span class="center">이웃</span><span class="right"></span></div>';
+                const content = '<div class ="label"><span class="left"></span><span class="center">이웃</span><span class="right"></span></div>';
 
                 // 커스텀 오버레이가 표시될 위치입니다
-                var position = new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng);
+                const position = new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng);
 
                 // 커스텀 오버레이를 생성합니다
-                var customOverlay = new kakao.maps.CustomOverlay({
+                const customOverlay = new kakao.maps.CustomOverlay({
                     position: position,
                     content: content,
                 });
