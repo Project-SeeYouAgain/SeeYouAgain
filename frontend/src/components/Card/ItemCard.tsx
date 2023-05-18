@@ -7,8 +7,8 @@ import ItemCardOption from '../CardOption/ItemCardOption';
 import { useRouter } from 'next/router';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { axAuth } from '@/apis/axiosinstance';
-import { userState } from 'recoil/user/atoms';
-import { useRecoilValue } from 'recoil';
+import { userState, productState } from 'recoil/user/atoms';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
 interface dataProps {
     productId: number;
@@ -23,17 +23,17 @@ interface dataProps {
     menuState?: number;
     ownerId?: number;
     isBooked?: boolean;
-    onRefreshKey?: () => void;
     reservationId?: number;
     hasReview?: boolean;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, reservationId, hasReview, onRefreshKey }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, reservationId, hasReview }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();
     const token = useRecoilValue(userState).accessToken;
-    const [state,setState]=useState<string|null>(null)
+    const [state, setState] = useState<string | null>(null);
+    const [productStateData, setProductStateData] = useRecoilState(productState);
 
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     function Dropdown(event: React.MouseEvent) {
@@ -43,8 +43,8 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }
 
     useEffect(() => {
-        const click=localStorage.getItem('click')
-        setState(click)
+        const click = localStorage.getItem('click');
+        setState(click);
         setUrl(window.location.pathname);
     }, []);
 
@@ -84,14 +84,20 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
             axAuth(token)({ method: 'delete', url: url })
                 .then(() => {
                     setIsActive(!isActive);
-                    onRefreshKey?.();
+                    setProductStateData({
+                        ...productStateData,
+                        refreshKey: productStateData.refreshKey + 1,
+                    });
                 })
                 .catch(err => console.log(err));
         } else {
             axAuth(token)({ method: 'post', url: url })
                 .then(() => {
                     setIsActive(!isActive);
-                    onRefreshKey?.();
+                    setProductStateData({
+                        ...productStateData,
+                        refreshKey: productStateData.refreshKey + 1,
+                    });
                 })
                 .catch(err => console.log(err));
         }
