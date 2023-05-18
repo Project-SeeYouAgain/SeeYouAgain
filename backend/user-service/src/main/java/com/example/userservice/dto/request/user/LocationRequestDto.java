@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class LocationRequestDto {
-    private Float lat;
-    private Float lng;
+    private Double lat;
+    private Double lng;
     private Boolean moving;
 }
