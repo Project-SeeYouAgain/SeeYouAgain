@@ -191,7 +191,7 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                                 </div>
                             </div>
                         ) : modalNum === 2 ? (
-                            <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 flex flex-col items-center">
+                            <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 items-center">
                                 {start && end ? (
                                     <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} startDate={start} endDate={end} />
                                 ) : (
