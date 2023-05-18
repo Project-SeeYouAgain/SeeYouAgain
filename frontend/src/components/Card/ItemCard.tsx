@@ -33,7 +33,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();
     const token = useRecoilValue(userState).accessToken;
-    const [state,setState]=useState<string|null>(null)
+    const [state, setState] = useState<string | null>(null);
 
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     function Dropdown(event: React.MouseEvent) {
@@ -43,8 +43,8 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }
 
     useEffect(() => {
-        const click=localStorage.getItem('click')
-        setState(click)
+        const click = localStorage.getItem('click');
+        setState(click);
         setUrl(window.location.pathname);
     }, []);
 
@@ -177,16 +177,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                             {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" width={300} height={400} /> : null}
                         </span>
                         {startDate !== null && startDate !== undefined ? (
-                            <div className="grid grid-cols-2 gap-2 text-center">
-                                <div className="flex text-darkgrey text-sm">
-                                    <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
-                                    <p className="whitespace-nowrap">{startDate}</p>
-                                </div>
-                                <div className="flex text-darkgrey text-sm justify-end">
-                                    <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
-                                    <p className="whitespace-nowrap">{endDate}</p>
-                                </div>
-                            </div>
+                            <p className="whitespace-nowrap text-sm">
+                                {startDate}부터 {endDate}까지
+                            </p>
                         ) : null}
                     </div>
                 </div>
