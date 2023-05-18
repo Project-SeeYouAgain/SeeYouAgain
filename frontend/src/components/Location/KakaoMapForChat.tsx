@@ -89,6 +89,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     content: content,
                 });
                 customOverlay.setMap(map);
+                newMarkers.push(customOverlay);
             }
 
             if (otherUserLocation) {
@@ -125,6 +126,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     content: content,
                 });
                 customOverlay.setMap(map);
+                newMarkers.push(customOverlay);
             }
 
             setMarkers(newMarkers);
