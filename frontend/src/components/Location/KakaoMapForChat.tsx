@@ -76,7 +76,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     userMarker.setMap(map);
                     newMarkers.push(userMarker);
                 }
-                const content = '<div class ="label"><span class="left"></span><span class="center">나</span><span class="right"></span></div>';
+                const content = '<div style="padding-top:12px font-size: larger; color:blue;">나</div>';
 
                 // 커스텀 오버레이가 표시될 위치입니다
                 const position = new kakao.maps.LatLng(userLocation.lat, userLocation.lng);
@@ -111,7 +111,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     otherMarker.setMap(map);
                     newMarkers.push(otherMarker);
                 }
-                const content = '<div class ="label"><span class="left"></span><span class="center">이웃</span><span class="right"></span></div>';
+                const content = '<div style="padding-top:12px font-size: larger; color:red;">이웃</div>';
 
                 // 커스텀 오버레이가 표시될 위치입니다
                 const position = new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng);
