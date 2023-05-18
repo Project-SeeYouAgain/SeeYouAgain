@@ -12,13 +12,9 @@ function index(productId: number) {
     useEffect(() => {
         axAuth(token)({
             url: `/product-service/auth/review/${productId}/${lastReviewId}`,
-        })
-            .then(res => {
-                setReviews(res.data.data);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        }).then(res => {
+            setReviews(res.data.data);
+        });
     }, [lastReviewId]);
 
     return <div>{reviews}</div>;

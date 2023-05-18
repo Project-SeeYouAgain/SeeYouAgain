@@ -58,6 +58,11 @@ const UserLocation: React.FC = () => {
         }
     }, []);
 
+    // useEffect(() => {
+    //     if (otherUserLocation?.moving === false) {
+    //         setOtherUserLocation(null);
+    //     }
+    // }, [otherUserLocation?.moving]);
     const handleIsMobileChanged = (mobile: boolean) => {
         setIsMobile(mobile);
     };
@@ -87,37 +92,35 @@ const UserLocation: React.FC = () => {
             })
             .catch(err => console.log(err));
 
-        if (router.query.userId) {
-            // 내 위치가 변화한 것을 감지하면 watchId가 실행
-            const watchId = navigator.geolocation.getCurrentPosition(
-                position => {
-                    // 바뀌면 userLocation에 해당 lat, lng 저장
-                    setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-                    if (position) {
-                        console.log('position if 부분');
-                        const data = { lat: position.coords.latitude, lng: position.coords.longitude, moving: myCheck };
-                        console.log('내 위치 보내기');
-                        axAuth(token)({
-                            method: 'post',
-                            url: '/user-service/auth/location',
-                            data: data,
-                        })
-                            .then(res => {
-                                console.log('성공', res);
-                            })
+        // 3초마다 내 위치를 보냄
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                // 바뀌면 userLocation에 해당 lat, lng 저장
 
-                            .catch(err => {
-                                console.log(err);
-                            });
-                    }
-                },
-                error => {
-                    console.error('Error getting position:', error);
-                },
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-        }
+                setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+                if (position) {
+                    console.log('position if 부분');
+                    const data = { lat: position.coords.latitude, lng: position.coords.longitude, moving: myCheck };
+                    console.log('현 위치', typeof position.coords.latitude);
+                    console.log('내 위치 보내기');
+                    axAuth(token)({
+                        method: 'post',
+                        url: '/user-service/auth/location',
+                        data: data,
+                    })
+                        .then(res => {
+                            console.log('성공', res);
+                        })
+
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
+            },
+            error => {
+                console.error('Error getting position:', error);
+            },
+        );
     };
 
     useEffect(() => {
@@ -131,17 +134,12 @@ const UserLocation: React.FC = () => {
                 // 페이지를 벗어날 때 실행되는 cleanup 함수
                 (async () => {
                     if (userLocation) {
-                        const data = {
-                            lat: null,
-                            lng: null,
-                            moving: false, // 원하는 값으로 설정
-                        };
-
                         try {
                             await axAuth(token)({
                                 method: 'delete',
                                 url: `/user-service/auth/location/${myId}`,
                             });
+                            localStorage.removeItem('reservation-location');
                         } catch (err) {
                             console.log(err);
                         }

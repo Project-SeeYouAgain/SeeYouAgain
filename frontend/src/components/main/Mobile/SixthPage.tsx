@@ -8,9 +8,7 @@ import useInView from '../Mobile/useInView';
 
 function SixthPage() {
     const [ref, isInView] = useInView(0.5);
-    useEffect(() => {
-        console.log('Visibility status:', isInView ? 'Second Visible' : '');
-    }, [isInView]);
+
     return (
         <div className={styles.boxContainer} ref={ref}>
             <div className={classNames('w-full px-4', styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>

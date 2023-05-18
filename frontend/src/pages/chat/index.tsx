@@ -41,13 +41,9 @@ function chat() {
     const getChannelList = (type: string) => {
         axAuth(token)({
             url: `/chatting-service/auth/channel/${type}`,
-        })
-            .then(res => {
-                setChatRoomList((_chat_room_list: ChatRoomData[]) => res.data.data);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        }).then(res => {
+            setChatRoomList((_chat_room_list: ChatRoomData[]) => res.data.data);
+        });
     };
 
     const selectType = (event: MouseEvent, type: string) => {

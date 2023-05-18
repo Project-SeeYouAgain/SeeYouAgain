@@ -41,10 +41,8 @@ function Rent() {
         const url = `/product-service/auth/reservation/${menuState}`;
         axBase(token)({ url })
             .then(res => {
-                console.log(res.data.data);
                 setItemList(res.data.data);
             })
-            .catch(err => console.log(err));
     }, [menuState, refreshKey]);
 
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
