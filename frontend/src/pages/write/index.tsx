@@ -212,6 +212,7 @@ function Write() {
                                 <>
                                     <button className="absolute bottom-2 right-8 text-white text-[2rem] bg-blue w-[3.2rem] h-[3rem] rounded-[.4rem]" onClick={() => setCurrentStep(currentStep + 1)}>
                                         <MdKeyboardArrowRight className="m-auto" />
+                                        
                                     </button>
                                     <Navbar />
                                 </>
