@@ -8,9 +8,6 @@ import useInView from '../Mobile/useInView';
 
 function FourthPage() {
     const [ref, isInView] = useInView(0.5);
-    useEffect(() => {
-        console.log('Visibility status:', isInView ? 'Second Visible' : '');
-    }, [isInView]);
     return (
         <div className={classNames('flex', styles.boxContainer)} ref={ref}>
             <div className="m-auto text-center">

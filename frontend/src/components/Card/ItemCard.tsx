@@ -86,14 +86,12 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                     setIsActive(!isActive);
                     onRefreshKey?.();
                 })
-                .catch(err => console.log(err));
         } else {
             axAuth(token)({ method: 'post', url: url })
                 .then(() => {
                     setIsActive(!isActive);
                     onRefreshKey?.();
                 })
-                .catch(err => console.log(err));
         }
     };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
