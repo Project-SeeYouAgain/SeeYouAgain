@@ -81,15 +81,17 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         event.preventDefault();
         const url = `/product-service/auth/cart/${productId}`;
         if (isActive) {
-            axAuth(token)({ method: 'delete', url: url }).then(() => {
-                setIsActive(!isActive);
-                onRefreshKey?.();
-            });
+            axAuth(token)({ method: 'delete', url: url })
+                .then(() => {
+                    setIsActive(!isActive);
+                    onRefreshKey?.();
+                })
         } else {
-            axAuth(token)({ method: 'post', url: url }).then(() => {
-                setIsActive(!isActive);
-                onRefreshKey?.();
-            });
+            axAuth(token)({ method: 'post', url: url })
+                .then(() => {
+                    setIsActive(!isActive);
+                    onRefreshKey?.();
+                })
         }
     };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
