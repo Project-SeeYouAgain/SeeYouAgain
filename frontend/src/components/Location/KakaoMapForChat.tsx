@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { TbCookieMan } from 'react-icons/tb';
 import { BsBox2HeartFill } from 'react-icons/bs';
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
 import styles from './KakaoMap.module.scss';
 
 interface KakaoMapProps {
@@ -20,7 +20,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
     const [markers, setMarkers] = useState<any[]>([]);
     // const [reservationLocation, setReservationLocation] = useState<reservationLocation>();
 
-    const iconHtml = ReactDOMServer.renderToString(<TbCookieMan size={40} />);
+    // const iconHtml = ReactDOMServer.renderToString(<TbCookieMan size={40} />);
     const content = `
     <div style="color:blue; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bold;">
     <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:blue; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;">나<p/>
@@ -33,7 +33,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
       </div>
     `;
 
-    const reserIconHtml = ReactDOMServer.renderToString(<BsBox2HeartFill size={30} className="m-auto" />);
+    // const reserIconHtml = ReactDOMServer.renderToString(<BsBox2HeartFill size={30} className="m-auto" />);
     const reservationContent = `
       <div style="color:black; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bolder;">
       <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:black; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;margin-bottom:0.2rem">거래<p/>
