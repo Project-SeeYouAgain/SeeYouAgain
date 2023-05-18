@@ -33,10 +33,10 @@ public class Reservation {
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private Float lng;
+    private Double lng;
 
     @Column(nullable = false)
-    private Float lat;
+    private Double lat;
 
     @Column(nullable = false)
     private String location;

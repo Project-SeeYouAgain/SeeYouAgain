@@ -20,9 +20,9 @@ public class ProductRequestDto {
 
     private String description;
 
-    private Float lng;
+    private Double lng;
 
-    private Float lat;
+    private Double lat;
 
     private String regionCode;
 
