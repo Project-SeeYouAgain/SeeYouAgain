@@ -282,15 +282,7 @@ function Home() {
                             {listdata &&
                                 listdata.map((item, index) => (
                                     <div onClick={() => onClick(item.productId)} key={index}>
-                                        <ItemCard
-                                            productId={item.productId}
-                                            productImg={item.thumbnailUrl}
-                                            location={item.location}
-                                            price={item.price}
-                                            title={item.title}
-                                            isCart={item.isCart}
-                                            isSafe={item.isSafe}
-                                        />
+                                        <WebItemCard productId={item.productId} productImg={item.thumbnailUrl} location={item.location} price={item.price} title={item.title} />
                                     </div>
                                 ))}
                         </div>
