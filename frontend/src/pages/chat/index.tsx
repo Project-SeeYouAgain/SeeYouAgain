@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef, MouseEvent } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 import ChatRoom from '@/components/ChatRoom';
-import { VscBell } from 'react-icons/vsc';
 import { axAuth } from '@/apis/axiosinstance';
-import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Navbar from '@/components/Container/components/Navbar';
 import WebNavbar from './../../components/Container/components/WebNavbar/index';

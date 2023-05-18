@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 export const interceptors = (instance: AxiosInstance, token: string | null) => {
     instance.interceptors.request.use(
         config => {
-            // const tokens = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjg0MzY5MDA2LCJleHAiOjE2ODQ0NTU0MDZ9.WS7w6gU6hWVkkkUOnsYQqBs8GTwRQn3QHUgKlVqbx60';
+            // const tokens = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjg0Mzc2NDI0LCJleHAiOjE2ODQ0NjI4MjR9.ARYSWd01B9gW7eUg9FyhZC6nKVdbwwwG5KL1cOPigD4';
 
             config.headers.Authorization = `Bearer ${token}`;
             return config;
