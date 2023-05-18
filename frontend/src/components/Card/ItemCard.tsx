@@ -33,6 +33,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();
     const token = useRecoilValue(userState).accessToken;
+    const [state,setState]=useState<string|null>(null)
 
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     function Dropdown(event: React.MouseEvent) {
@@ -42,6 +43,8 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }
 
     useEffect(() => {
+        const click=localStorage.getItem('click')
+        setState(click)
         setUrl(window.location.pathname);
     }, []);
 
@@ -150,7 +153,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                                         isBooked={isBooked}
                                         start={startDate}
                                         end={endDate}
-                                        {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }}
+                                        {...{ isRent: state === '대여 받은 내역', menuState, dropdownVisible }}
                                         reservationId={reservationId}
                                     />
                                 </>
