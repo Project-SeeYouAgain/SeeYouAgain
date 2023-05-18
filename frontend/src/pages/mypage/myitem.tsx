@@ -28,7 +28,7 @@ function MyItem() {
     const token = useRecoilValue(userState).accessToken;
     const [bookList, setBookList] = useState<RentalItem[]>([]);
     const [holdList, setHoldList] = useState<RentalItem[]>([]);
-    const dragThreshold = 20;
+
     const refreshKey = useRecoilValue(productState).refreshKey;
 
     function SelectMenu(data: number) {
@@ -56,32 +56,6 @@ function MyItem() {
         });
     }, [menuState, refreshKey]);
 
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-    const handleDragStart = (e: any) => {
-        const touch = e.touches ? e.touches[0] : e;
-        setDragStart({ x: touch.clientX, y: touch.clientY });
-    };
-
-    const handleDragEnd = (e: any) => {
-        const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const deltaX = touch.clientX - dragStart.x;
-        const deltaY = touch.clientY - dragStart.y;
-
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-            // Ignore vertical drag
-            return;
-        }
-        if (Math.abs(deltaX) < dragThreshold) {
-            return;
-        }
-
-        if (deltaX > -90) {
-            setMenuState(prev => (prev === 1 ? 3 : prev - 1));
-        } else if (deltaX < 90) {
-            setMenuState(prev => (prev === 3 ? 1 : prev + 1));
-        }
-    };
     const [containerHeight, setContainerHeight] = useState<number>(0);
 
     useEffect(() => {
@@ -141,7 +115,7 @@ function MyItem() {
                     <div className="w-full mb-4 text-2xl font-bold pb-4">
                         <p className="pl-4">내 아이템</p>
                     </div>
-                    <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                    <div className="px-[1.88rem]" style={{ height: containerHeight }}>
                         <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
                         {menuState === 1 ? (
                             <div>
@@ -229,7 +203,7 @@ function MyItem() {
             {isMobile && (
                 <>
                     <Header title="내 아이템"></Header>
-                    <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                    <div className="px-[1.88rem]" style={{ height: containerHeight }}>
                         <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
                         {menuState === 1 ? (
                             <div>
