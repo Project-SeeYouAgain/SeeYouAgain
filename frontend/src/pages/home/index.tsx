@@ -19,7 +19,6 @@ import { useMediaQuery } from 'react-responsive';
 import WebNavbar from '@/components/Container/components/WebNavbar';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import { onBackgroundMessage } from 'firebase/messaging/sw';
 
 interface dataProps {
     thumbnailUrl: string;
@@ -207,10 +206,6 @@ function Home() {
         onMessage(messaging, payload => {
             console.log('메시지가 도착했습니다.', payload);
             // ...
-        });
-
-        onBackgroundMessage(messaging, payload => {
-            console.log('[firebase-messaging-sw.js] Received background message ', payload);
         });
     }, []);
 
