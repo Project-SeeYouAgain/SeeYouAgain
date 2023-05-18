@@ -62,11 +62,10 @@ function Detail() {
             router.push('/');
         }
         const url = `/product-service/auth/${productId}`;
-        axBase(token)({ url })
-            .then(res => {
-                setData(res.data.data);
-                setIsHeartFill(res.data.data.isCart);
-            })
+        axBase(token)({ url }).then(res => {
+            setData(res.data.data);
+            setIsHeartFill(res.data.data.isCart);
+        });
     }, [isHeartFill]);
 
     function GoChatRoom() {
@@ -77,10 +76,9 @@ function Detail() {
                 productId: productId,
                 ownerId: data.ownerId,
             };
-            axAuth(token)({ method: 'post', url: url, data: myData })
-                .then(res => {
-                    router.push(`/chat/${res.data.data}`);
-                })
+            axAuth(token)({ method: 'post', url: url, data: myData }).then(res => {
+                router.push(`/chat/${res.data.data}`);
+            });
         }
     }
 
@@ -92,10 +90,9 @@ function Detail() {
                 productId: productId,
                 ownerId: data.ownerId,
             };
-            axAuth(token)({ method: 'post', url: url, data: myData })
-                .then(res => {
-                    router.push(`/chat/${res.data.data}/book/${product}`);
-                })
+            axAuth(token)({ method: 'post', url: url, data: myData }).then(res => {
+                router.push(`/chat/${res.data.data}/book/${product}`);
+            });
         }
     }
 
@@ -103,50 +100,19 @@ function Detail() {
         const productId = Number(window.location.pathname.substring(1));
         const url = `/product-service/auth/cart/${productId}`;
         if (isHeartFill === false) {
-            axAuth(token)({ method: 'post', url: url })
-                .then(() => {
-                    setIsHeartFill(!isHeartFill);
-                })
+            axAuth(token)({ method: 'post', url: url }).then(() => {
+                setIsHeartFill(!isHeartFill);
+            });
         } else {
-            axAuth(token)({ method: 'delete', url: url })
-                .then(() => {
-                    setIsHeartFill(!isHeartFill);
-                })
+            axAuth(token)({ method: 'delete', url: url }).then(() => {
+                setIsHeartFill(!isHeartFill);
+            });
         }
     }
 
     function SelectMenu(state: number) {
         setMenuState(state);
     }
-
-    const dragThreshold = 20;
-
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-    const handleDragStart = (e: any) => {
-        const touch = e.touches ? e.touches[0] : e;
-        setDragStart({ x: touch.clientX, y: touch.clientY });
-    };
-
-    const handleDragEnd = (e: any) => {
-        const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const deltaX = touch.clientX - dragStart.x;
-        const deltaY = touch.clientY - dragStart.y;
-
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-            // Ignore vertical drag
-            return;
-        }
-        if (Math.abs(deltaX) < dragThreshold) {
-            return;
-        }
-
-        if (deltaX > -90) {
-            setMenuState(prev => (prev === 1 ? 3 : prev - 1));
-        } else if (deltaX < 90) {
-            setMenuState(prev => (prev === 3 ? 1 : prev + 1));
-        }
-    };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
@@ -285,7 +251,7 @@ function Detail() {
                                     </span>
                                 ))}
                             </div>
-                            <div className="w-full pb-8 " onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                            <div className="w-full pb-8 ">
                                 <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
                                 {menuState === 1 ? (
                                     <div className="h-[273.78px] w-full">
