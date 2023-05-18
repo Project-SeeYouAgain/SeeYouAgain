@@ -7,7 +7,7 @@ interface KakaoMapProps {
     lat: number;
     lng: number;
     userLocation: { lat: number; lng: number } | null;
-    otherUserLocation: { lat: number; lng: number; moving: boolean; profile: string | null } | null;
+    otherUserLocation: { lat: number | null; lng: number | null; moving: boolean; profile: string | null } | null;
     reservationLocation: { lat: number; lng: number } | null;
 }
 

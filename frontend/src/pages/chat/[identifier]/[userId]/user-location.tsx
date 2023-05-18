@@ -16,7 +16,7 @@ const UserLocation: React.FC = () => {
     const [userId, setUserId] = useState<any>('');
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number; moving: boolean; profile: string | null } | null>(null);
+    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number | null; lng: number | null; moving: boolean; profile: string | null } | null>(null);
     const token = useRecoilValue(userState).accessToken;
     const myId = useRecoilValue(userState).id;
     const profileImg = useRecoilValue(userState).profileImg;
@@ -52,7 +52,7 @@ const UserLocation: React.FC = () => {
             })
             .catch(err => {
                 console.log(err);
-                setOtherUserLocation(null);
+                setOtherUserLocation({lat: null, lng: null, moving: false, profile: otherProfile} );
             });
         // 저장해둔 예약 장소 받아오기
         const reserveLocation = localStorage.getItem('reservation-location');
