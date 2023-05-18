@@ -7,9 +7,6 @@ import Navbar from '@/components/Container/components/Navbar';
 import WebNavbar from './../../components/Container/components/WebNavbar/index';
 import classNames from 'classnames';
 
-import { initializeApp } from 'firebase/app';
-import { getMessaging, onMessage, MessagePayload } from 'firebase/messaging';
-
 interface ChatRoomData {
     nickname: string;
     profileImg: string;
@@ -28,48 +25,17 @@ function chat() {
     const [selectedTab, setSelectedTab] = useState<string>('borrow');
     const token = useRecoilValue(userState).accessToken;
 
-    const [message, setMessage] = useState<MessagePayload | null>(null);
-
-    useEffect(() => {
-        const firebaseConfig = {
-            apiKey: 'AIzaSyDwEsV86gH2v-5Qkm68DzJbqhByzvYuZng',
-            authDomain: 'seeyouagain-d505e.firebaseapp.com',
-            projectId: 'seeyouagain-d505e',
-            storageBucket: 'seeyouagain-d505e.appspot.com',
-            messagingSenderId: '299695008110',
-            appId: '1:299695008110:web:d6f1d174384198993cb97f',
-            measurementId: 'G-5JE202YV21',
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const messaging = getMessaging(app);
-        const unsubscribe = onMessage(messaging, payload => {
-            setMessage(payload);
-        });
-
-        return () => {
-            unsubscribe();
-        };
-    }, []);
-
-    // message에 변화가 생기면 특정 함수를 실행
-    useEffect(() => {
-        if (message) {
-            getChannelList(selectedTab);
-        }
-    }, [message]);
-
     useEffect(() => {
         getChannelList(selectedTab);
 
-        // const intervalId = setInterval(() => {
-        //     getChannelList(selectedTab);
-        // }, 2000);
+        const intervalId = setInterval(() => {
+            getChannelList(selectedTab);
+        }, 2000);
 
-        // // cleanup function
-        // return () => {
-        //     clearInterval(intervalId);
-        // };
+        // cleanup function
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [selectedTab]);
 
     const getChannelList = (type: string) => {
