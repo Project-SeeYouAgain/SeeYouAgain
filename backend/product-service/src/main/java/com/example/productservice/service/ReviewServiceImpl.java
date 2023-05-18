@@ -12,6 +12,7 @@ import com.example.productservice.exception.ExceptionEnum;
 import com.example.productservice.repository.ReservationRepository;
 import com.example.productservice.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,8 +34,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReviewResponseDto> getProductReview(Long productId, Long lastReviewId) {
-        return reviewRepository.getReviewListByProductId(productId, lastReviewId);
+    public List<ReviewResponseDto> getProductReview(Long productId, Integer page) {
+        return reviewRepository.getReviewListByProductId(productId, page);
     }
 
     @Override
