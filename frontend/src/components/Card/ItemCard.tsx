@@ -231,7 +231,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                         </span>
                         {startDate !== null && startDate !== undefined ? (
                             <p className="whitespace-nowrap text-sm">
-                                {startDate}부터 {endDate}까지
+                                {startDate} ~ {endDate}
                             </p>
                         ) : null}
                     </div>
