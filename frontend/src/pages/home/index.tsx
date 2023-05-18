@@ -325,14 +325,14 @@ function Home() {
                                             className={`rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ${selectedCategoryName === '전체' ? 'bg-white' : 'bg-blue text-white'}`}
                                             onClick={handleCategory}
                                         >
-                                            카테고리 선택
+                                            {selectedCategoryName}
                                         </button>
                                         {/* 동네 */}
                                         <button
                                             className={`rounded-full p-2 px-3 mx-1 border border-solid text-sm text-darkgrey ${isMyLocation ? 'bg-blue text-white' : 'bg-white'}`}
                                             onClick={handleIsMyLocation}
                                         >
-                                            내 동네만 보기
+                                            내 동네만
                                         </button>
                                         {/* 정렬 */}
                                         <select
