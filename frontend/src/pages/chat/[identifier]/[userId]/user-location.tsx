@@ -184,7 +184,7 @@ const UserLocation: React.FC = () => {
                             <div className="flex justify-center pb-4">
                                 <div className="pr-4 text-center w-fit">
                                     <div className="relative m-auto" style={{ width: 32, height: 32 }}>
-                                        <Image src={profileImg ? profileImg : default_user} alt="프로필 이미지" className="rounded-full object-cover" fill />
+                                        <Image src={otherProfile ? otherProfile : default_user} alt="프로필 이미지" className="rounded-full object-cover" fill />
                                     </div>
                                     <p className="font-bold">{userNickName}</p>
                                 </div>
