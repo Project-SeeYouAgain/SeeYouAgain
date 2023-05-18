@@ -83,14 +83,12 @@ function Home() {
     const [sort, setSort] = useState<number>(0);
 
     const handleSort = (type: number, typeText: string) => {
-        console.log(1);
         setSort(type);
         setSortText(typeText);
     };
 
     useEffect(() => {
         if (token === undefined || token === null) {
-            console.log('로그인 풀림');
             router.push('/');
         }
         setUser(userset);
@@ -120,8 +118,6 @@ function Home() {
     }, [userset, selectedCategoryName, isMyLocation, sort]);
 
     const getProduct = () => {
-        console.log(selectedCategoryName);
-        console.log(isMyLocation);
         axAuth(token)({
             method: 'post',
             url: '/product-service/auth/productlist',
@@ -188,17 +184,12 @@ function Home() {
             }
         }
 
-        console.log('권한 요청 중...');
-
         Notification.requestPermission().then(permission => {
             if (permission === 'denied') {
-                console.log('알림 권한 허용 안됨');
                 return;
             }
             // 권한이 'granted'인 경우의 처리
         });
-
-        console.log('알림 권한이 허용됨');
 
         const fcmToken = getToken(messaging, {
             vapidKey: 'BOxHR5SEepMdoj1-Zuy-qJC-S5SABE3eIZ_-e66-GDXjspEDsguTUG69NMz--8wDrTlZk3qiPzlfAhzs8viWEIo',

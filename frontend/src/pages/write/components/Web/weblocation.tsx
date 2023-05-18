@@ -35,7 +35,6 @@ const webpickLocation = ({
 
     const [myCheck, setMyCheck] = useState(true);
     const clickPosition = () => {
-        // console.log(lat, lng, score);
         if (score >= 7.5) {
             Swal.fire({
                 title: '안전지수 3단계',
@@ -55,13 +54,11 @@ const webpickLocation = ({
                         if (status === kakao.maps.services.Status.OK) {
                             // 행정동 주소 정보를 가져오는 데에 성공한 경우
                             const regionCode = result[0].region_3depth_name;
-                            console.log('행정동:', regionCode);
 
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
                             onSubmit({ ...data, location: locationData });
-                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -91,13 +88,11 @@ const webpickLocation = ({
                         if (status === kakao.maps.services.Status.OK) {
                             // 행정동 주소 정보를 가져오는 데에 성공한 경우
                             const regionCode = result[0].region_3depth_name;
-                            console.log('행정동:', regionCode);
 
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
                             onSubmit({ ...data, location: locationData });
-                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -127,13 +122,11 @@ const webpickLocation = ({
                         if (status === kakao.maps.services.Status.OK) {
                             // 행정동 주소 정보를 가져오는 데에 성공한 경우
                             const regionCode = result[0].region_3depth_name;
-                            console.log('행정동:', regionCode);
 
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
                             onSubmit({ ...data, location: locationData });
-                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우
@@ -163,13 +156,11 @@ const webpickLocation = ({
                         if (status === kakao.maps.services.Status.OK) {
                             // 행정동 주소 정보를 가져오는 데에 성공한 경우
                             const regionCode = result[0].region_3depth_name;
-                            console.log('행정동:', regionCode);
 
                             // locationData에 행정동 주소 정보 추가
                             locationData.RegionCode = regionCode;
                             setData(prevData => ({ ...prevData, location: locationData }));
                             onSubmit({ ...data, location: locationData });
-                            // console.log('로케이션에서', locationData);
                             setIsLocationOn(false);
                         } else {
                             // 행정동 주소 정보를 가져오는 데에 실패한 경우

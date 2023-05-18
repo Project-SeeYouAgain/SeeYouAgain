@@ -72,7 +72,6 @@ function Write() {
         };
 
         // stepTwoData의 데이터가 기본값인지 아닌지 확인
-        console.log('세이프존', data.isSafe);
         const hasEnteredData = Object.values(stepTwoData);
         // 데이터가 모두 입력되지 않은 경우 제출을 막음
         if (
@@ -153,9 +152,6 @@ function Write() {
 
         formData.append('requestDto', blob);
 
-        console.log('폼데이터 입니다.', formData);
-        console.log('제출 데이터 입니다.', submitData);
-        console.log('난 그냥 데이터', data);
         try {
             axAuth(token)({
                 method: 'post',
@@ -167,7 +163,6 @@ function Write() {
                     alert('게시글이 등록되었습니다!');
                     router.push('/home');
                 }) // 잘 들어갔는지 확인
-                .catch(err => console.log(err)); // 어떤 오류인지 확인)
         } catch (err) {
             console.log(err);
         } finally {
@@ -185,7 +180,6 @@ function Write() {
     // 이부분은 필요해서 놔뒀습니다.
     useEffect(() => {
         if (token === undefined || token === null) {
-            console.log('로그인 풀림');
             router.push('/');
         }
         setView(true);

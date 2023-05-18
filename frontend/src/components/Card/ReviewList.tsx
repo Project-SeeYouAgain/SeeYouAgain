@@ -31,10 +31,8 @@ function ReviewList(propdata: dataprop) {
 
         axBase(token)({ url: url })
             .then(res => {
-                console.log(res.data.data);
                 setReviewList(res.data.data);
             })
-            .catch(err => console.log(err));
     }, [page]);
 
     function SetPage(index: number) {
