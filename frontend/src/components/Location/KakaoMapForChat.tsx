@@ -1,8 +1,7 @@
 // KakaoMap.tsx
 import React, { useEffect, useState } from 'react';
-import { TbCookieMan, TbBrandQq } from 'react-icons/tb';
+import { TbCookieMan } from 'react-icons/tb';
 import { BsBox2HeartFill } from 'react-icons/bs';
-import { GrLocationPin } from 'react-icons/gr';
 import ReactDOMServer from 'react-dom/server';
 import styles from './KakaoMap.module.scss';
 
