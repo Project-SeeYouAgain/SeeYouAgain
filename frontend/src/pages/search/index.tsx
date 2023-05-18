@@ -197,7 +197,7 @@ function Search() {
     return (
         <Container className="flex flex-col h-screen">
             {isDesktop && <WebNavbar />}
-            <div className={classNames('flex py-5 px-[1.2rem] items-center', isDesktop ? 'mt-[100px]' : '')}>
+            <div className={classNames('flex py-5 px-[4rem] items-center', isDesktop ? 'mt-[100px]' : '')}>
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
                     <input
                         type="text"
@@ -211,9 +211,9 @@ function Search() {
                     <AiOutlineSearch size={30} onClick={handleAddKeyword} />
                 </div>
             </div>
-            <div className="px-[1.88rem] flex-grow">
-                <div className="flex justify-between">
-                    <p className="mt-2 text-xl font-bold text-blue">최근 검색어</p>
+            <div className="px-[4.5rem] flex-grow">
+                <div className="flex justify-between items-center">
+                    <p className="text-xl font-bold text-blue">최근 검색어</p>
                     <button onClick={handleClearKeywords} className="text-red font-bold">
                         모두 삭제
                     </button>
