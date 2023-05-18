@@ -1,16 +1,11 @@
-import React, { useEffect, useState, useRef, MouseEvent } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 import ChatRoom from '@/components/ChatRoom';
-import { VscBell } from 'react-icons/vsc';
 import { axAuth } from '@/apis/axiosinstance';
-import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Navbar from '@/components/Container/components/Navbar';
 import WebNavbar from './../../components/Container/components/WebNavbar/index';
 import classNames from 'classnames';
-
-import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 interface ChatRoomData {
     nickname: string;
@@ -31,37 +26,16 @@ function chat() {
     const token = useRecoilValue(userState).accessToken;
 
     useEffect(() => {
-        const firebaseConfig = {
-            apiKey: 'AIzaSyDwEsV86gH2v-5Qkm68DzJbqhByzvYuZng',
-            authDomain: 'seeyouagain-d505e.firebaseapp.com',
-            projectId: 'seeyouagain-d505e',
-            storageBucket: 'seeyouagain-d505e.appspot.com',
-            messagingSenderId: '299695008110',
-            appId: '1:299695008110:web:d6f1d174384198993cb97f',
-            measurementId: 'G-5JE202YV21',
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const messaging = getMessaging(app);
-
-        onMessage(messaging, payload => {
-            console.log('메시지가 도착했습니다.', payload);
-            // ...
-            getChannelList(selectedTab);
-        });
-    }, []);
-
-    useEffect(() => {
         getChannelList(selectedTab);
 
-        // const intervalId = setInterval(() => {
-        //     getChannelList(selectedTab);
-        // }, 2000);
+        const intervalId = setInterval(() => {
+            getChannelList(selectedTab);
+        }, 2000);
 
-        // // cleanup function
-        // return () => {
-        //     clearInterval(intervalId);
-        // };
+        // cleanup function
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [selectedTab]);
 
     const getChannelList = (type: string) => {

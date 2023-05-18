@@ -34,6 +34,7 @@ function MyPage() {
     const allCookies = cookie.getAll();
     const [selectedMenu, setSelectedMenu] = useState('찜 목록');
     const renderContent = () => {
+        localStorage.setItem('click', selectedMenu)
         switch (selectedMenu) {
             case '찜 목록':
                 return <Cart />;

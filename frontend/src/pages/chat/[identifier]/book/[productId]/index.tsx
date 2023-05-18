@@ -40,6 +40,19 @@ function book() {
     const [isSafe, setIsSafe] = useState<boolean>(false);
     const router = useRouter();
 
+    useEffect(() => {
+        // 클라이언트에서만 실행되는 부작용
+        // ...
+        const reload = localStorage.getItem('reload');
+        if (!reload) {
+            localStorage.setItem('reload', 'true');
+            router.reload();
+        }
+        return () => {
+            localStorage.removeItem('reload');
+        };
+    }, []);
+    
     const { identifier } = router.query;
     const productId = router.query.productId;
     const [unavailableDateRange, setUnavailableDateRange] = useState<Date[]>([]);
