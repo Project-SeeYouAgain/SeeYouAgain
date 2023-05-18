@@ -1,6 +1,6 @@
 // KakaoMap.tsx
 import React, { useEffect, useState } from 'react';
-import './KakaoMap.module.scss';
+import './KakaoMap.css';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 
