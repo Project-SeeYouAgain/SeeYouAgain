@@ -50,29 +50,6 @@ function chat() {
         setSelectedTab(type);
     };
 
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-    const handleDragStart = (e: any) => {
-        const touch = e.touches ? e.touches[0] : e;
-        setDragStart({ x: touch.clientX, y: touch.clientY });
-    };
-
-    const handleDragEnd = (e: any) => {
-        const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const deltaX = touch.clientX - dragStart.x;
-        const deltaY = touch.clientY - dragStart.y;
-
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-            // Ignore vertical drag
-            return;
-        }
-
-        if (deltaX > -90) {
-            setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
-        } else if (deltaX < 90) {
-            setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
-        }
-    };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
@@ -109,13 +86,7 @@ function chat() {
     return (
         <div>
             {isDesktop && <WebNavbar />}
-            <div
-                className={classNames('p-4 min-h-screen pb-[3.7rem] px-[1.88rem]', isDesktop ? 'mt-[100px]' : '')}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                onTouchStart={handleDragStart}
-                onTouchEnd={handleDragEnd}
-            >
+            <div className={classNames('p-4 min-h-screen pb-[3.7rem] px-[1.88rem]', isDesktop ? 'mt-[100px]' : '')}>
                 {/* <div className="flex justify-between mb-5 items-center border-b-1">
                     <p className="text-lg font-bold dark:text-black">채팅</p>
                     <VscBell className="text-2xl" />
