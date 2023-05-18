@@ -127,20 +127,19 @@ function MyItem() {
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {bookList.map((item, index) => (
-                                            <Link key={index} href={''}>
-                                                <Card
-                                                    productImg={item.productImg}
-                                                    title={item.title}
-                                                    location={item.location}
-                                                    price={item.price}
-                                                    startDate={item.startDate}
-                                                    endDate={item.endDate}
-                                                    isSafe={item.isSafe}
-                                                    menuState={menuState}
-                                                    productId={item.productId}
-                                                    isBooked={true}
-                                                />
-                                            </Link>
+                                            <Card
+                                                productImg={item.productImg}
+                                                title={item.title}
+                                                location={item.location}
+                                                price={item.price}
+                                                startDate={item.startDate}
+                                                endDate={item.endDate}
+                                                isSafe={item.isSafe}
+                                                menuState={menuState}
+                                                productId={item.productId}
+                                                isBooked={true}
+                                                key={`${item.startDate}${item.endDate}`}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -155,20 +154,19 @@ function MyItem() {
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {itemList.map((item, index) => (
-                                            <Link key={index} href={''}>
-                                                <Card
-                                                    productImg={item.productImg}
-                                                    title={item.title}
-                                                    location={item.location}
-                                                    price={item.price}
-                                                    isSafe={item.isSafe}
-                                                    menuState={menuState}
-                                                    productId={item.productId}
-                                                    isBooked={true}
-                                                    startDate={item.startDate}
-                                                    endDate={item.endDate}
-                                                />
-                                            </Link>
+                                            <Card
+                                                productImg={item.productImg}
+                                                title={item.title}
+                                                location={item.location}
+                                                price={item.price}
+                                                isSafe={item.isSafe}
+                                                menuState={menuState}
+                                                productId={item.productId}
+                                                isBooked={true}
+                                                startDate={item.startDate}
+                                                endDate={item.endDate}
+                                                key={`${item.startDate}${item.endDate}`}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -183,18 +181,17 @@ function MyItem() {
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {holdList.map((item, index) => (
-                                            <Link key={index} href={''}>
-                                                <Card
-                                                    productImg={item.productImg}
-                                                    title={item.title}
-                                                    location={item.location}
-                                                    price={item.price}
-                                                    isSafe={item.isSafe}
-                                                    menuState={menuState}
-                                                    productId={item.productId}
-                                                    isBooked={true}
-                                                />
-                                            </Link>
+                                            <Card
+                                                productImg={item.productImg}
+                                                title={item.title}
+                                                location={item.location}
+                                                price={item.price}
+                                                isSafe={item.isSafe}
+                                                menuState={menuState}
+                                                productId={item.productId}
+                                                isBooked={true}
+                                                key={item.productId}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -228,7 +225,7 @@ function MyItem() {
                                             menuState={menuState}
                                             productId={item.productId}
                                             isBooked={true}
-                                            key={index}
+                                            key={`${item.startDate}${item.endDate}`}
                                         />
                                     ))
                                 )}
@@ -250,9 +247,9 @@ function MyItem() {
                                         menuState={menuState}
                                         productId={item.productId}
                                         isBooked={true}
-                                        key={index}
                                         startDate={item.startDate}
                                         endDate={item.endDate}
+                                        key={`${item.startDate}${item.endDate}`}
                                     />
                                 ))
                             )
@@ -272,7 +269,7 @@ function MyItem() {
                                     menuState={menuState}
                                     productId={item.productId}
                                     isBooked={true}
-                                    key={index}
+                                    key={item.productId}
                                 />
                             ))
                         )}
