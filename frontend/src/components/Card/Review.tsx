@@ -15,13 +15,19 @@ interface ReviewProp {
 
 function Review(data: ReviewProp) {
     const [clickReview, setClickReview] = useRecoilState(reviewState);
-    console.log(clickReview);
 
     function reviewClick() {
-        setClickReview({
-            ...clickReview,
-            review: data.index,
-        });
+        if (data.index === clickReview.review) {
+            setClickReview({
+                ...clickReview,
+                review: 3,
+            });
+        } else {
+            setClickReview({
+                ...clickReview,
+                review: data.index,
+            });
+        }
     }
 
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
