@@ -41,7 +41,7 @@ function Calender({ onChange }: CalenderProps) {
                 minDate={new Date()}
                 filterDate={date => isBeforeTodayOrSameDay(date) || isAfterToday(date)}
             />
-            <div className="mt-[.5rem] mb-4 px-2 py-1 text-center bg-lightgrey rounded-[.3rem]">
+            <div className="mt-[.5rem] mb-4 px-2 py-1 bg-lightgrey rounded-[.3rem]">
                 {startDate && endDate ? (
                     <div className="grid grid-cols-2 ">
                         <p>
