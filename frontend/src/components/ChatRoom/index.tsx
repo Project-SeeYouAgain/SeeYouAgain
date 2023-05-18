@@ -64,8 +64,8 @@ function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMes
                 </div>
                 <p className="truncate">{latestMessage}</p>
             </div>
+            {notReadMessageSize > 0 && <p className="text-white text-center text-sm rounded-full bg-blue aspect-square w-5 h-5 me-2">{notReadMessageSize}</p>}
             <div className="w-[50px] flex justify-end items-center">
-                {notReadMessageSize > 0 && <p className="text-white text-center text-sm rounded-full bg-blue aspect-square w-5 h-5 me-2">{notReadMessageSize}</p>}
                 <div className="relative" style={{ width: 50, height: 50 }}>
                     <Image src={productImg} alt="물품 이미지" className="rounded-md object-cover" fill />
                 </div>
