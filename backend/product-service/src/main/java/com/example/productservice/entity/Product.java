@@ -39,10 +39,10 @@ public class Product extends TimeStamped {
     private String description;
 
     @Column(nullable = false)
-    private Float lng;
+    private Double lng;
 
     @Column(nullable = false)
-    private Float lat;
+    private Double lat;
 
     @Column(nullable = false)
     private String location;

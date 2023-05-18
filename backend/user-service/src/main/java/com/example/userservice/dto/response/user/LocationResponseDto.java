@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class LocationResponseDto {
 
     private Long userId;
-    private Float lat;
-    private Float lng;
+    private Double lat;
+    private Double lng;
     private Boolean moving;
 
     public static LocationResponseDto from(Location location) {
