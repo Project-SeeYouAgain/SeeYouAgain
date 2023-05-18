@@ -134,17 +134,12 @@ const UserLocation: React.FC = () => {
                 // 페이지를 벗어날 때 실행되는 cleanup 함수
                 (async () => {
                     if (userLocation) {
-                        const data = {
-                            lat: null,
-                            lng: null,
-                            moving: false, // 원하는 값으로 설정
-                        };
-
                         try {
                             await axAuth(token)({
                                 method: 'delete',
                                 url: `/user-service/auth/location/${myId}`,
                             });
+                            localStorage.removeItem('reservation-location');
                         } catch (err) {
                             console.log(err);
                         }
