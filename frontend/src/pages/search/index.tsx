@@ -47,10 +47,6 @@ function Search() {
 
     // 페이지 로드 시 로컬스토리지에서 기존 검색어 불러오기
     useEffect(() => {
-        if (token === undefined || token === null) {
-            console.log('로그인 풀림');
-            router.push('/');
-        }
         const storedKeywords = localStorage.getItem('keywords');
         if (storedKeywords) {
             setKeywords(JSON.parse(storedKeywords));
@@ -197,7 +193,7 @@ function Search() {
     return (
         <Container className="flex flex-col h-screen">
             {isDesktop && <WebNavbar />}
-            <div className={classNames('flex py-5 px-[4rem] items-center', isDesktop ? 'mt-[100px]' : '')}>
+            <div className={classNames('flex py-5  items-center', isDesktop ? 'mt-[100px] px-8' : 'px-[1.2rem]')}>
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
                     <input
                         type="text"
@@ -211,9 +207,9 @@ function Search() {
                     <AiOutlineSearch size={30} onClick={handleAddKeyword} />
                 </div>
             </div>
-            <div className="px-[4.5rem] flex-grow">
-                <div className="flex justify-between items-center">
-                    <p className="text-xl font-bold text-blue">최근 검색어</p>
+            <div className={classNames(' flex-grow', isDesktop ? 'px-10' : 'px-[1.88rem]')}>
+                <div className="flex justify-between">
+                    <p className="mt-2 text-xl font-bold text-blue">최근 검색어</p>
                     <button onClick={handleClearKeywords} className="text-red font-bold">
                         모두 삭제
                     </button>
@@ -235,7 +231,7 @@ function Search() {
                     ))}
                 </ul>
                 <div className="pb-16">
-                    <p className="my-4 mt-8 text-xl font-bold text-blue">검색 결과</p>
+                    <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
                     <div style={{ overflow: 'auto' }}>
                         <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
                             {isDesktop && (
