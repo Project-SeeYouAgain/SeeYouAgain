@@ -244,20 +244,20 @@ function Detail() {
 
                         <div className="w-full px-[10rem] pt-8 grid grid-cols-2 gap-6">
                             <div>
-                                <p className="text-xl font-bold ml-2 mb-2">대여일정</p>
+                                <p className="text-2xl font-bold ml-2 mb-2">대여일정</p>
                                 <div className="w-full h-[300px]">
                                     <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
                                 </div>
                             </div>
                             <div>
-                                <p className="text-xl font-bold ml-2 mb-2">거래장소</p>
+                                <p className="text-2xl font-bold ml-2 mb-2">거래장소</p>
                                 <div className="w-full h-[300px] aspect-[4/3] relative">
                                     <KakaoMapMini lat={data.lat} lng={data.lng} />
                                 </div>
                             </div>
                         </div>
                         <div className="w-full px-[10rem] mt-8">
-                            <p className="text-xl font-bold pl-2 pb-2 w-full border-b-4 border-solid border-black">대여 후기</p>
+                            <p className="text-2xl font-bold pl-2 pb-2 w-full border-b-4 border-solid border-black">대여 후기</p>
                             <div className="py-4">
                                 <ReviewList productId={product} reviewListSize={data.reviewListSize} />
                             </div>
