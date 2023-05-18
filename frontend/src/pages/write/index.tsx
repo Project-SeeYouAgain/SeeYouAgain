@@ -210,9 +210,8 @@ function Write() {
                         <>
                             {currentStep == 1 && (
                                 <>
-                                    <button className="absolute bottom-2 right-8 text-white text-[1.5rem] bg-blue px-4 h-[3rem] rounded-[.4rem]" onClick={() => setCurrentStep(currentStep + 1)}>
-                                        {/* <MdKeyboardArrowRight className="m-auto" /> */}
-                                        다음으로
+                                    <button className="absolute bottom-2 right-8 text-white text-[2rem] bg-blue w-[3.2rem] h-[3rem] rounded-[.4rem]" onClick={() => setCurrentStep(currentStep + 1)}>
+                                        <MdKeyboardArrowRight className="m-auto" />
                                     </button>
                                     <Navbar />
                                 </>
