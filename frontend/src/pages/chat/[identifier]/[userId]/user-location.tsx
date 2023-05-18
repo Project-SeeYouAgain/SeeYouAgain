@@ -49,7 +49,7 @@ const UserLocation: React.FC = () => {
                 }
             })
             .catch(err => {
-                console.log(err)
+                console.log(err);
                 setOtherUserLocation(null);
             });
         // 저장해둔 예약 장소 받아오기
