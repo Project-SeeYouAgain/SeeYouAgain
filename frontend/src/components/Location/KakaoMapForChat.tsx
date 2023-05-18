@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
-import './kakaoMap.css';
+import './kakaoMap.module.scss';
 
 interface KakaoMapProps {
     lat: number;
