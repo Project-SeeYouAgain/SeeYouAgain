@@ -9,9 +9,7 @@ import useInView from '../Web/useInView';
 
 function FifthPage() {
     const [ref, isInView] = useInView(0.5);
-    useEffect(() => {
-        console.log('Visibility status:', isInView ? 'fifth Visible' : '');
-    }, [isInView]);
+
     return (
         <div className="text-center pt-16 ">
             <div className={classNames(styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>

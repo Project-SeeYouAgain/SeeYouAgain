@@ -59,24 +59,20 @@ function Detail() {
         const productId = Number(window.location.pathname.substring(1));
         setProduct(productId);
         if (token === undefined || token === null) {
-            console.log('로그인 풀림');
             router.push('/');
         }
         const url = `/product-service/auth/${productId}`;
         axBase(token)({ url })
             .then(res => {
-                console.log(res.data.data);
                 setData(res.data.data);
                 setIsHeartFill(res.data.data.isCart);
             })
-            .catch(err => console.log(err));
     }, [isHeartFill]);
 
     function GoChatRoom() {
         const url = `/chatting-service/auth/channel`;
         const productId = Number(window.location.pathname.substring(1));
         if (data) {
-            console.log(data.ownerId);
             const myData = {
                 productId: productId,
                 ownerId: data.ownerId,
@@ -85,7 +81,6 @@ function Detail() {
                 .then(res => {
                     router.push(`/chat/${res.data.data}`);
                 })
-                .catch(err => console.log(err));
         }
     }
 
@@ -93,7 +88,6 @@ function Detail() {
         const url = `/chatting-service/auth/channel`;
         const productId = Number(window.location.pathname.substring(1));
         if (data) {
-            console.log(data.ownerId);
             const myData = {
                 productId: productId,
                 ownerId: data.ownerId,
@@ -102,7 +96,6 @@ function Detail() {
                 .then(res => {
                     router.push(`/chat/${res.data.data}/book/${product}`);
                 })
-                .catch(err => console.log(err));
         }
     }
 
@@ -114,13 +107,11 @@ function Detail() {
                 .then(() => {
                     setIsHeartFill(!isHeartFill);
                 })
-                .catch(err => console.log(err));
         } else {
             axAuth(token)({ method: 'delete', url: url })
                 .then(() => {
                     setIsHeartFill(!isHeartFill);
                 })
-                .catch(err => console.log(err));
         }
     }
 

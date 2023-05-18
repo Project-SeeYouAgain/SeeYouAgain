@@ -34,7 +34,7 @@ function MyPage() {
     const allCookies = cookie.getAll();
     const [selectedMenu, setSelectedMenu] = useState('찜 목록');
     const renderContent = () => {
-        localStorage.setItem('click', selectedMenu)
+        localStorage.setItem('click', selectedMenu);
         switch (selectedMenu) {
             case '찜 목록':
                 return <Cart />;
@@ -94,16 +94,12 @@ function MyPage() {
     const token = useRecoilValue(userState).accessToken;
     useEffect(() => {
         if (token === undefined || token === null) {
-            console.log('로그인 풀림');
             router.push('/');
         }
         const url = `/user-service/auth/profile`;
-        axBase(token)({ url })
-            .then(res => {
-                console.log(res.data.data);
-                setProfileData(res.data.data);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ url }).then(res => {
+            setProfileData(res.data.data);
+        });
     }, []);
     const [webContainerWidth, setWebContainerWidth] = useState<number>(0);
     const [webContainerHeight, setWebContainerHeight] = useState<number>(0);
