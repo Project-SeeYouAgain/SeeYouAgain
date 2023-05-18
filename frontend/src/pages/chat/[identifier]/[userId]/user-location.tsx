@@ -52,7 +52,7 @@ const UserLocation: React.FC = () => {
             })
             .catch(err => {
                 console.log(err);
-                setOtherUserLocation({lat: null, lng: null, moving: false, profile: otherProfile} );
+                setOtherUserLocation(null);
             });
         // 저장해둔 예약 장소 받아오기
         const reserveLocation = localStorage.getItem('reservation-location');
@@ -94,7 +94,7 @@ const UserLocation: React.FC = () => {
                     setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving, profile: otherProfile });
                 }
             })
-            .catch(err => console.log(err));
+            .catch(() => setOtherUserLocation({ lat: null, lng: null, moving: false, profile: otherProfile }));
 
         // 3초마다 내 위치를 보냄
         navigator.geolocation.getCurrentPosition(
