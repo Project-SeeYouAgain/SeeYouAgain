@@ -1,16 +1,14 @@
-import React, { useEffect, useState, useRef, MouseEvent } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 import ChatRoom from '@/components/ChatRoom';
-import { VscBell } from 'react-icons/vsc';
 import { axAuth } from '@/apis/axiosinstance';
-import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Navbar from '@/components/Container/components/Navbar';
 import WebNavbar from './../../components/Container/components/WebNavbar/index';
 import classNames from 'classnames';
 
 import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging, onMessage, MessagePayload } from 'firebase/messaging';
 
 interface ChatRoomData {
     nickname: string;
@@ -30,6 +28,8 @@ function chat() {
     const [selectedTab, setSelectedTab] = useState<string>('borrow');
     const token = useRecoilValue(userState).accessToken;
 
+    const [message, setMessage] = useState<MessagePayload | null>(null);
+
     useEffect(() => {
         const firebaseConfig = {
             apiKey: 'AIzaSyDwEsV86gH2v-5Qkm68DzJbqhByzvYuZng',
@@ -43,13 +43,21 @@ function chat() {
 
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
-
-        onMessage(messaging, payload => {
-            console.log('메시지가 도착했습니다.', payload);
-            // ...
-            getChannelList(selectedTab);
+        const unsubscribe = onMessage(messaging, payload => {
+            setMessage(payload);
         });
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
+
+    // message에 변화가 생기면 특정 함수를 실행
+    useEffect(() => {
+        if (message) {
+            getChannelList(selectedTab);
+        }
+    }, [message]);
 
     useEffect(() => {
         getChannelList(selectedTab);
