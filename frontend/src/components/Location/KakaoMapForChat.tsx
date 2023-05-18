@@ -1,15 +1,14 @@
 // KakaoMap.tsx
 import React, { useEffect, useState } from 'react';
-import { TbCookieMan } from 'react-icons/tb';
-import { BsBox2HeartFill } from 'react-icons/bs';
-// import ReactDOMServer from 'react-dom/server';
 import styles from './KakaoMap.module.scss';
+import { useRecoilValue } from 'recoil';
+import { userState } from 'recoil/user/atoms';
 
 interface KakaoMapProps {
     lat: number;
     lng: number;
     userLocation: { lat: number; lng: number } | null;
-    otherUserLocation: { lat: number; lng: number } | null;
+    otherUserLocation: { lat: number; lng: number; moving: boolean; profile: string | null } | null;
     reservationLocation: { lat: number; lng: number } | null;
 }
 
@@ -18,31 +17,15 @@ declare const kakao: any;
 const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLocation, reservationLocation }) => {
     const [map, setMap] = useState<any>(null);
     const [markers, setMarkers] = useState<any[]>([]);
-    // const [reservationLocation, setReservationLocation] = useState<reservationLocation>();
+    const profileImg = useRecoilValue(userState).profileImg;
+    const defaultImage = 'https://seeyouagain-s3-bucket.s3.ap-northeast-2.amazonaws.com/UserProfile/default_user.png';
+    const deal = 'https://seeyouagain-s3-bucket.s3.ap-northeast-2.amazonaws.com/UserProfile/money-bag.png';
 
-    // const iconHtml = ReactDOMServer.renderToString(<TbCookieMan size={40} />);
-    const content = `
-    <div style="color:blue; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bold;">
-    <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:blue; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;">나<p/>
-    </div>
-    `;
-
-    const otherContent = `
-      <div style="color:red; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bolder;">
-      <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:red; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;">이웃<p/>
-      </div>
-    `;
-
-    // const reserIconHtml = ReactDOMServer.renderToString(<BsBox2HeartFill size={30} className="m-auto" />);
-    const reservationContent = `
-      <div style="color:black; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bolder;">
-      <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:black; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;margin-bottom:0.2rem">거래<p/>
-      </div>
-    `;
+    // 이미지 마커에 사용될 이미지 URL을 여기에 넣으세요.
+    const imageUrl = '이미지_URL';
 
     useEffect(() => {
         const container = document.getElementById('map');
-
         const options = {
             center: new kakao.maps.LatLng(reservationLocation?.lat, reservationLocation?.lng),
             zoomControl: false,
@@ -61,30 +44,64 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
         if (map && reservationLocation) {
             const newMarkers = [];
             setMarkers([]);
-            const reservationMarker = new kakao.maps.CustomOverlay({
+
+            const reservationMarkerImage = new kakao.maps.MarkerImage(deal, new kakao.maps.Size(50, 50));
+
+            const reservationMarker = new kakao.maps.Marker({
                 position: new kakao.maps.LatLng(reservationLocation.lat, reservationLocation.lng),
-                content: reservationContent,
+                image: reservationMarkerImage,
             });
+
             reservationMarker.setMap(map);
             newMarkers.push(reservationMarker);
             markers.forEach(marker => marker.setMap(null));
 
             if (userLocation) {
-                const userMarker = new kakao.maps.CustomOverlay({
-                    position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-                    content: content,
-                });
-                userMarker.setMap(map);
-                newMarkers.push(userMarker);
+                if (profileImg) {
+                    const markerImage = new kakao.maps.MarkerImage(profileImg, new kakao.maps.Size(50, 50));
+
+                    const userMarker = new kakao.maps.Marker({
+                        position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+                        image: markerImage,
+                    });
+
+                    userMarker.setMap(map);
+                    newMarkers.push(userMarker);
+                } else {
+                    const markerImage = new kakao.maps.MarkerImage(defaultImage, new kakao.maps.Size(50, 50));
+
+                    const userMarker = new kakao.maps.Marker({
+                        position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+                        image: markerImage,
+                    });
+
+                    userMarker.setMap(map);
+                    newMarkers.push(userMarker);
+                }
             }
 
             if (otherUserLocation) {
-                const otherMarker = new kakao.maps.CustomOverlay({
-                    position: new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng),
-                    content: otherContent,
-                });
-                otherMarker.setMap(map);
-                newMarkers.push(otherMarker);
+                if (otherUserLocation.profile) {
+                    const otherMarkerImage = new kakao.maps.MarkerImage(otherUserLocation.profile, new kakao.maps.Size(50, 50));
+
+                    const otherMarker = new kakao.maps.Marker({
+                        position: new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng),
+                        image: otherMarkerImage,
+                    });
+
+                    otherMarker.setMap(map);
+                    newMarkers.push(otherMarker);
+                } else {
+                    const otherMarkerImage = new kakao.maps.MarkerImage(defaultImage, new kakao.maps.Size(50, 50));
+
+                    const otherMarker = new kakao.maps.Marker({
+                        position: new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng),
+                        image: otherMarkerImage,
+                    });
+
+                    otherMarker.setMap(map);
+                    newMarkers.push(otherMarker);
+                }
             }
 
             setMarkers(newMarkers);
