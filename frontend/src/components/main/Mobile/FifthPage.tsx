@@ -9,9 +9,6 @@ import styles from './Mobile.module.scss';
 
 function FifthPage() {
     const [ref, isInView] = useInView(0.3);
-    useEffect(() => {
-        console.log('Visibility status:', isInView ? 'fifth Visible' : '');
-    }, [isInView]);
     return (
         <div className={classNames(styles.boxContainer, 'text-center')} ref={ref}>
             <div className={classNames(styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp)}>

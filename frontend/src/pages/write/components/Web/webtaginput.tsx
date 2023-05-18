@@ -34,7 +34,7 @@ function WebTagInput({ value = [], onChange }: TagInputProps) {
     // }, [onChange, newData]);
 
     return (
-        <div className="mb-[1.5rem] grid grid-cols-[1fr,3fr]  mb-8">
+        <div className=" grid grid-cols-[1fr,3fr] mb-8">
             <p className=" font-bold text-[1.2rem] "> 태그 </p>
             <div>
                 <input
