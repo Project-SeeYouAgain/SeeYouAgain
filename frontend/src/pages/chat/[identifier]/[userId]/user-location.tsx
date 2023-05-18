@@ -16,12 +16,17 @@ const UserLocation: React.FC = () => {
     const [userId, setUserId] = useState<any>('');
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number | null; lng: number | null; moving: boolean; profile: string | null } | null>(null);
+    const [otherProfile, setOtherProfile] = useState<string | null>(null);
+    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number | null; lng: number | null; moving: boolean; profile: string | null } | null>({
+        lat: null,
+        lng: null,
+        moving: false,
+        profile: otherProfile,
+    });
     const token = useRecoilValue(userState).accessToken;
     const myId = useRecoilValue(userState).id;
     const profileImg = useRecoilValue(userState).profileImg;
     const [reservationLocation, setReservationLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [otherProfile, setOtherProfile] = useState<string | null>(null);
 
     useEffect(() => {
         console.log(router.query.userId);
