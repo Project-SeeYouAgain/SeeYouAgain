@@ -8,8 +8,8 @@ import { axAuth } from '@/apis/axiosinstance';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import { useRouter } from 'next/router';
+import default_user from '@/images/default_user.png';
 import Navbar from './../../../../components/Container/components/Navbar/index';
-
 const UserLocation: React.FC = () => {
     const router = useRouter();
     const [userNickName, setUserNickName] = useState<string | null>('이웃닉넴');
@@ -19,6 +19,7 @@ const UserLocation: React.FC = () => {
     const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number; moving: boolean } | null>(null);
     const token = useRecoilValue(userState).accessToken;
     const myId = useRecoilValue(userState).id;
+    const profileImg = useRecoilValue(userState).profileImg;
     const [reservationLocation, setReservationLocation] = useState<{ lat: number; lng: number } | null>(null);
 
     useEffect(() => {
@@ -134,12 +135,6 @@ const UserLocation: React.FC = () => {
                 // 페이지를 벗어날 때 실행되는 cleanup 함수
                 (async () => {
                     if (userLocation) {
-                        const data = {
-                            lat: null,
-                            lng: null,
-                            moving: false, // 원하는 값으로 설정
-                        };
-
                         try {
                             await axAuth(token)({
                                 method: 'delete',
@@ -185,7 +180,9 @@ const UserLocation: React.FC = () => {
                             <p className="p-4 pt-8 text-2xl text-center font-bold text-blue">실시간 위치</p>
                             <div className="flex justify-center pb-4">
                                 <div className="pr-4 text-center w-fit">
-                                    <div className="w-8 h-8 rounded-full bg-black m-auto" />
+                                    <div className="relative m-auto" style={{ width: 32, height: 32 }}>
+                                        <Image src={profileImg ? profileImg : default_user} alt="프로필 이미지" className="rounded-full object-cover" fill />
+                                    </div>
                                     <p className="font-bold">{userNickName}</p>
                                 </div>
                                 {!otherUserLocation?.moving && <div className="w-1/2 rounded-full bg-gray-400 text-white p-0.5 text-center h-8"> 준비중이예요. </div>}

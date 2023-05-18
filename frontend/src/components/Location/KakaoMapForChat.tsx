@@ -1,5 +1,9 @@
 // KakaoMap.tsx
 import React, { useEffect, useState } from 'react';
+import { TbCookieMan, TbBrandQq } from 'react-icons/tb';
+import { BsBox2HeartFill } from 'react-icons/bs';
+import { GrLocationPin } from 'react-icons/gr';
+import ReactDOMServer from 'react-dom/server';
 import styles from './KakaoMap.module.scss';
 
 interface KakaoMapProps {
@@ -16,16 +20,29 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
     const [map, setMap] = useState<any>(null);
     const [markers, setMarkers] = useState<any[]>([]);
     // const [reservationLocation, setReservationLocation] = useState<reservationLocation>();
-    const content =
-        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:blue; font-family:NanumNeo; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;">' +
-        '<p>나</p>' +
-        '</div>';
 
-    const otherContent =
-        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:red; font-family:NanumNeo; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;"><p>이웃</p></div>';
+    const iconHtml = ReactDOMServer.renderToString(<TbCookieMan size={40} />);
+    const content = `
+    <div style="color:blue; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bold;">
+    <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:blue; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;">나<p/>
+      ${iconHtml}
+    </div>
+    `;
 
-    const reservationContent =
-        '<div style="color:white; display: flex; align-items: center; justify-content:center; background-color:black; font-family:NanumNeo; font-size:large; border-radius:100%; font-weight:bold; width:2.5rem; height:2.5rem;"><p>거래</p></div>';
+    const otherContent = `
+      <div style="color:red; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bolder;">
+      <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:red; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;">이웃<p/>
+        ${iconHtml}
+      </div>
+    `;
+
+    const reserIconHtml = ReactDOMServer.renderToString(<BsBox2HeartFill size={30} className="m-auto" />);
+    const reservationContent = `
+      <div style="color:black; align-items:center; justify-content:center; font-size:large; border-radius:100%; font-weight:bolder;">
+      <p style="font-family:NanumNeoLt;text-align:center; margin:auto; background-color:black; border-radius:20px;color:white;font-size:0.8rem;width:2.5rem;margin-bottom:0.2rem">거래<p/>
+        ${reserIconHtml}
+      </div>
+    `;
 
     useEffect(() => {
         const container = document.getElementById('map');

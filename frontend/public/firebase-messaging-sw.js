@@ -1,7 +1,5 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
-importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js");
 
 self.addEventListener('install', function (e) {
     console.log('fcm sw install..');
