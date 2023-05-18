@@ -62,8 +62,8 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         <div className="w-full relative" onClick={GoDetail}>
             <div className="w-full h-[200px] relative">
                 <Image src={productImg} alt="제품 사진" fill className="aspect-square object-cover rounded-lg w-full h-full" />
-                {isCart !== undefined ? <Button.WebHeart isActive={isCart} productId={productId} className="absolute bottom-2 right-2" /> : null}
-                {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute top-2 left-2 w-8 h-8" /> : null}
+                {isCart === true ? <Button.WebHeart isActive={isCart} productId={productId} className="absolute bottom-2 right-2 z-20" /> : null}
+                {isSafe === true ? <Image src={shield} alt="세이프존 표시" className="absolute top-2 left-2 w-8 h-8" /> : null}
             </div>
 
             <div className="items-center w-full px-2 pt-2">
