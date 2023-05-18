@@ -33,11 +33,9 @@ function Cart() {
 
     useEffect(() => {
         const url = `/product-service/auth/cart`;
-        axBase(token)({ url })
-            .then(res => {
-                setItemList(res.data.data);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ url }).then(res => {
+            setItemList(res.data.data);
+        });
     }, [refreshKey]);
 
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);

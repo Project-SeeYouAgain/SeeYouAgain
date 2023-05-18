@@ -20,7 +20,6 @@ function SignUp() {
 
     const sendNickName = () => {
         if (nickName === '') {
-            console.log(token);
             alert('닉네임을 입력해주세요');
         } else {
             axAuth(token)({
@@ -35,8 +34,7 @@ function SignUp() {
                     router.push('/home');
                 })
 
-                .catch(err => {
-                    console.log(err);
+                .catch(() => {
                     alert('중복된 닉네임입니다.');
                 });
         }
