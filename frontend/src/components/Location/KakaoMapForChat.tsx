@@ -1,6 +1,6 @@
 // KakaoMap.tsx
 import React, { useEffect, useState } from 'react';
-import styles from './KakaoMap.module.scss';
+import './KakaoMap.module.scss';
 import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 
@@ -57,10 +57,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
 
             if (userLocation) {
                 if (profileImg) {
-                    const markerImage = new kakao.maps.MarkerImage(profileImg, new kakao.maps.Size(35, 35), {
-                        shape: 'poly',
-                        coords: '16,0,20,2,24,6,26,10,26,16,23,22,17,25,14,35,13,35,9,25,6,24,2,20,0,16,0,10,2,6,6,2,10,0',
-                    });
+                    const markerImage = new kakao.maps.MarkerImage(profileImg, new kakao.maps.Size(35, 35));
 
                     const userMarker = new kakao.maps.Marker({
                         position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
@@ -70,10 +67,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     userMarker.setMap(map);
                     newMarkers.push(userMarker);
                 } else {
-                    const markerImage = new kakao.maps.MarkerImage(defaultImage, new kakao.maps.Size(35, 35),{
-                        shape: 'poly',
-                        coords: '16,0,20,2,24,6,26,10,26,16,23,22,17,25,14,35,13,35,9,25,6,24,2,20,0,16,0,10,2,6,6,2,10,0'        
-                    });
+                    const markerImage = new kakao.maps.MarkerImage(defaultImage, new kakao.maps.Size(35, 35));
 
                     const userMarker = new kakao.maps.Marker({
                         position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
@@ -87,10 +81,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
 
             if (otherUserLocation) {
                 if (otherUserLocation.profile) {
-                    const otherMarkerImage = new kakao.maps.MarkerImage(otherUserLocation.profile, new kakao.maps.Size(35, 35),{
-                        shape: 'poly',
-                        coords: '16,0,20,2,24,6,26,10,26,16,23,22,17,25,14,35,13,35,9,25,6,24,2,20,0,16,0,10,2,6,6,2,10,0'        
-                    });
+                    const otherMarkerImage = new kakao.maps.MarkerImage(otherUserLocation.profile, new kakao.maps.Size(35, 35));
 
                     const otherMarker = new kakao.maps.Marker({
                         position: new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng),
@@ -100,10 +91,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     otherMarker.setMap(map);
                     newMarkers.push(otherMarker);
                 } else {
-                    const otherMarkerImage = new kakao.maps.MarkerImage(defaultImage, new kakao.maps.Size(35, 35),{
-                        shape: 'poly',
-                        coords: '16,0,20,2,24,6,26,10,26,16,23,22,17,25,14,35,13,35,9,25,6,24,2,20,0,16,0,10,2,6,6,2,10,0'        
-                    });
+                    const otherMarkerImage = new kakao.maps.MarkerImage(defaultImage, new kakao.maps.Size(35, 35));
 
                     const otherMarker = new kakao.maps.Marker({
                         position: new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng),
