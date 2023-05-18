@@ -27,6 +27,19 @@ function Write() {
 
     const router = useRouter();
 
+    useEffect(() => {
+        // 클라이언트에서만 실행되는 부작용
+        // ...
+        const reload = localStorage.getItem('reload');
+        if (!reload) {
+            localStorage.setItem('reload', 'true');
+            router.reload();
+        }
+        return () => {
+            localStorage.removeItem('reload');
+        };
+    }, []);
+
     const handleStepOneSubmit = (data: StepOneData) => {
         setStepOneData(prevData => ({ ...prevData, ...data }));
     };
