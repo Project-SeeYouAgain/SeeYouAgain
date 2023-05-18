@@ -16,11 +16,12 @@ const UserLocation: React.FC = () => {
     const [userId, setUserId] = useState<any>('');
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number; moving: boolean } | null>(null);
+    const [otherUserLocation, setOtherUserLocation] = useState<{ lat: number; lng: number; moving: boolean; profile: string | null } | null>(null);
     const token = useRecoilValue(userState).accessToken;
     const myId = useRecoilValue(userState).id;
     const profileImg = useRecoilValue(userState).profileImg;
     const [reservationLocation, setReservationLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const [otherProfile, setOtherProfile] = useState<string | null>(null);
 
     useEffect(() => {
         console.log(router.query.userId);
@@ -34,6 +35,7 @@ const UserLocation: React.FC = () => {
             .then(res => {
                 console.log('다른 사람 프로필', res.data.data);
                 setUserNickName(res.data.data.nickname);
+                setOtherProfile(res.data.data.profileImg);
             })
             .catch(err => console.log(err));
 
@@ -45,7 +47,7 @@ const UserLocation: React.FC = () => {
             .then(res => {
                 console.log('다른 사람 프로필', res.data.data);
                 if (res.data.data.moving === true) {
-                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving });
+                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving, profile: otherProfile });
                 }
             })
             .catch(err => {
@@ -89,7 +91,7 @@ const UserLocation: React.FC = () => {
             .then(res => {
                 console.log('다른 사람 위치', res.data.data);
                 if (res.data.data.moving == true) {
-                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving });
+                    setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving, profile: otherProfile });
                 }
             })
             .catch(err => console.log(err));
