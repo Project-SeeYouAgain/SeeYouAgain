@@ -15,3 +15,7 @@ interface ReservationIdState {
     reservationId: number;
     title: string;
 }
+
+interface ReviewState {
+    review: number;
+}
