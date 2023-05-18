@@ -47,10 +47,6 @@ function Search() {
 
     // 페이지 로드 시 로컬스토리지에서 기존 검색어 불러오기
     useEffect(() => {
-        if (token === undefined || token === null) {
-            console.log('로그인 풀림');
-            router.push('/');
-        }
         const storedKeywords = localStorage.getItem('keywords');
         if (storedKeywords) {
             setKeywords(JSON.parse(storedKeywords));
@@ -59,7 +55,6 @@ function Search() {
 
     // 검색 버튼 클릭 시, 검색어 추가하기
     const handleAddKeyword = () => {
-        console.log(text);
         if (!text) return; // 검색어가 입력되어 있지 않으면 추가하지 않음
 
         setSaveText(text);
@@ -83,7 +78,6 @@ function Search() {
                     setHasMore(true);
                 }
             }) // 잘 들어갔는지 확인
-            .catch(err => console.log(err)); // 어떤 오류인지 확인
 
         // 키워드가 일치하는 기존 검색어를 찾는다
         const existingKeyword = keywords.find(keyword => keyword.text === text);
@@ -129,7 +123,6 @@ function Search() {
                     setHasMore(true);
                 }
             }) // 잘 들어갔는지 확인
-            .catch(err => console.log(err)); // 어떤 오류인지 확인
     };
 
     const onClick = (id: number) => {
@@ -197,7 +190,7 @@ function Search() {
     return (
         <Container className="flex flex-col h-screen">
             {isDesktop && <WebNavbar />}
-            <div className={classNames('flex py-5 px-[1.2rem] items-center', isDesktop ? 'mt-[100px]' : '')}>
+            <div className={classNames('flex py-5  items-center', isDesktop ? 'mt-[100px] px-8' : 'px-[1.2rem]')}>
                 <div className="bg-gray-100 border-solid border-2 ml-2 w-full h-10 rounded-full flex items-center pr-2">
                     <input
                         type="text"
@@ -211,7 +204,7 @@ function Search() {
                     <AiOutlineSearch size={30} onClick={handleAddKeyword} />
                 </div>
             </div>
-            <div className="px-[1.88rem] flex-grow">
+            <div className={classNames(' flex-grow', isDesktop ? 'px-10' : 'px-[1.88rem]')}>
                 <div className="flex justify-between">
                     <p className="mt-2 text-xl font-bold text-blue">최근 검색어</p>
                     <button onClick={handleClearKeywords} className="text-red font-bold">
@@ -235,7 +228,7 @@ function Search() {
                     ))}
                 </ul>
                 <div className="pb-16">
-                    <p className="my-4 mt-8 text-xl font-bold text-blue">검색 결과</p>
+                    <p className="mt-8 text-xl font-bold text-blue">검색 결과</p>
                     <div style={{ overflow: 'auto' }}>
                         <InfiniteScroll initialLoad={false} loadMore={getProduct} hasMore={hasMore} isReverse={false} useWindow={false} threshold={50}>
                             {isDesktop && (

@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
+
 self.addEventListener('install', function (e) {
     console.log('fcm sw install..');
     self.skipWaiting();

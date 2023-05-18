@@ -50,22 +50,20 @@ function ChatRoom({ profileImg, nickname, location, latestMessageDate, latestMes
                 <Image src={profileImg ? profileImg : default_user} alt="프로필 이미지" className="rounded-full object-cover" fill />
             </div>
             <div className="grow items-center px-2">
-                <div className="flex justify-between items-center">
-                    <p className="font-medium">{nickname}</p>
-                    <span className="flex">
-                        <p className="text-gray-500 font-light text-xs">{location}</p>
-                        <p className="text-gray-500 font-light text-xs">
-                            <span className="flex items-center justify-center">
-                                <BsDot className="mr-[1px]" />
-                                {timeAgo(latestMessageDate)}
-                            </span>
-                        </p>
-                    </span>
+                <div className="flex items-center">
+                    <p className="font-medium pr-[2px]">{nickname}</p>
+                    <p className="text-gray-500 font-light text-xs pr-[2px]">{location}</p>
+                    <p className="text-gray-500 font-light text-xs">
+                        <span className="flex items-center justify-center">
+                            <BsDot className="mr-[1px]" />
+                            {timeAgo(latestMessageDate)}
+                        </span>
+                    </p>
                 </div>
                 <p className="truncate">{latestMessage}</p>
             </div>
+            {notReadMessageSize > 0 && <p className="text-white text-center text-sm rounded-full bg-blue aspect-square w-5 h-5 me-2">{notReadMessageSize}</p>}
             <div className="w-[50px] flex justify-end items-center">
-                {notReadMessageSize > 0 && <p className="text-white text-center text-sm rounded-full bg-blue aspect-square w-5 h-5 me-2">{notReadMessageSize}</p>}
                 <div className="relative" style={{ width: 50, height: 50 }}>
                     <Image src={productImg} alt="물품 이미지" className="rounded-md object-cover" fill />
                 </div>

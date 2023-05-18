@@ -7,9 +7,7 @@ import useInView from '../Web/useInView';
 
 function SecondPage() {
     const [ref, isInView] = useInView(0.5);
-    useEffect(() => {
-        console.log('Visibility status:', isInView ? 'Second Visible' : '');
-    }, [isInView]);
+
     return (
         <div className={classNames(styles.boxContainer)} ref={ref}>
             <div className={classNames(styles.fadeUp, isInView ? styles.fadeUpVisible : styles.fadeUp, 'flex items-center')}>

@@ -39,12 +39,9 @@ function Rent() {
 
     useEffect(() => {
         const url = `/product-service/auth/reservation/${menuState}`;
-        axBase(token)({ url })
-            .then(res => {
-                console.log(res.data.data);
-                setItemList(res.data.data);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ url }).then(res => {
+            setItemList(res.data.data);
+        });
     }, [menuState, refreshKey]);
 
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
@@ -93,23 +90,22 @@ function Rent() {
                         {itemList.length !== 0 ? (
                             <div className="grid grid-cols-2 gap-4">
                                 {itemList.map((item, index) => (
-                                    <Link key={index} href={''}>
-                                        <Card
-                                            productImg={item.productImg}
-                                            title={item.title}
-                                            location={item.location}
-                                            price={item.price}
-                                            startDate={item.startDate}
-                                            endDate={item.endDate}
-                                            isCart={item.isCart}
-                                            isSafe={item.isSafe}
-                                            menuState={menuState}
-                                            productId={item.productId}
-                                            ownerId={item.ownerId}
-                                            hasReview={item.hasReview}
-                                            reservationId={item.reservationId}
-                                        />
-                                    </Link>
+                                    <Card
+                                        productImg={item.productImg}
+                                        title={item.title}
+                                        location={item.location}
+                                        price={item.price}
+                                        startDate={item.startDate}
+                                        endDate={item.endDate}
+                                        isCart={item.isCart}
+                                        isSafe={item.isSafe}
+                                        menuState={menuState}
+                                        productId={item.productId}
+                                        ownerId={item.ownerId}
+                                        hasReview={item.hasReview}
+                                        reservationId={item.reservationId}
+                                        key={item.reservationId}
+                                    />
                                 ))}
                             </div>
                         ) : (
@@ -140,7 +136,7 @@ function Rent() {
                                     menuState={menuState}
                                     productId={item.productId}
                                     ownerId={item.ownerId}
-                                    key={index}
+                                    key={item.reservationId}
                                     hasReview={item.hasReview}
                                     reservationId={item.reservationId}
                                 />

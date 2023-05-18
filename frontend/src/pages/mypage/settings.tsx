@@ -97,35 +97,33 @@ function settings() {
             url: '/user-service/auth/profile',
             headers: { 'Content-Type': 'multipart/form-data' },
             data: formData,
-        })
-            .then((res: any) => {
-                setUser({
-                    ...user,
-                    location: res.data.data.location,
-                    mannerScore: res.data.data.mannerScore,
-                    nickname: res.data.data.nickname,
-                    profileImg: res.data.data.profileImg,
-                });
-                alert('프로필이 수정되었습니다!');
-                router.push('/home');
-                Swal.fire({
-                    title: '프로필 수정 완료',
-                    icon: 'success',
-                    confirmButtonText: '확인',
-                    timer: 2000, // 3초 뒤에 자동으로 닫히게 설정합니다.
-                    timerProgressBar: true, // 타이머 진행바를 표시합니다.
-                    willClose: () => {
-                        Swal.showLoading();
-                    },
-                }).then(result => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-                        router.push('/home');
-                    } else if (result.isConfirmed) {
-                        router.push('/home');
-                    }
-                });
-            })
-            .catch((err: any) => console.log(err));
+        }).then((res: any) => {
+            setUser({
+                ...user,
+                location: res.data.data.location,
+                mannerScore: res.data.data.mannerScore,
+                nickname: res.data.data.nickname,
+                profileImg: res.data.data.profileImg,
+            });
+            alert('프로필이 수정되었습니다!');
+            router.push('/home');
+            Swal.fire({
+                title: '프로필 수정 완료',
+                icon: 'success',
+                confirmButtonText: '확인',
+                timer: 2000, // 3초 뒤에 자동으로 닫히게 설정합니다.
+                timerProgressBar: true, // 타이머 진행바를 표시합니다.
+                willClose: () => {
+                    Swal.showLoading();
+                },
+            }).then(result => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    router.push('/home');
+                } else if (result.isConfirmed) {
+                    router.push('/home');
+                }
+            });
+        });
     };
 
     useEffect(() => {

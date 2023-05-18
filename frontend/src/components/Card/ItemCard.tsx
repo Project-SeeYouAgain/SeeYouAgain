@@ -7,8 +7,8 @@ import ItemCardOption from '../CardOption/ItemCardOption';
 import { useRouter } from 'next/router';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { axAuth } from '@/apis/axiosinstance';
-import { userState } from 'recoil/user/atoms';
-import { useRecoilValue } from 'recoil';
+import { userState, productState } from 'recoil/user/atoms';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
 interface dataProps {
     productId: number;
@@ -23,16 +23,17 @@ interface dataProps {
     menuState?: number;
     ownerId?: number;
     isBooked?: boolean;
-    onRefreshKey?: () => void;
     reservationId?: number;
     hasReview?: boolean;
 }
 
-function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, reservationId, hasReview, onRefreshKey }: dataProps) {
+function ItemCard({ productId, productImg, title, location, price, startDate, endDate, isSafe, isCart, menuState, ownerId, isBooked, reservationId, hasReview }: dataProps) {
     const router = useRouter();
     const [url, setUrl] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>();
     const token = useRecoilValue(userState).accessToken;
+    const [state, setState] = useState<string | null>(null);
+    const [productStateData, setProductStateData] = useRecoilState(productState);
 
     const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
     function Dropdown(event: React.MouseEvent) {
@@ -42,6 +43,8 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
     }
 
     useEffect(() => {
+        const click = localStorage.getItem('click');
+        setState(click);
         setUrl(window.location.pathname);
     }, []);
 
@@ -78,19 +81,21 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
         event.preventDefault();
         const url = `/product-service/auth/cart/${productId}`;
         if (isActive) {
-            axAuth(token)({ method: 'delete', url: url })
-                .then(() => {
-                    setIsActive(!isActive);
-                    onRefreshKey?.();
-                })
-                .catch(err => console.log(err));
+            axAuth(token)({ method: 'delete', url: url }).then(() => {
+                setIsActive(!isActive);
+                setProductStateData({
+                    ...productStateData,
+                    refreshKey: productStateData.refreshKey + 1,
+                });
+            });
         } else {
-            axAuth(token)({ method: 'post', url: url })
-                .then(() => {
-                    setIsActive(!isActive);
-                    onRefreshKey?.();
-                })
-                .catch(err => console.log(err));
+            axAuth(token)({ method: 'post', url: url }).then(() => {
+                setIsActive(!isActive);
+                setProductStateData({
+                    ...productStateData,
+                    refreshKey: productStateData.refreshKey + 1,
+                });
+            });
         }
     };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
@@ -150,7 +155,7 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                                         isBooked={isBooked}
                                         start={startDate}
                                         end={endDate}
-                                        {...{ isRent: url === '/mypage/rent', menuState, dropdownVisible }}
+                                        {...{ isRent: state === '대여 받은 내역', menuState, dropdownVisible }}
                                         reservationId={reservationId}
                                     />
                                 </>
@@ -176,16 +181,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                             {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" width={300} height={400} /> : null}
                         </span>
                         {startDate !== null && startDate !== undefined ? (
-                            <div className="grid grid-cols-2 gap-2 text-center">
-                                <div className="flex text-darkgrey text-sm">
-                                    <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
-                                    <p className="whitespace-nowrap">{startDate}</p>
-                                </div>
-                                <div className="flex text-darkgrey text-sm justify-end">
-                                    <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
-                                    <p className="whitespace-nowrap">{endDate}</p>
-                                </div>
-                            </div>
+                            <p className="whitespace-nowrap text-sm">
+                                {startDate}부터 {endDate}까지
+                            </p>
                         ) : null}
                     </div>
                 </div>
@@ -238,16 +236,9 @@ function ItemCard({ productId, productImg, title, location, price, startDate, en
                             {isSafe !== undefined && isSafe === true ? <Image src={shield} alt="세이프존 표시" className="w-4 h-4" width={300} height={400} /> : null}
                         </span>
                         {startDate !== null && startDate !== undefined ? (
-                            <div className="grid grid-cols-2 gap-2 text-center">
-                                <div className="flex text-darkgrey text-sm">
-                                    <p className="font-bold mr-1 whitespace-nowrap">대여일</p>
-                                    <p className="whitespace-nowrap">{startDate}</p>
-                                </div>
-                                <div className="flex text-darkgrey text-sm justify-end">
-                                    <p className="font-bold mr-1 whitespace-nowrap">반납일</p>
-                                    <p className="whitespace-nowrap">{endDate}</p>
-                                </div>
-                            </div>
+                            <p className="whitespace-nowrap text-sm">
+                                {startDate} ~ {endDate}
+                            </p>
                         ) : null}
                     </div>
                 </div>

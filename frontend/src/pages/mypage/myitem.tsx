@@ -28,7 +28,7 @@ function MyItem() {
     const token = useRecoilValue(userState).accessToken;
     const [bookList, setBookList] = useState<RentalItem[]>([]);
     const [holdList, setHoldList] = useState<RentalItem[]>([]);
-    const dragThreshold = 20;
+
     const refreshKey = useRecoilValue(productState).refreshKey;
 
     function SelectMenu(data: number) {
@@ -40,57 +40,27 @@ function MyItem() {
         if (menuState === 3) {
             url = '/product-service/auth/myproduct/1';
         }
-        axAuth(token)({ url })
-            .then(res => {
-                console.log(res.data.data);
-                setItemList(res.data.data);
-                const today = new Date();
-                const BookItems = res.data.data.filter((item: RentalItem) => {
-                    const startDate = new Date(item.startDate);
-                    const endDate = new Date(item.endDate);
-                    return startDate > today;
-                });
-                setBookList(BookItems);
-                const HoldItems = res.data.data.filter((item: RentalItem) => {
-                    return item.startDate === null;
-                });
-                setHoldList(HoldItems);
-            })
-            .catch(err => console.log(err));
+        axAuth(token)({ url }).then(res => {
+            setItemList(res.data.data);
+            const today = new Date();
+            const BookItems = res.data.data.filter((item: RentalItem) => {
+                const startDate = new Date(item.startDate);
+                const endDate = new Date(item.endDate);
+                return startDate > today;
+            });
+            setBookList(BookItems);
+            const HoldItems = res.data.data.filter((item: RentalItem) => {
+                return item.startDate === null;
+            });
+            setHoldList(HoldItems);
+        });
     }, [menuState, refreshKey]);
 
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-    const handleDragStart = (e: any) => {
-        const touch = e.touches ? e.touches[0] : e;
-        setDragStart({ x: touch.clientX, y: touch.clientY });
-    };
-
-    const handleDragEnd = (e: any) => {
-        const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const deltaX = touch.clientX - dragStart.x;
-        const deltaY = touch.clientY - dragStart.y;
-
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-            // Ignore vertical drag
-            return;
-        }
-        if (Math.abs(deltaX) < dragThreshold) {
-            return;
-        }
-
-        if (deltaX > -90) {
-            setMenuState(prev => (prev === 1 ? 3 : prev - 1));
-        } else if (deltaX < 90) {
-            setMenuState(prev => (prev === 3 ? 1 : prev + 1));
-        }
-    };
     const [containerHeight, setContainerHeight] = useState<number>(0);
 
     useEffect(() => {
         const handleResize = () => {
             const windowHeight = window.innerHeight;
-            console.log(windowHeight);
             const containerHeight = windowHeight - 56;
             setContainerHeight(containerHeight);
         };
@@ -145,7 +115,7 @@ function MyItem() {
                     <div className="w-full mb-4 text-2xl font-bold pb-4">
                         <p className="pl-4">내 아이템</p>
                     </div>
-                    <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                    <div className="px-[1.88rem]" style={{ height: containerHeight }}>
                         <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
                         {menuState === 1 ? (
                             <div>
@@ -157,20 +127,19 @@ function MyItem() {
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {bookList.map((item, index) => (
-                                            <Link key={index} href={''}>
-                                                <Card
-                                                    productImg={item.productImg}
-                                                    title={item.title}
-                                                    location={item.location}
-                                                    price={item.price}
-                                                    startDate={item.startDate}
-                                                    endDate={item.endDate}
-                                                    isSafe={item.isSafe}
-                                                    menuState={menuState}
-                                                    productId={item.productId}
-                                                    isBooked={true}
-                                                />
-                                            </Link>
+                                            <Card
+                                                productImg={item.productImg}
+                                                title={item.title}
+                                                location={item.location}
+                                                price={item.price}
+                                                startDate={item.startDate}
+                                                endDate={item.endDate}
+                                                isSafe={item.isSafe}
+                                                menuState={menuState}
+                                                productId={item.productId}
+                                                isBooked={true}
+                                                key={`${item.startDate}${item.endDate}`}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -185,20 +154,19 @@ function MyItem() {
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {itemList.map((item, index) => (
-                                            <Link key={index} href={''}>
-                                                <Card
-                                                    productImg={item.productImg}
-                                                    title={item.title}
-                                                    location={item.location}
-                                                    price={item.price}
-                                                    isSafe={item.isSafe}
-                                                    menuState={menuState}
-                                                    productId={item.productId}
-                                                    isBooked={true}
-                                                    startDate={item.startDate}
-                                                    endDate={item.endDate}
-                                                />
-                                            </Link>
+                                            <Card
+                                                productImg={item.productImg}
+                                                title={item.title}
+                                                location={item.location}
+                                                price={item.price}
+                                                isSafe={item.isSafe}
+                                                menuState={menuState}
+                                                productId={item.productId}
+                                                isBooked={true}
+                                                startDate={item.startDate}
+                                                endDate={item.endDate}
+                                                key={`${item.startDate}${item.endDate}`}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -213,18 +181,17 @@ function MyItem() {
                                 ) : (
                                     <div className="grid grid-cols-2 gap-4">
                                         {holdList.map((item, index) => (
-                                            <Link key={index} href={''}>
-                                                <Card
-                                                    productImg={item.productImg}
-                                                    title={item.title}
-                                                    location={item.location}
-                                                    price={item.price}
-                                                    isSafe={item.isSafe}
-                                                    menuState={menuState}
-                                                    productId={item.productId}
-                                                    isBooked={true}
-                                                />
-                                            </Link>
+                                            <Card
+                                                productImg={item.productImg}
+                                                title={item.title}
+                                                location={item.location}
+                                                price={item.price}
+                                                isSafe={item.isSafe}
+                                                menuState={menuState}
+                                                productId={item.productId}
+                                                isBooked={true}
+                                                key={item.productId}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -236,7 +203,7 @@ function MyItem() {
             {isMobile && (
                 <>
                     <Header title="내 아이템"></Header>
-                    <div className="px-[1.88rem]" style={{ height: containerHeight }} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                    <div className="px-[1.88rem]" style={{ height: containerHeight }}>
                         <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약중'} title2={'대여중'} title3={'대기중'} />
                         {menuState === 1 ? (
                             <div>
@@ -258,7 +225,7 @@ function MyItem() {
                                             menuState={menuState}
                                             productId={item.productId}
                                             isBooked={true}
-                                            key={index}
+                                            key={`${item.startDate}${item.endDate}`}
                                         />
                                     ))
                                 )}
@@ -280,16 +247,16 @@ function MyItem() {
                                         menuState={menuState}
                                         productId={item.productId}
                                         isBooked={true}
-                                        key={index}
                                         startDate={item.startDate}
                                         endDate={item.endDate}
+                                        key={`${item.startDate}${item.endDate}`}
                                     />
                                 ))
                             )
                         ) : holdList.length === 0 ? (
                             <>
-                            <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
-                            <p className="text-center text-xl font-bold">대기중인 아이템이 없습니다.</p>
+                                <Image src={noresult} alt={'텅 빈 상자 이미지'} className="w-[100%] h-[20rem]" />
+                                <p className="text-center text-xl font-bold">대기중인 아이템이 없습니다.</p>
                             </>
                         ) : (
                             holdList.map((item, index) => (
@@ -302,7 +269,7 @@ function MyItem() {
                                     menuState={menuState}
                                     productId={item.productId}
                                     isBooked={true}
-                                    key={index}
+                                    key={item.productId}
                                 />
                             ))
                         )}

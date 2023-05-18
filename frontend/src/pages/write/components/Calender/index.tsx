@@ -41,23 +41,23 @@ function Calender({ onChange }: CalenderProps) {
                 minDate={new Date()}
                 filterDate={date => isBeforeTodayOrSameDay(date) || isAfterToday(date)}
             />
-            <div className="mt-[.5rem] mb-4 px-2 py-1 text-center bg-lightgrey rounded-[.3rem]">
+            <div className="mt-[.5rem] mb-4 px-2 py-1 bg-lightgrey rounded-[.3rem]">
                 {startDate && endDate ? (
                     <div className="grid grid-cols-2 ">
                         <p>
-                            <span className="text-blue font-bold ">시작일</span> {format(startDate, 'yyyy-MM-dd', { locale: ko })}
+                            <span className="text-blue font-bold ">시작일</span> <span className="flex-grow">{format(startDate, 'yyyy-MM-dd', { locale: ko })}</span>
                         </p>
                         <p>
-                            <span className="text-blue font-bold">종료일</span> {format(endDate, 'yyyy-MM-dd', { locale: ko })}
+                            <span className="text-blue font-bold">종료일</span> <span className="flex-grow">{format(endDate, 'yyyy-MM-dd', { locale: ko })}</span>
                         </p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 text-blue font-bold">
                         <p>
-                            <span>시작일</span> <span className="text-lightgrey">2020.01.01</span>
+                            <span>시작일</span> <span className="flex-grow"></span>
                         </p>
                         <p>
-                            <span>종료일</span> <span className="text-lightgrey">2020.01.01</span>
+                            <span>종료일</span> <span className="flex-grow"></span>
                         </p>
                     </div>
                 )}

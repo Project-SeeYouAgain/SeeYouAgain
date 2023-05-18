@@ -40,15 +40,12 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
             type = 0;
         }
         const url = `/product-service/auth/reservation/${type}/${productId}`;
-        axAuth(token)({ method: 'delete', url: url })
-            .then(() => {
-                console.log('예약 취소 완료');
-                setProductStateData({
-                    ...productStateData,
-                    refreshKey: productStateData.refreshKey + 1,
-                });
-            })
-            .catch(err => console.log(err));
+        axAuth(token)({ method: 'delete', url: url }).then(() => {
+            setProductStateData({
+                ...productStateData,
+                refreshKey: productStateData.refreshKey + 1,
+            });
+        });
     }
 
     function OpenConfirmBookCancel(event: React.MouseEvent) {
@@ -61,12 +58,10 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
         event.stopPropagation();
         event.preventDefault();
         const url = `/product-service/auth/reservation/list/${productId}`;
-        axBase(token)({ url: url })
-            .then(res => {
-                setBookData(res.data.data);
-                setModalNum(2);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ url: url }).then(res => {
+            setBookData(res.data.data);
+            setModalNum(2);
+        });
     }
 
     function GoReview(event: React.MouseEvent) {
@@ -77,17 +72,15 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
             productId: productId,
             ownerId: ownerId,
         };
-        axBase(token)({ method: 'post', url: url, data: myData })
-            .then(res => {
-                if (reservationId) {
-                    setReservationIdStateData({
-                        ...reservationIdStateData,
-                        reservationId: reservationId,
-                    });
-                }
-                router.push(`/chat/${res.data.data}/rating`);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ method: 'post', url: url, data: myData }).then(res => {
+            if (reservationId) {
+                setReservationIdStateData({
+                    ...reservationIdStateData,
+                    reservationId: reservationId,
+                });
+            }
+            router.push(`/chat/${res.data.data}/rating`);
+        });
     }
 
     function GoChat() {
@@ -96,11 +89,9 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
             productId: productId,
             ownerId: ownerId,
         };
-        axBase(token)({ method: 'post', url: url, data: myData })
-            .then(res => {
-                router.push(`/chat/${res.data.data}`);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ method: 'post', url: url, data: myData }).then(res => {
+            router.push(`/chat/${res.data.data}`);
+        });
     }
 
     function openDeleteConfirm(event: React.MouseEvent) {
@@ -111,23 +102,19 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
 
     function DeleteItem() {
         const url = `/product-service/auth/${productId}`;
-        axAuth(token)({ method: 'delete', url: url })
-            .then(() => {
-                setModalNum(0);
-                setProductStateData({
-                    ...productStateData,
-                    refreshKey: productStateData.refreshKey + 1,
-                });
-            })
-            .catch(err => {
-                console.log(err);
+        axAuth(token)({ method: 'delete', url: url }).then(() => {
+            setModalNum(0);
+            setProductStateData({
+                ...productStateData,
+                refreshKey: productStateData.refreshKey + 1,
             });
+        });
     }
 
     if (dropdownVisible) {
         return (
             <>
-                <div className="bg-white shadow-md rounded absolute top-[1.5rem] right-0 rounded-[3px]">
+                <div className="bg-white shadow-md absolute top-[1.5rem] right-0 rounded-[3px]">
                     {isRent ? (
                         menuState === 1 ? (
                             <>
@@ -191,7 +178,7 @@ const ItemCardOption: React.FC<ItemCardOptionProps> = ({ isRent, menuState, drop
                                 </div>
                             </div>
                         ) : modalNum === 2 ? (
-                            <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 flex flex-col items-center">
+                            <div className="bg-white rounded-[1.5rem] shadow-md absolute w-[90%] pt-4 px-4 pb-4 items-center">
                                 {start && end ? (
                                     <Calender reservationPeriods={bookData.slice(1)} availablePeriod={bookData[0]} startDate={start} endDate={end} />
                                 ) : (

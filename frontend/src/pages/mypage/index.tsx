@@ -8,7 +8,7 @@ import Body from '@/components/Container/components/Body';
 import { axBase } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState, productState, reservationIdState } from 'recoil/user/atoms';
+import { userState, productState, reservationIdState, reviewState } from 'recoil/user/atoms';
 import { atom, useResetRecoilState } from 'recoil';
 import Navbar from '@/components/Container/components/Navbar';
 import { useRouter } from 'next/router';
@@ -34,6 +34,7 @@ function MyPage() {
     const allCookies = cookie.getAll();
     const [selectedMenu, setSelectedMenu] = useState('찜 목록');
     const renderContent = () => {
+        localStorage.setItem('click', selectedMenu);
         switch (selectedMenu) {
             case '찜 목록':
                 return <Cart />;
@@ -51,6 +52,7 @@ function MyPage() {
     const resetUserState = useResetRecoilState(userState);
     const resetProductState = useResetRecoilState(productState);
     const resetReservationIdState = useResetRecoilState(reservationIdState);
+    const resetReviewState = useResetRecoilState(reviewState);
 
     const Router = useRouter();
     const logout = () => {
@@ -73,11 +75,17 @@ function MyPage() {
             default: {},
         });
 
+        const reviewState = atom({
+            key: 'reviewState',
+            default: {},
+        });
+
         sessionStorage.removeItem('recoil-persist');
 
         resetUserState();
         resetProductState();
         resetReservationIdState();
+        resetReviewState();
 
         Router.push('/');
     };
@@ -86,16 +94,12 @@ function MyPage() {
     const token = useRecoilValue(userState).accessToken;
     useEffect(() => {
         if (token === undefined || token === null) {
-            console.log('로그인 풀림');
             router.push('/');
         }
         const url = `/user-service/auth/profile`;
-        axBase(token)({ url })
-            .then(res => {
-                console.log(res.data.data);
-                setProfileData(res.data.data);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ url }).then(res => {
+            setProfileData(res.data.data);
+        });
     }, []);
     const [webContainerWidth, setWebContainerWidth] = useState<number>(0);
     const [webContainerHeight, setWebContainerHeight] = useState<number>(0);

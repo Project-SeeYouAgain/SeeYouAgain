@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef, MouseEvent } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 import ChatRoom from '@/components/ChatRoom';
-import { VscBell } from 'react-icons/vsc';
 import { axAuth } from '@/apis/axiosinstance';
-import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import Navbar from '@/components/Container/components/Navbar';
 import WebNavbar from './../../components/Container/components/WebNavbar/index';
@@ -43,42 +41,15 @@ function chat() {
     const getChannelList = (type: string) => {
         axAuth(token)({
             url: `/chatting-service/auth/channel/${type}`,
-        })
-            .then(res => {
-                setChatRoomList((_chat_room_list: ChatRoomData[]) => res.data.data);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        }).then(res => {
+            setChatRoomList((_chat_room_list: ChatRoomData[]) => res.data.data);
+        });
     };
 
     const selectType = (event: MouseEvent, type: string) => {
         setSelectedTab(type);
     };
 
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-    const handleDragStart = (e: any) => {
-        const touch = e.touches ? e.touches[0] : e;
-        setDragStart({ x: touch.clientX, y: touch.clientY });
-    };
-
-    const handleDragEnd = (e: any) => {
-        const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const deltaX = touch.clientX - dragStart.x;
-        const deltaY = touch.clientY - dragStart.y;
-
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-            // Ignore vertical drag
-            return;
-        }
-
-        if (deltaX > -90) {
-            setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
-        } else if (deltaX < 90) {
-            setSelectedTab(prev => (prev === 'borrow' ? 'lend' : 'borrow'));
-        }
-    };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
@@ -115,13 +86,7 @@ function chat() {
     return (
         <div>
             {isDesktop && <WebNavbar />}
-            <div
-                className={classNames('p-4 min-h-screen pb-[3.7rem] px-[1.88rem]', isDesktop ? 'mt-[100px]' : '')}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                onTouchStart={handleDragStart}
-                onTouchEnd={handleDragEnd}
-            >
+            <div className={classNames('p-4 min-h-screen pb-[3.7rem] px-[1.88rem]', isDesktop ? 'mt-[100px]' : '')}>
                 {/* <div className="flex justify-between mb-5 items-center border-b-1">
                     <p className="text-lg font-bold dark:text-black">채팅</p>
                     <VscBell className="text-2xl" />

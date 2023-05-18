@@ -18,7 +18,6 @@ function Rating() {
     const router = useRouter();
 
     const handleRatingChange = (rating: number) => {
-        console.log(rating);
         setRate(rating);
     };
 
@@ -79,10 +78,8 @@ function Rating() {
             formData.append('requestDto', blob);
             axAuth(token)({ url: url, method: 'post', data: formData, headers: { 'Content-Type': 'multipart/form-data' } })
                 .then(res => {
-                    console.log(res);
                     router.back();
                 })
-                .catch(err => console.log(err));
         } else {
             alert('평가와 내용 입력을 완료해주세요');
         }

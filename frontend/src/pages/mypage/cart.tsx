@@ -8,8 +8,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import noresult from '@/images/no-results.png';
 import axios, { AxiosInstance } from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState } from 'recoil/user/atoms';
+import { useRecoilValue } from 'recoil';
+import { userState, productState } from 'recoil/user/atoms';
 
 function Cart() {
     interface RentalItem {
@@ -25,19 +25,13 @@ function Cart() {
     const [itemList, setItemList] = useState<RentalItem[]>([]);
     const token = useRecoilValue(userState).accessToken;
     const isCart = true;
-    const [refreshKey, setRefreshKey] = useState<number>(0);
-
-    function handleRefreshKey() {
-        setRefreshKey(refreshKey + 1);
-    }
+    const refreshKey = useRecoilValue(productState).refreshKey;
 
     useEffect(() => {
         const url = `/product-service/auth/cart`;
-        axBase(token)({ url })
-            .then(res => {
-                setItemList(res.data.data);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ url }).then(res => {
+            setItemList(res.data.data);
+        });
     }, [refreshKey]);
 
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
@@ -88,24 +82,21 @@ function Cart() {
                     ) : (
                         <div className="grid grid-cols-2 gap-4">
                             {itemList.map((item, index) => (
-                                <Link key={index} href={''}>
-                                    <Card
-                                        productImg={item.productImg}
-                                        title={item.title}
-                                        location={item.location}
-                                        price={item.price}
-                                        isSafe={item.isSafe}
-                                        productId={item.productId}
-                                        isCart={isCart}
-                                        onRefreshKey={handleRefreshKey}
-                                    />
-                                </Link>
+                                <Card
+                                    productImg={item.productImg}
+                                    title={item.title}
+                                    location={item.location}
+                                    price={item.price}
+                                    isSafe={item.isSafe}
+                                    productId={item.productId}
+                                    isCart={isCart}
+                                    key={`${index}${item.productId}`}
+                                />
                             ))}
                         </div>
                     )}
                 </>
             )}
-
             {isMobile && (
                 <>
                     <Header title="찜 목록"></Header>
@@ -118,18 +109,16 @@ function Cart() {
                             </>
                         ) : (
                             itemList.map((item, index) => (
-                                <Link key={index} href={''}>
-                                    <Card
-                                        productImg={item.productImg}
-                                        title={item.title}
-                                        location={item.location}
-                                        price={item.price}
-                                        isSafe={item.isSafe}
-                                        productId={item.productId}
-                                        isCart={isCart}
-                                        onRefreshKey={handleRefreshKey}
-                                    />
-                                </Link>
+                                <Card
+                                    productImg={item.productImg}
+                                    title={item.title}
+                                    location={item.location}
+                                    price={item.price}
+                                    isSafe={item.isSafe}
+                                    productId={item.productId}
+                                    isCart={isCart}
+                                    key={item.productId}
+                                />
                             ))
                         )}
                     </Body>

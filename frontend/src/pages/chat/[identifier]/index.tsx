@@ -73,7 +73,6 @@ function Channel() {
         });
 
         client.current.onConnect = () => {
-            console.log('success');
             subscribe();
         };
 
@@ -83,7 +82,6 @@ function Channel() {
     const subscribe = () => {
         client.current?.subscribe('/sub/chat/' + identifier, body => {
             const json_body: ChatData = JSON.parse(body.body);
-            console.log(json_body);
             setChatList((_chat_list: ChatData[]) => [json_body, ..._chat_list]);
         });
     };
@@ -196,7 +194,6 @@ function Channel() {
     useEffect(() => {
         const resizeAndUploadImage = async () => {
             if (token === undefined || token === null) {
-                console.log('로그인 풀림');
                 router.push('/');
             }
             if (image) {
@@ -214,7 +211,6 @@ function Channel() {
                         publish(res.data.data, true);
                         setImage(null);
                     })
-                    .catch(err => console.log(err));
             }
         };
 

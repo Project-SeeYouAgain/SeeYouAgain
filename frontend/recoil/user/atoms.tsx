@@ -35,3 +35,10 @@ export const reservationIdState = atom<ReservationIdState>({
     },
     effects_UNSTABLE: [persistAtom],
 });
+
+export const reviewState = atom<ReviewState>({
+    key: 'reviewState',
+    default: {
+        review: 3,
+    },
+});

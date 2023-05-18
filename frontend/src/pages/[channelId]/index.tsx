@@ -59,33 +59,26 @@ function Detail() {
         const productId = Number(window.location.pathname.substring(1));
         setProduct(productId);
         if (token === undefined || token === null) {
-            console.log('로그인 풀림');
             router.push('/');
         }
         const url = `/product-service/auth/${productId}`;
-        axBase(token)({ url })
-            .then(res => {
-                console.log(res.data.data);
-                setData(res.data.data);
-                setIsHeartFill(res.data.data.isCart);
-            })
-            .catch(err => console.log(err));
+        axBase(token)({ url }).then(res => {
+            setData(res.data.data);
+            setIsHeartFill(res.data.data.isCart);
+        });
     }, [isHeartFill]);
 
     function GoChatRoom() {
         const url = `/chatting-service/auth/channel`;
         const productId = Number(window.location.pathname.substring(1));
         if (data) {
-            console.log(data.ownerId);
             const myData = {
                 productId: productId,
                 ownerId: data.ownerId,
             };
-            axAuth(token)({ method: 'post', url: url, data: myData })
-                .then(res => {
-                    router.push(`/chat/${res.data.data}`);
-                })
-                .catch(err => console.log(err));
+            axAuth(token)({ method: 'post', url: url, data: myData }).then(res => {
+                router.push(`/chat/${res.data.data}`);
+            });
         }
     }
 
@@ -93,16 +86,13 @@ function Detail() {
         const url = `/chatting-service/auth/channel`;
         const productId = Number(window.location.pathname.substring(1));
         if (data) {
-            console.log(data.ownerId);
             const myData = {
                 productId: productId,
                 ownerId: data.ownerId,
             };
-            axAuth(token)({ method: 'post', url: url, data: myData })
-                .then(res => {
-                    router.push(`/chat/${res.data.data}/book/${product}`);
-                })
-                .catch(err => console.log(err));
+            axAuth(token)({ method: 'post', url: url, data: myData }).then(res => {
+                router.push(`/chat/${res.data.data}/book/${product}`);
+            });
         }
     }
 
@@ -110,52 +100,19 @@ function Detail() {
         const productId = Number(window.location.pathname.substring(1));
         const url = `/product-service/auth/cart/${productId}`;
         if (isHeartFill === false) {
-            axAuth(token)({ method: 'post', url: url })
-                .then(() => {
-                    setIsHeartFill(!isHeartFill);
-                })
-                .catch(err => console.log(err));
+            axAuth(token)({ method: 'post', url: url }).then(() => {
+                setIsHeartFill(!isHeartFill);
+            });
         } else {
-            axAuth(token)({ method: 'delete', url: url })
-                .then(() => {
-                    setIsHeartFill(!isHeartFill);
-                })
-                .catch(err => console.log(err));
+            axAuth(token)({ method: 'delete', url: url }).then(() => {
+                setIsHeartFill(!isHeartFill);
+            });
         }
     }
 
     function SelectMenu(state: number) {
         setMenuState(state);
     }
-
-    const dragThreshold = 20;
-
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-    const handleDragStart = (e: any) => {
-        const touch = e.touches ? e.touches[0] : e;
-        setDragStart({ x: touch.clientX, y: touch.clientY });
-    };
-
-    const handleDragEnd = (e: any) => {
-        const touch = e.changedTouches ? e.changedTouches[0] : e;
-        const deltaX = touch.clientX - dragStart.x;
-        const deltaY = touch.clientY - dragStart.y;
-
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-            // Ignore vertical drag
-            return;
-        }
-        if (Math.abs(deltaX) < dragThreshold) {
-            return;
-        }
-
-        if (deltaX > -90) {
-            setMenuState(prev => (prev === 1 ? 3 : prev - 1));
-        } else if (deltaX < 90) {
-            setMenuState(prev => (prev === 3 ? 1 : prev + 1));
-        }
-    };
     const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
     const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
@@ -244,20 +201,20 @@ function Detail() {
 
                         <div className="w-full px-[10rem] pt-8 grid grid-cols-2 gap-6">
                             <div>
-                                <p className="text-xl font-bold ml-2 mb-2">대여일정</p>
+                                <p className="text-2xl font-bold ml-2 mb-2">대여일정</p>
                                 <div className="w-full h-[300px]">
                                     <Calender reservationPeriods={data.reservation} availablePeriod={{ startDate: data.startDate, endDate: data.endDate }} />
                                 </div>
                             </div>
                             <div>
-                                <p className="text-xl font-bold ml-2 mb-2">거래장소</p>
+                                <p className="text-2xl font-bold ml-2 mb-2">거래장소</p>
                                 <div className="w-full h-[300px] aspect-[4/3] relative">
                                     <KakaoMapMini lat={data.lat} lng={data.lng} />
                                 </div>
                             </div>
                         </div>
                         <div className="w-full px-[10rem] mt-8">
-                            <p className="text-xl font-bold pl-2 pb-2 w-full border-b-4 border-solid border-black">대여 후기</p>
+                            <p className="text-2xl font-bold pl-2 pb-2 w-full border-b-4 border-solid border-black">대여 후기</p>
                             <div className="py-4">
                                 <ReviewList productId={product} reviewListSize={data.reviewListSize} />
                             </div>
@@ -294,7 +251,7 @@ function Detail() {
                                     </span>
                                 ))}
                             </div>
-                            <div className="w-full pb-8 " onDragStart={handleDragStart} onDragEnd={handleDragEnd} onTouchStart={handleDragStart} onTouchEnd={handleDragEnd}>
+                            <div className="w-full pb-8 ">
                                 <Menu onSelectMenu={SelectMenu} dragMenu={menuState} title1={'예약일정'} title2={'거래장소'} title3={'대여후기'} />
                                 {menuState === 1 ? (
                                     <div className="h-[273.78px] w-full">
