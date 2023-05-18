@@ -8,7 +8,7 @@ import Body from '@/components/Container/components/Body';
 import { axBase } from '@/apis/axiosinstance';
 import axios, { AxiosInstance } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userState, productState, reservationIdState } from 'recoil/user/atoms';
+import { userState, productState, reservationIdState, reviewState } from 'recoil/user/atoms';
 import { atom, useResetRecoilState } from 'recoil';
 import Navbar from '@/components/Container/components/Navbar';
 import { useRouter } from 'next/router';
@@ -51,6 +51,7 @@ function MyPage() {
     const resetUserState = useResetRecoilState(userState);
     const resetProductState = useResetRecoilState(productState);
     const resetReservationIdState = useResetRecoilState(reservationIdState);
+    const resetReviewState = useResetRecoilState(reviewState);
 
     const Router = useRouter();
     const logout = () => {
@@ -73,11 +74,17 @@ function MyPage() {
             default: {},
         });
 
+        const reviewState = atom({
+            key: 'reviewState',
+            default: {},
+        });
+
         sessionStorage.removeItem('recoil-persist');
 
         resetUserState();
         resetProductState();
         resetReservationIdState();
+        resetReviewState();
 
         Router.push('/');
     };
