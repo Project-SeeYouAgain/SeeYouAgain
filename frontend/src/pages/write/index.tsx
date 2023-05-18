@@ -170,7 +170,14 @@ function Write() {
     });
     const [view, setView] = useState<boolean>(false);
     // 이부분은 필요해서 놔뒀습니다.
-    
+    useEffect(() => {
+        if (token === undefined || token === null) {
+            console.log('로그인 풀림');
+            router.push('/');
+        }
+        setView(true);
+    }, []);
+
     // 모달
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalMessage, setModalMessage] = useState<string>('');
