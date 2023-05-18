@@ -14,6 +14,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from 'recoil/user/atoms';
 import { Cookies } from 'react-cookie';
 import imageCompression from 'browser-image-compression';
+import { channel } from 'diagnostics_channel';
 
 interface ChatData {
     messageId: number;
@@ -230,6 +231,17 @@ function Channel() {
     };
 
     useEffect(() => {
+        if (channelInfo) {
+            axAuth(token)({
+                url: `product-service/auth/reservation/${channelInfo?.productId}/${channelInfo?.userId}`,
+            }).then(res => {
+                console.log(res.data.data);
+                localStorage.setItem('reservation-location', JSON.stringify({ lat: res.data.data.lat, lng: res.data.data.lng }));
+            });
+        }
+    }, [channelInfo]);
+
+    useEffect(() => {
         if (!router.isReady) return;
 
         setUserId(Number(cookie.get('userId')));
@@ -251,11 +263,6 @@ function Channel() {
 
     const goToBook = () => [router.push(`/chat/${identifier}/book/${channelInfo?.productId}`)];
     const goToUserLocation = () => {
-        axAuth(token)({
-            url: `product-service/auth/reservation/${channelInfo?.productId}/${channelInfo?.userId}`,
-        }).then(res => {
-            localStorage.setItem('reservation-location', JSON.stringify({ lat: res.data.data.lat, lng: res.data.data.lng }));
-        });
         router.push(`/chat/${identifier}/${channelInfo?.userId}/user-location`);
     };
 
