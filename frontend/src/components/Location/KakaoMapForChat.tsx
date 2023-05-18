@@ -77,7 +77,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     userMarker.setMap(map);
                     newMarkers.push(userMarker);
                 }
-                const content = '<div class ="label"><span class="left"></span><span class="center">나</span><span class="right"></span></div>';
+                const content =
+                    '<div class="label" style="margin-bottom: 96px;"><span class="left" style="background-image: url(\'https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png\'); background-repeat: no-repeat; display: inline-block; height: 24px; overflow: hidden; vertical-align: top; width: 7px;"></span><span class="center" style="background-image: url(\'https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png\'); background-repeat: repeat-x; display: inline-block; height: 24px; font-size: 12px; line-height: 24px;">나</span><span class="right" style="background-image: url(\'https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png\'); background-position: -1px 0; background-repeat: no-repeat; display: inline-block; height: 24px; overflow: hidden; width: 6px;"></span></div>';
 
                 // 커스텀 오버레이가 표시될 위치입니다
                 const position = new kakao.maps.LatLng(userLocation.lat, userLocation.lng);
@@ -112,7 +113,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ lat, lng, userLocation, otherUserLo
                     otherMarker.setMap(map);
                     newMarkers.push(otherMarker);
                 }
-                const content = '<div class ="label"><span class="left"></span><span class="center">이웃</span><span class="right"></span></div>';
+                const content =
+                    '<div class="label" style="margin-bottom: 96px;"><span class="left" style="background-image: url(\'https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png\'); background-repeat: no-repeat; display: inline-block; height: 24px; overflow: hidden; vertical-align: top; width: 7px;"></span><span class="center" style="background-image: url(\'https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png\'); background-repeat: repeat-x; display: inline-block; height: 24px; font-size: 12px; line-height: 24px;">이웃</span><span class="right" style="background-image: url(\'https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png\'); background-position: -1px 0; background-repeat: no-repeat; display: inline-block; height: 24px; overflow: hidden; width: 6px;"></span></div>';
 
                 // 커스텀 오버레이가 표시될 위치입니다
                 const position = new kakao.maps.LatLng(otherUserLocation.lat, otherUserLocation.lng);
