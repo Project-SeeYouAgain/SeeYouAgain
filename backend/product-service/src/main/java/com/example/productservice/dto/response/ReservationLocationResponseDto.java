@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReservationLocationResponseDto {
 
-    private Float lng;
+    private Double lng;
 
-    private Float lat;
+    private Double lat;
 
     private String location;
 
