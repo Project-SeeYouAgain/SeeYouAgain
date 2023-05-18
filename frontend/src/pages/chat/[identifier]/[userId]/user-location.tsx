@@ -79,6 +79,9 @@ const UserLocation: React.FC = () => {
     // 클릭 시 mycheck를 true로 바꿔
     const clickPosition = () => {
         setMyCheck(!myCheck);
+        if (myCheck === false) {
+            setOtherUserLocation({ lat: null, lng: null, moving: false, profile: otherProfile });
+        }
         updateLocation();
     };
 
@@ -99,7 +102,7 @@ const UserLocation: React.FC = () => {
                     setOtherUserLocation({ lat: res.data.data.lat, lng: res.data.data.lng, moving: res.data.data.moving, profile: otherProfile });
                 }
             })
-            .catch(() => setOtherUserLocation({ lat: 0, lng: 0, moving: false, profile: otherProfile }));
+            .catch(() => setOtherUserLocation({ lat: null, lng: null, moving: false, profile: otherProfile }));
 
         // 3초마다 내 위치를 보냄
         navigator.geolocation.getCurrentPosition(
