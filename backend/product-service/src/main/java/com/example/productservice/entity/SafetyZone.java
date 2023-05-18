@@ -14,6 +14,6 @@ public abstract class SafetyZone {
     @Column(name = "safety_zone_id")
     private Long id;
     private String address;
-    private float lat;
-    private float lng;
+    private Double lat;
+    private Double lng;
 }

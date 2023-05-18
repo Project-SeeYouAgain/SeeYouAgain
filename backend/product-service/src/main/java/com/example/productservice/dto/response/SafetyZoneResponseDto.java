@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SafetyZoneResponseDto {
     private String address;
-    private float lat;
-    private float lng;
+    private Double lat;
+    private Double lng;
     public static SafetyZoneResponseDto from(SafetyZone safetyZone) {
         return SafetyZoneResponseDto.builder()
                 .address(safetyZone.getAddress())
