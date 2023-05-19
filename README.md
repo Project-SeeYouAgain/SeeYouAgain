@@ -1,6 +1,6 @@
 # See You Again
-![SeeYouAgain]()
-### 우리 동네 안심 물품 대여 서비스
+![SeeYouAgain](./image/banner.png)
+## 우리 동네 안심 물품 대여 서비스
 
 #### 🕛 기간
 2023.04.10 ~ 2023.05.19
@@ -20,7 +20,7 @@
 
 여행 갈 때만 쓰고 싶은데 평소엔 잘 쓰지 않아 구입을 망설인 제품이 있으신가요?
 
-우리 동네 안심 물품 대여 서비스, See You Again 입니다.
+필요한 물건을 쉽고 빠르게 대여할 수 있는 우리 동네 안심 물품 대여 서비스, See You Again 입니다.
 
 ## 🛠️ 주요 기능 소개 
 
@@ -36,15 +36,17 @@
     - Node.js : 9.4.1
     - react : 18.2.0
     - react-dom : 18.2.0
-    - react-chartjs-2 : ^5.2.0
-    - react-hook-form : ^7.43.8
-    - redux : ^4.2.1
+    - react-hook-form : ^7.43.9
+    - recoil : ^0.7.7
     - husky : ^8.0.3
-    - eslint : ^8.2.0
-    - prettier : 2.8.4
-    - tailwindcss : ^3.2.7
-    - axios : ^1.3.4
+    - eslint : ^8.38.0
+    - prettier : 2.8.7
+    - tailwindcss : ^3.3.1
+    - axios : ^1.3.6
+    - next-pwa : ^5.6.0
     - firebase : 9.22.0
+    - stompjs : 2.3.5
+    - sockjs-client : 1.5.1
 - **BackEnd**
     - IntelliJ
     - OpenJDK 11
@@ -53,8 +55,8 @@
     - SpringCloud : 2021.0.6
         - Netflix Eureka Service (Discovery Service)
         - API Gateway
-    - Spring Security
-    - Kafka
+    - Spring Security : 2.7.10
+    - Kafka : 3.1.2
     - Websocket : 2.3.3
     - firebase : 9.1.1
 - **CI/CD**
