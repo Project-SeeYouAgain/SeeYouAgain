@@ -95,6 +95,26 @@
 
 ## 📺 서비스 소개 (화면)
 
+### 로그인 페이지
+![Index](./image/index.gif)
+
+### 메인 페이지 & 디테일 페이지
+![Home](./image/home.gif)
+
+### 상품 등록
+![Create](./image/create.gif)
+
+### 프로필 수정
+![Profile](./image/profile.gif)
+
+### 예약 기능
+![Reservation](./image/reservation.gif)
+
+### 실시간 채팅
+![Chat](./image/chatting.gif)
+
+### 실시간 위치 공유
+![Location](./image/location.gif)
 
 
 ## 👤 참여자 - 역할
