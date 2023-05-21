@@ -1,0 +1,132 @@
+.fifthPage_box {
+    background: #ffffff;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    margin-top: 30px;
+    padding: 20px;
+    justify-content: space-between;
+}
+.parent {
+    position: relative;
+}
+
+.textContainer {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    .first {
+        color: white;
+        // font-size: xx-large;
+        text-align: center;
+        // font-weight: bolder;
+        width: 100vw;
+        
+   
+        .title{
+        text-shadow: 0px 0px 10px black;
+
+    }
+    .logo{
+        font-weight: bolder;
+        font-size: xx-large;
+
+    }
+    }
+}
+.boxContainer {
+    padding: 0 32px 0 32px;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    .first {
+        color: white;
+        font-size: xx-large;
+        text-align: center;
+        font-weight: bolder;
+    }
+}
+.slickContainer {
+    position: absolute;
+    top: 50vh;
+    // left: 45vw;
+    transform: translate(0, -50%);
+    .first {
+        color: white;
+        font-size: xxx-large;
+        text-align: center;
+        font-weight: bolder;
+    }
+}
+.pointColor {
+    color: #1279ff;
+}
+.text {
+    font-size: x-large;
+    // text-align: center;
+    font-weight: bolder;
+}
+.textBox {
+    width: fit-content;
+    margin: auto;
+}
+.thirdPageBox {
+    background-color: #5669ff;
+}
+.blue {
+    color: #5669ff;
+}
+.spacebetween {
+    display: flex;
+    justify-content: space-between;
+}
+.margin {
+    padding-top: 25vh;
+    margin-bottom: 12px;
+}
+.fadeUp {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 2000ms, transform 2000ms;
+}
+
+.fadeUpVisible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fourthImage {
+    // margin: 10px 10% 10% 10%;
+    border-radius: 20px;
+}
+.arrowContainer {
+    position: absolute;
+    bottom: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation-name: fade-in-out;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+.arrowContainer.visible {
+    opacity: 1;
+}
+
+@keyframes fade-in-out {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 2000ms, transform 2000ms;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
