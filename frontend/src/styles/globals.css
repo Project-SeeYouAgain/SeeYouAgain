@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: 0, 0, 0;
+        --background-start-rgb: 214, 219, 220;
+        --background-end-rgb: 255, 255, 255;
+    }
+}
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+#__next-build-watcher {
+    display: none;
+}
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slick-dots{
+    display: absolute;
+    top: 90%;
+    z-index: 10 !important;
+
+
+}
+.slick-dots li button:before{
+    font-family: 'slick';
+    font-size: 6px;
+    line-height: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    content: '•';
+    text-align: center;
+    opacity: .6 !important;
+    color: darkgrey !important;
+
+}
+.slick-dots li.slick-active button:before
+{
+    opacity: 1;
+    color: white !important;
+
+}
+
+@font-face{
+    font-family: 'NanumNeo';
+    src: url('../assets/font/NanumSquareNeo-bRg.ttf') format('truetype') ,       local('NanumNeo');
+
+}
+
+@font-face{
+    font-family: 'NanumNeoLt';
+    src: url('../assets/font/NanumSquareNeo-aLt.ttf') format('truetype') ,       local('NanumNeoLt');
+
+}
+@font-face{
+    font-family: 'NanumNeoEB';
+    src: url('../assets/font/NanumSquareNeo-dEb.ttf') format('truetype') ,       local('NanumNeoEB');
+
+}
+
+@font-face {
+    font-family: 'Pretendard-Bold';
+    src: url('/src/assets/font/Pretendard-Bold.ttf')format('truetype') ,       local('Pretendard-Bold')
+}
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('/src/assets/font/Pretendard-Regular.ttf')format('truetype') ,       local('Pretendard-Regular');
+}
+@font-face {
+    font-family: 'Pretendard-SemiBold';
+    src: url('/src/assets/font/Pretendard-SemiBold.ttf')format('truetype') ,       local('Pretendard-SemiBold');
+}

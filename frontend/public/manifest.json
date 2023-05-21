@@ -1,0 +1,23 @@
+{
+  "short_name": "씨유어게인",
+  "name": "See you Again",
+  "icons": [
+    {
+      "src": "icon/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "language": "ko-KR",
+  "prefer_related_applications": true
+}
