@@ -50,7 +50,7 @@ cloud:
     s3:
       bucket: seeyouagain-s3-bucket
     credentials:
-      access-key: AKIAZDX46XDEUXV5APLQ
-      secret-key: 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
+      access-key: 
+      secret-key: 
     stack:
       auto: false
